@@ -1,4 +1,4 @@
-# Stay Safe Tips 
+# Stay Safe Tips Premium 
 
 Stay Safe Tips είναι μια **πολυγλωσσική, PWA, interactive εφαρμογή ασφαλείας** που βοηθά τον χρήστη να βελτιώσει:
 
