@@ -6,48 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0f172a" />
 
+  <!-- SEO -->
+  <meta name="description" content="Stay Safe Premium — interactive safety experience with quizzes, badges, and offline protection.">
+  <meta property="og:title" content="Stay Safe Premium">
+  <meta property="og:description" content="Your personal safety companion with real‑world scenarios and progress tracking.">
+  <meta property="og:type" content="website">
+
+  <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <div class="app-shell">
+
+    <!-- HEADER -->
     <header class="app-header">
-      <div>
+      <div class="title-block">
         <h1 data-i18n="t-app-title">Stay Safe Premium</h1>
         <p data-i18n="t-app-subtitle">Interactive safety experience</p>
       </div>
 
-      <select id="lang-select">
-        <option value="en">English</option>
-        <option value="el">Ελληνικά</option>
-        <option value="zh">中文</option>
-        <option value="ar">العربية</option>
-        <option value="hi">हिन्दी</option>
-        <option value="it">Italiano</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="pt">Português</option>
-        <option value="nl">Nederlands</option>
-        <option value="sv">Svenska</option>
-        <option value="no">Norsk</option>
-        <option value="da">Dansk</option>
-        <option value="fi">Suomi</option>
-        <option value="pl">Polski</option>
-        <option value="ro">Română</option>
-        <option value="tr">Türkçe</option>
-      </select>
+      <select id="lang-select" class="lang-select"></select>
     </header>
 
+    <!-- NAVIGATION -->
     <nav class="nav-tabs">
-      <button class="nav-tab active" data-target="home" data-i18n="t-tab-home">Home Safety</button>
-      <button class="nav-tab" data-target="digital" data-i18n="t-tab-digital">Digital Safety</button>
+      <button class="nav-tab active" data-target="home" data-i18n="t-tab-home">Home</button>
+      <button class="nav-tab" data-target="digital" data-i18n="t-tab-digital">Digital</button>
       <button class="nav-tab" data-target="quiz" data-i18n="t-tab-quiz">Quiz</button>
       <button class="nav-tab" data-target="badges" data-i18n="t-tab-badges">Badges</button>
       <button class="nav-tab" data-target="premium" data-i18n="t-tab-premium">Premium</button>
     </nav>
 
+    <!-- MAIN SCREENS -->
     <main>
 
       <!-- HOME -->
@@ -56,85 +48,53 @@
         <p class="sub" data-i18n="t-home-sub">Daily protection</p>
         <span class="pill" data-i18n="t-home-pill">Level 1 · Basics</span>
 
-        <p data-i18n="t-home-intro">
-          Your home is your base. Start with the essentials:
-        </p>
-
         <ul id="home-list"></ul>
-
-        <p class="pro-tip" data-i18n="t-home-pro">
-          Pro tip: unplug devices if you’re away for more than 24 hours.
-        </p>
 
         <div class="snapshot">
           <h3 data-i18n="t-home-snap-title">Home Safety Snapshot</h3>
-          <p data-i18n="t-home-snap-sub">Locked entries, safe balcony, good habits.</p>
-
           <div class="progress-row">
             <span data-i18n="t-home-quiz-label">Home quiz progress</span>
             <span id="t-home-quiz-progress">0%</span>
           </div>
         </div>
 
-        <button id="home-quiz-btn" data-i18n="t-home-btn">
-          Start home mini‑quiz
-        </button>
+        <button id="home-quiz-btn" data-i18n="t-home-btn">Start home mini‑quiz</button>
       </section>
 
       <!-- DIGITAL -->
       <section id="screen-digital" class="app-screen">
-        <h2 data-i18n="t-digital-title">Digital & Social Safety</h2>
+        <h2 data-i18n="t-digital-title">Digital Safety</h2>
         <p class="sub" data-i18n="t-digital-sub">Online protection</p>
         <span class="pill" data-i18n="t-digital-pill">Level 2 · Online</span>
 
-        <p data-i18n="t-digital-intro">
-          Protect your accounts, identity and devices:
-        </p>
-
         <ul id="digital-list"></ul>
-
-        <p class="critical" data-i18n="t-digital-critical">
-          Avoid public Wi‑Fi for sensitive logins. Always use device lock.
-        </p>
 
         <div class="snapshot">
           <h3 data-i18n="t-digital-snap-title">Digital Shield View</h3>
-          <p data-i18n="t-digital-snap-sub">Protected accounts, updated software.</p>
-
           <div class="progress-row">
             <span data-i18n="t-digital-quiz-label">Digital quiz progress</span>
             <span id="t-digital-quiz-progress">0%</span>
           </div>
         </div>
 
-        <button id="digital-quiz-btn" data-i18n="t-digital-btn">
-          Start digital mini‑quiz
-        </button>
+        <button id="digital-quiz-btn" data-i18n="t-digital-btn">Start digital mini‑quiz</button>
       </section>
 
       <!-- QUIZ -->
       <section id="screen-quiz" class="app-screen">
         <h2 data-i18n="t-quiz-title">Digital Safety Quiz</h2>
-        <p class="sub" data-i18n="t-quiz-sub">
-          Test your reactions in real‑world scenarios
-        </p>
+        <p class="sub" data-i18n="t-quiz-sub">Real‑world scenarios</p>
 
-        <span class="pill" id="quiz-pill" data-i18n="t-quiz-pill">
-          Live · Question 1
-        </span>
+        <span class="pill" id="quiz-pill" data-i18n="t-quiz-pill">Live · Question 1</span>
 
         <div class="progress-row">
-          <span id="quiz-progress-label" data-i18n="t-quiz-progress-label">
-            Question 1 of 15
-          </span>
+          <span id="quiz-progress-label" data-i18n="t-quiz-progress-label">Question 1 of 15</span>
         </div>
 
         <div id="quiz-question"></div>
         <div id="quiz-options" class="quiz-options"></div>
 
-        <button id="quiz-next-btn" data-i18n="t-quiz-next" disabled>
-          Next
-        </button>
+        <button id="quiz-next-btn" disabled data-i18n="t-quiz-next">Next</button>
       </section>
 
       <!-- BADGES -->
@@ -142,45 +102,20 @@
         <h2 data-i18n="t-badges-title">Badges</h2>
         <p class="sub" data-i18n="t-badges-sub">Your safety journey</p>
 
-        <span class="pill" id="badges-pill" data-i18n="t-badges-pill">
-          8 / 12 badges unlocked
-        </span>
+        <div class="badges-grid" id="badges-grid"></div>
 
-        <p id="badges-progress" data-i18n="t-badges-progress">
-          You’ve unlocked 8 of 12 badges. Keep going.
-        </p>
-
-        <div class="badges-grid">
-          <div id="badge-home" class="badge unlocked" data-i18n="t-badge-home">Home Safety</div>
-          <div id="badge-digital" class="badge unlocked" data-i18n="t-badge-digital">Digital Safety</div>
-          <div id="badge-scam" class="badge unlocked" data-i18n="t-badge-scam">Scam Protection</div>
-          <div id="badge-emergency" class="badge unlocked" data-i18n="t-badge-emergency">Emergency Ready</div>
-          <div id="badge-night" class="badge locked" data-i18n="t-badge-locked1">Night Guardian</div>
-          <div id="badge-travel" class="badge locked" data-i18n="t-badge-locked2">Travel Guardian</div>
-          <div id="badge-family" class="badge locked" data-i18n="t-badge-locked3">Family Shield</div>
-          <div id="badge-crisis" class="badge locked" data-i18n="t-badge-locked4">Crisis Navigator</div>
-        </div>
-
-        <button id="badges-req-btn" data-i18n="t-badges-req">
-          Show requirements ∧
-        </button>
+        <button id="badges-req-btn" data-i18n="t-badges-req">Show requirements ∧</button>
       </section>
 
       <!-- PREMIUM -->
       <section id="screen-premium" class="app-screen">
         <h2 data-i18n="t-premium-title">Unlock Premium Protection</h2>
-        <p class="sub" data-i18n="t-premium-sub">
-          Full access to protocols, quizzes and advanced badges.
-        </p>
+        <p class="sub" data-i18n="t-premium-sub">Full access to all protocols</p>
 
         <ul id="premium-list"></ul>
 
         <p class="price" data-i18n="t-premium-price">€4.90 / month</p>
-        <p class="note" data-i18n="t-premium-note">Cancel anytime. No hidden fees.</p>
-
-        <button id="premium-btn" class="stripe-btn" data-i18n="t-premium-btn">
-          Subscribe with Stripe
-        </button>
+        <button id="premium-btn" class="stripe-btn" data-i18n="t-premium-btn">Subscribe</button>
       </section>
 
     </main>
@@ -200,13 +135,6 @@
     <div class="paywall-card">
       <h2>Stay Safe Premium</h2>
       <p>Πλήρης πρόσβαση σε όλα τα πρωτόκολλα, quiz, badges και offline λειτουργία.</p>
-
-      <ul>
-        <li>✔ Προηγμένα σενάρια ασφαλείας</li>
-        <li>✔ Προσωπική πρόοδος & badges</li>
-        <li>✔ Offline πρόσβαση</li>
-      </ul>
-
       <button id="paywall-subscribe">€4.90 / μήνα – Συνέχεια</button>
       <button id="paywall-close" class="secondary">Ίσως αργότερα</button>
     </div>
@@ -214,10 +142,11 @@
 
   <!-- A2HS -->
   <div id="a2hs-banner" class="a2hs-box hidden">
-    <p>Εγκατέστησε το Stay Safe Premium στη συσκευή σου</p>
+    <p>Εγκατάστησε το Stay Safe Premium στη συσκευή σου</p>
     <button onclick="installApp()">Εγκατάσταση</button>
   </div>
 
+  <!-- SCRIPTS -->
   <script src="i18n.js"></script>
   <script src="analytics.js"></script>
   <script src="api.js"></script>
