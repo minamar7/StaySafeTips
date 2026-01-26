@@ -298,6 +298,66 @@ button:disabled {
 }
 
 /* ---------------------------------------------------------
+   PREMIUM HUB (LIST + LOCKS + BANNER)
+---------------------------------------------------------- */
+
+.premium-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.premium-item {
+  background: #020617;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #1f2937;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+}
+
+.premium-item:hover {
+  background: #020617;
+  border-color: #facc15;
+  transform: translateY(-1px);
+}
+
+.premium-item span:first-child {
+  color: #facc15;
+  font-size: 0.9rem;
+}
+
+.lock {
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.upgrade-banner {
+  margin-top: 18px;
+  background: radial-gradient(circle at top left, #facc15, #eab308);
+  color: #020617;
+  padding: 12px 16px;
+  text-align: center;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 10px 25px rgba(250, 204, 21, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.upgrade-banner:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 14px 32px rgba(250, 204, 21, 0.45);
+}
+
+/* ---------------------------------------------------------
    ANIMATIONS
 ---------------------------------------------------------- */
 
@@ -442,6 +502,11 @@ button:disabled {
   z-index: 999;
   animation: fadeIn 0.3s ease-out;
 }
+
+/* ---------------------------------------------------------
+   BADGE MODAL
+---------------------------------------------------------- */
+
 .badge-modal {
   position: fixed;
   inset: 0;
