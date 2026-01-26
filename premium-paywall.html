@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unlock Premium – Stay Safe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    body {
+      background: #020617;
+      color: #e2e8f0;
+    }
+
+    .paywall-container {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .paywall-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .paywall-header h1 {
+      color: #facc15;
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+
+    .paywall-header p {
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+
+    .benefit-card {
+      background: #0b1120;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 18px 20px;
+      transition: 0.2s ease;
+    }
+
+    .benefit-card:hover {
+      border-color: #facc15;
+      background: #111827;
+    }
+
+    .benefit-card h3 {
+      margin: 0 0 6px 0;
+      font-size: 1.1rem;
+      color: #facc15;
+    }
+
+    .benefit-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .price-box {
+      margin-top: 10px;
+      padding: 16px;
+      background: #facc15;
+      color: #000;
+      text-align: center;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .unlock-btn {
+      margin-top: 10px;
+      padding: 16px;
+      background: linear-gradient(90deg, #facc15, #eab308);
+      color: #000;
+      text-align: center;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .unlock-btn:hover {
+      opacity: 0.9;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="paywall-container">
+
+    <div class="paywall-header">
+      <h1>Unlock Premium</h1>
+      <p>Get full access to all safety tools</p>
+    </div>
+
+    <div class="benefit-card">
+      <h3>🚨 Emergency Button</h3>
+      <p>Instant help, location tools, emergency actions.</p>
+    </div>
+
+    <div class="benefit-card">
+      <h3>🔐 Security Checkup</h3>
+      <p>Full device, privacy & scam vulnerability scan.</p>
+    </div>
+
+    <div class="benefit-card">
+      <h3>🧠 Advanced Safety Tips</h3>
+      <p>Expert‑level protection: deepfakes, AI scams, dark web.</p>
+    </div>
+
+    <div class="benefit-card">
+      <h3>🛑 Scam Alerts</h3>
+      <p>Real‑time trending scam warnings.</p>
+    </div>
+
+    <div class="benefit-card">
+      <h3>🔑 Password Generator</h3>
+      <p>Ultra‑secure passwords with strength meter.</p>
+    </div>
+
+    <div class="benefit-card">
+      <h3>📱 Offline Mode</h3>
+      <p>Safety tools without internet.</p>
+    </div>
+
+    <div class="benefit-card">
+      <h3>⭐ Premium Benefits</h3>
+      <p>No ads · Unlimited quizzes · All badges unlocked · Priority updates</p>
+    </div>
+
+    <div class="price-box">
+      One‑time purchase · €4.90
+    </div>
+
+    <button class="unlock-btn" onclick="unlockPremium()">
+      Unlock Premium Now
+    </button>
+
+    <p class="footer-note">Secure local activation · No subscription</p>
+
+  </div>
+
+  <script>
+    function unlockPremium() {
+      localStorage.setItem("premium", "true");
+      alert("Premium unlocked successfully!");
+      window.location.href = "index.html#premium";
+    }
+  </script>
+
+</body>
+</html>
