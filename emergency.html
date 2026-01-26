@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Emergency Button – Stay Safe Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    #emergency-hold-btn {
+      margin-top: 16px;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 999px;
+      border: 1px solid #b91c1c;
+      background: radial-gradient(circle at top, #ef4444, #7f1d1d);
+      color: #fee2e2;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    #emergency-hold-btn:disabled {
+      opacity: 0.7;
+    }
+    .snapshot ul {
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+    .snapshot li {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1>🚨 Emergency Button</h1>
+        <p class="sub">Immediate help & quick actions</p>
+      </div>
+    </header>
+
+    <main class="app-screen active">
+      <section class="snapshot" style="margin-top:0;">
+        <h3>Emergency Mode</h3>
+        <p>Hold the button for 3 seconds to confirm you’re in danger.</p>
+      </section>
+
+      <button id="emergency-hold-btn">HOLD TO ACTIVATE EMERGENCY MODE</button>
+
+      <div class="snapshot">
+        <h3>Quick Actions</h3>
+        <ul>
+          <li>📞 Call local emergency number if you are in immediate danger.</li>
+          <li>📍 Share your location with a trusted contact when possible.</li>
+          <li>🧭 Move to a visible, safe, well‑lit area.</li>
+        </ul>
+      </div>
+
+      <div class="snapshot">
+        <h3>Stay Safe Checklist</h3>
+        <ul>
+          <li>Avoid confrontation whenever you can.</li>
+          <li>Stay where other people can see you.</li>
+          <li>Leave immediately if something feels wrong.</li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Premium gate
+    (function () {
+      const isPremium = localStorage.getItem("premium") === "true";
+      if (!isPremium) {
+        window.location.href = "index.html#premium";
+        return;
+      }
+    })();
+
+    const btn = document.getElementById("emergency-hold-btn");
+    let holdInterval = null;
+    let counter = 0;
+
+    function startHold(e) {
+      e.preventDefault();
+      if (holdInterval) return;
+      counter = 3;
+      btn.textContent = "HOLDING… " + counter;
+
+      holdInterval = setInterval(() => {
+        counter--;
+        if (counter <= 0) {
+          clearInterval(holdInterval);
+          holdInterval = null;
+          btn.textContent = "EMERGENCY MODE ACTIVATED";
+          btn.disabled = true;
+          alert("Emergency mode activated. Call local emergency services if you are in danger.");
+        } else {
+          btn.textContent = "HOLDING… " + counter;
+        }
+      }, 1000);
+    }
+
+    function cancelHold() {
+      if (!holdInterval) return;
+      clearInterval(holdInterval);
+      holdInterval = null;
+      btn.textContent = "HOLD TO ACTIVATE EMERGENCY MODE";
+    }
+
+    btn.addEventListener("mousedown", startHold);
+    btn.addEventListener("touchstart", startHold, { passive: false });
+    btn.addEventListener("mouseup", cancelHold);
+    btn.addEventListener("mouseleave", cancelHold);
+    btn.addEventListener("touchend", cancelHold);
+    btn.addEventListener("touchcancel", cancelHold);
+  </script>
+</body>
+</html>
