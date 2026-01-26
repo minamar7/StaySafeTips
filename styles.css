@@ -1,3 +1,7 @@
+/* ---------------------------------------------------------
+   GLOBAL
+---------------------------------------------------------- */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -15,6 +19,10 @@ body {
   padding: 16px;
 }
 
+/* ---------------------------------------------------------
+   APP SHELL
+---------------------------------------------------------- */
+
 .app-shell {
   width: 100%;
   max-width: 480px;
@@ -24,6 +32,10 @@ body {
   padding: 16px 16px 24px;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
 }
+
+/* ---------------------------------------------------------
+   HEADER
+---------------------------------------------------------- */
 
 .app-header {
   display: flex;
@@ -51,6 +63,10 @@ body {
   font-size: 0.8rem;
 }
 
+/* ---------------------------------------------------------
+   NAV TABS (WITH ICONS)
+---------------------------------------------------------- */
+
 .nav-tabs {
   display: flex;
   gap: 4px;
@@ -66,6 +82,16 @@ body {
   font-size: 0.75rem;
   padding: 6px 0;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.nav-tab span.icon {
+  font-size: 1rem;
+  line-height: 1;
 }
 
 .nav-tab.active {
@@ -73,6 +99,10 @@ body {
   color: #020617;
   border-color: transparent;
 }
+
+/* ---------------------------------------------------------
+   SCREENS
+---------------------------------------------------------- */
 
 .app-screen {
   display: none;
@@ -116,6 +146,10 @@ ul {
   color: #d1d5db;
 }
 
+/* ---------------------------------------------------------
+   HOME / DIGITAL SNAPSHOTS
+---------------------------------------------------------- */
+
 .pro-tip {
   font-size: 0.8rem;
   color: #a5b4fc;
@@ -153,6 +187,10 @@ ul {
   margin-top: 6px;
 }
 
+/* ---------------------------------------------------------
+   BUTTONS
+---------------------------------------------------------- */
+
 button {
   margin-top: 10px;
   width: 100%;
@@ -176,6 +214,10 @@ button:disabled {
   color: white;
 }
 
+/* ---------------------------------------------------------
+   BADGES (PREMIUM)
+---------------------------------------------------------- */
+
 .badges-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -184,17 +226,20 @@ button:disabled {
 }
 
 .badge {
-  padding: 10px;
-  border-radius: 12px;
-  font-size: 0.8rem;
+  padding: 14px;
+  border-radius: 14px;
+  font-size: 0.85rem;
   text-align: center;
   border: 1px solid #1f2937;
-  background: #020617;
+  background: linear-gradient(145deg, #0b1220, #020617);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
 }
 
 .badge.unlocked {
   border-color: #22c55e;
+  background: linear-gradient(145deg, #052e16, #020617);
   color: #bbf7d0;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
 }
 
 .badge.locked {
@@ -202,27 +247,62 @@ button:disabled {
   color: #6b7280;
 }
 
+/* ---------------------------------------------------------
+   QUIZ (PREMIUM)
+---------------------------------------------------------- */
+
+#quiz-question {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 12px;
+  color: #f1f5f9;
+}
+
 .quiz-options {
+  margin-top: 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
+  gap: 8px;
 }
 
 .quiz-option {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid #1f2937;
-  background: #020617;
-  font-size: 0.85rem;
-  cursor: pointer;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  background: #0b1220;
+  border: 1px solid #1e293b;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
-/* PREMIUM ANIMATIONS */
+.quiz-option:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+}
+
+/* ---------------------------------------------------------
+   PREMIUM SCREEN
+---------------------------------------------------------- */
+
+#screen-premium ul li {
+  padding: 8px 0;
+  font-size: 0.9rem;
+  color: #d1d5db;
+  display: flex;
+  gap: 8px;
+}
+
+#screen-premium ul li::before {
+  content: "✔";
+  color: #22c55e;
+  font-weight: bold;
+}
+
+/* ---------------------------------------------------------
+   ANIMATIONS
+---------------------------------------------------------- */
 
 .badge.unlocked {
   animation: badgeUnlock 0.8s ease-out;
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
 }
 
 @keyframes badgeUnlock {
@@ -262,16 +342,9 @@ button:disabled {
   to { opacity: 1; transform: translateY(0); }
 }
 
-button, .stripe-btn, .nav-tab {
-  transition: transform 0.15s ease, opacity 0.15s ease;
-}
-
-button:active, .stripe-btn:active, .nav-tab:active {
-  transform: scale(0.96);
-  opacity: 0.85;
-}
-
-/* Onboarding */
+/* ---------------------------------------------------------
+   ONBOARDING
+---------------------------------------------------------- */
 
 .onboarding {
   position: fixed;
@@ -296,7 +369,9 @@ button:active, .stripe-btn:active, .nav-tab:active {
   display: none;
 }
 
-/* Paywall */
+/* ---------------------------------------------------------
+   PAYWALL
+---------------------------------------------------------- */
 
 .paywall {
   position: fixed;
@@ -329,7 +404,9 @@ button:active, .stripe-btn:active, .nav-tab:active {
   margin-top: 8px;
 }
 
-/* A2HS */
+/* ---------------------------------------------------------
+   A2HS
+---------------------------------------------------------- */
 
 .a2hs-box {
   position: fixed;
@@ -345,4 +422,23 @@ button:active, .stripe-btn:active, .nav-tab:active {
   align-items: center;
   z-index: 40;
   animation: fadeIn 0.4s ease-out;
+}
+
+/* ---------------------------------------------------------
+   OFFLINE BANNER
+---------------------------------------------------------- */
+
+.offline-banner {
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #1f2937;
+  font-size: 0.75rem;
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  animation: fadeIn 0.3s ease-out;
 }
