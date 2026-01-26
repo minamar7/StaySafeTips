@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Advanced Safety Tips – Stay Safe Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    .tip-block {
+      background: #0b1120;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .tip-block h3 {
+      margin: 0 0 6px 0;
+      color: #facc15;
+      font-size: 1.05rem;
+    }
+    .tip-block li {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    #refresh-tips-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #facc15, #eab308);
+      color: #000;
+      font-weight: 600;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <header class="app-header">
+      <div>
+        <h1>🧠 Advanced Safety Tips</h1>
+        <p class="sub">Expert‑level protection for modern digital life</p>
+      </div>
+    </header>
+
+    <main class="app-screen active" id="tips-container">
+      <!-- Tips injected dynamically -->
+    </main>
+
+    <button id="refresh-tips-btn">Refresh Tips</button>
+
+  </div>
+
+  <script>
+    // Premium gate
+    (function () {
+      const isPremium = localStorage.getItem("premium") === "true";
+      if (!isPremium) {
+        window.location.href = "index.html#premium";
+        return;
+      }
+    })();
+
+    const tipsData = [
+      {
+        title: "Social Engineering Defense",
+        items: [
+          "Pause when someone creates urgency.",
+          "Verify identity through a second channel.",
+          "Never share codes or passwords over chat."
+        ]
+      },
+      {
+        title: "Deepfake Awareness",
+        items: [
+          "Be skeptical of unexpected video/voice calls asking for money.",
+          "Check for inconsistencies in lighting and lip sync.",
+          "Confirm with a known contact method before acting."
+        ]
+      },
+      {
+        title: "Dark Web Exposure",
+        items: [
+          "If you reuse passwords, assume they are leaked.",
+          "Watch for login alerts from unknown locations.",
+          "Enable alerts from your bank and email provider."
+        ]
+      },
+      {
+        title: "Advanced Device Hardening",
+        items: [
+          "Review app permissions every few months.",
+          "Disable install from unknown sources.",
+          "Use a separate browser for banking."
+        ]
+      }
+    ];
+
+    const container = document.getElementById("tips-container");
+    const refreshBtn = document.getElementById("refresh-tips-btn");
+
+    function renderTips() {
+      container.innerHTML = "";
+      const shuffled = [...tipsData].sort(() => Math.random() - 0.5).slice(0, 3);
+
+      shuffled.forEach(block => {
+        const div = document.createElement("div");
+        div.className = "tip-block";
+
+        const title = document.createElement("h3");
+        title.textContent = block.title;
+        div.appendChild(title);
+
+        const ul = document.createElement("ul");
+        block.items.forEach(t => {
+          const li = document.createElement("li");
+          li.textContent = t;
+          ul.appendChild(li);
+        });
+
+        div.appendChild(ul);
+        container.appendChild(div);
+      });
+    }
+
+    refreshBtn.addEventListener("click", renderTips);
+    renderTips();
+  </script>
+
+</body>
+</html>
