@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (target === "premium") {
         Analytics.track("premium_tab_open");
+        renderPremiumList(); // 🔥 εδώ καλούμε το premium hub
       }
     });
   });
@@ -259,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Analytics.track("paywall_subscribe_click");
   });
 
-  document.getElementById("premium-btn").addEventListener("click", openPaywall);
+  document.getElementById("premium-btn")?.addEventListener("click", openPaywall);
 
   /* ---------------------------------------------------------
      A2HS
@@ -358,4 +359,49 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("online", hideOfflineBar);
 
   Analytics.track("app_open");
+
+  /* ---------------------------------------------------------
+     PREMIUM FEATURES
+  ---------------------------------------------------------- */
+
+  const premiumFeatures = [
+    { id: "emergency", label: "🚨 Emergency Button", page: "emergency.html" },
+    { id: "checkup", label: "🔐 Security Checkup", page: "checkup.html" },
+    { id: "advanced", label: "🧠 Advanced Safety Tips", page: "advanced-tips.html" },
+    { id: "alerts", label: "🛑 Scam Alerts", page: "scam-alerts.html" },
+    { id: "password", label: "🔑 Password Generator", page: "password-generator.html" },
+    { id: "offline", label: "📱 Offline Mode", page: "offline.html" }
+  ];
+
+  function renderPremiumList() {
+    const isPremium = localStorage.getItem("premium") === "true";
+    const list = document.getElementById("premium-list");
+    const banner = document.getElementById("upgrade-banner");
+
+    if (!list || !banner) return;
+
+    list.innerHTML = premiumFeatures.map(f => `
+      <li class="premium-item" onclick="openPremiumFeature('${f.page}')">
+        <span>${f.label}</span>
+        ${!isPremium ? '<span class="lock">🔒</span>' : ''}
+      </li>
+    `).join("");
+
+    banner.style.display = isPremium ? "none" : "block";
+  }
+
+  window.openPremiumFeature = function(page) {
+    const isPremium = localStorage.getItem("premium") === "true";
+    if (!isPremium) {
+      document.querySelector('[data-target="premium"]').click();
+      return;
+    }
+    window.location.href = page;
+  };
+
+  window.unlockPremium = function() {
+    localStorage.setItem("premium", "true");
+    renderPremiumList();
+    Analytics.track("premium_unlocked");
+  };
 });
