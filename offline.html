@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Offline Mode – Stay Safe Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    .offline-block {
+      background: #0b1120;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .offline-block h3 {
+      margin: 0 0 6px 0;
+      color: #facc15;
+      font-size: 1.05rem;
+    }
+    .offline-block li {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    #refresh-offline-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, #facc15, #eab308);
+      color: #000;
+      font-weight: 600;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <header class="app-header">
+      <div>
+        <h1>📱 Offline Mode</h1>
+        <p class="sub">Access essential safety tools without internet</p>
+      </div>
+    </header>
+
+    <main class="app-screen active" id="offline-container">
+
+      <div class="offline-block">
+        <h3>Offline Safety Guide</h3>
+        <ul>
+          <li>Stay where other people can see you.</li>
+          <li>Avoid moving into unknown, isolated areas.</li>
+          <li>Tell someone your last known location if possible.</li>
+        </ul>
+      </div>
+
+      <div class="offline-block">
+        <h3>Battery Survival Checklist</h3>
+        <ul>
+          <li>Lower screen brightness.</li>
+          <li>Disable Bluetooth, Wi‑Fi and hotspot if not needed.</li>
+          <li>Close battery‑heavy apps (video, games).</li>
+        </ul>
+      </div>
+
+      <div class="offline-block">
+        <h3>Offline Tools</h3>
+        <ul>
+          <li>Use your phone’s flashlight only when necessary.</li>
+          <li>Prepare an “SOS” screen with your name & contact.</li>
+          <li>Keep local emergency numbers saved in contacts.</li>
+        </ul>
+      </div>
+
+      <!-- Extra tips injected dynamically -->
+    </main>
+
+    <button id="refresh-offline-btn">Refresh Offline Tips</button>
+
+  </div>
+
+  <script>
+    // Premium gate
+    (function () {
+      const isPremium = localStorage.getItem("premium") === "true";
+      if (!isPremium) {
+        window.location.href = "index.html#premium";
+        return;
+      }
+    })();
+
+    const refreshBtn = document.getElementById("refresh-offline-btn");
+    const container = document.getElementById("offline-container");
+
+    const extraBlocks = [
+      {
+        title: "What NOT to do",
+        items: [
+          "Don’t wander randomly without a plan.",
+          "Don’t drain your battery on social media.",
+          "Don’t trust unknown people with your device."
+        ]
+      },
+      {
+        title: "Location Without GPS",
+        items: [
+          "Use landmarks (shops, main roads, squares).",
+          "Move towards well‑lit, busy areas.",
+          "Avoid dead ends and narrow alleys."
+        ]
+      }
+    ];
+
+    refreshBtn.addEventListener("click", () => {
+      const existing = container.querySelectorAll(".extra-offline");
+      existing.forEach(e => e.remove());
+
+      const block = extraBlocks[Math.floor(Math.random() * extraBlocks.length)];
+
+      const div = document.createElement("div");
+      div.className = "offline-block extra-offline";
+
+      const h3 = document.createElement("h3");
+      h3.textContent = block.title;
+      div.appendChild(h3);
+
+      const ul = document.createElement("ul");
+      block.items.forEach(i => {
+        const li = document.createElement("li");
+        li.textContent = i;
+        ul.appendChild(li);
+      });
+
+      div.appendChild(ul);
+      container.appendChild(div);
+    });
+  </script>
+
+</body>
+</html>
