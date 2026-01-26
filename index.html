@@ -32,21 +32,43 @@
 
     <!-- NAVIGATION -->
     <nav class="nav-tabs">
-      <button class="nav-tab active" data-target="home" data-i18n="t-tab-home">Home</button>
-      <button class="nav-tab" data-target="digital" data-i18n="t-tab-digital">Digital</button>
-      <button class="nav-tab" data-target="quiz" data-i18n="t-tab-quiz">Quiz</button>
-      <button class="nav-tab" data-target="badges" data-i18n="t-tab-badges">Badges</button>
-      <button class="nav-tab" data-target="premium" data-i18n="t-tab-premium">Premium</button>
+      <button class="nav-tab active" data-target="home">
+        <span class="icon">🏠</span>
+        <span data-i18n="t-tab-home">Home</span>
+      </button>
+
+      <button class="nav-tab" data-target="digital">
+        <span class="icon">💻</span>
+        <span data-i18n="t-tab-digital">Digital</span>
+      </button>
+
+      <button class="nav-tab" data-target="quiz">
+        <span class="icon">❓</span>
+        <span data-i18n="t-tab-quiz">Quiz</span>
+      </button>
+
+      <button class="nav-tab" data-target="badges">
+        <span class="icon">🏅</span>
+        <span data-i18n="t-tab-badges">Badges</span>
+      </button>
+
+      <button class="nav-tab" data-target="premium">
+        <span class="icon">⭐</span>
+        <span data-i18n="t-tab-premium">Premium</span>
+      </button>
     </nav>
 
     <!-- MAIN SCREENS -->
     <main>
+
       <!-- HOME -->
       <section id="screen-home" class="app-screen active">
         <h2 data-i18n="t-home-title">Home Safety</h2>
         <p class="sub" data-i18n="t-home-sub">Daily protection</p>
         <span class="pill" data-i18n="t-home-pill">Level 1 · Basics</span>
+
         <ul id="home-list"></ul>
+
         <div class="snapshot">
           <h3 data-i18n="t-home-snap-title">Home Safety Snapshot</h3>
           <div class="progress-row">
@@ -54,6 +76,7 @@
             <span id="t-home-quiz-progress">0%</span>
           </div>
         </div>
+
         <button id="home-quiz-btn" data-i18n="t-home-btn">Start home mini‑quiz</button>
       </section>
 
@@ -62,7 +85,9 @@
         <h2 data-i18n="t-digital-title">Digital Safety</h2>
         <p class="sub" data-i18n="t-digital-sub">Online protection</p>
         <span class="pill" data-i18n="t-digital-pill">Level 2 · Online</span>
+
         <ul id="digital-list"></ul>
+
         <div class="snapshot">
           <h3 data-i18n="t-digital-snap-title">Digital Shield View</h3>
           <div class="progress-row">
@@ -70,6 +95,7 @@
             <span id="t-digital-quiz-progress">0%</span>
           </div>
         </div>
+
         <button id="digital-quiz-btn" data-i18n="t-digital-btn">Start digital mini‑quiz</button>
       </section>
 
@@ -77,12 +103,16 @@
       <section id="screen-quiz" class="app-screen">
         <h2 data-i18n="t-quiz-title">Digital Safety Quiz</h2>
         <p class="sub" data-i18n="t-quiz-sub">Real‑world scenarios</p>
+
         <span class="pill" id="quiz-pill" data-i18n="t-quiz-pill">Live · Question 1</span>
+
         <div class="progress-row">
           <span id="quiz-progress-label" data-i18n="t-quiz-progress-label">Question 1 of 15</span>
         </div>
+
         <div id="quiz-question"></div>
         <div id="quiz-options" class="quiz-options"></div>
+
         <button id="quiz-next-btn" disabled data-i18n="t-quiz-next">Next</button>
       </section>
 
@@ -90,7 +120,21 @@
       <section id="screen-badges" class="app-screen">
         <h2 data-i18n="t-badges-title">Badges</h2>
         <p class="sub" data-i18n="t-badges-sub">Your safety journey</p>
-        <div class="badges-grid" id="badges-grid"></div>
+
+        <span class="pill" id="badges-pill">0 / 12 badges unlocked</span>
+        <p id="badges-progress">You’ve unlocked 0 of 12 badges.</p>
+
+        <div class="badges-grid">
+          <div id="badge-home" class="badge locked" data-i18n="t-badge-home">Home Security</div>
+          <div id="badge-digital" class="badge locked" data-i18n="t-badge-digital">Digital Safety</div>
+          <div id="badge-scam" class="badge locked" data-i18n="t-badge-scam">Scam Protection</div>
+          <div id="badge-emergency" class="badge locked" data-i18n="t-badge-emergency">Emergency Ready</div>
+          <div id="badge-night" class="badge locked" data-i18n="t-badge-locked1">Night Watch</div>
+          <div id="badge-travel" class="badge locked" data-i18n="t-badge-locked2">Travel Guardian</div>
+          <div id="badge-family" class="badge locked" data-i18n="t-badge-locked3">Family Shield</div>
+          <div id="badge-crisis" class="badge locked" data-i18n="t-badge-locked4">Crisis Navigator</div>
+        </div>
+
         <button id="badges-req-btn" data-i18n="t-badges-req">Show requirements ∧</button>
       </section>
 
@@ -98,11 +142,47 @@
       <section id="screen-premium" class="app-screen">
         <h2 data-i18n="t-premium-title">Unlock Premium Protection</h2>
         <p class="sub" data-i18n="t-premium-sub">Full access to all protocols</p>
+
         <ul id="premium-list"></ul>
+
         <p class="price" data-i18n="t-premium-price">€4.90 / month</p>
-        <button id="premium-btn" class="stripe-btn" data-i18n="t-premium-btn">Subscribe</button>
+
+        <button id="premium-btn" class="stripe-btn" data-i18n="t-premium-btn">
+          Subscribe
+        </button>
       </section>
+
     </main>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loader"></div>
+    <p>Loading…</p>
+  </div>
+
+  <!-- QUIZ RESULT SCREEN -->
+  <div id="quiz-result" class="quiz-result hidden">
+    <div class="quiz-result-card">
+      <h2 id="quiz-result-title">Quiz Completed</h2>
+      <p id="quiz-result-score">You scored 0%</p>
+
+      <div id="quiz-result-badge" class="quiz-result-badge hidden">
+        <span>🏅</span>
+        <p>Badge Earned!</p>
+      </div>
+
+      <button id="quiz-result-continue">Continue</button>
+    </div>
+  </div>
+
+  <!-- BADGE UNLOCK MODAL -->
+  <div id="badge-modal" class="badge-modal hidden">
+    <div class="badge-modal-card">
+      <h2 id="badge-modal-title">Badge Unlocked!</h2>
+      <p id="badge-modal-name">Home Security</p>
+      <button id="badge-modal-close">Continue</button>
+    </div>
   </div>
 
   <!-- SCRIPTS -->
@@ -112,13 +192,14 @@
   <script src="./quiz.js"></script>
   <script src="./app.js"></script>
 
+  <!-- SERVICE WORKER -->
   <script>
-    // Register service worker
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js")
+      navigator.serviceWorker.register("./service-worker.js")
         .then(() => console.log("Service Worker registered"))
         .catch(err => console.error("SW registration failed:", err));
     }
   </script>
+
 </body>
 </html>
