@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const tabs = document.querySelectorAll(".nav-tab");
   const screens = document.querySelectorAll(".app-screen");
 
-  /* STORAGE ENGINE */
+  /* ---------------------------------------------------------
+     STORAGE ENGINE
+  ---------------------------------------------------------- */
 
   const Storage = {
     saveLanguage(lang) {
@@ -34,7 +36,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  /* AUTO-DETECT LANGUAGE */
+  /* ---------------------------------------------------------
+     BADGE META
+  ---------------------------------------------------------- */
+
+  const ALL_BADGES = [
+    "badge-home",
+    "badge-digital",
+    "badge-scam",
+    "badge-emergency",
+    "badge-night",
+    "badge-travel",
+    "badge-family",
+    "badge-crisis"
+  ];
+
+  function updateBadgeProgress() {
+    const unlocked = Storage.loadBadges();
+    const unlockedCount = unlocked.length;
+    const total = ALL_BADGES.length;
+
+    const pill = document.getElementById("badges-pill");
+    const progress = document.getElementById("badges-progress");
+
+    if (pill) {
+      pill.textContent = `${unlockedCount} / ${total} badges unlocked`;
+    }
+    if (progress) {
+      progress.textContent = `You’ve unlocked ${unlockedCount} of ${total} badges. Keep going.`;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     LANGUAGE INIT
+  ---------------------------------------------------------- */
 
   const supportedLangs = [
     "en","el","it","es","fr","de","pt","nl","sv","no","da","fi","pl","ro","tr",
@@ -67,7 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.I18N.apply(lang);
   });
 
-  /* TABS */
+  /* ---------------------------------------------------------
+     TABS
+  ---------------------------------------------------------- */
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -85,7 +122,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* BADGES */
+  /* ---------------------------------------------------------
+     BADGE UNLOCK + MODAL
+  ---------------------------------------------------------- */
+
+  function showBadgeModal(badgeId) {
+    const modal = document.getElementById("badge-modal");
+    const name = document.getElementById("badge-modal-name");
+
+    const dict = I18N.getDict(Storage.loadLanguage());
+    const key = `t-badge-${badgeId.replace("badge-", "")}`;
+
+    name.textContent = dict[key] || "Badge";
+
+    modal.classList.remove("hidden");
+  }
+
+  document.getElementById("badge-modal-close").addEventListener("click", () => {
+    document.getElementById("badge-modal").classList.add("hidden");
+  });
 
   function unlockBadge(badgeId) {
     const badge = document.getElementById(badgeId);
@@ -99,12 +154,16 @@ document.addEventListener("DOMContentLoaded", () => {
     badge.style.animation = "";
 
     Storage.saveBadge(badgeId);
+    updateBadgeProgress();
+    showBadgeModal(badgeId);
   }
 
-  const unlocked = Storage.loadBadges();
-  unlocked.forEach((id) => unlockBadge(id));
+  Storage.loadBadges().forEach((id) => unlockBadge(id));
+  updateBadgeProgress();
 
-  /* QUIZ PROGRESS LOAD */
+  /* ---------------------------------------------------------
+     QUIZ PROGRESS LOAD
+  ---------------------------------------------------------- */
 
   const qp = Storage.loadQuizProgress();
   if (qp.total > 0) {
@@ -113,19 +172,57 @@ document.addEventListener("DOMContentLoaded", () => {
     if (homeProg) homeProg.textContent = percent + "%";
   }
 
-  /* QUIZ EVENTS */
+  /* ---------------------------------------------------------
+     QUIZ RESULT SCREEN
+  ---------------------------------------------------------- */
+
+  const quizResult = document.getElementById("quiz-result");
+  const quizResultScore = document.getElementById("quiz-result-score");
+  const quizResultBadge = document.getElementById("quiz-result-badge");
+  const quizResultContinue = document.getElementById("quiz-result-continue");
+
+  quizResultContinue.addEventListener("click", () => {
+    quizResult.classList.add("hidden");
+  });
+
+  /* ---------------------------------------------------------
+     QUIZ EVENTS
+  ---------------------------------------------------------- */
 
   window.addEventListener("quizCompleted", (e) => {
-    const { score, total } = e.detail;
+    const { score, total, badgeId } = e.detail;
+
     Storage.saveQuizProgress(score, total);
     Analytics.track("quiz_completed", { score, total });
 
-    if (score / total >= 0.7) {
-      unlockBadge("badge-digital");
+    const percent = Math.round((score / total) * 100);
+    quizResultScore.textContent = `You scored ${percent}%`;
+
+    if (percent >= 70 && badgeId) {
+      quizResultBadge.classList.remove("hidden");
+      unlockBadge(badgeId);
+    } else {
+      quizResultBadge.classList.add("hidden");
     }
+
+    quizResult.classList.remove("hidden");
   });
 
-  /* ONBOARDING */
+  /* ---------------------------------------------------------
+     LOADING OVERLAY
+  ---------------------------------------------------------- */
+
+  function showLoading() {
+    document.getElementById("loading-overlay").classList.remove("hidden");
+  }
+
+  function hideLoading() {
+    document.getElementById("loading-overlay").classList.add("hidden");
+  }
+
+  /* ---------------------------------------------------------
+     ONBOARDING
+  ---------------------------------------------------------- */
 
   const onboarding = document.getElementById("onboarding");
   const onboardingStart = document.getElementById("onboarding-start");
@@ -140,7 +237,9 @@ document.addEventListener("DOMContentLoaded", () => {
     Analytics.track("onboarding_completed");
   });
 
-  /* PAYWALL */
+  /* ---------------------------------------------------------
+     PAYWALL
+  ---------------------------------------------------------- */
 
   const paywall = document.getElementById("paywall");
   const paywallSubscribe = document.getElementById("paywall-subscribe");
@@ -158,12 +257,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   paywallSubscribe.addEventListener("click", () => {
     Analytics.track("paywall_subscribe_click");
-    // window.location.href = "https://checkout.stripe.com/your-link";
   });
 
   document.getElementById("premium-btn").addEventListener("click", openPaywall);
 
-  /* A2HS */
+  /* ---------------------------------------------------------
+     A2HS
+  ---------------------------------------------------------- */
 
   let deferredPrompt;
   const a2hsBanner = document.getElementById("a2hs-banner");
@@ -181,45 +281,81 @@ document.addEventListener("DOMContentLoaded", () => {
     a2hsBanner.classList.add("hidden");
   };
 
-  /* NOTIFICATIONS */
+  /* ---------------------------------------------------------
+     NOTIFICATIONS
+  ---------------------------------------------------------- */
 
   window.requestNotificationPermission = async function () {
     const permission = await Notification.requestPermission();
     if (permission === "granted") {
       new Notification("Stay Safe Premium", {
         body: "Οι ειδοποιήσεις ενεργοποιήθηκαν!",
-        icon: "icons/icon-192.png"   // FIXED PATH
+        icon: "icons/icon-192.png"
       });
     }
   };
 
-  /* HOME / DIGITAL QUIZ BUTTONS */
+  /* ---------------------------------------------------------
+     QUIZ START BUTTONS (WITH BADGE ID)
+  ---------------------------------------------------------- */
 
   document.getElementById("home-quiz-btn").addEventListener("click", () => {
+    showLoading();
+    setTimeout(() => hideLoading(), 500);
+
     tabs.forEach((t) => t.classList.remove("active"));
     document.querySelector('[data-target="quiz"]').classList.add("active");
     screens.forEach((s) => s.classList.remove("active"));
     document.getElementById("screen-quiz").classList.add("active");
-    QuizEngine.start(langSelect.value);
+
+    QuizEngine.start(langSelect.value, { badgeId: "badge-home" });
   });
 
   document.getElementById("digital-quiz-btn").addEventListener("click", () => {
+    showLoading();
+    setTimeout(() => hideLoading(), 500);
+
     tabs.forEach((t) => t.classList.remove("active"));
     document.querySelector('[data-target="quiz"]').classList.add("active");
     screens.forEach((s) => s.classList.remove("active"));
     document.getElementById("screen-quiz").classList.add("active");
-    QuizEngine.start(langSelect.value);
+
+    QuizEngine.start(langSelect.value, { badgeId: "badge-digital" });
   });
 
-  /* SERVICE WORKER */
+  /* ---------------------------------------------------------
+     SERVICE WORKER
+  ---------------------------------------------------------- */
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("service-worker.js")   // FIXED PATH
+      .register("service-worker.js")
       .then(() => console.log("Service Worker registered"))
       .catch((err) => console.log("SW error:", err));
   }
 
+  /* ---------------------------------------------------------
+     OFFLINE BANNER
+  ---------------------------------------------------------- */
+
+  let offlineBar = null;
+
+  function showOfflineBar() {
+    if (offlineBar) return;
+    offlineBar = document.createElement("div");
+    offlineBar.className = "offline-banner";
+    offlineBar.textContent = I18N.get("t-offline-msg", Storage.loadLanguage());
+    document.body.appendChild(offlineBar);
+  }
+
+  function hideOfflineBar() {
+    if (!offlineBar) return;
+    offlineBar.remove();
+    offlineBar = null;
+  }
+
+  window.addEventListener("offline", showOfflineBar);
+  window.addEventListener("online", hideOfflineBar);
+
   Analytics.track("app_open");
 });
-  
