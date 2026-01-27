@@ -9,7 +9,7 @@
   <!-- SEO -->
   <meta name="description" content="Stay Safe Premium — interactive safety experience with quizzes, badges, and offline protection.">
   <meta property="og:title" content="Stay Safe Premium">
-  <meta property="og:description" content="Your personal safety companion with real‑world scenarios and progress tracking.">
+  <meta property="og:description" content="Your personal safety companion with real-world scenarios and progress tracking.">
   <meta property="og:type" content="website">
 
   <!-- PWA -->
@@ -18,188 +18,208 @@
 </head>
 
 <body>
-  <div class="app-shell">
 
-    <!-- HEADER -->
-    <header class="app-header">
-      <div class="title-block">
-        <h1 data-i18n="t-app-title">Stay Safe Premium</h1>
-        <p data-i18n="t-app-subtitle">Interactive safety experience</p>
-      </div>
+<!-- ✅ ONBOARDING -->
+<section id="onboarding" class="onboarding-screen active">
+  <div class="onboarding-slide active">
+    <h1>Stay Safe</h1>
+    <p>Protect your real & digital life</p>
+  </div>
 
-      <select id="lang-select" class="lang-select"></select>
-    </header>
+  <div class="onboarding-slide">
+    <h1>Learn by doing</h1>
+    <p>Real scenarios. Quick decisions.</p>
+  </div>
 
-    <!-- NAVIGATION -->
-    <nav class="nav-tabs">
-      <button class="nav-tab active" data-target="home">
-        <span class="icon">🏠</span>
-        <span data-i18n="t-tab-home">Home</span>
-      </button>
+  <div class="onboarding-slide">
+    <h1>Earn badges</h1>
+    <p>Build safety skills every day</p>
+  </div>
 
-      <button class="nav-tab" data-target="digital">
-        <span class="icon">💻</span>
-        <span data-i18n="t-tab-digital">Digital</span>
-      </button>
+  <button id="onboarding-start">Start Your Journey</button>
+</section>
 
-      <button class="nav-tab" data-target="quiz">
-        <span class="icon">❓</span>
-        <span data-i18n="t-tab-quiz">Quiz</span>
-      </button>
+<!-- ✅ APP WRAPPER -->
+<div class="app-shell hidden">
 
-      <button class="nav-tab" data-target="badges">
-        <span class="icon">🏅</span>
-        <span data-i18n="t-tab-badges">Badges</span>
-      </button>
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="title-block">
+      <h1 data-i18n="t-app-title">Stay Safe Premium</h1>
+      <p data-i18n="t-app-subtitle">Interactive safety experience</p>
+    </div>
 
-      <button class="nav-tab" data-target="premium">
-        <span class="icon">⭐</span>
-        <span data-i18n="t-tab-premium">Premium</span>
-      </button>
-    </nav>
+    <select id="lang-select" class="lang-select"></select>
+  </header>
 
-    <!-- MAIN SCREENS -->
-    <main>
+  <!-- NAVIGATION -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-target="home">
+      <span class="icon">🏠</span>
+      <span data-i18n="t-tab-home">Home</span>
+    </button>
 
-      <!-- HOME -->
-      <section id="screen-home" class="app-screen active">
-        <h2 data-i18n="t-home-title">Home Safety</h2>
-        <p class="sub" data-i18n="t-home-sub">Daily protection</p>
-        <span class="pill" data-i18n="t-home-pill">Level 1 · Basics</span>
+    <button class="nav-tab" data-target="digital">
+      <span class="icon">💻</span>
+      <span data-i18n="t-tab-digital">Digital</span>
+    </button>
 
-        <ul id="home-list"></ul>
+    <button class="nav-tab" data-target="quiz">
+      <span class="icon">❓</span>
+      <span data-i18n="t-tab-quiz">Quiz</span>
+    </button>
 
-        <div class="snapshot">
-          <h3 data-i18n="t-home-snap-title">Home Safety Snapshot</h3>
-          <div class="progress-row">
-            <span data-i18n="t-home-quiz-label">Home quiz progress</span>
-            <span id="t-home-quiz-progress">0%</span>
-          </div>
-        </div>
+    <button class="nav-tab" data-target="badges">
+      <span class="icon">🏅</span>
+      <span data-i18n="t-tab-badges">Badges</span>
+    </button>
 
-        <button id="home-quiz-btn" data-i18n="t-home-btn">Start home mini‑quiz</button>
-      </section>
+    <button class="nav-tab" data-target="premium">
+      <span class="icon">⭐</span>
+      <span data-i18n="t-tab-premium">Premium</span>
+    </button>
+  </nav>
 
-      <!-- DIGITAL -->
-      <section id="screen-digital" class="app-screen">
-        <h2 data-i18n="t-digital-title">Digital Safety</h2>
-        <p class="sub" data-i18n="t-digital-sub">Online protection</p>
-        <span class="pill" data-i18n="t-digital-pill">Level 2 · Online</span>
+  <!-- MAIN -->
+  <main>
 
-        <ul id="digital-list"></ul>
+    <!-- HOME -->
+    <section id="screen-home" class="app-screen active">
+      <h2 data-i18n="t-home-title">Home Safety</h2>
+      <p class="sub" data-i18n="t-home-sub">Daily protection</p>
+      <span class="pill" data-i18n="t-home-pill">Level 1 · Basics</span>
 
-        <div class="snapshot">
-          <h3 data-i18n="t-digital-snap-title">Digital Shield View</h3>
-          <div class="progress-row">
-            <span data-i18n="t-digital-quiz-label">Digital quiz progress</span>
-            <span id="t-digital-quiz-progress">0%</span>
-          </div>
-        </div>
+      <ul id="home-list"></ul>
 
-        <button id="digital-quiz-btn" data-i18n="t-digital-btn">Start digital mini‑quiz</button>
-      </section>
-
-      <!-- QUIZ -->
-      <section id="screen-quiz" class="app-screen">
-        <h2 data-i18n="t-quiz-title">Digital Safety Quiz</h2>
-        <p class="sub" data-i18n="t-quiz-sub">Real‑world scenarios</p>
-
-        <span class="pill" id="quiz-pill" data-i18n="t-quiz-pill">Live · Question 1</span>
-
+      <div class="snapshot">
+        <h3 data-i18n="t-home-snap-title">Home Safety Snapshot</h3>
         <div class="progress-row">
-          <span id="quiz-progress-label" data-i18n="t-quiz-progress-label">Question 1 of 15</span>
+          <span data-i18n="t-home-quiz-label">Home quiz progress</span>
+          <span id="t-home-quiz-progress">0%</span>
         </div>
-
-        <div id="quiz-question"></div>
-        <div id="quiz-options" class="quiz-options"></div>
-
-        <button id="quiz-next-btn" disabled data-i18n="t-quiz-next">Next</button>
-      </section>
-
-      <!-- BADGES -->
-      <section id="screen-badges" class="app-screen">
-        <h2 data-i18n="t-badges-title">Badges</h2>
-        <p class="sub" data-i18n="t-badges-sub">Your safety journey</p>
-
-        <span class="pill" id="badges-pill">0 / 12 badges unlocked</span>
-        <p id="badges-progress">You’ve unlocked 0 of 12 badges.</p>
-
-        <div class="badges-grid">
-          <div id="badge-home" class="badge locked" data-i18n="t-badge-home">Home Security</div>
-          <div id="badge-digital" class="badge locked" data-i18n="t-badge-digital">Digital Safety</div>
-          <div id="badge-scam" class="badge locked" data-i18n="t-badge-scam">Scam Protection</div>
-          <div id="badge-emergency" class="badge locked" data-i18n="t-badge-emergency">Emergency Ready</div>
-          <div id="badge-night" class="badge locked" data-i18n="t-badge-locked1">Night Watch</div>
-          <div id="badge-travel" class="badge locked" data-i18n="t-badge-locked2">Travel Guardian</div>
-          <div id="badge-family" class="badge locked" data-i18n="t-badge-locked3">Family Shield</div>
-          <div id="badge-crisis" class="badge locked" data-i18n="t-badge-locked4">Crisis Navigator</div>
-        </div>
-
-        <button id="badges-req-btn" data-i18n="t-badges-req">Show requirements ∧</button>
-      </section>
-
-      <!-- PREMIUM -->
-      <section id="screen-premium" class="app-screen">
-        <h2 data-i18n="t-premium-title">Unlock Premium Protection</h2>
-        <p class="sub" data-i18n="t-premium-sub">Full access to all protocols</p>
-
-        <!-- PREMIUM LIST -->
-        <ul id="premium-list" class="premium-list"></ul>
-
-        <!-- UPGRADE BANNER -->
-        <div id="upgrade-banner" class="upgrade-banner" onclick="unlockPremium()">
-          Unlock Premium – €4.90
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- LOADING OVERLAY -->
-  <div id="loading-overlay" class="loading-overlay hidden">
-    <div class="loader"></div>
-    <p>Loading…</p>
-  </div>
-
-  <!-- QUIZ RESULT SCREEN -->
-  <div id="quiz-result" class="quiz-result hidden">
-    <div class="quiz-result-card">
-      <h2 id="quiz-result-title">Quiz Completed</h2>
-      <p id="quiz-result-score">You scored 0%</p>
-
-      <div id="quiz-result-badge" class="quiz-result-badge hidden">
-        <span>🏅</span>
-        <p>Badge Earned!</p>
       </div>
 
-      <button id="quiz-result-continue">Continue</button>
+      <button id="home-quiz-btn" data-i18n="t-home-btn">Start home mini-quiz</button>
+    </section>
+
+    <!-- DIGITAL -->
+    <section id="screen-digital" class="app-screen">
+      <h2 data-i18n="t-digital-title">Digital Safety</h2>
+      <p class="sub" data-i18n="t-digital-sub">Online protection</p>
+      <span class="pill" data-i18n="t-digital-pill">Level 2 · Online</span>
+
+      <ul id="digital-list"></ul>
+
+      <div class="snapshot">
+        <h3 data-i18n="t-digital-snap-title">Digital Shield View</h3>
+        <div class="progress-row">
+          <span data-i18n="t-digital-quiz-label">Digital quiz progress</span>
+          <span id="t-digital-quiz-progress">0%</span>
+        </div>
+      </div>
+
+      <button id="digital-quiz-btn" data-i18n="t-digital-btn">Start digital mini-quiz</button>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="screen-quiz" class="app-screen">
+      <h2 data-i18n="t-quiz-title">Digital Safety Quiz</h2>
+      <p class="sub" data-i18n="t-quiz-sub">Real-world scenarios</p>
+
+      <span class="pill" id="quiz-pill" data-i18n="t-quiz-pill">Live · Question 1</span>
+
+      <div class="progress-row">
+        <span id="quiz-progress-label" data-i18n="t-quiz-progress-label">Question 1 of 15</span>
+      </div>
+
+      <div id="quiz-question"></div>
+      <div id="quiz-options" class="quiz-options"></div>
+
+      <button id="quiz-next-btn" disabled data-i18n="t-quiz-next">Next</button>
+    </section>
+
+    <!-- BADGES -->
+    <section id="screen-badges" class="app-screen">
+      <h2 data-i18n="t-badges-title">Badges</h2>
+      <p class="sub" data-i18n="t-badges-sub">Your safety journey</p>
+
+      <span class="pill" id="badges-pill">0 / 12 badges unlocked</span>
+      <p id="badges-progress">You’ve unlocked 0 of 12 badges.</p>
+
+      <div class="badges-grid">
+        <div id="badge-home" class="badge locked" data-i18n="t-badge-home">Home Security</div>
+        <div id="badge-digital" class="badge locked" data-i18n="t-badge-digital">Digital Safety</div>
+        <div id="badge-scam" class="badge locked" data-i18n="t-badge-scam">Scam Protection</div>
+        <div id="badge-emergency" class="badge locked" data-i18n="t-badge-emergency">Emergency Ready</div>
+        <div id="badge-night" class="badge locked" data-i18n="t-badge-locked1">Night Watch</div>
+        <div id="badge-travel" class="badge locked" data-i18n="t-badge-locked2">Travel Guardian</div>
+        <div id="badge-family" class="badge locked" data-i18n="t-badge-locked3">Family Shield</div>
+        <div id="badge-crisis" class="badge locked" data-i18n="t-badge-locked4">Crisis Navigator</div>
+      </div>
+
+      <button id="badges-req-btn" data-i18n="t-badges-req">Show requirements ∧</button>
+    </section>
+
+    <!-- PREMIUM -->
+    <section id="screen-premium" class="app-screen">
+      <h2 data-i18n="t-premium-title">Unlock Premium Protection</h2>
+      <p class="sub" data-i18n="t-premium-sub">Full access to all protocols</p>
+
+      <ul id="premium-list" class="premium-list"></ul>
+
+      <div id="upgrade-banner" class="upgrade-banner" onclick="unlockPremium()">
+        Unlock Premium – €4.90
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- LOADING -->
+<div id="loading-overlay" class="loading-overlay hidden">
+  <div class="loader"></div>
+  <p>Loading…</p>
+</div>
+
+<!-- QUIZ RESULT -->
+<div id="quiz-result" class="quiz-result hidden">
+  <div class="quiz-result-card">
+    <h2 id="quiz-result-title">Quiz Completed</h2>
+    <p id="quiz-result-score">You scored 0%</p>
+
+    <div id="quiz-result-badge" class="quiz-result-badge hidden">
+      <span>🏅</span>
+      <p>Badge Earned!</p>
     </div>
+
+    <button id="quiz-result-continue">Continue</button>
   </div>
+</div>
 
-  <!-- BADGE UNLOCK MODAL -->
-  <div id="badge-modal" class="badge-modal hidden">
-    <div class="badge-modal-card">
-      <h2 id="badge-modal-title">Badge Unlocked!</h2>
-      <p id="badge-modal-name">Home Security</p>
-      <button id="badge-modal-close">Continue</button>
-    </div>
+<!-- BADGE MODAL -->
+<div id="badge-modal" class="badge-modal hidden">
+  <div class="badge-modal-card">
+    <h2 id="badge-modal-title">Badge Unlocked!</h2>
+    <p id="badge-modal-name">Home Security</p>
+    <button id="badge-modal-close">Continue</button>
   </div>
+</div>
 
-  <!-- SCRIPTS -->
-  <script src="./i18n.js"></script>
-  <script src="./analytics.js"></script>
-  <script src="./api.js"></script>
-  <script src="./quiz.js"></script>
-  <script src="./app.js"></script>
+<!-- SCRIPTS -->
+<script src="./i18n.js"></script>
+<script src="./analytics.js"></script>
+<script src="./api.js"></script>
+<script src="./quiz.js"></script>
+<script src="./app.js"></script>
 
-  <!-- SERVICE WORKER -->
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./service-worker.js")
-        .then(() => console.log("Service Worker registered"))
-        .catch(err => console.error("SW registration failed:", err));
-    }
-  </script>
+<!-- SERVICE WORKER -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("Service Worker registered"))
+      .catch(err => console.error("SW registration failed:", err));
+  }
+</script>
 
 </body>
 </html>
