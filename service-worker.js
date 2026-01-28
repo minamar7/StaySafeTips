@@ -1,13 +1,14 @@
-const CACHE_STATIC = "ssp-static-v4";
-const CACHE_DYNAMIC = "ssp-dynamic-v1";
+const VERSION = "v5"; // ⬅️ ΑΛΛΑΖΕΙ ΚΑΘΕ ΦΟΡΑ ΠΟΥ ΑΛΛΑΖΕΙ UI
+const STATIC_CACHE = `ssp-static-${VERSION}`;
+const DYNAMIC_CACHE = `ssp-dynamic-${VERSION}`;
 
 const STATIC_ASSETS = [
   "./",
   "./index.html",
+  "./styles.css",
   "./app.js",
   "./quiz.js",
   "./i18n.js",
-  "./styles.css",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
@@ -16,7 +17,9 @@ const STATIC_ASSETS = [
 // INSTALL
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_STATIC).then(cache => cache.addAll(STATIC_ASSETS))
+    caches.open(STATIC_CACHE).then(cache => {
+      return cache.addAll(STATIC_ASSETS);
+    })
   );
   self.skipWaiting();
 });
@@ -27,7 +30,7 @@ self.addEventListener("activate", event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_STATIC && key !== CACHE_DYNAMIC)
+          .filter(key => !key.includes(VERSION))
           .map(key => caches.delete(key))
       )
     )
@@ -37,18 +40,17 @@ self.addEventListener("activate", event => {
 
 // FETCH
 self.addEventListener("fetch", event => {
-  const request = event.request;
+  const req = event.request;
 
-  // Μόνο requests από το ίδιο origin
-  if (!request.url.startsWith(self.location.origin)) return;
+  if (!req.url.startsWith(self.location.origin)) return;
 
-  // HTML → network-first
-  if (request.headers.get("accept")?.includes("text/html")) {
+  // 🧠 HTML → Network First (για onboarding, νέα screens κλπ)
+  if (req.headers.get("accept")?.includes("text/html")) {
     event.respondWith(
-      fetch(request)
+      fetch(req)
         .then(res => {
-          const resClone = res.clone();
-          caches.open(CACHE_DYNAMIC).then(cache => cache.put(request, resClone));
+          const clone = res.clone();
+          caches.open(DYNAMIC_CACHE).then(c => c.put(req, clone));
           return res;
         })
         .catch(() => caches.match("./index.html"))
@@ -56,14 +58,16 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // CSS/JS/images → cache-first
+  // 🎨 CSS / JS / Images → Stale While Revalidate
   event.respondWith(
-    caches.match(request).then(cached => {
-      return cached || fetch(request).then(res => {
-        const resClone = res.clone();
-        caches.open(CACHE_DYNAMIC).then(cache => cache.put(request, resClone));
+    caches.match(req).then(cached => {
+      const fetchPromise = fetch(req).then(res => {
+        const clone = res.clone();
+        caches.open(DYNAMIC_CACHE).then(c => c.put(req, clone));
         return res;
       });
+
+      return cached || fetchPromise;
     })
   );
 });
