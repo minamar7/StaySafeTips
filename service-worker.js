@@ -1,7 +1,6 @@
-const VERSION = "v5"; // ⬅️ ΑΛΛΑΖΕΙ ΚΑΘΕ ΦΟΡΑ ΠΟΥ ΑΛΛΑΖΕΙ UI
+const VERSION = "v6"; // ⬅️ ΕΔΩ
 const STATIC_CACHE = `ssp-static-${VERSION}`;
 const DYNAMIC_CACHE = `ssp-dynamic-${VERSION}`;
-
 const STATIC_ASSETS = [
   "./",
   "./index.html",
