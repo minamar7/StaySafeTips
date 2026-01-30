@@ -1,111 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
-  <title>Scam Alerts – Stay Safe Premium</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scam Alerts – Stay Safe Elite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="./styles.css" />
 
   <style>
+    :root {
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+    }
+
+    .alert-feed {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
     .alert-block {
-      background: #0b1120;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 16px;
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: 5px solid var(--info); /* Δυναμικό χρώμα */
+      border-radius: 16px;
+      padding: 18px;
+      animation: slideIn 0.4s ease-out forwards;
+      position: relative;
     }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .threat-level {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 0.65rem;
+      font-weight: 900;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
     .alert-block h3 {
-      margin: 0 0 6px 0;
-      color: #facc15;
-      font-size: 1.05rem;
+      margin: 0 0 10px 0;
+      color: #fff;
+      font-size: 1.1rem;
+      max-width: 80%;
     }
+
+    .alert-block ul {
+      padding-left: 18px;
+      margin: 10px 0;
+    }
+
     .alert-block li {
       color: #cbd5e1;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .action-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+
+    .action-box strong {
+      color: #facc15;
+      font-size: 0.8rem;
+      display: block;
       margin-bottom: 4px;
+      text-transform: uppercase;
     }
-    .alert-block p {
-      color: #e2e8f0;
-      font-size: 0.9rem;
-      margin-top: 6px;
+
+    .action-box p {
+      margin: 0;
+      color: #fff;
+      font-size: 0.85rem;
     }
+
     #refresh-alerts-btn {
-      margin-top: 10px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      background: linear-gradient(90deg, #facc15, #eab308);
-      color: #000;
-      font-weight: 600;
-      border: none;
+      margin: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #facc15;
+      border: 1px solid #facc15;
+      border-radius: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
+
+    #refresh-alerts-btn:active {
+      transform: scale(0.98);
+      background: #facc15;
+      color: #000;
+    }
+
+    /* Threat Colors */
+    .level-high { border-left-color: var(--danger); }
+    .level-high .threat-level { background: var(--danger); color: white; }
+    
+    .level-medium { border-left-color: var(--warning); }
+    .level-medium .threat-level { background: var(--warning); color: black; }
   </style>
 </head>
 
 <body>
   <div class="app-shell">
-
     <header class="app-header">
       <div>
-        <h1>🛑 Scam Alerts</h1>
-        <p class="sub">Real‑time warnings for trending scams</p>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <h1 style="margin:0;">🛑 Scam Radar</h1>
+            <span id="live-indicator" style="color:#22c55e; font-size: 0.7rem; font-weight: bold; animation: pulse 2s infinite;">• LIVE</span>
+        </div>
+        <p class="sub">Πραγματική παρακολούθηση νέων απειλών</p>
       </div>
     </header>
 
-    <main class="app-screen active" id="alerts-container">
-      <!-- Alerts injected dynamically -->
-    </main>
+    <main class="alert-feed" id="alerts-container">
+      </main>
 
-    <button id="refresh-alerts-btn">Refresh Alerts</button>
-
+    <button id="refresh-alerts-btn">ΣΑΡΩΣΗ ΓΙΑ ΝΕΕΣ ΑΠΕΙΛΕΣ</button>
   </div>
 
   <script>
-    // Premium gate
+    // Premium Gate
     (function () {
-      const isPremium = localStorage.getItem("premium") === "true";
+      const isPremium = localStorage.getItem("ss_premium") === "true";
       if (!isPremium) {
-        window.location.href = "index.html#premium";
+        window.location.href = "index.html";
         return;
       }
     })();
 
     const alertsData = [
       {
-        title: "Bank Verification SMS",
+        title: "SMS Επιβεβαίωσης Τράπεζας",
+        level: "high",
         bullets: [
-          "Claims your account will be closed.",
-          "Includes a link to a fake login page.",
-          "Uses urgent language to force quick action."
+          "Μήνυμα ότι ο λογαριασμός σας θα κλειδωθεί.",
+          "Σύνδεσμος (link) προς ψεύτικη σελίδα e-banking.",
+          "Χρήση επείγουσας γλώσσας για να σας πιέσει."
         ],
-        action: "Never tap links in SMS. Open your bank app directly."
+        action: "Μην πατάτε ποτέ συνδέσμους σε SMS. Μπείτε μόνο από το επίσημο app της τράπεζας."
       },
       {
-        title: "Family Member in Trouble",
+        title: "Απάτη 'Συγγενής σε Ανάγκη'",
+        level: "high",
         bullets: [
-          "Caller claims to be a relative in danger.",
-          "Asks for immediate money transfer.",
-          "May use AI‑cloned voice."
+          "Κλήση από άγνωστο για ατύχημα δικού σας ανθρώπου.",
+          "Απαίτηση για άμεση μεταφορά χρημάτων ή παράδοση μετρητών.",
+          "Πιθανή χρήση AI για κλωνοποίηση φωνής."
         ],
-        action: "Hang up and call your relative on a known number."
+        action: "Κλείστε το τηλέφωνο και καλέστε εσείς τον συγγενή σας στον γνωστό του αριθμό."
       },
       {
-        title: "Fake Delivery Notice",
+        title: "Ψεύτικο Ειδοποιητήριο ΕΛΤΑ/Courier",
+        level: "medium",
         bullets: [
-          "Says a package is held at customs.",
-          "Requests payment of a small fee.",
-          "Links to phishing payment page."
+          "Email ή SMS για δέμα που 'εκκρεμεί'.",
+          "Ζητάει πληρωμή μικρού ποσού για έξοδα αποστολής.",
+          "Σας οδηγεί σε σελίδα υποκλοπής κάρτας."
         ],
-        action: "Check only through official courier apps or websites."
+        action: "Ελέγξτε τον κωδικό αποστολής απευθείας στο επίσημο site της εταιρείας."
       },
       {
-        title: "Job Offer Scam",
+        title: "Επενδυτικές Απάτες (Crypto)",
+        level: "medium",
         bullets: [
-          "Unrealistic salary for minimal work.",
-          "Requests upfront payment for training or equipment.",
-          "No verifiable company details."
+          "Υποσχέσεις για εγγυημένα κέρδη χωρίς ρίσκο.",
+          "Πίεση να επενδύσετε 'τώρα' πριν κλείσει η ευκαιρία.",
+          "Εμφάνιση ψεύτικων κερδών σε πλατφόρμες-μαϊμού."
         ],
-        action: "Verify the company via official website and LinkedIn."
+        action: "Αγνοήστε διαφημίσεις με επώνυμους που 'πλούτισαν ξαφνικά'. Δεν υπάρχει εγγυημένο κέρδος."
       }
     ];
 
@@ -114,35 +193,42 @@
 
     function renderAlerts() {
       container.innerHTML = "";
+      
+      // Shuffle και επιλογή 3 τυχαίων για "φρέσκο" περιεχόμενο
       const shuffled = [...alertsData].sort(() => Math.random() - 0.5).slice(0, 3);
 
-      shuffled.forEach(alert => {
-        const div = document.createElement("div");
-        div.className = "alert-block";
+      shuffled.forEach((alert, index) => {
+        setTimeout(() => {
+          const div = document.createElement("div");
+          div.className = `alert-block level-${alert.level}`;
 
-        const h3 = document.createElement("h3");
-        h3.textContent = alert.title;
-        div.appendChild(h3);
+          div.innerHTML = `
+            <span class="threat-level">${alert.level === 'high' ? 'CRITICAL' : 'WARNING'}</span>
+            <h3>${alert.title}</h3>
+            <ul>
+              ${alert.bullets.map(b => `<li>${b}</li>`).join('')}
+            </ul>
+            <div class="action-box">
+              <strong>ΟΔΗΓΙΑ ΑΣΦΑΛΕΙΑΣ:</strong>
+              <p>${alert.action}</p>
+            </div>
+          `;
 
-        const ul = document.createElement("ul");
-        alert.bullets.forEach(b => {
-          const li = document.createElement("li");
-          li.textContent = b;
-          ul.appendChild(li);
-        });
-        div.appendChild(ul);
-
-        const p = document.createElement("p");
-        p.textContent = "What to do: " + alert.action;
-        div.appendChild(p);
-
-        container.appendChild(div);
+          container.appendChild(div);
+          if (window.navigator.vibrate) window.navigator.vibrate(10);
+        }, index * 150);
       });
     }
 
-    refreshBtn.addEventListener("click", renderAlerts);
+    refreshBtn.addEventListener("click", () => {
+      refreshBtn.textContent = "ΣΑΡΩΣΗ...";
+      setTimeout(() => {
+        renderAlerts();
+        refreshBtn.textContent = "ΣΑΡΩΣΗ ΓΙΑ ΝΕΕΣ ΑΠΕΙΛΕΣ";
+      }, 800);
+    });
+
     renderAlerts();
   </script>
-
 </body>
 </html>
