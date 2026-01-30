@@ -1,18 +1,21 @@
 {
   "name": "Stay Safe Premium",
   "short_name": "StaySafe",
-  "start_url": "/",
+  "description": "Η απόλυτη εφαρμογή διαδραστικής ασφάλειας.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0f172a",
+  "background_color": "#020617",
+  "theme_color": "#facc15",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "./icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "./icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
