@@ -1,204 +1,201 @@
 /**
  * Stay Safe Premium - Final Production app.js
+ * The core engine of the Stay Safe experience.
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+  /* ---------------------------------------------------------
+     1. SELECTORS & STATE
+  ---------------------------------------------------------- */
   const langSelect = document.getElementById("lang-select");
   const tabs = document.querySelectorAll(".nav-tab");
   const screens = document.querySelectorAll(".app-screen");
+  
+  // Global State for current session
+  const State = {
+    isPremium: localStorage.getItem("ss_premium") === "true",
+    lang: localStorage.getItem("ss_lang") || "en",
+    badges: JSON.parse(localStorage.getItem("ss_badges") || "[]")
+  };
 
   /* ---------------------------------------------------------
-     STORAGE ENGINE
+     2. STORAGE & DATA ENGINE
   ---------------------------------------------------------- */
   const Storage = {
-    saveLanguage(lang) { localStorage.setItem("ss_lang", lang); },
-    loadLanguage() { return localStorage.getItem("ss_lang") || "en"; },
-    
-    saveBadge(badgeId) {
-      const badges = JSON.parse(localStorage.getItem("ss_badges") || "[]");
-      if (!badges.includes(badgeId)) {
-        badges.push(badgeId);
-        localStorage.setItem("ss_badges", JSON.stringify(badges));
+    save(key, val) { localStorage.setItem(`ss_${key}`, JSON.stringify(val)); },
+    get(key) { 
+        const data = localStorage.getItem(`ss_${key}`);
+        try { return data ? JSON.parse(data) : null; } catch(e) { return data; }
+    },
+    unlockBadge(badgeId) {
+      if (!State.badges.includes(badgeId)) {
+        State.badges.push(badgeId);
+        localStorage.setItem("ss_badges", JSON.stringify(State.badges));
+        UI.syncBadges();
+      }
+    }
+  };
+
+  /* ---------------------------------------------------------
+     3. UI & ANIMATION ENGINE
+  ---------------------------------------------------------- */
+  const UI = {
+    showLoading(duration = 600) {
+      const loader = document.getElementById("loading-overlay");
+      if (loader) {
+        loader.classList.remove("hidden");
+        setTimeout(() => loader.classList.add("hidden"), duration);
       }
     },
-    loadBadges() { return JSON.parse(localStorage.getItem("ss_badges") || "[]"); },
-    
-    saveQuizProgress(score, total) {
-      localStorage.setItem("ss_quiz_score", score);
-      localStorage.setItem("ss_quiz_total", total);
+
+    haptic(type = 10) {
+      if (window.navigator.vibrate) window.navigator.vibrate(type);
     },
-    loadQuizProgress() {
-      return {
-        score: Number(localStorage.getItem("ss_quiz_score") || 0),
-        total: Number(localStorage.getItem("ss_quiz_total") || 0)
-      };
-    }
-  };
 
-  /* ---------------------------------------------------------
-     BADGE SYSTEM
-  ---------------------------------------------------------- */
-  const ALL_BADGES = ["badge-home", "badge-digital", "badge-scam", "badge-emergency"];
+    syncBadges() {
+      const unlocked = State.badges;
+      const pill = document.getElementById("badges-pill");
+      if (pill) pill.textContent = `${unlocked.length} / 12 unlocked`;
 
-  function updateBadgeProgress() {
-    const unlocked = Storage.loadBadges();
-    const pill = document.getElementById("badges-pill");
-    if (pill) pill.textContent = `${unlocked.length} / ${ALL_BADGES.length} unlocked`;
-  }
-
-  function unlockBadge(badgeId) {
-    const badgeElement = document.getElementById(badgeId);
-    if (!badgeElement) return;
-
-    badgeElement.classList.remove("locked");
-    badgeElement.classList.add("unlocked");
-    
-    Storage.saveBadge(badgeId);
-    updateBadgeProgress();
-  }
-
-  /* ---------------------------------------------------------
-     LANGUAGE ENGINE
-  ---------------------------------------------------------- */
-  function initializeLanguage() {
-    const saved = Storage.loadLanguage();
-    langSelect.value = saved;
-    if (window.I18N) window.I18N.apply(saved);
-  }
-
-  langSelect.addEventListener("change", () => {
-    const lang = langSelect.value;
-    Storage.saveLanguage(lang);
-    if (window.I18N) window.I18N.apply(lang);
-  });
-
-  /* ---------------------------------------------------------
-     NAVIGATION (TABS)
-  ---------------------------------------------------------- */
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
-      tab.classList.add("active");
-
-      const target = tab.getAttribute("data-target");
-      screens.forEach((s) => {
-        s.classList.toggle("active", s.id === `screen-${target}`);
+      unlocked.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove("locked");
+            el.classList.add("unlocked");
+        }
       });
+    },
 
-      if (target === "premium") renderPremiumList();
-      if (window.Analytics) Analytics.track(`tab_open_${target}`);
-    });
-  });
-
-  /* ---------------------------------------------------------
-     QUIZ LOGIC & EVENTS
-  ---------------------------------------------------------- */
-  window.addEventListener("quizCompleted", (e) => {
-    const { score, total, badgeId } = e.detail;
-    Storage.saveQuizProgress(score, total);
-    
-    const percent = Math.round((score / total) * 100);
-    const resultScoreEl = document.getElementById("quiz-result-score");
-    if (resultScoreEl) resultScoreEl.textContent = `Score: ${percent}%`;
-
-    if (percent >= 80 && badgeId) {
-      unlockBadge(badgeId);
-      document.getElementById("quiz-result-badge")?.classList.remove("hidden");
-    }
-
-    document.getElementById("quiz-result")?.classList.remove("hidden");
-  });
-
-  document.getElementById("quiz-result-continue")?.addEventListener("click", () => {
-    document.getElementById("quiz-result").classList.add("hidden");
-  });
-
-  /* ---------------------------------------------------------
-     ONBOARDING & LOADING
-  ---------------------------------------------------------- */
-  const onboarding = document.getElementById("onboarding");
-  if (!localStorage.getItem("ss_onboarding_done")) {
-    onboarding?.classList.remove("hidden");
-  }
-
-  document.getElementById("onboarding-start")?.addEventListener("click", () => {
-    localStorage.setItem("ss_onboarding_done", "true");
-    onboarding?.classList.add("hidden");
-    document.querySelector(".app-shell").classList.remove("hidden");
-  });
-
-  function showLoading(duration = 500) {
-    const loader = document.getElementById("loading-overlay");
-    loader?.classList.remove("hidden");
-    setTimeout(() => loader?.classList.add("hidden"), duration);
-  }
-
-  /* ---------------------------------------------------------
-     UI BUTTONS (QUIZ LAUNCH)
-  ---------------------------------------------------------- */
-  const launchQuiz = (badgeId) => {
-    showLoading(600);
-    document.querySelector('[data-target="quiz"]').click();
-    if (window.QuizEngine) {
-      QuizEngine.start(langSelect.value, { badgeId });
+    updateConnectionStatus() {
+        const status = navigator.onLine;
+        document.body.classList.toggle("is-offline", !status);
+        if (!status) console.warn("Stay Safe: Running in Offline Mode");
     }
   };
 
-  document.getElementById("home-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-home"));
-  document.getElementById("digital-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-digital"));
+  /* ---------------------------------------------------------
+     4. NAVIGATION & TABS
+  ---------------------------------------------------------- */
+  function handleNavigation() {
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        UI.haptic(15);
+        const target = tab.getAttribute("data-target");
+
+        // UI Updates
+        tabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        screens.forEach((s) => {
+          s.classList.toggle("active", s.id === `screen-${target}`);
+        });
+
+        // Specialized Logic per Tab
+        if (target === "premium") renderPremiumHub();
+        if (target === "badges") UI.syncBadges();
+        
+        // Auto-scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  }
 
   /* ---------------------------------------------------------
-     PREMIUM HUB
+     5. PREMIUM HUB LOGIC
   ---------------------------------------------------------- */
   const premiumFeatures = [
-    { id: "emergency", label: "🚨 Emergency Button", page: "emergency.html" },
-    { id: "checkup", label: "🔐 Security Checkup", page: "checkup.html" },
-    { id: "offline", label: "📱 Offline Mode", page: "offline.html" }
+    { id: "emergency", label: "🚨 Emergency Hub", page: "emergency.html" },
+    { id: "checkup", label: "🛡️ Security Checkup", page: "checkup.html" },
+    { id: "passgen", label: "🔑 SafePass Pro", page: "password-generator.html" },
+    { id: "alerts", label: "🛑 Live Scam Alerts", page: "scam-alerts.html" },
+    { id: "offline", label: "🌐 Offline Survival", page: "offline.html" }
   ];
 
-  function renderPremiumList() {
-    const isPremium = localStorage.getItem("ss_premium") === "true";
+  function renderPremiumHub() {
     const list = document.getElementById("premium-list");
     if (!list) return;
 
     list.innerHTML = premiumFeatures.map(f => `
-      <li class="premium-item" onclick="handleFeatureClick('${f.page}')">
-        <span>${f.label}</span>
-        ${!isPremium ? '<span class="lock">🔒</span>' : '<span>➔</span>'}
-      </li>
+      <div class="premium-card ${!State.isPremium ? 'locked-feature' : ''}" 
+           onclick="handleFeatureAccess('${f.page}')">
+        <div class="card-content">
+          <h3>${f.label}</h3>
+          <p>Advanced protection module</p>
+        </div>
+        <div class="card-action">
+          ${!State.isPremium ? '🔒' : '➔'}
+        </div>
+      </div>
     `).join("");
   }
 
-  window.handleFeatureClick = (page) => {
-    const isPremium = localStorage.getItem("ss_premium") === "true";
-    if (!isPremium) {
-      document.getElementById("paywall")?.classList.remove("hidden");
+  window.handleFeatureAccess = (page) => {
+    UI.haptic(20);
+    if (!State.isPremium) {
+      window.location.href = "premium-paywall.html";
     } else {
-      window.location.href = page;
+      UI.showLoading(400);
+      setTimeout(() => window.location.href = page, 400);
     }
   };
 
   /* ---------------------------------------------------------
-     OFFLINE & SERVICE WORKER
+     6. EVENTS & INITIALIZATION
   ---------------------------------------------------------- */
-  window.addEventListener("offline", () => {
-    document.body.classList.add("is-offline");
-    console.log("App is offline");
+  
+  // Language Change
+  langSelect?.addEventListener("change", (e) => {
+    const lang = e.target.value;
+    State.lang = lang;
+    localStorage.setItem("ss_lang", lang);
+    if (window.I18N) window.I18N.apply(lang);
+    UI.haptic(5);
   });
 
-  window.addEventListener("online", () => {
-    document.body.classList.remove("is-offline");
-    console.log("App is online");
+  // Quiz Completion Bridge
+  window.addEventListener("quizCompleted", (e) => {
+    const { score, total, badgeId } = e.detail;
+    const percent = (score / total) * 100;
+
+    if (percent >= 80 && badgeId) {
+      Storage.unlockBadge(badgeId);
+      UI.haptic([50, 30, 50]); // Victory vibration
+    }
   });
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("SW Active"))
-      .catch(err => console.error("SW Error:", err));
+  // Connectivity Listeners
+  window.addEventListener("online", UI.updateConnectionStatus);
+  window.addEventListener("offline", UI.updateConnectionStatus);
+
+  // Initialize App
+  function init() {
+    // 1. Language
+    if (window.I18N) window.I18N.apply(State.lang);
+    if (langSelect) langSelect.value = State.lang;
+
+    // 2. Navigation
+    handleNavigation();
+
+    // 3. Sync UI
+    UI.syncBadges();
+    UI.updateConnectionStatus();
+
+    // 4. Onboarding Gate
+    if (!localStorage.getItem("ss_onboarding_done")) {
+        document.getElementById("onboarding")?.classList.remove("hidden");
+    }
+
+    console.log("Stay Safe Premium: Systems Nominal");
   }
 
-  // Final Init
-  initializeLanguage();
-  Storage.loadBadges().forEach(id => unlockBadge(id));
-  updateBadgeProgress();
+  /* ---------------------------------------------------------
+     7. SERVICE WORKER REGISTRATION
+  ---------------------------------------------------------- */
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .then(reg => console.log("SW: Protection Active"))
+      .catch(err => console.error("SW: Shield Failure", err));
+  }
+
+  init();
 });
