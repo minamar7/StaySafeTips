@@ -5,49 +5,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const appShell = document.querySelector(".app-shell");
   const startBtn = document.getElementById("onboarding-start");
 
-  const State = {
-    lang: localStorage.getItem("ss_lang") || "el",
-    badges: JSON.parse(localStorage.getItem("ss_badges") || "[]")
-  };
-
-  // --- NAVIGATION ---
-  function switchTab(target) {
-    tabs.forEach(t => t.classList.toggle("active", t.dataset.target === target));
-    screens.forEach(s => s.classList.toggle("active", s.id === `screen-${target}`));
-    window.scrollTo(0, 0);
-  }
-
-  tabs.forEach(tab => {
-    tab.addEventListener("click", () => switchTab(tab.dataset.target));
-  });
-
-  // --- ONBOARDING ---
+  // --- 1. Onboarding Logic ---
   if (startBtn) {
     startBtn.addEventListener("click", () => {
-      onboarding.classList.add("hidden");
+      onboarding.style.display = "none";
       appShell.classList.remove("hidden");
       localStorage.setItem("ss_onboarding_done", "true");
     });
   }
 
-  // --- QUIZ LAUNCHER ---
+  if (localStorage.getItem("ss_onboarding_done") === "true") {
+    if (onboarding) onboarding.style.display = "none";
+    if (appShell) appShell.classList.remove("hidden");
+  }
+
+  // --- 2. Navigation Logic ---
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const target = tab.getAttribute("data-target");
+      
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      screens.forEach(s => {
+        s.classList.toggle("active", s.id === `screen-${target}`);
+      });
+    });
+  });
+
+  // --- 3. Quiz Launcher ---
   window.launchQuiz = (badgeId) => {
-    switchTab("quiz"); // Αλλάζει την οθόνη
-    if (window.QuizEngine && typeof window.QuizEngine.start === 'function') {
-      setTimeout(() => {
-        window.QuizEngine.start(State.lang, { badgeId });
-      }, 300);
-    } else {
-      console.error("QuizEngine not ready");
+    // Ενεργοποιούμε το tab του quiz
+    const quizTab = document.querySelector('[data-target="quiz"]');
+    if (quizTab) quizTab.click();
+
+    if (window.QuizEngine) {
+      window.QuizEngine.start('el', badgeId);
     }
   };
 
-  document.getElementById("home-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-home"));
-  document.getElementById("digital-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-digital"));
-
-  // Initial Check
-  if (localStorage.getItem("ss_onboarding_done") === "true") {
-    onboarding?.classList.add("hidden");
-    appShell?.classList.remove("hidden");
-  }
+  document.getElementById("home-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-home"));
+  document.getElementById("digital-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-digital"));
 });
