@@ -1,166 +1,262 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
-  <title>Unlock Premium – Stay Safe</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stay Safe Premium – Elevate Your Safety</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="./styles.css" />
 
   <style>
+    :root {
+      --gold-gradient: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+      --premium-dark: #020617;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+    }
+
     body {
-      background: #020617;
-      color: #e2e8f0;
+      background: radial-gradient(circle at top, #1e1b4b 0%, var(--premium-dark) 100%);
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
     }
 
     .paywall-container {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      max-width: 480px;
+      padding: 40px 20px;
+      max-width: 500px;
       margin: 0 auto;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .paywall-header {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 40px;
+    }
+
+    .premium-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--gold-gradient);
+      color: #422006;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
     }
 
     .paywall-header h1 {
-      color: #facc15;
-      font-size: 1.8rem;
-      margin-bottom: 6px;
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: linear-gradient(to bottom, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
     }
 
-    .paywall-header p {
-      color: #cbd5e1;
-      font-size: 1rem;
+    /* Benefits Grid */
+    .benefits-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 30px;
     }
 
     .benefit-card {
-      background: #0b1120;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 18px 20px;
-      transition: 0.2s ease;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .benefit-card:hover {
-      border-color: #facc15;
-      background: #111827;
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(250, 204, 21, 0.3);
+      transform: scale(1.02);
     }
 
-    .benefit-card h3 {
-      margin: 0 0 6px 0;
-      font-size: 1.1rem;
-      color: #facc15;
+    .icon-wrapper {
+      font-size: 1.8rem;
+      min-width: 45px;
     }
 
-    .benefit-card p {
+    .benefit-info h3 {
       margin: 0;
-      font-size: 0.9rem;
-      color: #cbd5e1;
+      font-size: 1rem;
+      color: #fff;
+      font-weight: 700;
     }
 
-    .price-box {
-      margin-top: 10px;
-      padding: 16px;
-      background: #facc15;
-      color: #000;
+    .benefit-info p {
+      margin: 2px 0 0;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    /* Pricing Section */
+    .cta-section {
+      position: sticky;
+      bottom: 20px;
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 20px;
+      border-radius: 24px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    }
+
+    .price-tag {
       text-align: center;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    .price-tag .amount {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .price-tag .period {
+      font-size: 0.9rem;
+      color: #64748b;
+      text-decoration: line-through;
+      margin-right: 8px;
     }
 
     .unlock-btn {
-      margin-top: 10px;
-      padding: 16px;
-      background: linear-gradient(90deg, #facc15, #eab308);
-      color: #000;
-      text-align: center;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1.1rem;
+      width: 100%;
+      padding: 20px;
+      background: var(--gold-gradient);
+      color: #422006;
       border: none;
+      border-radius: 18px;
+      font-size: 1.1rem;
+      font-weight: 800;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(234, 179, 8, 0.2);
+      transition: all 0.2s ease;
     }
 
-    .unlock-btn:hover {
-      opacity: 0.9;
+    .unlock-btn:active {
+      transform: scale(0.96);
     }
 
-    .footer-note {
+    .guarantee {
       text-align: center;
-      font-size: 0.8rem;
-      color: #64748b;
-      margin-top: 10px;
+      font-size: 0.75rem;
+      color: #475569;
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
     }
   </style>
 </head>
 
 <body>
   <div class="paywall-container">
+    <header class="paywall-header">
+      <span class="premium-badge">Limited Time Offer</span>
+      <h1>Stay Safe Elite</h1>
+      <p>Η απόλυτη ασπίδα προστασίας στην τσέπη σου.</p>
+    </header>
 
-    <div class="paywall-header">
-      <h1>Unlock Premium</h1>
-      <p>Get full access to all safety tools</p>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="icon-wrapper">🚨</div>
+        <div class="benefit-info">
+          <h3>Emergency Core</h3>
+          <p>Panic button, Live Location & SOS πρωτόκολλα.</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="icon-wrapper">🛡️</div>
+        <div class="benefit-info">
+          <h3>Security Deep Scan</h3>
+          <p>Έλεγχος ευπαθειών σε συσκευή και social media.</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="icon-wrapper">🤖</div>
+        <div class="benefit-info">
+          <h3>AI Scam Protection</h3>
+          <p>Άμυνα κατά Deepfakes και εξελιγμένης απάτης.</p>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="icon-wrapper">🌐</div>
+        <div class="benefit-info">
+          <h3>Offline Survival</h3>
+          <p>Πρόσβαση σε όλα τα εργαλεία χωρίς σήμα ή Wi-Fi.</p>
+        </div>
+      </div>
+      
+      <div class="benefit-card">
+        <div class="icon-wrapper">✨</div>
+        <div class="benefit-info">
+          <h3>No Ads & Priority</h3>
+          <p>Μηδενικές διαφημίσεις και πρόσβαση σε νέα modules.</p>
+        </div>
+      </div>
     </div>
 
-    <div class="benefit-card">
-      <h3>🚨 Emergency Button</h3>
-      <p>Instant help, location tools, emergency actions.</p>
+    <div class="cta-section">
+      <div class="price-tag">
+        <span class="period">€12.00</span>
+        <span class="amount">€4.90</span>
+        <p style="font-size: 0.7rem; color: #fbbf24; margin-top: 5px; font-weight: bold;">ΕΦΑΠΑΞ ΑΓΟΡΑ - ΓΙΑ ΠΑΝΤΑ ΔΙΚΟ ΣΟΥ</p>
+      </div>
+
+      <button class="unlock-btn" onclick="processPremium()">
+        ΞΕΚΛΕΙΔΩΣΕ ΤΟ PREMIUM 
+        <span style="font-size: 1.4rem;">→</span>
+      </button>
+
+      <div class="guarantee">
+        <span>🔒 Secure Payment</span>
+        <span>⚡ Instant Access</span>
+        <span>⭐ 5-Star Rated</span>
+      </div>
     </div>
-
-    <div class="benefit-card">
-      <h3>🔐 Security Checkup</h3>
-      <p>Full device, privacy & scam vulnerability scan.</p>
-    </div>
-
-    <div class="benefit-card">
-      <h3>🧠 Advanced Safety Tips</h3>
-      <p>Expert‑level protection: deepfakes, AI scams, dark web.</p>
-    </div>
-
-    <div class="benefit-card">
-      <h3>🛑 Scam Alerts</h3>
-      <p>Real‑time trending scam warnings.</p>
-    </div>
-
-    <div class="benefit-card">
-      <h3>🔑 Password Generator</h3>
-      <p>Ultra‑secure passwords with strength meter.</p>
-    </div>
-
-    <div class="benefit-card">
-      <h3>📱 Offline Mode</h3>
-      <p>Safety tools without internet.</p>
-    </div>
-
-    <div class="benefit-card">
-      <h3>⭐ Premium Benefits</h3>
-      <p>No ads · Unlimited quizzes · All badges unlocked · Priority updates</p>
-    </div>
-
-    <div class="price-box">
-      One‑time purchase · €4.90
-    </div>
-
-    <button class="unlock-btn" onclick="unlockPremium()">
-      Unlock Premium Now
-    </button>
-
-    <p class="footer-note">Secure local activation · No subscription</p>
-
   </div>
 
   <script>
-    function unlockPremium() {
-      localStorage.setItem("premium", "true");
-      alert("Premium unlocked successfully!");
-      window.location.href = "premium-suite.html";
+    function processPremium() {
+      // Haptic Feedback
+      if (window.navigator.vibrate) window.navigator.vibrate([30, 50, 30]);
+
+      // Εδώ κανονικά θα πήγαινε στο Stripe Checkout
+      // Για το demo μας, ενεργοποιούμε τοπικά:
+      localStorage.setItem("ss_premium", "true");
+      
+      const btn = document.querySelector('.unlock-btn');
+      btn.textContent = "ΕΝΕΡΓΟΠΟΙΗΣΗ...";
+      btn.style.opacity = "0.7";
+
+      setTimeout(() => {
+        alert("🎉 Συγχαρητήρια! Το Stay Safe Elite ενεργοποιήθηκε επιτυχώς.");
+        window.location.href = "index.html"; // Επιστροφή στο Dashboard
+      }, 1500);
     }
   </script>
-
 </body>
 </html>
