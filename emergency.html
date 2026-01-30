@@ -1,121 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
   <title>Emergency Button – Stay Safe Premium</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="./styles.css" />
   <style>
+    :root {
+      --emergency-red: #dc2626;
+      --emergency-glow: rgba(220, 38, 38, 0.4);
+    }
+
+    body { background: #000; } /* Maximum contrast for emergencies */
+
+    .emergency-container {
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Οπτικός κύκλος φόρτωσης γύρω από το κουμπί */
+    .btn-wrapper {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      margin: 40px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     #emergency-hold-btn {
-      margin-top: 16px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 8px solid #450a0a;
+      background: radial-gradient(circle, #ef4444, #7f1d1d);
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.2rem;
+      line-height: 1.2;
+      cursor: pointer;
+      z-index: 2;
+      box-shadow: 0 0 30px var(--emergency-glow);
+      transition: transform 0.1s ease;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #emergency-hold-btn:active {
+      transform: scale(0.92);
+    }
+
+    .hold-progress {
+      position: absolute;
       width: 100%;
-      padding: 14px 16px;
-      border-radius: 999px;
-      border: 1px solid #b91c1c;
-      background: radial-gradient(circle at top, #ef4444, #7f1d1d);
-      color: #fee2e2;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      height: 100%;
+      border-radius: 50%;
+      border: 8px solid transparent;
+      border-top-color: #fca5a5;
+      transform: rotate(0deg);
+      z-index: 1;
+      display: none;
     }
-    #emergency-hold-btn:disabled {
-      opacity: 0.7;
+
+    /* SOS Blink Animation */
+    .sos-active {
+      animation: blink 0.5s infinite alternate;
     }
-    .snapshot ul {
-      padding-left: 18px;
-      margin-top: 6px;
+
+    @keyframes blink {
+      from { background: #ef4444; box-shadow: 0 0 50px #ef4444; }
+      to { background: #7f1d1d; box-shadow: 0 0 10px #7f1d1d; }
     }
-    .snapshot li {
-      font-size: 0.9rem;
-      color: #cbd5e1;
-      margin-bottom: 3px;
+
+    .quick-call-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
     }
+
+    .call-card {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      border: 1px solid #334155;
+    }
+
+    .call-card span { color: #ef4444; display: block; font-size: 1.4rem; }
   </style>
 </head>
 <body>
   <div class="app-shell">
     <header class="app-header">
       <div>
-        <h1>🚨 Emergency Button</h1>
-        <p class="sub">Immediate help & quick actions</p>
+        <h1>🚨 Emergency Hub</h1>
+        <p class="sub">Immediate response protocols</p>
       </div>
+      <a href="index.html" style="color:#94a3b8; text-decoration:none; font-size:0.8rem;">CLOSE</a>
     </header>
 
-    <main class="app-screen active">
-      <section class="snapshot" style="margin-top:0;">
-        <h3>Emergency Mode</h3>
-        <p>Hold the button for 3 seconds to confirm you’re in danger.</p>
-      </section>
+    <main class="emergency-container">
+      <p style="color: #f87171; font-weight: bold; margin-bottom: 10px;">
+        ΚΡΑΤΗΣΤΕ ΠΑΤΗΜΕΝΟ ΓΙΑ 3 ΔΕΥΤΕΡΟΛΕΠΤΑ
+      </p>
 
-      <button id="emergency-hold-btn">HOLD TO ACTIVATE EMERGENCY MODE</button>
-
-      <div class="snapshot">
-        <h3>Quick Actions</h3>
-        <ul>
-          <li>📞 Call local emergency number if you are in immediate danger.</li>
-          <li>📍 Share your location with a trusted contact when possible.</li>
-          <li>🧭 Move to a visible, safe, well‑lit area.</li>
-        </ul>
+      <div class="btn-wrapper">
+        <div class="hold-progress" id="progress-ring"></div>
+        <button id="emergency-hold-btn">SOS<br>HOLD</button>
       </div>
 
-      <div class="snapshot">
-        <h3>Stay Safe Checklist</h3>
-        <ul>
-          <li>Avoid confrontation whenever you can.</li>
-          <li>Stay where other people can see you.</li>
-          <li>Leave immediately if something feels wrong.</li>
+      <div class="quick-call-grid">
+        <a href="tel:112" class="call-card">
+          <span>📞 112</span>
+          European Emergency
+        </a>
+        <a href="tel:100" class="call-card">
+          <span>🚓 100</span>
+          Local Police
+        </a>
+      </div>
+
+      <div class="snapshot" style="text-align: left; margin-top: 25px;">
+        <h3 style="color:#facc15;">📍 Current Safety Protocol</h3>
+        <ul style="padding-left: 20px; color: #cbd5e1; font-size: 0.9rem;">
+          <li>Μετακινηθείτε σε φωτεινό σημείο με κόσμο.</li>
+          <li>Ετοιμάστε την κοινοποίηση τοποθεσίας (Live Location).</li>
+          <li>Αποφύγετε την αντιπαράθεση, αναζητήστε διέξοδο.</li>
         </ul>
       </div>
     </main>
   </div>
 
   <script>
-    // Premium gate
+    // Premium Gate
     (function () {
-      const isPremium = localStorage.getItem("premium") === "true";
+      const isPremium = localStorage.getItem("ss_premium") === "true";
       if (!isPremium) {
-        window.location.href = "index.html#premium";
+        window.location.href = "index.html";
         return;
       }
     })();
 
     const btn = document.getElementById("emergency-hold-btn");
-    let holdInterval = null;
-    let counter = 0;
+    const ring = document.getElementById("progress-ring");
+    let holdTimer = null;
+    let rotation = 0;
+    let startTime;
 
     function startHold(e) {
       e.preventDefault();
-      if (holdInterval) return;
-      counter = 3;
-      btn.textContent = "HOLDING… " + counter;
+      startTime = Date.now();
+      ring.style.display = "block";
+      btn.textContent = "HOLDING...";
+      
+      if (window.navigator.vibrate) window.navigator.vibrate(50);
 
-      holdInterval = setInterval(() => {
-        counter--;
-        if (counter <= 0) {
-          clearInterval(holdInterval);
-          holdInterval = null;
-          btn.textContent = "EMERGENCY MODE ACTIVATED";
-          btn.disabled = true;
-          alert("Emergency mode activated. Call local emergency services if you are in danger.");
-        } else {
-          btn.textContent = "HOLDING… " + counter;
+      holdTimer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const percent = elapsed / 3000;
+        
+        // Οπτική περιστροφή του δακτυλίου
+        ring.style.transform = `rotate(${percent * 360}deg)`;
+
+        if (elapsed >= 3000) {
+          activateSOS();
         }
-      }, 1000);
+      }, 50);
     }
 
     function cancelHold() {
-      if (!holdInterval) return;
-      clearInterval(holdInterval);
-      holdInterval = null;
-      btn.textContent = "HOLD TO ACTIVATE EMERGENCY MODE";
+      if (btn.classList.contains("sos-active")) return;
+      clearInterval(holdTimer);
+      ring.style.display = "none";
+      btn.textContent = "SOS HOLD";
     }
 
+    function activateSOS() {
+      clearInterval(holdTimer);
+      ring.style.display = "none";
+      btn.classList.add("sos-active");
+      btn.textContent = "SOS ACTIVE";
+      
+      if (window.navigator.vibrate) window.navigator.vibrate([500, 200, 500, 200, 500]);
+      
+      // Εδώ μπορείς να προσθέσεις κλήση API για αποστολή SMS/Email
+      alert("EMERGENCY ALERT: Το πρωτόκολλο ανάγκης ενεργοποιήθηκε. Καλέστε το 112 αν βρίσκεστε σε άμεσο κίνδυνο.");
+    }
+
+    // Event Listeners για Mobile & Desktop
     btn.addEventListener("mousedown", startHold);
     btn.addEventListener("touchstart", startHold, { passive: false });
-    btn.addEventListener("mouseup", cancelHold);
-    btn.addEventListener("mouseleave", cancelHold);
-    btn.addEventListener("touchend", cancelHold);
-    btn.addEventListener("touchcancel", cancelHold);
+    window.addEventListener("mouseup", cancelHold);
+    window.addEventListener("touchend", cancelHold);
   </script>
 </body>
 </html>
