@@ -1,33 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
   <title>Stay Safe Premium</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#020617" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <meta name="description" content="Stay Safe Premium — interactive safety experience with quizzes, badges, and offline protection.">
+  <meta name="description" content="Stay Safe Premium — Διαδραστική εμπειρία ασφάλειας με κουίζ, σήματα και προστασία εκτός σύνδεσης.">
   <meta property="og:title" content="Stay Safe Premium">
-  <meta property="og:description" content="Your personal safety companion with real-world scenarios and progress tracking.">
+  <meta property="og:description" content="Ο προσωπικός σας σύμβουλος ασφαλείας με σενάρια από την πραγματική ζωή.">
   <meta property="og:type" content="website">
 
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./styles.css" />
+  
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 </head>
 
 <body>
 
-<section id="onboarding" class="onboarding-screen active">
+<section id="onboarding" class="onboarding-screen">
   <div class="onboarding-content">
     <div class="onboarding-slide active">
-      <h1>Stay Safe</h1>
+      <div class="onboarding-icon">🛡️</div>
+      <h1>Stay Safe Elite</h1>
       <p>Προστάτεψε την ψηφιακή και την πραγματική σου ζωή.</p>
     </div>
-    <div class="onboarding-slide">
+    <div class="onboarding-slide hidden">
+      <div class="onboarding-icon">🧠</div>
       <h1>Μάθε στην πράξη</h1>
       <p>Πραγματικά σενάρια. Γρήγορες αποφάσεις.</p>
     </div>
-    <div class="onboarding-slide">
+    <div class="onboarding-slide hidden">
+      <div class="onboarding-icon">🏅</div>
       <h1>Κέρδισε Badges</h1>
       <p>Χτίσε δεξιότητες ασφαλείας κάθε μέρα.</p>
     </div>
@@ -39,10 +47,13 @@
 
   <header class="app-header">
     <div class="title-block">
-      <h1 data-i18n="t-app-title">Stay Safe Premium</h1>
-      <p data-i18n="t-app-subtitle">Interactive safety experience</p>
+      <h1 data-i18n="t-app-title">Stay Safe Elite</h1>
+      <p data-i18n="t-app-subtitle">Premium Safety Experience</p>
     </div>
-    <select id="lang-select" class="lang-select"></select>
+    <select id="lang-select" class="lang-select">
+      <option value="el">Ελληνικά</option>
+      <option value="en">English</option>
+    </select>
   </header>
 
   <nav class="nav-tabs">
@@ -64,70 +75,79 @@
     </button>
     <button class="nav-tab" data-target="premium">
       <span class="icon">⭐</span>
-      <span data-i18n="t-tab-premium">Premium</span>
+      <span data-i18n="t-tab-premium">Elite</span>
     </button>
   </nav>
 
-  <main>
+  <main class="content-area">
     <section id="screen-home" class="app-screen active">
-      <h2 data-i18n="t-home-title">Home Safety</h2>
+      <h2 data-i18n="t-home-title">Ασφάλεια Σπιτιού</h2>
       <p class="sub" data-i18n="t-home-sub">Daily protection</p>
       <span class="pill" data-i18n="t-home-pill">Level 1 · Basics</span>
-      <ul id="home-list"></ul>
+      <ul id="home-list" class="feature-list"></ul>
       <div class="snapshot">
         <h3 data-i18n="t-home-snap-title">Home Safety Snapshot</h3>
         <div class="progress-row">
-          <span data-i18n="t-home-quiz-label">Home quiz progress</span>
+          <span data-i18n="t-home-quiz-label">Πρόοδος Quiz</span>
           <span id="t-home-quiz-progress">0%</span>
         </div>
       </div>
-      <button id="home-quiz-btn" data-i18n="t-home-btn">Start home mini-quiz</button>
+      <button id="home-quiz-btn" class="main-cta" data-i18n="t-home-btn">Έναρξη Home Quiz</button>
     </section>
 
     <section id="screen-digital" class="app-screen">
-      <h2 data-i18n="t-digital-title">Digital Safety</h2>
+      <h2 data-i18n="t-digital-title">Ψηφιακή Ασφάλεια</h2>
       <p class="sub" data-i18n="t-digital-sub">Online protection</p>
       <span class="pill" data-i18n="t-digital-pill">Level 2 · Online</span>
-      <ul id="digital-list"></ul>
+      <ul id="digital-list" class="feature-list"></ul>
       <div class="snapshot">
         <h3 data-i18n="t-digital-snap-title">Digital Shield View</h3>
         <div class="progress-row">
-          <span data-i18n="t-digital-quiz-label">Digital quiz progress</span>
+          <span data-i18n="t-digital-quiz-label">Πρόοδος Quiz</span>
           <span id="t-digital-quiz-progress">0%</span>
         </div>
       </div>
-      <button id="digital-quiz-btn" data-i18n="t-digital-btn">Start digital mini-quiz</button>
+      <button id="digital-quiz-btn" class="main-cta" data-i18n="t-digital-btn">Έναρξη Digital Quiz</button>
     </section>
 
     <section id="screen-quiz" class="app-screen">
       <h2 data-i18n="t-quiz-title">Safety Quiz</h2>
-      <p class="sub" data-i18n="t-quiz-sub">Real-world scenarios</p>
-      <span class="pill" id="quiz-pill">Question 1</span>
+      <p class="sub" data-i18n="t-quiz-sub">Σενάρια πραγματικής ζωής</p>
+      <div class="quiz-status-bar">
+        <span class="pill" id="quiz-pill">Question 1</span>
+        <div id="quiz-timer" class="timer"></div>
+      </div>
       <div id="quiz-question" class="quiz-question-box"></div>
-      <div id="quiz-options" class="quiz-options"></div>
-      <button id="quiz-next-btn" disabled data-i18n="t-quiz-next">Next</button>
+      <div id="quiz-options" class="quiz-options-grid"></div>
+      <button id="quiz-next-btn" class="main-cta" disabled data-i18n="t-quiz-next">Επόμενο</button>
     </section>
 
     <section id="screen-badges" class="app-screen">
-      <h2 data-i18n="t-badges-title">Badges</h2>
-      <p class="sub" data-i18n="t-badges-sub">Your safety journey</p>
+      <h2 data-i18n="t-badges-title">Τα Σήματά σου</h2>
+      <p class="sub" data-i18n="t-badges-sub">Η πορεία σου προς την ασφάλεια</p>
       <div class="badges-grid">
-        <div id="badge-home" class="badge locked">🏠 Home</div>
-        <div id="badge-digital" class="badge locked">🛡️ Digital</div>
-        <div id="badge-scam" class="badge locked">🚫 Scam</div>
-        <div id="badge-emergency" class="badge locked">🚨 Ready</div>
+        <div id="badge-home" class="badge locked">🏠 <small>Home</small></div>
+        <div id="badge-digital" class="badge locked">🛡️ <small>Digital</small></div>
+        <div id="badge-scam" class="badge locked">🚫 <small>Scam</small></div>
+        <div id="badge-emergency" class="badge locked">🚨 <small>Ready</small></div>
       </div>
-      <button id="badges-req-btn" data-i18n="t-badges-req">Show requirements</button>
+      <button id="badges-req-btn" class="secondary-btn" data-i18n="t-badges-req">Απαιτήσεις</button>
     </section>
 
     <section id="screen-premium" class="app-screen">
-      <h2 data-i18n="t-premium-title">Premium Protection</h2>
-      <p class="sub">Ξεκλείδωσε όλα τα πρωτόκολλα</p>
-      <div id="upgrade-banner" class="upgrade-banner">
-        Unlock Full Access – €4.90
+      <h2 data-i18n="t-premium-title">Elite Hub</h2>
+      <p class="sub">Προηγμένα εργαλεία προστασίας</p>
+      
+      <div id="premium-list" class="premium-list-container">
+          </div>
+
+      <div id="upgrade-banner" class="upgrade-banner hidden" onclick="window.location.href='premium-paywall.html'">
+        Unlock All Protocols – €4.90
       </div>
+
       <footer class="app-footer">
-        <a href="privacy.html" id="t-privacy-link">Privacy Policy</a>
+        <a href="#" id="t-privacy-link">Privacy Policy</a>
+        <span>v1.0.0 Elite</span>
       </footer>
     </section>
   </main>
@@ -135,17 +155,19 @@
 
 <div id="quiz-result" class="quiz-result hidden">
   <div class="quiz-result-card">
+    <div class="result-icon">🏆</div>
     <h2 id="quiz-result-title">Quiz Completed</h2>
     <p id="quiz-result-score">Score: 0%</p>
     <div class="share-actions">
-        <button id="quiz-share-btn">Share Score 🚀</button>
-        <button id="quiz-result-continue">Continue</button>
+        <button id="quiz-share-btn" class="share-btn">Μοιράσου το 🚀</button>
+        <button id="quiz-result-continue" class="main-cta">Συνέχεια</button>
     </div>
   </div>
 </div>
 
 <div id="loading-overlay" class="loading-overlay hidden">
   <div class="loader"></div>
+  <p>Loading Shield...</p>
 </div>
 
 <script src="./i18n.js"></script>
@@ -155,10 +177,13 @@
 <script src="./app.js"></script>
 
 <script>
+  // GitHub Pages Friendly Service Worker
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("SW Active"))
-      .catch(err => console.log("SW Error", err));
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js")
+        .then(reg => console.log("🛡️ Shield Active: ", reg.scope))
+        .catch(err => console.log("⚠️ Shield Error: ", err));
+    });
   }
 </script>
 
