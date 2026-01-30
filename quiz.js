@@ -164,3 +164,24 @@ class QuizEngine {
 
 // Global Export
 window.QuizEngine = QuizEngine;
+// Στο τέλος της κλάσης QuizEngine στο quiz.js
+showResults() {
+  const percentage = (this.score / this.data.length) * 100;
+  const screen = document.getElementById("screen-quiz");
+  
+  let badgeEarned = "";
+  if (percentage >= 80) {
+    badgeEarned = this.lang === "el" ? "Ψηφιακή Ασπίδα" : "Digital Shield";
+    Storage.saveBadge("badge-digital"); // Αποθήκευση badge
+    Analytics.track("badge_unlocked", { badge: "digital" });
+  }
+
+  screen.innerHTML = `
+    <div class="result-card">
+      <h2>${percentage >= 80 ? '🎉 Συγχαρητήρια!' : '📚 Χρειάζεται μελέτη'}</h2>
+      <p>Το σκορ σου: ${this.score} / ${this.data.length}</p>
+      ${badgeEarned ? `<div class="badge-popup">Ξεκλειδώθηκε το Badge: ${badgeEarned}</div>` : ''}
+      <button onclick="location.reload()">Επιστροφή</button>
+    </div>
+  `;
+}
