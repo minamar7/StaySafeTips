@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
   <title>Advanced Safety Tips – Stay Safe Premium</title>
@@ -7,129 +7,220 @@
   <link rel="stylesheet" href="./styles.css" />
 
   <style>
+    :root {
+      --premium-gold: linear-gradient(135deg, #facc15, #eab308);
+      --glass-bg: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+      background: #020617; /* Συνέπεια με το app shell */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-shell {
+      border: 1px solid var(--border-color);
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tip Card Styling */
     .tip-block {
-      background: #0b1120;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 16px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transform: translateY(0);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: slideIn 0.5s ease-out forwards;
+      opacity: 0;
     }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tip-block:hover {
+      border-color: rgba(250, 204, 21, 0.4);
+      transform: translateY(-4px);
+    }
+
     .tip-block h3 {
-      margin: 0 0 6px 0;
+      margin-bottom: 12px;
       color: #facc15;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+
+    .tip-block ul {
+      list-style: none;
+      padding: 0;
+    }
+
     .tip-block li {
-      color: #cbd5e1;
-      font-size: 0.9rem;
-      margin-bottom: 4px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+      line-height: 1.5;
+      position: relative;
+      padding-left: 20px;
     }
+
+    .tip-block li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #facc15;
+      font-weight: bold;
+    }
+
+    /* Refresh Button Styling */
     #refresh-tips-btn {
-      margin-top: 10px;
-      width: 100%;
-      padding: 14px;
-      border-radius: 12px;
-      background: linear-gradient(90deg, #facc15, #eab308);
-      color: #000;
-      font-weight: 600;
-      border: none;
+      margin-top: auto;
+      background: var(--premium-gold);
+      color: #422006;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 20px rgba(234, 179, 8, 0.2);
+    }
+
+    #refresh-tips-btn:active {
+      transform: scale(0.95);
+    }
+
+    .back-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+      display: inline-block;
     }
   </style>
 </head>
 
 <body>
   <div class="app-shell">
+    <a href="index.html" class="back-link">← Επιστροφή στο Dashboard</a>
 
     <header class="app-header">
       <div>
-        <h1>🧠 Advanced Safety Tips</h1>
-        <p class="sub">Expert‑level protection for modern digital life</p>
+        <h1 style="font-size: 1.6rem;">🧠 Advanced Tips</h1>
+        <p style="color: #94a3b8;">Expert‑level protocols for the 1%</p>
       </div>
     </header>
 
-    <main class="app-screen active" id="tips-container">
-      <!-- Tips injected dynamically -->
-    </main>
+    <main id="tips-container">
+      </main>
 
-    <button id="refresh-tips-btn">Refresh Tips</button>
-
+    <button id="refresh-tips-btn">Refresh Knowledge</button>
   </div>
 
   <script>
-    // Premium gate
-    (function () {
-      const isPremium = localStorage.getItem("premium") === "true";
+    // Premium Gate Check
+    document.addEventListener("DOMContentLoaded", () => {
+      const isPremium = localStorage.getItem("ss_premium") === "true";
       if (!isPremium) {
-        window.location.href = "index.html#premium";
+        // Αν δεν είναι premium, ανακατεύθυνση στην αρχική με το paywall ανοιχτό
+        window.location.href = "index.html"; 
         return;
       }
-    })();
 
-    const tipsData = [
-      {
-        title: "Social Engineering Defense",
-        items: [
-          "Pause when someone creates urgency.",
-          "Verify identity through a second channel.",
-          "Never share codes or passwords over chat."
-        ]
-      },
-      {
-        title: "Deepfake Awareness",
-        items: [
-          "Be skeptical of unexpected video/voice calls asking for money.",
-          "Check for inconsistencies in lighting and lip sync.",
-          "Confirm with a known contact method before acting."
-        ]
-      },
-      {
-        title: "Dark Web Exposure",
-        items: [
-          "If you reuse passwords, assume they are leaked.",
-          "Watch for login alerts from unknown locations.",
-          "Enable alerts from your bank and email provider."
-        ]
-      },
-      {
-        title: "Advanced Device Hardening",
-        items: [
-          "Review app permissions every few months.",
-          "Disable install from unknown sources.",
-          "Use a separate browser for banking."
-        ]
+      const tipsData = [
+        {
+          icon: "🛡️",
+          title: "Social Engineering Defense",
+          items: [
+            "Να είστε καχύποπτοι όταν κάποιος δημιουργεί αίσθημα επείγοντος.",
+            "Επαληθεύστε την ταυτότητα μέσω δεύτερου καναλιού (π.χ. τηλέφωνο).",
+            "Ποτέ μην μοιράζεστε κωδικούς μίας χρήσης (OTP) σε chat."
+          ]
+        },
+        {
+          icon: "🎭",
+          title: "Deepfake Awareness",
+          items: [
+            "Προσοχή σε απρόσμενες κλήσεις βίντεο που ζητούν χρήματα.",
+            "Ελέγξτε για ασυνέπειες στον φωτισμό και στον συγχρονισμό χειλιών.",
+            "Ορίστε μια 'μυστική λέξη' με την οικογένειά σας για επιβεβαίωση."
+          ]
+        },
+        {
+          icon: "🔍",
+          title: "Dark Web Exposure",
+          items: [
+            "Αν επαναχρησιμοποιείτε κωδικούς, θεωρήστε τους παραβιασμένους.",
+            "Ενεργοποιήστε ειδοποιήσεις σύνδεσης από άγνωστες τοποθεσίες.",
+            "Χρησιμοποιήστε υπηρεσίες όπως το 'Have I Been Pwned'."
+          ]
+        },
+        {
+          icon: "📱",
+          title: "Advanced Device Hardening",
+          items: [
+            "Αφαιρέστε δικαιώματα από εφαρμογές που δεν χρησιμοποιείτε συχνά.",
+            "Απενεργοποιήστε την αυτόματη σύνδεση σε άγνωστα Wi-Fi.",
+            "Χρησιμοποιήστε έναν απομονωμένο browser για τραπεζικές συναλλαγές."
+          ]
+        },
+        {
+          icon: "🔐",
+          title: "Physical Security",
+          items: [
+            "Μην αφήνετε USB sticks σε κοινόχρηστους χώρους.",
+            "Κλειδώστε τη συσκευή σας (Win+L / Cmd+Ctrl+Q) κάθε φορά που σηκώνεστε.",
+            "Χρησιμοποιήστε privacy filters στην οθόνη σας σε δημόσιους χώρους."
+          ]
+        }
+      ];
+
+      const container = document.getElementById("tips-container");
+      const refreshBtn = document.getElementById("refresh-tips-btn");
+
+      function renderTips() {
+        // Animation out effect
+        container.style.opacity = "0";
+        
+        setTimeout(() => {
+          container.innerHTML = "";
+          // Ανακάτεμα και επιλογή 3 tips
+          const shuffled = [...tipsData].sort(() => Math.random() - 0.5).slice(0, 3);
+
+          shuffled.forEach((block, index) => {
+            const div = document.createElement("div");
+            div.className = "tip-block";
+            div.style.animationDelay = `${index * 0.15}s`; // Staggered animation
+
+            div.innerHTML = `
+              <h3><span>${block.icon}</span> ${block.title}</h3>
+              <ul>
+                ${block.items.map(item => `<li>${item}</li>`).join('')}
+              </ul>
+            `;
+            container.appendChild(div);
+          });
+          container.style.opacity = "1";
+        }, 300);
       }
-    ];
 
-    const container = document.getElementById("tips-container");
-    const refreshBtn = document.getElementById("refresh-tips-btn");
-
-    function renderTips() {
-      container.innerHTML = "";
-      const shuffled = [...tipsData].sort(() => Math.random() - 0.5).slice(0, 3);
-
-      shuffled.forEach(block => {
-        const div = document.createElement("div");
-        div.className = "tip-block";
-
-        const title = document.createElement("h3");
-        title.textContent = block.title;
-        div.appendChild(title);
-
-        const ul = document.createElement("ul");
-        block.items.forEach(t => {
-          const li = document.createElement("li");
-          li.textContent = t;
-          ul.appendChild(li);
-        });
-
-        div.appendChild(ul);
-        container.appendChild(div);
+      refreshBtn.addEventListener("click", () => {
+        // Haptic feedback αν υποστηρίζεται
+        if (window.navigator.vibrate) window.navigator.vibrate(10);
+        renderTips();
       });
-    }
 
-    refreshBtn.addEventListener("click", renderTips);
-    renderTips();
+      renderTips();
+    });
   </script>
-
 </body>
 </html>
