@@ -1,3 +1,7 @@
+/**
+ * Stay Safe Premium - Final Production app.js
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
   const langSelect = document.getElementById("lang-select");
   const tabs = document.querySelectorAll(".nav-tab");
@@ -6,14 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------------------------------------------------------
      STORAGE ENGINE
   ---------------------------------------------------------- */
-
   const Storage = {
-    saveLanguage(lang) {
-      localStorage.setItem("ss_lang", lang);
-    },
-    loadLanguage() {
-      return localStorage.getItem("ss_lang") || "en";
-    },
+    saveLanguage(lang) { localStorage.setItem("ss_lang", lang); },
+    loadLanguage() { return localStorage.getItem("ss_lang") || "en"; },
+    
     saveBadge(badgeId) {
       const badges = JSON.parse(localStorage.getItem("ss_badges") || "[]");
       if (!badges.includes(badgeId)) {
@@ -21,9 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("ss_badges", JSON.stringify(badges));
       }
     },
-    loadBadges() {
-      return JSON.parse(localStorage.getItem("ss_badges") || "[]");
-    },
+    loadBadges() { return JSON.parse(localStorage.getItem("ss_badges") || "[]"); },
+    
     saveQuizProgress(score, total) {
       localStorage.setItem("ss_quiz_score", score);
       localStorage.setItem("ss_quiz_total", total);
@@ -37,75 +36,45 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /* ---------------------------------------------------------
-     BADGE META
+     BADGE SYSTEM
   ---------------------------------------------------------- */
-
-  const ALL_BADGES = [
-    "badge-home",
-    "badge-digital",
-    "badge-scam",
-    "badge-emergency",
-    "badge-night",
-    "badge-travel",
-    "badge-family",
-    "badge-crisis"
-  ];
+  const ALL_BADGES = ["badge-home", "badge-digital", "badge-scam", "badge-emergency"];
 
   function updateBadgeProgress() {
     const unlocked = Storage.loadBadges();
-    const unlockedCount = unlocked.length;
-    const total = ALL_BADGES.length;
-
     const pill = document.getElementById("badges-pill");
-    const progress = document.getElementById("badges-progress");
+    if (pill) pill.textContent = `${unlocked.length} / ${ALL_BADGES.length} unlocked`;
+  }
 
-    if (pill) {
-      pill.textContent = `${unlockedCount} / ${total} badges unlocked`;
-    }
-    if (progress) {
-      progress.textContent = `You’ve unlocked ${unlockedCount} of ${total} badges. Keep going.`;
-    }
+  function unlockBadge(badgeId) {
+    const badgeElement = document.getElementById(badgeId);
+    if (!badgeElement) return;
+
+    badgeElement.classList.remove("locked");
+    badgeElement.classList.add("unlocked");
+    
+    Storage.saveBadge(badgeId);
+    updateBadgeProgress();
   }
 
   /* ---------------------------------------------------------
-     LANGUAGE INIT
+     LANGUAGE ENGINE
   ---------------------------------------------------------- */
-
-  const supportedLangs = [
-    "en","el","it","es","fr","de","pt","nl","sv","no","da","fi","pl","ro","tr",
-    "zh","ar","hi"
-  ];
-
-  function detectBrowserLanguage() {
-    const browserLang = navigator.language.split("-")[0].toLowerCase();
-    return supportedLangs.includes(browserLang) ? browserLang : "en";
-  }
-
   function initializeLanguage() {
     const saved = Storage.loadLanguage();
-    if (saved) {
-      langSelect.value = saved;
-      window.I18N.apply(saved);
-      return;
-    }
-    const detected = detectBrowserLanguage();
-    langSelect.value = detected;
-    window.I18N.apply(detected);
-    Storage.saveLanguage(detected);
+    langSelect.value = saved;
+    if (window.I18N) window.I18N.apply(saved);
   }
-
-  initializeLanguage();
 
   langSelect.addEventListener("change", () => {
     const lang = langSelect.value;
     Storage.saveLanguage(lang);
-    window.I18N.apply(lang);
+    if (window.I18N) window.I18N.apply(lang);
   });
 
   /* ---------------------------------------------------------
-     TABS
+     NAVIGATION (TABS)
   ---------------------------------------------------------- */
-
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       tabs.forEach((t) => t.classList.remove("active"));
@@ -116,292 +85,120 @@ document.addEventListener("DOMContentLoaded", () => {
         s.classList.toggle("active", s.id === `screen-${target}`);
       });
 
-      if (target === "premium") {
-        Analytics.track("premium_tab_open");
-        renderPremiumList(); // 🔥 εδώ καλούμε το premium hub
-      }
+      if (target === "premium") renderPremiumList();
+      if (window.Analytics) Analytics.track(`tab_open_${target}`);
     });
   });
 
   /* ---------------------------------------------------------
-     BADGE UNLOCK + MODAL
+     QUIZ LOGIC & EVENTS
   ---------------------------------------------------------- */
-
-  function showBadgeModal(badgeId) {
-    const modal = document.getElementById("badge-modal");
-    const name = document.getElementById("badge-modal-name");
-
-    const dict = I18N.getDict(Storage.loadLanguage());
-    const key = `t-badge-${badgeId.replace("badge-", "")}`;
-
-    name.textContent = dict[key] || "Badge";
-
-    modal.classList.remove("hidden");
-  }
-
-  document.getElementById("badge-modal-close").addEventListener("click", () => {
-    document.getElementById("badge-modal").classList.add("hidden");
-  });
-
-  function unlockBadge(badgeId) {
-    const badge = document.getElementById(badgeId);
-    if (!badge) return;
-
-    badge.classList.remove("locked");
-    badge.classList.add("unlocked");
-
-    badge.style.animation = "none";
-    void badge.offsetWidth;
-    badge.style.animation = "";
-
-    Storage.saveBadge(badgeId);
-    updateBadgeProgress();
-    showBadgeModal(badgeId);
-  }
-
-  Storage.loadBadges().forEach((id) => unlockBadge(id));
-  updateBadgeProgress();
-
-  /* ---------------------------------------------------------
-     QUIZ PROGRESS LOAD
-  ---------------------------------------------------------- */
-
-  const qp = Storage.loadQuizProgress();
-  if (qp.total > 0) {
-    const percent = Math.round((qp.score / qp.total) * 100);
-    const homeProg = document.getElementById("t-home-quiz-progress");
-    if (homeProg) homeProg.textContent = percent + "%";
-  }
-
-  /* ---------------------------------------------------------
-     QUIZ RESULT SCREEN
-  ---------------------------------------------------------- */
-
-  const quizResult = document.getElementById("quiz-result");
-  const quizResultScore = document.getElementById("quiz-result-score");
-  const quizResultBadge = document.getElementById("quiz-result-badge");
-  const quizResultContinue = document.getElementById("quiz-result-continue");
-
-  quizResultContinue.addEventListener("click", () => {
-    quizResult.classList.add("hidden");
-  });
-
-  /* ---------------------------------------------------------
-     QUIZ EVENTS
-  ---------------------------------------------------------- */
-
   window.addEventListener("quizCompleted", (e) => {
     const { score, total, badgeId } = e.detail;
-
     Storage.saveQuizProgress(score, total);
-    Analytics.track("quiz_completed", { score, total });
-
+    
     const percent = Math.round((score / total) * 100);
-    quizResultScore.textContent = `You scored ${percent}%`;
+    const resultScoreEl = document.getElementById("quiz-result-score");
+    if (resultScoreEl) resultScoreEl.textContent = `Score: ${percent}%`;
 
-    if (percent >= 70 && badgeId) {
-      quizResultBadge.classList.remove("hidden");
+    if (percent >= 80 && badgeId) {
       unlockBadge(badgeId);
-    } else {
-      quizResultBadge.classList.add("hidden");
+      document.getElementById("quiz-result-badge")?.classList.remove("hidden");
     }
 
-    quizResult.classList.remove("hidden");
+    document.getElementById("quiz-result")?.classList.remove("hidden");
+  });
+
+  document.getElementById("quiz-result-continue")?.addEventListener("click", () => {
+    document.getElementById("quiz-result").classList.add("hidden");
   });
 
   /* ---------------------------------------------------------
-     LOADING OVERLAY
+     ONBOARDING & LOADING
   ---------------------------------------------------------- */
-
-  function showLoading() {
-    document.getElementById("loading-overlay").classList.remove("hidden");
-  }
-
-  function hideLoading() {
-    document.getElementById("loading-overlay").classList.add("hidden");
-  }
-
-  /* ---------------------------------------------------------
-     ONBOARDING
-  ---------------------------------------------------------- */
-
   const onboarding = document.getElementById("onboarding");
-  const onboardingStart = document.getElementById("onboarding-start");
-
   if (!localStorage.getItem("ss_onboarding_done")) {
-    onboarding.classList.remove("hidden");
+    onboarding?.classList.remove("hidden");
   }
 
-  onboardingStart.addEventListener("click", () => {
-    localStorage.setItem("ss_onboarding_done", "1");
-    onboarding.classList.add("hidden");
-    Analytics.track("onboarding_completed");
+  document.getElementById("onboarding-start")?.addEventListener("click", () => {
+    localStorage.setItem("ss_onboarding_done", "true");
+    onboarding?.classList.add("hidden");
+    document.querySelector(".app-shell").classList.remove("hidden");
   });
 
-  /* ---------------------------------------------------------
-     PAYWALL
-  ---------------------------------------------------------- */
-
-  const paywall = document.getElementById("paywall");
-  const paywallSubscribe = document.getElementById("paywall-subscribe");
-  const paywallClose = document.getElementById("paywall-close");
-
-  function openPaywall() {
-    paywall.classList.remove("hidden");
-    Analytics.track("paywall_open");
+  function showLoading(duration = 500) {
+    const loader = document.getElementById("loading-overlay");
+    loader?.classList.remove("hidden");
+    setTimeout(() => loader?.classList.add("hidden"), duration);
   }
 
-  paywallClose.addEventListener("click", () => {
-    paywall.classList.add("hidden");
-    Analytics.track("paywall_dismiss");
-  });
-
-  paywallSubscribe.addEventListener("click", () => {
-    Analytics.track("paywall_subscribe_click");
-  });
-
-  document.getElementById("premium-btn")?.addEventListener("click", openPaywall);
-
   /* ---------------------------------------------------------
-     A2HS
+     UI BUTTONS (QUIZ LAUNCH)
   ---------------------------------------------------------- */
-
-  let deferredPrompt;
-  const a2hsBanner = document.getElementById("a2hs-banner");
-
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    a2hsBanner.classList.remove("hidden");
-  });
-
-  window.installApp = function () {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    deferredPrompt = null;
-    a2hsBanner.classList.add("hidden");
-  };
-
-  /* ---------------------------------------------------------
-     NOTIFICATIONS
-  ---------------------------------------------------------- */
-
-  window.requestNotificationPermission = async function () {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      new Notification("Stay Safe Premium", {
-        body: "Οι ειδοποιήσεις ενεργοποιήθηκαν!",
-        icon: "icons/icon-192.png"
-      });
+  const launchQuiz = (badgeId) => {
+    showLoading(600);
+    document.querySelector('[data-target="quiz"]').click();
+    if (window.QuizEngine) {
+      QuizEngine.start(langSelect.value, { badgeId });
     }
   };
 
-  /* ---------------------------------------------------------
-     QUIZ START BUTTONS (WITH BADGE ID)
-  ---------------------------------------------------------- */
-
-  document.getElementById("home-quiz-btn").addEventListener("click", () => {
-    showLoading();
-    setTimeout(() => hideLoading(), 500);
-
-    tabs.forEach((t) => t.classList.remove("active"));
-    document.querySelector('[data-target="quiz"]').classList.add("active");
-    screens.forEach((s) => s.classList.remove("active"));
-    document.getElementById("screen-quiz").classList.add("active");
-
-    QuizEngine.start(langSelect.value, { badgeId: "badge-home" });
-  });
-
-  document.getElementById("digital-quiz-btn").addEventListener("click", () => {
-    showLoading();
-    setTimeout(() => hideLoading(), 500);
-
-    tabs.forEach((t) => t.classList.remove("active"));
-    document.querySelector('[data-target="quiz"]').classList.add("active");
-    screens.forEach((s) => s.classList.remove("active"));
-    document.getElementById("screen-quiz").classList.add("active");
-
-    QuizEngine.start(langSelect.value, { badgeId: "badge-digital" });
-  });
+  document.getElementById("home-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-home"));
+  document.getElementById("digital-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-digital"));
 
   /* ---------------------------------------------------------
-     SERVICE WORKER
+     PREMIUM HUB
   ---------------------------------------------------------- */
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("service-worker.js")
-      .then(() => console.log("Service Worker registered"))
-      .catch((err) => console.log("SW error:", err));
-  }
-
-  /* ---------------------------------------------------------
-     OFFLINE BANNER
-  ---------------------------------------------------------- */
-
-  let offlineBar = null;
-
-  function showOfflineBar() {
-    if (offlineBar) return;
-    offlineBar = document.createElement("div");
-    offlineBar.className = "offline-banner";
-    offlineBar.textContent = I18N.get("t-offline-msg", Storage.loadLanguage());
-    document.body.appendChild(offlineBar);
-  }
-
-  function hideOfflineBar() {
-    if (!offlineBar) return;
-    offlineBar.remove();
-    offlineBar = null;
-  }
-
-  window.addEventListener("offline", showOfflineBar);
-  window.addEventListener("online", hideOfflineBar);
-
-  Analytics.track("app_open");
-
-  /* ---------------------------------------------------------
-     PREMIUM FEATURES
-  ---------------------------------------------------------- */
-
   const premiumFeatures = [
     { id: "emergency", label: "🚨 Emergency Button", page: "emergency.html" },
     { id: "checkup", label: "🔐 Security Checkup", page: "checkup.html" },
-    { id: "advanced", label: "🧠 Advanced Safety Tips", page: "advanced-tips.html" },
-    { id: "alerts", label: "🛑 Scam Alerts", page: "scam-alerts.html" },
-    { id: "password", label: "🔑 Password Generator", page: "password-generator.html" },
     { id: "offline", label: "📱 Offline Mode", page: "offline.html" }
   ];
 
   function renderPremiumList() {
-    const isPremium = localStorage.getItem("premium") === "true";
+    const isPremium = localStorage.getItem("ss_premium") === "true";
     const list = document.getElementById("premium-list");
-    const banner = document.getElementById("upgrade-banner");
-
-    if (!list || !banner) return;
+    if (!list) return;
 
     list.innerHTML = premiumFeatures.map(f => `
-      <li class="premium-item" onclick="openPremiumFeature('${f.page}')">
+      <li class="premium-item" onclick="handleFeatureClick('${f.page}')">
         <span>${f.label}</span>
-        ${!isPremium ? '<span class="lock">🔒</span>' : ''}
+        ${!isPremium ? '<span class="lock">🔒</span>' : '<span>➔</span>'}
       </li>
     `).join("");
-
-    banner.style.display = isPremium ? "none" : "block";
   }
 
-  window.openPremiumFeature = function(page) {
-    const isPremium = localStorage.getItem("premium") === "true";
+  window.handleFeatureClick = (page) => {
+    const isPremium = localStorage.getItem("ss_premium") === "true";
     if (!isPremium) {
-      document.querySelector('[data-target="premium"]').click();
-      return;
+      document.getElementById("paywall")?.classList.remove("hidden");
+    } else {
+      window.location.href = page;
     }
-    window.location.href = page;
   };
 
-  window.unlockPremium = function() {
-    localStorage.setItem("premium", "true");
-    renderPremiumList();
-    Analytics.track("premium_unlocked");
-  };
+  /* ---------------------------------------------------------
+     OFFLINE & SERVICE WORKER
+  ---------------------------------------------------------- */
+  window.addEventListener("offline", () => {
+    document.body.classList.add("is-offline");
+    console.log("App is offline");
+  });
+
+  window.addEventListener("online", () => {
+    document.body.classList.remove("is-offline");
+    console.log("App is online");
+  });
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("SW Active"))
+      .catch(err => console.error("SW Error:", err));
+  }
+
+  // Final Init
+  initializeLanguage();
+  Storage.loadBadges().forEach(id => unlockBadge(id));
+  updateBadgeProgress();
 });
