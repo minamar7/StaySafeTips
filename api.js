@@ -100,3 +100,15 @@ const API = {
  * });
  * * if (result.success) console.log("Cloud Synced!");
  */
+// Στο τέλος του app.js
+const startBtn = document.getElementById("onboarding-start");
+if (startBtn) {
+  startBtn.addEventListener("click", () => {
+    console.log("Starting App...");
+    document.getElementById("onboarding").classList.remove("active");
+    document.getElementById("onboarding").classList.add("hidden");
+    document.querySelector(".app-shell").classList.remove("hidden");
+    localStorage.setItem("ss_onboarding_done", "true");
+  });
+}
+
