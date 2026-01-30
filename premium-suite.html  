@@ -1,124 +1,210 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
-  <title>Premium Suite – Stay Safe</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Premium Suite – Stay Safe Elite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <link rel="stylesheet" href="./styles.css" />
 
   <style>
+    :root {
+      --premium-gold: #facc15;
+      --card-bg: rgba(15, 23, 42, 0.6);
+      --accent-glow: rgba(250, 204, 21, 0.15);
+    }
+
+    body {
+      background: #020617;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(126, 34, 206, 0.2) 0, transparent 50%);
+    }
+
     .suite-container {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Safety Status Indicator */
+    .safety-status {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 20px;
+      margin: 10px 20px 20px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    .status-pulse {
+      width: 12px;
+      height: 12px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Premium Grid Cards */
+    .suite-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
       padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .suite-card {
-      background: #0b1120;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 18px 20px;
-      color: #e2e8f0;
-      transition: 0.2s ease;
-      cursor: pointer;
+    .suite-card::after {
+      content: "→";
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--premium-gold);
+      opacity: 0.3;
+      transition: opacity 0.3s;
     }
 
     .suite-card:hover {
-      border-color: #facc15;
-      background: #111827;
+      background: rgba(30, 41, 59, 0.8);
+      border-color: var(--premium-gold);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transform: translateY(-3px);
+    }
+
+    .suite-card:hover::after {
+      opacity: 1;
     }
 
     .suite-card h3 {
-      margin: 0 0 6px 0;
+      margin: 0;
       font-size: 1.1rem;
-      color: #facc15;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .suite-card p {
       margin: 0;
-      font-size: 0.9rem;
-      color: #cbd5e1;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      max-width: 85%;
+    }
+
+    .icon-box {
+      font-size: 1.4rem;
     }
 
     .premium-banner {
-      margin-top: 20px;
-      padding: 16px;
-      background: linear-gradient(90deg, #facc15, #eab308);
-      color: #000;
+      margin: 20px;
+      padding: 18px;
+      background: linear-gradient(135deg, #facc15, #eab308);
+      color: #422006;
       text-align: center;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 1rem;
+      border-radius: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 20px rgba(234, 179, 8, 0.3);
       cursor: pointer;
     }
 
-    .premium-banner:hover {
-      opacity: 0.9;
+    .footer-badge {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #475569;
+      padding: 20px;
     }
   </style>
 </head>
 
 <body>
   <div class="app-shell">
-
     <header class="app-header">
       <div>
-        <h1>⭐ Full Premium Suite</h1>
-        <p class="sub">Unlock the complete protection experience</p>
+        <h1 style="font-size: 1.8rem;">Elite Suite</h1>
+        <p class="sub">Ενεργά Πρωτόκολλα Προστασίας</p>
       </div>
+      <div style="font-size: 1.5rem;">👑</div>
     </header>
 
-    <main class="app-screen active">
-      <div class="suite-container">
+    <div class="safety-status">
+      <div class="status-pulse"></div>
+      <div>
+        <div style="font-size: 0.85rem; font-weight: bold; color: #fff;">System Status: Secure</div>
+        <div style="font-size: 0.75rem; color: #22c55e;">Όλα τα premium εργαλεία είναι έτοιμα</div>
+      </div>
+    </div>
 
-        <div class="suite-card" onclick="go('emergency.html')">
-          <h3>🚨 Emergency Button</h3>
-          <p>Instant help, location tools, emergency actions.</p>
-        </div>
+    <main class="suite-container">
+      <div class="suite-card" onclick="go('emergency.html')">
+        <h3><span class="icon-box">🚨</span> Emergency Hub</h3>
+        <p>Άμεση βοήθεια, Live Location & Πρωτόκολλα SOS.</p>
+      </div>
 
-        <div class="suite-card" onclick="go('checkup.html')">
-          <h3>🔐 Security Checkup</h3>
-          <p>Full device, privacy & scam vulnerability scan.</p>
-        </div>
+      <div class="suite-card" onclick="go('checkup.html')">
+        <h3><span class="icon-box">🛡️</span> Security Checkup</h3>
+        <p>Πλήρης σάρωση συσκευής, ιδιωτικότητας & κινδύνων απάτης.</p>
+      </div>
 
-        <div class="suite-card" onclick="go('advanced-tips.html')">
-          <h3>🧠 Advanced Safety Tips</h3>
-          <p>Expert‑level protection: deepfakes, AI scams, dark web.</p>
-        </div>
+      <div class="suite-card" onclick="go('password-generator.html')">
+        <h3><span class="icon-box">🔑</span> SafePass Pro</h3>
+        <p>Κρυπτογραφημένοι κωδικοί με Strength Meter.</p>
+      </div>
 
-        <div class="suite-card" onclick="go('scam-alerts.html')">
-          <h3>🛑 Scam Alerts</h3>
-          <p>Real‑time trending scam warnings.</p>
-        </div>
+      <div class="suite-card" onclick="go('offline.html')">
+        <h3><span class="icon-box">🌐</span> Offline Survival</h3>
+        <p>Πρόσβαση σε οδηγούς ασφαλείας χωρίς δίκτυο.</p>
+      </div>
 
-        <div class="suite-card" onclick="go('password-generator.html')">
-          <h3>🔑 Password Generator</h3>
-          <p>Ultra‑secure passwords with strength meter.</p>
-        </div>
+      <div class="suite-card" onclick="go('scam-alerts.html')">
+        <h3><span class="icon-box">🛑</span> Real-time Alerts</h3>
+        <p>Ειδοποιήσεις για νέες απάτες και phishing επιθέσεις.</p>
+      </div>
 
-        <div class="suite-card" onclick="go('offline.html')">
-          <h3>📱 Offline Mode</h3>
-          <p>Safety tools without internet.</p>
-        </div>
+      <div class="suite-card" onclick="go('advanced-tips.html')">
+        <h3><span class="icon-box">🧠</span> Expert Intel</h3>
+        <p>Συμβουλές για Deepfakes, AI Scams & Dark Web.</p>
+      </div>
 
-        <div class="suite-card">
-          <h3>⭐ Premium Benefits</h3>
-          <p>No ads · Unlimited quizzes · All badges unlocked · Priority updates</p>
-        </div>
+      <div class="premium-banner" onclick="go('index.html')">
+        Επιστροφη στο Dashboard
+      </div>
 
-        <div class="premium-banner" onclick="go('premium-paywall.html')">
-          Manage Premium
-        </div>
-
+      <div class="footer-badge">
+        Stay Safe Premium v1.0 • Encryption Enabled
       </div>
     </main>
   </div>
 
   <script>
-    // Premium gate
+    // Premium gate (ss_premium κλειδί για συνέπεια)
     (function () {
-      const isPremium = localStorage.getItem("premium") === "true";
+      const isPremium = localStorage.getItem("ss_premium") === "true";
       if (!isPremium) {
         window.location.href = "index.html#premium";
         return;
@@ -126,9 +212,9 @@
     })();
 
     function go(page) {
+      if (window.navigator.vibrate) window.navigator.vibrate(10);
       window.location.href = page;
     }
   </script>
-
 </body>
 </html>
