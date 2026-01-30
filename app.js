@@ -1,72 +1,108 @@
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("App.js: Initializing Shield...");
+  /* ---------------------------------------------------------
+     1. SELECTORS & STATE
+  ---------------------------------------------------------- */
+  const langSelect = document.getElementById("lang-select");
+  const tabs = document.querySelectorAll(".nav-tab");
+  const screens = document.querySelectorAll(".app-screen");
+  const onboarding = document.getElementById("onboarding");
+  const appShell = document.querySelector(".app-shell");
+  const startBtn = document.getElementById("onboarding-start");
+  
+  const State = {
+    isPremium: localStorage.getItem("ss_premium") === "true",
+    lang: localStorage.getItem("ss_lang") || "el",
+    badges: JSON.parse(localStorage.getItem("ss_badges") || "[]")
+  };
 
-    // 1. SELECTORS
-    const tabs = document.querySelectorAll(".nav-tab");
-    const screens = document.querySelectorAll(".app-screen");
-    const onboarding = document.getElementById("onboarding");
-    const appShell = document.querySelector(".app-shell");
-    const startBtn = document.getElementById("onboarding-start");
-
-    // 2. SAFE NAVIGATION (Το μενού σου)
-    function switchTab(targetId) {
-        console.log("Switching to:", targetId);
-        
-        // Ενημέρωση Tabs
-        tabs.forEach(t => t.classList.remove("active"));
-        const activeTab = document.querySelector(`[data-target="${targetId}"]`);
-        if (activeTab) activeTab.classList.add("active");
-
-        // Ενημέρωση Οθονών
-        screens.forEach(s => {
-            s.classList.remove("active");
-            if (s.id === `screen-${targetId}`) {
-                s.classList.add("active");
-            }
-        });
-        
-        window.scrollTo(0, 0);
+  /* ---------------------------------------------------------
+     2. UI ENGINE
+  ---------------------------------------------------------- */
+  const UI = {
+    showLoading(duration = 600) {
+      const loader = document.getElementById("loading-overlay");
+      if (loader) {
+        loader.classList.remove("hidden");
+        setTimeout(() => loader.classList.add("hidden"), duration);
+      }
+    },
+    haptic(type = 15) {
+      if (window.navigator.vibrate) window.navigator.vibrate(type);
+    },
+    syncBadges() {
+      State.badges.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove("locked"); el.classList.add("unlocked"); }
+      });
     }
+  };
 
-    // Προσθήκη Event Listeners στα Tabs
-    tabs.forEach(tab => {
-        tab.addEventListener("click", () => {
-            const target = tab.getAttribute("data-target");
-            switchTab(target);
+  /* ---------------------------------------------------------
+     3. NAVIGATION (Tabs)
+  ---------------------------------------------------------- */
+  function handleNavigation() {
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.getAttribute("data-target");
+        
+        // Update UI Tabs
+        tabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+
+        // Update Screens
+        screens.forEach((s) => {
+          s.classList.remove("active");
+          if (s.id === `screen-${target}`) s.classList.add("active");
         });
+
+        UI.haptic(10);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     });
+  }
 
-    // 3. ONBOARDING LOGIC
-    if (startBtn) {
-        startBtn.addEventListener("click", () => {
-            onboarding.style.display = "none";
-            appShell.classList.remove("hidden");
-            localStorage.setItem("ss_onboarding_done", "true");
-        });
+  /* ---------------------------------------------------------
+     4. QUIZ BRIDGE
+  ---------------------------------------------------------- */
+  window.launchQuiz = (badgeId) => {
+    UI.showLoading(500);
+    // Προσομοίωση κλικ στο tab του Quiz
+    document.querySelector('[data-target="quiz"]')?.click();
+
+    if (window.QuizEngine) {
+      window.QuizEngine.start(State.lang, { badgeId });
+    } else {
+      console.error("QuizEngine not found!");
     }
+  };
 
-    // Έλεγχος αν έχει ξαναμπει
+  document.getElementById("home-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-home"));
+  document.getElementById("digital-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-digital"));
+
+  /* ---------------------------------------------------------
+     5. ONBOARDING & INIT
+  ---------------------------------------------------------- */
+  if (startBtn) {
+    startBtn.addEventListener("click", () => {
+      onboarding.classList.add("hidden");
+      appShell.classList.remove("hidden");
+      localStorage.setItem("ss_onboarding_done", "true");
+    });
+  }
+
+  function init() {
+    // Check if onboarding done
     if (localStorage.getItem("ss_onboarding_done") === "true") {
-        if (onboarding) onboarding.style.display = "none";
-        if (appShell) appShell.classList.remove("hidden");
+      onboarding?.classList.add("hidden");
+      appShell?.classList.remove("hidden");
     }
 
-    // 4. QUIZ BRIDGE (Εδώ είναι το "κλειδί" για το Quiz)
-    window.launchQuiz = (badgeId) => {
-        switchTab("quiz"); // Πρώτα άλλαξε οθόνη
-        
-        if (window.QuizEngine && typeof window.QuizEngine.start === 'function') {
-            setTimeout(() => {
-                window.QuizEngine.start('el', { badgeId: badgeId });
-            }, 300);
-        } else {
-            console.error("QuizEngine missing! Check if quiz.js is loaded.");
-            alert("Το Quiz δεν είναι έτοιμο ακόμα.");
-        }
-    };
+    handleNavigation();
+    UI.syncBadges();
+    
+    if (window.I18N) window.I18N.apply(State.lang);
+    console.log("Stay Safe Elite: Systems Nominal");
+  }
 
-    document.getElementById("home-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-home"));
-    document.getElementById("digital-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-digital"));
-
-    console.log("App.js: Navigation Ready.");
+  init();
 });
