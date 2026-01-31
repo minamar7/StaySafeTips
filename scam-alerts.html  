@@ -1,234 +1,255 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-  <meta charset="UTF-8" />
-  <title>Scam Alerts – Stay Safe Elite</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <link rel="stylesheet" href="./styles.css" />
+<meta charset="UTF-8">
+<title>Scam Radar – Stay Safe Elite</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<style>
+:root {
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --bg-dark: #0f172a;
+  --glass: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.1);
+}
 
-  <style>
-    :root {
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --info: #3b82f6;
-    }
+body {
+  margin:0;
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top, #1e1b4b, var(--bg-dark));
+  color: #f1f5f9;
+}
 
-    .alert-feed {
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+.app-shell {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-    .alert-block {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-left: 5px solid var(--info); /* Δυναμικό χρώμα */
-      border-radius: 16px;
-      padding: 18px;
-      animation: slideIn 0.4s ease-out forwards;
-      position: relative;
-    }
+.app-header h1 {
+  margin:0;
+  font-size:1.8rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
+.sub {
+  font-size:0.9rem;
+  color:#94a3b8;
+  margin-top:4px;
+}
 
-    .threat-level {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      font-size: 0.65rem;
-      font-weight: 900;
-      padding: 4px 8px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+#live-indicator {
+  color:#22c55e;
+  font-weight:bold;
+  font-size:0.7rem;
+  animation: pulse 2s infinite;
+}
 
-    .alert-block h3 {
-      margin: 0 0 10px 0;
-      color: #fff;
-      font-size: 1.1rem;
-      max-width: 80%;
-    }
+@keyframes pulse {
+  0%, 100% { opacity:1; }
+  50% { opacity:0.4; }
+}
 
-    .alert-block ul {
-      padding-left: 18px;
-      margin: 10px 0;
-    }
+/* Alerts Feed */
+.alert-feed {
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  margin-top:20px;
+}
 
-    .alert-block li {
-      color: #cbd5e1;
-      font-size: 0.85rem;
-      margin-bottom: 6px;
-      line-height: 1.3;
-    }
+.alert-block {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  border-radius:16px;
+  border:1px solid var(--glass-border);
+  padding:18px;
+  position:relative;
+  opacity:0;
+  transform: translateX(20px);
+  animation: slideIn 0.4s forwards;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-    .action-box {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 12px;
-      border-radius: 10px;
-      margin-top: 12px;
-      border: 1px dashed rgba(255, 255, 255, 0.2);
-    }
+.alert-block:hover {
+  transform: translateX(0) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
 
-    .action-box strong {
-      color: #facc15;
-      font-size: 0.8rem;
-      display: block;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-    }
+@keyframes slideIn {
+  to { opacity:1; transform: translateX(0); }
+}
 
-    .action-box p {
-      margin: 0;
-      color: #fff;
-      font-size: 0.85rem;
-    }
+.threat-level {
+  position:absolute;
+  top:15px;
+  right:15px;
+  font-size:0.65rem;
+  font-weight:900;
+  padding:4px 8px;
+  border-radius:6px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
 
-    #refresh-alerts-btn {
-      margin: 20px;
-      padding: 16px;
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      color: #facc15;
-      border: 1px solid #facc15;
-      border-radius: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+.alert-block h3 {
+  margin:0 0 10px 0;
+  font-size:1.1rem;
+  color:#fff;
+}
 
-    #refresh-alerts-btn:active {
-      transform: scale(0.98);
-      background: #facc15;
-      color: #000;
-    }
+.alert-block ul {
+  padding-left:18px;
+  margin:10px 0;
+}
 
-    /* Threat Colors */
-    .level-high { border-left-color: var(--danger); }
-    .level-high .threat-level { background: var(--danger); color: white; }
-    
-    .level-medium { border-left-color: var(--warning); }
-    .level-medium .threat-level { background: var(--warning); color: black; }
-  </style>
+.alert-block li {
+  color:#cbd5e1;
+  font-size:0.85rem;
+  line-height:1.4;
+}
+
+.action-box {
+  background: rgba(0,0,0,0.3);
+  border-radius:10px;
+  border:1px dashed rgba(255,255,255,0.2);
+  padding:12px;
+  margin-top:12px;
+}
+
+.action-box strong {
+  color:#facc15;
+  font-size:0.75rem;
+  display:block;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+
+.action-box p {
+  font-size:0.85rem;
+  margin:0;
+  color:#fff;
+}
+
+/* Buttons */
+#refresh-alerts-btn {
+  margin-top:20px;
+  width:100%;
+  padding:16px;
+  border-radius:14px;
+  border:1px solid #facc15;
+  background: linear-gradient(135deg,#1e293b,#0f172a);
+  color:#facc15;
+  font-weight:800;
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:all 0.2s;
+}
+
+#refresh-alerts-btn:active {
+  transform:scale(0.97);
+  background:#facc15;
+  color:#000;
+}
+
+/* Threat Colors */
+.level-high { border-left:5px solid var(--danger); }
+.level-high .threat-level { background: var(--danger); color:#fff; }
+
+.level-medium { border-left:5px solid var(--warning); }
+.level-medium .threat-level { background: var(--warning); color:#000; }
+
+.level-info { border-left:5px solid var(--info); }
+.level-info .threat-level { background: var(--info); color:#fff; }
+</style>
 </head>
 
 <body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <h1 style="margin:0;">🛑 Scam Radar</h1>
-            <span id="live-indicator" style="color:#22c55e; font-size: 0.7rem; font-weight: bold; animation: pulse 2s infinite;">• LIVE</span>
-        </div>
-        <p class="sub">Πραγματική παρακολούθηση νέων απειλών</p>
+<div class="app-shell">
+  <header class="app-header">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <h1>🛑 Scam Radar</h1>
+        <span id="live-indicator">• LIVE</span>
       </div>
-    </header>
+      <p class="sub">Πραγματική παρακολούθηση νέων απειλών</p>
+    </div>
+  </header>
 
-    <main class="alert-feed" id="alerts-container">
-      </main>
+  <main class="alert-feed" id="alerts-container"></main>
 
-    <button id="refresh-alerts-btn">ΣΑΡΩΣΗ ΓΙΑ ΝΕΕΣ ΑΠΕΙΛΕΣ</button>
-  </div>
+  <button id="refresh-alerts-btn">Σάρωση για νέες απειλές</button>
+</div>
 
-  <script>
-    // Premium Gate
-    (function () {
-      const isPremium = localStorage.getItem("ss_premium") === "true";
-      if (!isPremium) {
-        window.location.href = "index.html";
-        return;
-      }
-    })();
+<script>
+(function() {
+  if(localStorage.getItem("ss_premium")!=="true") {
+    window.location.href="index.html";
+  }
+})();
 
-    const alertsData = [
-      {
-        title: "SMS Επιβεβαίωσης Τράπεζας",
-        level: "high",
-        bullets: [
-          "Μήνυμα ότι ο λογαριασμός σας θα κλειδωθεί.",
-          "Σύνδεσμος (link) προς ψεύτικη σελίδα e-banking.",
-          "Χρήση επείγουσας γλώσσας για να σας πιέσει."
-        ],
-        action: "Μην πατάτε ποτέ συνδέσμους σε SMS. Μπείτε μόνο από το επίσημο app της τράπεζας."
-      },
-      {
-        title: "Απάτη 'Συγγενής σε Ανάγκη'",
-        level: "high",
-        bullets: [
-          "Κλήση από άγνωστο για ατύχημα δικού σας ανθρώπου.",
-          "Απαίτηση για άμεση μεταφορά χρημάτων ή παράδοση μετρητών.",
-          "Πιθανή χρήση AI για κλωνοποίηση φωνής."
-        ],
-        action: "Κλείστε το τηλέφωνο και καλέστε εσείς τον συγγενή σας στον γνωστό του αριθμό."
-      },
-      {
-        title: "Ψεύτικο Ειδοποιητήριο ΕΛΤΑ/Courier",
-        level: "medium",
-        bullets: [
-          "Email ή SMS για δέμα που 'εκκρεμεί'.",
-          "Ζητάει πληρωμή μικρού ποσού για έξοδα αποστολής.",
-          "Σας οδηγεί σε σελίδα υποκλοπής κάρτας."
-        ],
-        action: "Ελέγξτε τον κωδικό αποστολής απευθείας στο επίσημο site της εταιρείας."
-      },
-      {
-        title: "Επενδυτικές Απάτες (Crypto)",
-        level: "medium",
-        bullets: [
-          "Υποσχέσεις για εγγυημένα κέρδη χωρίς ρίσκο.",
-          "Πίεση να επενδύσετε 'τώρα' πριν κλείσει η ευκαιρία.",
-          "Εμφάνιση ψεύτικων κερδών σε πλατφόρμες-μαϊμού."
-        ],
-        action: "Αγνοήστε διαφημίσεις με επώνυμους που 'πλούτισαν ξαφνικά'. Δεν υπάρχει εγγυημένο κέρδος."
-      }
-    ];
+const alertsData = [
+  {
+    title:"SMS Τράπεζας",
+    level:"high",
+    bullets:["Μήνυμα για κλείδωμα λογαριασμού","Link προς ψεύτικη σελίδα","Επείγουσα γλώσσα για πίεση"],
+    action:"Μην πατάτε συνδέσμους. Μπείτε από το επίσημο app."
+  },
+  {
+    title:"Συγγενής σε ανάγκη",
+    level:"high",
+    bullets:["Άγνωστο άτομο καλεί για ατύχημα","Ζητά άμεση μεταφορά χρημάτων","Μπορεί να χρησιμοποιηθεί AI φωνής"],
+    action:"Κλείστε το τηλέφωνο, καλέστε τον γνωστό αριθμό του συγγενή."
+  },
+  {
+    title:"Ψεύτικο ειδοποιητήριο δέματος",
+    level:"medium",
+    bullets:["Email/SMS για εκκρεμές δέμα","Ζητά πληρωμή για έξοδα αποστολής","Οδηγεί σε phishing site"],
+    action:"Ελέγξτε απευθείας στο επίσημο site της εταιρείας."
+  },
+  {
+    title:"Απάτες Crypto",
+    level:"medium",
+    bullets:["Υποσχέσεις εγγυημένων κερδών","Πίεση να επενδύσετε άμεσα","Ψεύτικα κέρδη σε πλατφόρμες"],
+    action:"Αγνοήστε ψεύτικες διαφημίσεις. Δεν υπάρχει εγγυημένο κέρδος."
+  }
+];
 
-    const container = document.getElementById("alerts-container");
-    const refreshBtn = document.getElementById("refresh-alerts-btn");
+const container=document.getElementById("alerts-container");
+const refreshBtn=document.getElementById("refresh-alerts-btn");
 
-    function renderAlerts() {
-      container.innerHTML = "";
-      
-      // Shuffle και επιλογή 3 τυχαίων για "φρέσκο" περιεχόμενο
-      const shuffled = [...alertsData].sort(() => Math.random() - 0.5).slice(0, 3);
+function renderAlerts() {
+  container.innerHTML="";
+  const shuffled=alertsData.sort(()=>0.5-Math.random()).slice(0,3);
+  shuffled.forEach((alert,index)=>{
+    setTimeout(()=>{
+      const div=document.createElement("div");
+      div.className=`alert-block level-${alert.level}`;
+      div.innerHTML=`
+        <span class="threat-level">${alert.level==="high"?"CRITICAL":"WARNING"}</span>
+        <h3>${alert.title}</h3>
+        <ul>${alert.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
+        <div class="action-box"><strong>ΟΔΗΓΙΑ ΑΣΦΑΛΕΙΑΣ:</strong><p>${alert.action}</p></div>
+      `;
+      container.appendChild(div);
+      if(navigator.vibrate) navigator.vibrate(10);
+    },index*150);
+  });
+}
 
-      shuffled.forEach((alert, index) => {
-        setTimeout(() => {
-          const div = document.createElement("div");
-          div.className = `alert-block level-${alert.level}`;
-
-          div.innerHTML = `
-            <span class="threat-level">${alert.level === 'high' ? 'CRITICAL' : 'WARNING'}</span>
-            <h3>${alert.title}</h3>
-            <ul>
-              ${alert.bullets.map(b => `<li>${b}</li>`).join('')}
-            </ul>
-            <div class="action-box">
-              <strong>ΟΔΗΓΙΑ ΑΣΦΑΛΕΙΑΣ:</strong>
-              <p>${alert.action}</p>
-            </div>
-          `;
-
-          container.appendChild(div);
-          if (window.navigator.vibrate) window.navigator.vibrate(10);
-        }, index * 150);
-      });
-    }
-
-    refreshBtn.addEventListener("click", () => {
-      refreshBtn.textContent = "ΣΑΡΩΣΗ...";
-      setTimeout(() => {
-        renderAlerts();
-        refreshBtn.textContent = "ΣΑΡΩΣΗ ΓΙΑ ΝΕΕΣ ΑΠΕΙΛΕΣ";
-      }, 800);
-    });
-
+refreshBtn.addEventListener("click",()=>{
+  refreshBtn.textContent="Σάρωση...";
+  setTimeout(()=>{
     renderAlerts();
-  </script>
+    refreshBtn.textContent="Σάρωση για νέες απειλές";
+  },800);
+});
+
+renderAlerts();
+</script>
 </body>
 </html>
