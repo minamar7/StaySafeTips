@@ -18,8 +18,7 @@
 }
 
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; transition: direction 0.3s; }
-body[dir="rtl"] { text-align: right; }
+body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
 .hidden { display: none !important; }
 
@@ -60,25 +59,28 @@ body[dir="rtl"] { text-align: right; }
 .main-cta:active { transform: scale(0.96); }
 
 /* Quiz Styles */
-.quiz-question-box { background: #1e293b; padding: 20px; border-radius: 20px; margin-bottom: 20px; font-size: 18px; font-weight: 600; text-align: center; }
+.quiz-question-box { background: #1e293b; padding: 25px; border-radius: 20px; margin-bottom: 20px; font-size: 18px; font-weight: 600; text-align: center; min-height: 120px; display: flex; align-items: center; justify-content: center; }
 .quiz-options-grid button {
   background: #0f172a; border: 1px solid #334155; color: white;
   padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%;
   font-size: 15px; cursor: pointer; transition: 0.2s;
 }
 
+/* Next Button in Quiz */
+#next_btn { margin-top: 10px; background: var(--gold); color: black; display: none; }
+
 /* Badges */
 .badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; }
 .badge.locked { opacity: 0.2; filter: grayscale(1); }
-.badge.unlocked { border-color: var(--gold); box-shadow: 0 0 15px rgba(250, 204, 21, 0.3); animation: pop 0.5s; }
+.badge.unlocked { border-color: var(--gold); box-shadow: 0 0 15px rgba(250, 204, 21, 0.3); }
 
 /* Navigation */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: 15px; }
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
 .nav-tab.active { color: var(--accent); }
 
-/* Overlay */
+/* Result Overlays */
 .quiz-result { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; }
 .quiz-result-card { background: #1e293b; padding: 40px; border-radius: 30px; text-align: center; width: 85%; border: 1px solid var(--accent); }
 
@@ -137,6 +139,7 @@ body[dir="rtl"] { text-align: right; }
   <section id="screen_quiz" class="screen hidden">
     <div id="question_box" class="quiz-question-box"></div>
     <div id="options_grid" class="quiz-options-grid"></div>
+    <button id="next_btn" class="main-cta" onclick="nextQuestion()" data-i18n="continue">ΣΥΝΕΧΕΙΑ</button>
   </section>
 
   <section id="screen_badges" class="screen hidden">
@@ -152,7 +155,7 @@ body[dir="rtl"] { text-align: right; }
       <div style="font-size:50px;">💎</div>
       <h2 data-i18n="premium_tab">Elite Access</h2>
       <p data-i18n="upgrade_msg">Ξεκλείδωσε όλα τα επίπεδα.</p>
-      <button class="main-cta" style="background:var(--gold)" onclick="openPaywall()" data-i18n="elite_quiz_btn">ELITE QUIZ</button>
+      <button class="main-cta" style="background:var(--gold); color:black;" onclick="openPaywall()" data-i18n="elite_quiz_btn">ELITE QUIZ</button>
     </div>
   </section>
 </main>
@@ -169,11 +172,11 @@ body[dir="rtl"] { text-align: right; }
     <div class="quiz-result-card" style="border: 2px solid var(--gold);">
       <div style="font-size:50px; margin-bottom:10px;">👑</div>
       <h2 style="color:var(--gold)">Stay Safe Elite</h2>
-      <p style="font-size:14px; margin-bottom:20px;">Γίνε μέλος και ξεκλείδωσε όλες τις ερωτήσεις και τα ειδικά σήματα!</p>
+      <p style="font-size:14px; margin-bottom:20px;">Γίνε μέλος και ξεκλείδωσε όλες τις ερωτήσεις!</p>
       <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:20px;">
           <h3 style="margin:0; font-size:24px;">2.99€ <small style="font-size:12px;">/ μήνα</small></h3>
       </div>
-      <button class="main-cta" style="background:var(--gold); color:black; margin-bottom:10px;" onclick="alert('Σύνδεση με PayPal...')">ΕΓΓΡΑΦΗ ΤΩΡΑ</button>
+      <button class="main-cta" style="background:var(--gold); color:black; margin-bottom:10px;" onclick="alert('Ανακατεύθυνση σε ασφαλές περιβάλλον πληρωμής...')">ΕΓΓΡΑΦΗ ΤΩΡΑ</button>
       <button onclick="closePaywall()" style="background:none; border:none; color:var(--muted); cursor:pointer;">Ίσως αργότερα</button>
     </div>
 </div>
@@ -181,9 +184,9 @@ body[dir="rtl"] { text-align: right; }
 <div id="result_screen" class="quiz-result hidden">
   <div class="quiz-result-card">
     <div style="font-size:60px; margin-bottom:10px;">🏆</div>
-    <h2 id="result_title" data-i18n="congrats">Συγχαρητήρια!</h2>
+    <h2 data-i18n="congrats">Συγχαρητήρια!</h2>
     <p id="xp_gained_text" style="color:var(--gold); font-weight:bold; font-size:20px;">+100 XP</p>
-    <button class="main-cta" onclick="closeResult()" data-i18n="continue">ΣΥΝΕΧΕΙΑ</button>
+    <button class="main-cta" onclick="closeResult()" data-i18n="continue">ΤΕΛΟΣ</button>
   </div>
 </div>
 
@@ -196,7 +199,7 @@ const translations = {
   es: { welcome: "Stay Safe Elite", start_btn: "EMPEZAR", home_tab: "Seguridad Hogar", badges_tab: "Insignias", premium_tab: "Elite Access", level: "Nivel", continue: "CONTINUAR", upgrade_msg: "Aprende a protegerte.", safety_dashboard: "Panel", entry_quiz_btn: "INICIAR CUESTIONARIO", elite_quiz_btn: "CUESTIONARIO ELITE", congrats: "¡Felicidades!" },
   pt: { welcome: "Stay Safe Elite", start_btn: "COMEÇAR", home_tab: "Segurança Casa", badges_tab: "Conquistas", premium_tab: "Elite Access", level: "Nível", continue: "CONTINUAR", upgrade_msg: "Aprenda a se proteger.", safety_dashboard: "Painel", entry_quiz_btn: "INICIAR QUIZ", elite_quiz_btn: "QUIZ ELITE", congrats: "Parabéns!" },
   it: { welcome: "Stay Safe Elite", start_btn: "INIZIA", home_tab: "Sicurezza Casa", badges_tab: "Premi", premium_tab: "Elite Access", level: "Livello", continue: "CONTINUA", upgrade_msg: "Impara a proteggerti.", safety_dashboard: "Dashboard", entry_quiz_btn: "INIZIA QUIZ", elite_quiz_btn: "QUIZ ELITE", congrats: "Congratulazioni!" },
-  ru: { welcome: "Stay Safe Elite", start_btn: "НАЧАТЬ", home_tab: "Безопасность дома", badges_tab: "Достижения", premium_tab: "Elite Access", level: "Уровень", continue: "ПРОДОЛЖИТЬ", upgrade_msg: "Узнайте, как защитить себя.", safety_dashboard: "Панель", entry_quiz_btn: "НАЧΑТЬ ТЕСТ", elite_quiz_btn: "ЭЛИТНЫЙ ТЕСТ", congrats: "Поздравляем!" },
+  ru: { welcome: "Stay Safe Elite", start_btn: "НАЧАТЬ", home_tab: "Безопасность дома", badges_tab: "Достижения", premium_tab: "Elite Access", level: "Уровень", continue: "ПΡΟΔОЛЖИТЬ", upgrade_msg: "Узнайте, как защитить себя.", safety_dashboard: "Панель", entry_quiz_btn: "НАЧАТЬ ТЕСТ", elite_quiz_btn: "ЭΛИТНЫЙ ТЕСТ", congrats: "Поздравляем!" },
   zh: { welcome: "Stay Safe Elite", start_btn: "开始旅程", home_tab: "家庭安全", badges_tab: "奖章", premium_tab: "Elite Access", level: "等级", continue: "继续", upgrade_msg: "学习如何保护自己。", safety_dashboard: "仪表板", entry_quiz_btn: "开始测验", elite_quiz_btn: "精英测验", congrats: "恭喜！" },
   hi: { welcome: "Stay Safe Elite", start_btn: "यात्रा शुरू करें", home_tab: "घर की सुरक्षा", badges_tab: "बैज", premium_tab: "Elite Access", level: "स्तर", continue: "जारी रखें", upgrade_msg: "खुद को बचाना सीखें।", safety_dashboard: "डैशबोर्ड", entry_quiz_btn: "प्रश्नावली शुरू करें", elite_quiz_btn: "एलीट प्रश्नावली", congrats: "बधाई हो!" },
   ar: { welcome: "Stay Safe Elite", start_btn: "ابدأ الرحلة", home_tab: "أمن المنزل", badges_tab: "الأوسمة", premium_tab: "Elite Access", level: "المستوى", continue: "استمرار", upgrade_msg: "تعلم كيف تحمي نفسك.", safety_dashboard: "لوحة التحكم", entry_quiz_btn: "ابدأ الاختبار", elite_quiz_btn: "اختبار النخبة", congrats: "تهانينا!" }
@@ -237,28 +240,29 @@ async function startQuiz(mode = 'free') {
   const fileName = `./questions_${mode}_${currentLang}.json`;
   try {
     const response = await fetch(fileName);
-    if (!response.ok) throw new Error(`Not found: ${fileName}`);
+    if (!response.ok) throw new Error("File not found");
     const data = await response.json();
     quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
     current_q = 0;
     nav('quiz');
     showQuestion();
   } catch (err) {
-    alert("Σφάλμα: Ανεβάστε τα αρχεία .json στο GitHub για να ξεκινήσει το τεστ.");
+    alert("Πρόβλημα: Βεβαιωθείτε ότι τα JSON αρχεία είναι στο GitHub.");
   }
 }
 
 function showQuestion() {
   const qData = quiz_data[current_q];
   document.getElementById('question_box').innerText = qData.q;
+  document.getElementById('next_btn').style.display = 'none'; // Κρύβουμε το κουμπί Συνέχεια
   document.getElementById('options_grid').innerHTML = qData.o.map((opt, i) => 
-    `<button onclick="handleAnswer(${i})">${opt}</button>`
+    `<button class="opt-btn" onclick="handleAnswer(${i})">${opt}</button>`
   ).join('');
 }
 
 function handleAnswer(selectedIdx) {
   const qData = quiz_data[current_q];
-  const buttons = document.querySelectorAll('#options_grid button');
+  const buttons = document.querySelectorAll('.opt-btn');
   buttons.forEach(btn => btn.disabled = true);
 
   if (selectedIdx === qData.a) {
@@ -269,16 +273,19 @@ function handleAnswer(selectedIdx) {
     buttons[qData.a].style.background = "#22c55e";
   }
 
-  setTimeout(() => {
-    current_q++;
-    if (current_q < quiz_data.length) {
-        showQuestion();
-    } else {
-        document.getElementById('result_screen').classList.remove('hidden');
-        document.getElementById('badge_home').classList.remove('locked');
-        document.getElementById('badge_home').classList.add('unlocked');
-    }
-  }, 1000);
+  // ΕΜΦΑΝΙΖΟΥΜΕ το κουμπί Συνέχεια για να πάει ο χρήστης στην επόμενη ερώτηση
+  document.getElementById('next_btn').style.display = 'block';
+}
+
+function nextQuestion() {
+  current_q++;
+  if (current_q < quiz_data.length) {
+    showQuestion();
+  } else {
+    document.getElementById('result_screen').classList.remove('hidden');
+    document.getElementById('badge_home').classList.remove('locked');
+    document.getElementById('badge_home').classList.add('unlocked');
+  }
 }
 
 function updateProgress() {
@@ -293,4 +300,3 @@ function closeResult() {
 </script>
 </body>
 </html>
- 
