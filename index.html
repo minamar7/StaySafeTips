@@ -4,135 +4,81 @@
 <meta charset="UTF-8">
 <title>Stay Safe Elite</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#020617">
-
-<link rel="icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
 <style>
-:root{
-  --bg:#020617;
-  --card:#0f172a;
-  --accent:#38bdf8;
-  --gold:#facc15;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
+:root {
+  --bg: #020617;
+  --card: #0f172a;
+  --accent: #38bdf8;
+  --gold: #facc15;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
 }
 
-*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-}
+* { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-.hidden{display:none!important}
+.hidden { display: none !important; }
 
-h1,h2{margin:0 0 8px}
+/* Onboarding */
+.onboarding-screen {
+  position: fixed; inset: 0;
+  background: radial-gradient(circle at top, #1e293b, #000);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.onboarding-content { text-align: center; padding: 30px; }
+.onboarding-icon { font-size: 80px; margin-bottom: 20px; filter: drop-shadow(0 0 20px var(--accent)); }
 
-.main-cta{
-  background:linear-gradient(135deg,var(--accent),#0ea5e9);
-  border:none;color:#020617;
-  padding:14px 20px;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:700;
-  width:100%;
-}
+/* App Header */
+.app-header { padding: 40px 20px 20px; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b; }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.user-rank-box { background: #1e293b; border-radius: 20px; padding: 6px 15px; font-size: 14px; color: var(--gold); border: 1px solid rgba(250, 204, 21, 0.3); }
 
-.pulse{animation:pulse 2s infinite}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(56,189,248,.6)}
-  70%{box-shadow:0 0 0 20px rgba(56,189,248,0)}
-}
+.xp-container { margin-top: 10px; }
+.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; }
+.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 15%; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-.onboarding-screen{
-  position:fixed;inset:0;
-  background:radial-gradient(circle at top,#020617,#000);
-  display:flex;align-items:center;justify-content:center;
-  z-index:9999;
-}
-.onboarding-content{text-align:center;padding:20px}
-.onboarding-icon{font-size:64px;margin-bottom:20px}
+/* Content Area */
+.content-area { padding: 20px 20px 100px; }
+.glass-card { background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 24px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-.app-header{
-  padding:16px;
-  background:linear-gradient(180deg,#020617,#020617cc);
+.main-cta {
+  background: linear-gradient(135deg, var(--accent), #0ea5e9);
+  border: none; color: #020617; padding: 18px; border-radius: 18px;
+  font-size: 16px; font-weight: 800; width: 100%; cursor: pointer;
+  transition: transform 0.2s;
 }
-.header-top{
-  display:flex;justify-content:space-between;align-items:center;
-}
-.user-rank-box{
-  background:#020617;border-radius:999px;
-  padding:6px 12px;font-size:13px;color:var(--gold)
-}
-.lang-minimal{
-  background:#020617;color:white;border-radius:8px;border:1px solid #1e293b
-}
+.main-cta:active { transform: scale(0.96); }
 
-.xp-bar{
-  background:#020617;border-radius:999px;height:10px;overflow:hidden
+/* Quiz Styles */
+.quiz-question-box { background: #1e293b; padding: 20px; border-radius: 20px; margin-bottom: 20px; font-size: 18px; font-weight: 600; text-align: center; }
+.quiz-options-grid button {
+  background: #0f172a; border: 1px solid #334155; color: white;
+  padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%;
+  font-size: 15px; cursor: pointer; transition: 0.2s;
 }
-.xp-fill{
-  background:linear-gradient(90deg,var(--gold),#fde047);
-  height:100%;width:0%;transition:.4s
-}
+.quiz-options-grid button:active { background: var(--accent); color: #000; }
 
-.content-area{padding:16px 16px 90px}
-.glass-card{
-  background:linear-gradient(180deg,#0f172a,#020617);
-  border-radius:18px;padding:16px;margin-bottom:16px;
-  box-shadow:0 10px 40px rgba(0,0,0,.5)
-}
-.pill{
-  background:#020617;color:var(--muted);
-  padding:4px 10px;border-radius:999px;font-size:12px
-}
+/* Badges */
+.badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; transition: 0.3s; }
+.badge.locked { opacity: 0.2; filter: grayscale(1); }
+.badge.unlocked { border-color: var(--gold); box-shadow: 0 0 15px rgba(250, 204, 21, 0.3); animation: pop 0.5s; }
 
-.feature-list{padding-left:18px;color:var(--muted)}
+/* Navigation */
+.nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: 15px; }
+.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+.nav-tab.active { color: var(--accent); transform: translateY(-5px); transition: 0.3s; }
 
-.quiz-question-box{
-  background:var(--card);
-  padding:16px;border-radius:16px;
-  margin-bottom:12px
-}
-.quiz-options-grid button{
-  background:#020617;border:1px solid #1e293b;
-  color:white;padding:12px;border-radius:14px;
-  margin-bottom:10px;width:100%
-}
+/* Overlay */
+.quiz-result { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+.quiz-result-card { background: #1e293b; padding: 40px; border-radius: 30px; text-align: center; width: 85%; border: 1px solid var(--accent); }
 
-.badges-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:14px
-}
-.badge{
-  background:var(--card);
-  padding:20px;border-radius:18px;
-  text-align:center;font-size:28px
-}
-.badge.locked{opacity:.3}
-.badge.unlocked{
-  box-shadow:0 0 0 2px var(--gold)
-}
-
-.nav-tabs{
-  position:fixed;bottom:0;left:0;right:0;
-  background:#020617;
-  display:flex;border-top:1px solid #1e293b
-}
-.nav-tab{
-  flex:1;background:none;border:none;color:var(--muted);
-  padding:10px;font-size:12px
-}
-.nav-tab.active{color:var(--accent)}
-
-.quiz-result{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);
-  display:flex;align-items:center;justify-content:center
-}
-.quiz-result-card{
-  background:var(--card);
-  padding:20px;border-radius:20px;
-  text-align:center;width:80%
-}
+@keyframes pop { 0% { transform: scale(0.8); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
 </style>
 </head>
 
@@ -141,60 +87,60 @@ h1,h2{margin:0 0 8px}
 <section id="onboarding" class="onboarding-screen">
   <div class="onboarding-content">
     <div class="onboarding-icon">🛡️</div>
-    <h1>Stay Safe Elite</h1>
-    <p>Ο προσωπικός σου σύμμαχος ασφάλειας.</p>
-    <button id="onboarding-start" class="main-cta pulse">Ξεκίνα</button>
+    <h1 style="font-size: 32px;">Stay Safe Elite</h1>
+    <p style="color: var(--muted); margin-bottom: 30px;">Μάθε να προστατεύεις τον εαυτό σου και την περιουσία σου.</p>
+    <button id="btn-start" class="main-cta">ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ</button>
   </div>
 </section>
 
-<div id="main-app" class="hidden">
+<div id="main_app" class="hidden">
 
 <header class="app-header">
   <div class="header-top">
-    <div class="user-rank-box">🔥 <span id="streak">1 Day</span></div>
-    <select class="lang-minimal">
-      <option>GR</option><option>EN</option>
-    </select>
+    <div class="user-rank-box">🔥 <span id="streak">1 Day Streak</span></div>
+    <div style="color: var(--accent); font-weight: bold;">GR</div>
   </div>
-  <h1>Stay Safe Elite</h1>
-  <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
-  <small>Level <span id="level">1</span></small>
+  <h1 style="font-size: 24px;">Dashboard</h1>
+  <div class="xp-container">
+    <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
+    <div style="display:flex; justify-content:space-between; margin-top:5px;">
+        <small style="color:var(--muted)">Progress</small>
+        <small style="color:var(--gold)">Level <span id="level_val">1</span></small>
+    </div>
+  </div>
 </header>
 
 <main class="content-area">
+  <section id="screen_home" class="screen">
+    <div class="glass-card">
+      <span style="color:var(--accent); font-size:12px; font-weight:bold; text-transform:uppercase;">Επιπεδο 1</span>
+      <h2 style="margin-top:10px;">Ασφάλεια Σπιτιού</h2>
+      <p style="color:var(--muted); font-size:14px;">Μάθε τις βασικές ενέργειες σε περίπτωση πυρκαγιάς ή διαρροής.</p>
+      <button class="main-cta" onclick="startQuiz()">ENTRY QUIZ</button>
+    </div>
+  </section>
 
-<section id="home" class="screen">
-  <div class="glass-card">
-    <h2>Ασφάλεια Σπιτιού</h2>
-    <ul class="feature-list">
-      <li>Κίνδυνοι πυρκαγιάς</li>
-      <li>Πρώτες ενέργειες</li>
-    </ul>
-    <button class="main-cta" onclick="startQuiz()">Ξεκίνα Quiz</button>
-  </div>
-</section>
+  <section id="screen_quiz" class="screen hidden">
+    <div id="question_box" class="quiz-question-box"></div>
+    <div id="options_grid" class="quiz-options-grid"></div>
+  </section>
 
-<section id="quiz" class="screen hidden">
-  <div id="question" class="quiz-question-box"></div>
-  <div id="options" class="quiz-options-grid"></div>
-</section>
+  <section id="screen_badges" class="screen hidden">
+    <h2 style="margin-bottom:20px;">Τα Τρόπαιά σου</h2>
+    <div class="badges-grid">
+      <div id="badge_home" class="badge locked">🏠<br><small style="font-size:12px; color:var(--muted)">Guardian</small></div>
+      <div id="badge_digital" class="badge locked">🛡️<br><small style="font-size:12px; color:var(--muted)">Cyber</small></div>
+    </div>
+  </section>
 
-<section id="badges" class="screen hidden">
-  <h2>Τα Τρόπαιά σου</h2>
-  <div class="badges-grid">
-    <div id="badge-home" class="badge locked">🏠<br><small>Home</small></div>
-    <div id="badge-digital" class="badge locked">🛡️<br><small>Digital</small></div>
-  </div>
-</section>
-
-<section id="premium" class="screen hidden">
-  <div class="glass-card">
-    <h2>Elite Access</h2>
-    <p>Ξεκλείδωσε όλα τα επίπεδα & αφαίρεσε διαφημίσεις.</p>
-    <button class="main-cta">Αναβάθμιση</button>
-  </div>
-</section>
-
+  <section id="screen_premium" class="screen hidden">
+    <div class="glass-card" style="border: 1px solid var(--gold); text-align:center;">
+      <div style="font-size:50px;">💎</div>
+      <h2>Elite Access</h2>
+      <p style="color:var(--muted);">Ξεκλείδωσε προηγμένα πρωτόκολλα ασφαλείας.</p>
+      <button class="main-cta" style="background:var(--gold)">ΑΝΑΒΑΘΜΙΣΗ €4.90</button>
+    </div>
+  </section>
 </main>
 
 <nav class="nav-tabs">
@@ -205,61 +151,88 @@ h1,h2{margin:0 0 8px}
 
 </div>
 
-<div id="result" class="quiz-result hidden">
+<div id="result_screen" class="quiz-result hidden">
   <div class="quiz-result-card">
-    <h2>🏆 Τέλεια!</h2>
-    <p>+50 XP</p>
-    <button class="main-cta" onclick="closeResult()">Συνέχεια</button>
+    <div style="font-size:60px; margin-bottom:10px;">🏆</div>
+    <h2>Συγχαρητήρια!</h2>
+    <p id="xp_gained" style="color:var(--gold); font-weight:bold; font-size:20px;">+50 XP</p>
+    <button class="main-cta" onclick="closeResult()">ΣΥΝΕΧΕΙΑ</button>
   </div>
 </div>
 
 <script>
-let xp=0,level=1,qIndex=0;
-const quiz=[
- {q:"Τι κάνεις σε φωτιά;",o:["Καλώ 112","Ανοίγω παράθυρα"],a:0}
+let xp = 0;
+let level = 1;
+let current_q = 0;
+
+const quiz_data = [
+  { q: "Ποιος είναι ο ευρωπαϊκός αριθμός έκτακτης ανάγκης;", o: ["100", "112", "911"], a: 1 },
+  { q: "Τι κάνουμε αν μυρίσει υγραέριο στο σπίτι;", o: ["Ανάβουμε φως", "Ανοίγουμε παράθυρα", "Καλούμε την αστυνομία"], a: 1 }
 ];
 
-onboardingStart.onclick=()=>{
-  onboarding.classList.add("hidden");
-  main-app.classList.remove("hidden");
+// Onboarding Start
+document.getElementById('btn-start').onclick = () => {
+  document.getElementById('onboarding').classList.add('hidden');
+  document.getElementById('main_app').classList.remove('hidden');
+};
+
+// Navigation Function
+function nav(id) {
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  // Show target
+  document.getElementById('screen_' + id).classList.remove('hidden');
+  
+  // Update Tabs
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
 }
 
-function nav(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-  document.querySelectorAll(".nav-tab").forEach(b=>b.classList.remove("active"));
-  event.target.classList.add("active");
+function startQuiz() {
+  current_q = 0;
+  nav('quiz');
+  showQuestion();
 }
 
-function startQuiz(){
-  nav("quiz");
-  showQ();
+function showQuestion() {
+  const qData = quiz_data[current_q];
+  document.getElementById('question_box').innerText = qData.q;
+  
+  const optionsHTML = qData.o.map((opt, i) => 
+    `<button onclick="handleAnswer(${i})">${opt}</button>`
+  ).join('');
+  
+  document.getElementById('options_grid').innerHTML = optionsHTML;
 }
 
-function showQ(){
-  question.innerText=quiz[qIndex].q;
-  options.innerHTML="";
-  quiz[qIndex].o.forEach((t,i)=>{
-    const b=document.createElement("button");
-    b.innerText=t;
-    b.onclick=()=>answer(i);
-    options.appendChild(b);
-  });
-}
-
-function answer(i){
-  if(i===quiz[qIndex].a){
-    xp+=50;
-    xp-fill.style.width=(xp%100)+"%";
-    badge-home.classList.remove("locked");
-    badge-home.classList.add("unlocked");
+function handleAnswer(i) {
+  if (i === quiz_data[current_q].a) {
+    xp += 50;
+    updateProgress();
+    // Unlock Badge
+    document.getElementById('badge_home').classList.remove('locked');
+    document.getElementById('badge_home').classList.add('unlocked');
   }
-  result.classList.remove("hidden");
+  
+  document.getElementById('result_screen').classList.remove('hidden');
 }
 
-function closeResult(){
-  result.classList.add("hidden");
-  nav("badges");
+function updateProgress() {
+  const fill = document.getElementById('xp_fill');
+  const levelDisp = document.getElementById('level_val');
+  
+  let progress = (xp % 100);
+  fill.style.width = progress + "%";
+  
+  if (xp >= 100) {
+    level = Math.floor(xp / 100) + 1;
+    levelDisp.innerText = level;
+  }
+}
+
+function closeResult() {
+  document.getElementById('result_screen').classList.add('hidden');
+  nav('badges');
 }
 </script>
 
