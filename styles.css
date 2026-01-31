@@ -5,10 +5,15 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
   -webkit-tap-highlight-color: transparent;
   outline: none;
-  user-select: none; /* Mobile optimization: αποφυγή highlight κειμένου */
+  user-select: none;
+}
+
+p, li, .tip-text, .emergency-text {
+  user-select: text; /* Accessibility & usefulness */
 }
 
 :root {
@@ -16,13 +21,18 @@
   --bg-soft: #0f172a;
   --bg-glass: rgba(30, 41, 59, 0.7);
   --border: rgba(255, 255, 255, 0.08);
+
   --text-main: #f8fafc;
   --text-soft: #94a3b8;
+
   --accent: #22c55e;
   --accent-glow: rgba(34, 197, 94, 0.4);
+
   --premium: #fbbf24;
   --premium-glow: rgba(251, 191, 36, 0.5);
+
   --error: #f43f5e;
+
   --safe-top: env(safe-area-inset-top, 20px);
   --safe-bottom: env(safe-area-inset-bottom, 20px);
 }
@@ -59,14 +69,14 @@ body {
 }
 
 /* =========================================================
-   QUIZ INTERFACE & BUTTONS (Fixed for Clickability)
+   QUIZ INTERFACE & BUTTONS
 ========================================================= */
 .quiz-options-grid {
   display: grid;
   gap: 12px;
   margin-top: 20px;
   position: relative;
-  z-index: 10; /* Σιγουρεύει ότι οι απαντήσεις είναι "πάνω" */
+  z-index: 10;
 }
 
 .option-btn {
@@ -80,8 +90,8 @@ body {
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: 0.2s;
-  pointer-events: auto !important; /* Force clickability */
+  transition: 0.2s ease;
+  pointer-events: auto !important;
 }
 
 .option-btn:active {
@@ -90,7 +100,18 @@ body {
   border-color: var(--accent);
 }
 
+.option-btn.selected {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-glow);
+}
+
+/* =========================================================
+   MAIN CTA (Premium Feel)
+========================================================= */
 .main-cta {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(135deg, var(--accent), #16a34a);
   color: white;
   padding: 20px;
@@ -103,15 +124,33 @@ body {
   cursor: pointer;
 }
 
+.main-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transform: translateX(-100%);
+}
+
+.main-cta:hover::after {
+  transform: translateX(100%);
+  transition: 0.6s;
+}
+
 /* =========================================================
-   NATIVE BOTTOM NAVIGATION (Larger Design)
+   NATIVE BOTTOM NAVIGATION
 ========================================================= */
 .nav-tabs {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(85px + var(--safe-bottom)); /* Αυξημένο ύψος για Store Look */
+  height: calc(85px + var(--safe-bottom));
   background: rgba(15, 23, 42, 0.96);
   backdrop-filter: blur(25px);
   display: grid;
@@ -134,7 +173,7 @@ body {
 }
 
 .nav-tab .icon {
-  font-size: 1.6rem; /* Μεγαλύτερα εικονίδια */
+  font-size: 1.6rem;
 }
 
 .nav-tab span:not(.icon) {
@@ -150,41 +189,83 @@ body {
   transform: translateY(-4px) scale(1.1);
 }
 
+.nav-tab.active::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+/* =========================================================
+   PREMIUM ELEMENTS
+========================================================= */
+.premium-badge {
+  color: var(--premium);
+  text-shadow: 0 0 10px var(--premium-glow);
+}
+
 /* =========================================================
    VISIBILITY & OVERLAYS
 ========================================================= */
 .hidden {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 #quiz-result {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(2, 6, 23, 0.98);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(2, 6, 23, 0.98);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  animation: resultIn 0.4s ease-out;
 }
 
 .app-screen {
   display: none;
   animation: fadeIn 0.4s ease-out;
-  padding-bottom: 120px; /* Χώρος για τη μεγάλη μπάρα */
+  padding-bottom: 120px;
 }
 
-.app-screen.active { display: block; }
+.app-screen.active {
+  display: block;
+}
 
 /* =========================================================
    ANIMATIONS
 ========================================================= */
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes unlockPop { 0% { transform: scale(0.8); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-.pulse { animation: pulseAnim 2s infinite; }
+@keyframes unlockPop {
+  0% { transform: scale(0.8); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes resultIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.pulse {
+  animation: pulseAnim 2s infinite;
+}
+
 @keyframes pulseAnim {
   0% { box-shadow: 0 0 0 0 var(--accent-glow); }
   70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
