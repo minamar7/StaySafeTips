@@ -12,17 +12,17 @@ window.QuizEngine = {
         { q: "Βρίσκεις ένα USB στο δρόμο. Τι κάνεις;", options: ["Το βάζω στο PC", "Το πετάω", "Το χαρίζω"], correct: 1 }
       ],
       "badge-scam": [
-        { q: "Λαμβάνεις SMS: 'Το δέμα σας εκκρεμεί, πάτα εδώ'. Τι κάνεις;", options: ["Πατάω το link", "Το διαγράφω αμέσως", "Στέλνω στοιχεία"], correct: 1 },
-        { q: "Κάποιος τηλεφωνεί από την 'Τράπεζα' και ζητάει PIN. Τι κάνεις;", options: ["Του το δίνω", "Κλείνω το τηλέφωνο", "Τον ρωτάω ποιος είναι"], correct: 1 }
+        { q: "Λαμβάνεις SMS: 'Το δέμα σας εκκρεμεί'. Τι κάνεις;", options: ["Πατάω το link", "Το διαγράφω", "Στέλνω στοιχεία"], correct: 1 },
+        { q: "Κάποιος τηλεφωνεί από την 'Τράπεζα' για το PIN σας.", options: ["Του το δίνω", "Κλείνω το τηλέφωνο", "Τον ρωτάω ποιος είναι"], correct: 1 }
       ],
       "badge-emergency": [
         { q: "Ποιος είναι ο ευρωπαϊκός αριθμός έκτακτης ανάγκης;", options: ["100", "911", "112"], correct: 2 },
         { q: "Τι κάνουμε σε περίπτωση σεισμού;", options: ["Τρέχουμε έξω", "Μπαίνουμε κάτω από γραφείο", "Παίρνουμε ασανσέρ"], correct: 1 }
       ],
-      "quiz": [ // Γενικό Safety IQ Quiz για το κεντρικό TAB
+      "quiz": [
         { q: "Ποια είναι η πιο ασφαλής μέθοδος κλειδώματος κινητού;", options: ["PIN 4 ψηφίων", "Μοτίβο", "Βιομετρικά στοιχεία"], correct: 2 },
         { q: "Τι προσφέρει η χρήση ενός VPN;", options: ["Ταχύτερο ίντερνετ", "Κρυπτογράφηση σύνδεσης", "Δωρεάν συνδρομές"], correct: 1 },
-        { q: "Κοινό password σε όλους τους λογαριασμούς είναι:", options: ["Καλή πρακτική", "Επικίνδυνο", "βολικό και ασφαλές"], correct: 1 }
+        { q: "Κοινό password σε όλους τους λογαριασμούς είναι:", options: ["Καλή πρακτική", "Επικίνδυνο", "Βολικό και ασφαλές"], correct: 1 }
       ]
     },
     en: {
@@ -35,14 +35,6 @@ window.QuizEngine = {
         { q: "Is it safe to share passwords via email?", options: ["Yes", "No", "Only with the bank"], correct: 1 },
         { q: "What is 2FA?", options: ["Double password", "Second security step", "A chat app"], correct: 1 },
         { q: "You find a USB in the street. What do you do?", options: ["Plug it in", "Throw it away", "Give it as a gift"], correct: 1 }
-      ],
-      "badge-scam": [
-        { q: "SMS says: 'Package pending, click here'. What do you do?", options: ["Click the link", "Delete it", "Send info"], correct: 1 },
-        { q: "Bank calls asking for your PIN. What do you do?", options: ["Give it to them", "Hang up", "Ask who they are"], correct: 1 }
-      ],
-      "badge-emergency": [
-        { q: "What is the European emergency number?", options: ["100", "911", "112"], correct: 2 },
-        { q: "What to do during an earthquake?", options: ["Run outside", "Hide under a desk", "Take the elevator"], correct: 1 }
       ],
       "quiz": [
         { q: "What is the most secure phone lock method?", options: ["4-digit PIN", "Pattern", "Biometrics"], correct: 2 },
@@ -60,23 +52,22 @@ window.QuizEngine = {
 
   start: function(lang, badgeId) {
     this.currentLang = lang || 'el';
-    this.badge = badgeId || 'quiz'; // Default στο γενικό quiz
-    
-    // Επιλογή σωστού σετ ερωτήσεων
+    this.badge = badgeId || 'quiz';
     this.activeQuestions = this.content[this.currentLang][this.badge] || this.content[this.currentLang]["quiz"];
-    
     this.currentIndex = 0;
     this.score = 0;
     
+    // Reset UI
     const res = document.getElementById("quiz-result");
-    if (res) res.classList.add("hidden");
+    if (res) {
+        res.classList.add("hidden");
+        res.style.display = "none";
+    }
     
     this.render();
   },
 
   render: function() {
-    if (!this.activeQuestions || this.activeQuestions.length === 0) return;
-
     const qData = this.activeQuestions[this.currentIndex];
     const qBox = document.getElementById("quiz-question");
     const oBox = document.getElementById("quiz-options");
@@ -85,14 +76,16 @@ window.QuizEngine = {
     const label = this.currentLang === 'el' ? 'Ερώτηση' : 'Question';
     if (pill) pill.textContent = `${label} ${this.currentIndex + 1} / ${this.activeQuestions.length}`;
     
-    if (qBox) qBox.innerHTML = `<div class="q-card"><p class="q-text">${qData.q}</p></div>`;
+    if (qBox) qBox.innerHTML = `<p class="q-text" style="font-size:1.2rem; font-weight:bold; text-align:center; margin-bottom:20px;">${qData.q}</p>`;
     
     if (oBox) {
       oBox.innerHTML = "";
       qData.options.forEach((opt, idx) => {
         const btn = document.createElement("button");
-        btn.className = "main-cta"; 
-        btn.style.margin = "8px 0";
+        btn.className = "option-btn"; // Χρήση του νέου CSS class για μεγάλα κουμπιά
+        btn.style.width = "100%";
+        btn.style.marginBottom = "12px";
+        btn.style.pointerEvents = "auto";
         btn.textContent = opt;
         btn.onclick = () => this.check(idx);
         oBox.appendChild(btn);
@@ -118,23 +111,19 @@ window.QuizEngine = {
     const scoreText = document.getElementById("quiz-result-score");
     const percent = Math.round((this.score / this.activeQuestions.length) * 100);
     
-    if (res) res.classList.remove("hidden");
+    if (res) {
+        res.classList.remove("hidden");
+        res.style.display = "flex";
+    }
     
     const scoreLabel = this.currentLang === 'el' ? 'Σκορ' : 'Score';
     if (scoreText) scoreText.textContent = `${scoreLabel}: ${percent}%`;
 
-    // Ξεκλείδωμα Badge (μόνο αν το badgeId αντιστοιχεί σε πραγματικό badge)
-    if (percent >= 80 && this.badge.startsWith('badge-')) {
-      const b = document.getElementById(this.badge);
-      if (b) {
-        b.classList.remove("locked");
-        b.classList.add("unlocked");
-        
-        let saved = JSON.parse(localStorage.getItem("ss_badges") || "[]");
-        if (!saved.includes(this.badge)) {
-          saved.push(this.badge);
-          localStorage.setItem("ss_badges", JSON.stringify(saved));
-        }
+    // 🏆 Gamification: XP & Badges
+    if (percent >= 60) {
+      this.updateXP(50); // Δώσε 50 XP
+      if (this.badge.startsWith('badge-')) {
+        this.unlockBadge(this.badge);
       }
     }
 
@@ -142,10 +131,37 @@ window.QuizEngine = {
     if (continueBtn) {
       continueBtn.onclick = () => {
         res.classList.add("hidden");
-        // Επιστροφή στο Home
-        const homeTab = document.querySelector('[data-target="home"]');
-        if (homeTab) homeTab.click();
+        res.style.display = "none";
+        if (window.showScreen) window.showScreen("home");
       };
+    }
+  },
+
+  updateXP: function(amount) {
+    let xpFill = document.getElementById("xp-fill");
+    if (xpFill) {
+      let currentWidth = parseInt(xpFill.style.width) || 10;
+      let newWidth = Math.min(currentWidth + (amount / 5), 100);
+      xpFill.style.width = newWidth + "%";
+      if (newWidth >= 100) {
+          const lv = document.getElementById("user-level");
+          if (lv) lv.textContent = parseInt(lv.textContent) + 1;
+          xpFill.style.width = "10%";
+      }
+    }
+  },
+
+  unlockBadge: function(badgeId) {
+    const b = document.getElementById(badgeId);
+    if (b) {
+      b.classList.remove("locked");
+      b.classList.add("unlocked");
+      
+      let saved = JSON.parse(localStorage.getItem("ss_badges") || "[]");
+      if (!saved.includes(badgeId)) {
+        saved.push(badgeId);
+        localStorage.setItem("ss_badges", JSON.stringify(saved));
+      }
     }
   }
 };
