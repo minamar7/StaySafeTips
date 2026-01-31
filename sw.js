@@ -5,6 +5,8 @@ const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 const STATIC_ASSETS = [
   "./",
   "index.html",
+  "scam.html",
+  "quiz.html",
   "styles.css",
   "app.js",
   "quiz.js",
@@ -14,14 +16,14 @@ const STATIC_ASSETS = [
   "icons/icon-512.png"
 ];
 
-// 1. Εγκατάσταση και αποθήκευση αρχείων
+// 1. Εγκατάσταση Service Worker και Cache Assets
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then(cache => {
       console.log("🛡️ SW: Shielding Assets...");
       return Promise.allSettled(
         STATIC_ASSETS.map(url => 
-          cache.add(url).catch(err => console.log(`⚠️ Failed to cache: ${url}`))
+          cache.add(url).catch(err => console.warn(`⚠️ Failed to cache: ${url}`, err))
         )
       );
     })
@@ -39,28 +41,29 @@ self.addEventListener("activate", event => {
       )
     )
   );
-  console.log("🛡️ SW: Shield Active & Updated");
+  console.log("🛡️ SW: Active & Updated");
   self.clients.claim();
 });
 
-// 3. Στρατηγική Fetch: Stale-While-Revalidate
-// Ιδανικό για Apps: Δείχνει αμέσως την cache και ανανεώνει κρυφά
+// 3. Fetch Strategy: Stale-While-Revalidate + Offline fallback
 self.addEventListener("fetch", event => {
-  // Παράβλεψη αιτημάτων εκτός του δικού μας domain (π.χ. analytics)
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
     caches.open(STATIC_CACHE).then(cache => {
       return cache.match(event.request).then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
-          // Αποθήκευση της νέας έκδοσης στην cache για την επόμενη φορά
           cache.put(event.request, networkResponse.clone());
           return networkResponse;
         }).catch(() => {
-          // Αν το δίκτυο αποτύχει, έχουμε ήδη το cachedResponse
+          console.warn("⚠️ SW: Network failed for", event.request.url);
         });
 
-        return cachedResponse || fetchPromise;
+        // Αν υπάρχει cache, δείχνει αμέσως. Αν όχι, περιμένει fetch
+        return cachedResponse || fetchPromise || new Response("Offline – Δεν υπάρχει αποθηκευμένο περιεχόμενο", {
+          status: 503,
+          statusText: "Service Worker Offline"
+        });
       });
     })
   );
