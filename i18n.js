@@ -1,4 +1,13 @@
-(function () {
+/**
+ * Stay Safe Elite – I18N Controller
+ * Lightweight • Safe • Scalable • Analytics-ready
+ */
+(() => {
+  "use strict";
+
+  /* ============================
+     TRANSLATIONS
+  ============================ */
   const translations = {
     en: {
       "t-app-title": "Stay Safe Premium",
@@ -30,6 +39,7 @@
         "Avoid public Wi-Fi."
       ]
     },
+
     el: {
       "t-app-title": "Stay Safe Elite",
       "t-app-subtitle": "Premium Εμπειρία Ασφάλειας",
@@ -60,59 +70,81 @@
         "Αποφύγετε δημόσια Wi-Fi."
       ]
     }
-    // Μπορείς να προσθέσεις it, es, fr, de όπως πριν...
   };
 
-  /**
-   * Apply translations to the DOM
-   */
-  function applyLanguage(lang) {
-    const dict = translations[lang] || translations["en"];
+  const DEFAULT_LANG = "en";
+  const STORAGE_KEY = "ss_lang";
 
-    // 1. Μετάφραση μέσω data-i18n (Προτιμότερο)
-    document.querySelectorAll("[data-i18n]").forEach((el) => {
-      const key = el.getAttribute("data-i18n");
+  /* ============================
+     CORE APPLY
+  ============================ */
+  const applyLanguage = (lang) => {
+    const dict = translations[lang] || translations[DEFAULT_LANG];
+    if (!dict) return;
+
+    // data-i18n (primary)
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.dataset.i18n;
       const value = dict[key];
-      if (value) {
-        if (Array.isArray(value)) {
-          el.innerHTML = value.map((li) => `<li>${li}</li>`).join("");
-        } else {
-          el.textContent = value;
-        }
+      if (!value) return;
+
+      if (Array.isArray(value)) {
+        el.innerHTML = value.map(v => `<li>${v}</li>`).join("");
+      } else {
+        el.textContent = value;
       }
     });
 
-    // 2. Μετάφραση μέσω ID (για συμβατότητα με τα t- keys σου)
-    Object.keys(dict).forEach(key => {
-        const el = document.getElementById(key);
-        if (el) {
-            if (Array.isArray(dict[key])) {
-                el.innerHTML = dict[key].map(li => `<li>${li}</li>`).join("");
-            } else {
-                el.textContent = dict[key];
-            }
-        }
+    // id fallback (legacy support)
+    Object.entries(dict).forEach(([key, value]) => {
+      const el = document.getElementById(key);
+      if (!el) return;
+
+      if (Array.isArray(value)) {
+        el.innerHTML = value.map(v => `<li>${v}</li>`).join("");
+      } else {
+        el.textContent = value;
+      }
     });
 
     document.documentElement.lang = lang;
-    localStorage.setItem("ss_lang", lang); // Αποθήκευση επιλογής
-  }
+    localStorage.setItem(STORAGE_KEY, lang);
 
-  // Αρχικοποίηση
-  document.addEventListener("DOMContentLoaded", () => {
+    // 🔗 analytics hook (silent)
+    window.track?.("language_change", { lang });
+  };
+
+  /* ============================
+     INIT
+  ============================ */
+  const init = () => {
     const langSelect = document.getElementById("lang-select");
-    const savedLang = localStorage.getItem("ss_lang") || "el";
+    const savedLang =
+      localStorage.getItem(STORAGE_KEY) ||
+      navigator.language?.slice(0, 2) ||
+      "el";
+
+    applyLanguage(savedLang);
 
     if (langSelect) {
       langSelect.value = savedLang;
-      langSelect.addEventListener("change", (e) => applyLanguage(e.target.value));
+      langSelect.addEventListener("change", e => {
+        applyLanguage(e.target.value);
+      });
     }
-
-    applyLanguage(savedLang);
-  });
-
-  window.I18N = {
-    apply: applyLanguage,
-    get: (key, lang) => (translations[lang] || translations["en"])[key] || key
   };
+
+  document.readyState === "loading"
+    ? document.addEventListener("DOMContentLoaded", init)
+    : init();
+
+  /* ============================
+     PUBLIC API
+  ============================ */
+  window.I18N = Object.freeze({
+    apply: applyLanguage,
+    get: (key, lang) =>
+      (translations[lang] || translations[DEFAULT_LANG])?.[key] || key,
+    available: () => Object.keys(translations)
+  });
 })();
