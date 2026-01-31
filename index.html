@@ -9,47 +9,53 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
 <style>
-:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; }
+:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 80%); z-index: -1; }
 .hidden { display: none !important; }
 
-/* --- ONBOARDING & FLAGS --- */
+/* --- SPLASH SCREEN --- */
 .overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; }
-.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 360px; margin-top: 20px; }
-.lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
-.lang-btn span { font-size: 24px; margin-bottom: 5px; }
-.lang-btn small { font-size: 10px; font-weight: bold; letter-spacing: 1px; }
-.lang-btn:active { transform: scale(0.95); background: rgba(56, 189, 248, 0.2); }
+.lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 380px; margin-top: 20px; }
+.lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
+.lang-btn span { font-size: 28px; }
+.lang-btn small { font-size: 11px; font-weight: bold; opacity: 0.8; }
 
 /* --- MAIN UI --- */
 .app-header { padding: 50px 20px 20px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
-.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
-.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
-.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
+.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; margin-top: 10px; }
+.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; box-shadow: 0 0 10px var(--gold); }
+.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; }
 
-/* --- NAV TABS --- */
-.nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
-.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+/* --- ELITE BADGES WITH NAMES --- */
+.badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+.badge-slot { 
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.7));
+    padding: 20px 5px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);
+    text-align: center; opacity: 0.2; grayscale: 1; transition: 0.8s;
+}
+.badge-slot span { font-size: 40px; display: block; margin-bottom: 8px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+.badge-name { font-size: 9px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
+.badge-slot.unlocked { 
+    opacity: 1; grayscale: 0; border-color: var(--gold); transform: scale(1.05);
+    background: linear-gradient(145deg, rgba(250, 204, 21, 0.1), rgba(15, 23, 42, 0.9));
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+.badge-slot.unlocked .badge-name { color: var(--gold); }
+
+.nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 85px; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(20px); display: flex; border-top: 1px solid rgba(56, 189, 248, 0.1); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
+.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 26px; cursor: pointer; }
 .nav-tab.active { color: var(--accent); }
-
-/* --- BADGES & PREMIUM --- */
-.badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-.badge-slot { text-align: center; opacity: 0.2; grayscale: 1; transition: 0.5s; font-size: 11px; }
-.badge-slot.unlocked { opacity: 1; grayscale: 0; transform: scale(1.05); }
-.premium-glow { border: 2px solid var(--gold) !important; box-shadow: 0 0 20px rgba(250, 204, 21, 0.2); }
 </style>
 </head>
 <body>
 
 <section id="onboarding" class="overlay">
   <div>
-    <div style="font-size: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 15px var(--accent));">🛡️</div>
-    <h1 style="margin-bottom: 5px;">Stay Safe Elite</h1>
-    <p style="color:var(--muted); font-size: 14px; margin-bottom: 25px;">Protecting your digital world</p>
-    
+    <div style="font-size: 85px; margin-bottom: 10px; filter: drop-shadow(0 0 20px var(--accent));">🛡️</div>
+    <h1 style="font-size: 32px; margin-bottom: 5px;">Stay Safe Elite</h1>
     <div class="lang-grid">
         <div class="lang-btn" onclick="initApp('el')"><span>🇬🇷</span><small>GREEK</small></div>
         <div class="lang-btn" onclick="initApp('en')"><span>🇺🇸</span><small>ENGLISH</small></div>
@@ -68,14 +74,13 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <div id="main_app" class="hidden">
   <header class="app-header">
     <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div style="color:var(--gold); font-weight:bold; font-size:13px; background:rgba(250,204,21,0.1); padding:4px 10px; border-radius:12px;">🔥 <span id="streak_val">1</span> DAYS</div>
-      <div style="font-weight:900; color:var(--accent); font-size:14px;">LEVEL <span id="level_val">1</span></div>
+      <div style="color:var(--gold); font-weight:bold; font-size:14px; background:rgba(250,204,21,0.1); padding:5px 12px; border-radius:15px;">🔥 <span id="streak_val">1</span> DAYS</div>
+      <div style="font-weight:900; color:var(--accent); font-size:15px;">LEVEL <span id="level_val">1</span></div>
     </div>
     <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
   </header>
 
-  <main style="padding: 20px 20px 100px;">
-    
+  <main style="padding: 20px 20px 120px;">
     <section id="screen_home">
       <div class="glass-card">
         <h2 style="margin-top:0;">🛡️ Ασφάλεια Σπιτιού</h2>
@@ -83,37 +88,27 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
       </div>
 
       <div class="glass-card" style="text-align:center;">
-        <h3 style="color:var(--gold); font-size:14px; margin-bottom:10px;">Elite Badges</h3>
+        <h3 style="color:var(--gold); font-size:14px; margin-bottom:5px;">Elite Rank</h3>
         <div class="badge-grid">
-            <div id="badge_1" class="badge-slot">🎖️<br>Guard</div>
-            <div id="badge_2" class="badge-slot">🛡️<br>Guardian</div>
-            <div id="badge_3" class="badge-slot">💎<br>Elite</div>
+            <div id="badge_1" class="badge-slot"><span>🎖️</span><div class="badge-name" id="name_b1">Rookie<br>Guard</div></div>
+            <div id="badge_2" class="badge-slot"><span>🛡️</span><div class="badge-name" id="name_b2">Silver<br>Guardian</div></div>
+            <div id="badge_3" class="badge-slot"><span>💎</span><div class="badge-name" id="name_b3">Elite<br>Master</div></div>
         </div>
       </div>
 
       <div id="ad_home" class="glass-card" style="min-height:100px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(255,255,255,0.1);">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <small style="color:var(--muted)">ADVERTISING SLOT</small>
       </div>
     </section>
 
     <section id="screen_premium" class="hidden">
-      <div class="glass-card premium-glow" style="text-align:center;">
-        <span style="font-size:50px; filter: drop-shadow(0 0 10px var(--gold));">💎</span>
-        <h2 style="color:var(--gold); margin:10px 0;">Stay Safe Elite</h2>
-        <p style="font-size:22px; font-weight:bold;">4,90€ <small style="font-size:12px;">/ μήνα</small></p>
-        <button class="main-cta" onclick="buyPremium()" style="background:var(--gold); color:black;">ΓΙΝΕ ELITE ΜΕΛΟΣ</button>
+      <div class="glass-card" style="border:2px solid var(--gold); text-align:center;">
+        <h2 style="color:var(--gold); font-size:28px;">Elite Membership</h2>
+        <p>4,90€ / μήνα</p>
+        <button class="main-cta" style="background:var(--gold); color:black;" onclick="buyPremium()">ΓΙΝΕ ELITE ΜΕΛΟΣ</button>
       </div>
-
-      <div class="glass-card" style="border-left: 4px solid var(--danger);" onclick="openDojo()">
-        <h3>🥋 Sensei's Dojo</h3>
-        <p style="font-size:12px; color:var(--muted);">Μαθήματα αυτοάμυνας από 2nd Dan Master.</p>
-      </div>
-
-      <div class="glass-card" style="border-left: 4px solid #22c55e;" onclick="openSOS()">
-        <h3>🌍 Global SOS Hub</h3>
-        <p style="font-size:12px; color:var(--muted);">Τηλέφωνα ανάγκης & καιρικά alerts παγκοσμίως.</p>
-      </div>
+      <div class="glass-card" onclick="alert('Dojo...')"><h3>🥋 Sensei Dojo</h3></div>
+      <div class="glass-card" onclick="alert('SOS...')"><h3>🌍 Global SOS</h3></div>
     </section>
 
     <section id="screen_quiz" class="hidden"></section>
@@ -126,19 +121,13 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 </div>
 
 <script>
-let currentLang = 'el', xp = 0, level = 1, isPremium = false, quizData = [];
-
-// Load State
-if(localStorage.getItem('isElite') === 'true') {
-    isPremium = true;
-    document.getElementById('ad_home')?.classList.add('hidden');
-}
+let currentLang = 'el', xp = 0, level = 1, isPremium = false, quizData = [], errors = 0;
 
 function initApp(lang) {
     currentLang = lang;
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
-    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    updateXP();
 }
 
 function nav(id, btn) {
@@ -151,20 +140,16 @@ function nav(id, btn) {
 }
 
 async function startQuiz() {
-    if(level >= 7 && !isPremium) {
-        alert("🔒 Τα επίπεδα 7-10 είναι διαθέσιμα μόνο για Premium μέλη!");
-        nav('premium');
-        return;
-    }
+    if(level >= 7 && !isPremium) { nav('premium'); return; }
+    errors = 0;
     const mode = isPremium ? "premium" : "free";
-    const file = `./questions_${mode}_${currentLang}.json`;
     try {
-        const res = await fetch(file);
+        const res = await fetch(`./questions_${mode}_${currentLang}.json`);
         const data = await res.json();
         quizData = data.sort(() => 0.5 - Math.random()).slice(0, 5);
         renderQuestion(0);
         nav('quiz');
-    } catch(e) { alert("JSON missing for " + currentLang); }
+    } catch(e) { alert("JSON error!"); }
 }
 
 function renderQuestion(idx) {
@@ -172,43 +157,67 @@ function renderQuestion(idx) {
     const s = document.getElementById('screen_quiz');
     s.innerHTML = `
         <div class="glass-card">
-            <small style="color:var(--accent)">Ερώτηση ${idx+1}/5</small>
+            <div style="display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-bottom:15px;">
+                <span>Ερώτηση ${idx+1}/5</span>
+                <span style="color:var(--danger)">Λάθη: ${errors}/3</span>
+            </div>
             <h3>${q.q}</h3>
-            ${q.o.map((opt, i) => `
-                <button class="main-cta" style="background:#1e293b; margin-bottom:12px; width:100%; color:white;" onclick="check(${i},${q.a},${idx})">${opt}</button>
-            `).join('')}
+            <div id="quiz_options">
+                ${q.o.map((opt, i) => `
+                    <button class="main-cta" style="background:#1e293b; margin-bottom:12px; width:100%; color:white;" onclick="check(${i},${q.a},${idx}, this)">${opt}</button>
+                `).join('')}
+            </div>
         </div>`;
 }
 
-window.check = (sel, cor, idx) => {
-    if(sel === cor) { xp += 25; updateXP(); confetti({particleCount:50}); }
-    if(idx < 4) renderQuestion(idx + 1); else nav('home');
+window.check = (sel, cor, idx, btn) => {
+    const btns = document.querySelectorAll('#quiz_options button');
+    btns.forEach(b => b.disabled = true);
+    if(sel === cor) {
+        btn.style.background = "var(--success)";
+        xp += 20;
+    } else {
+        btn.style.background = "var(--danger)";
+        btns[cor].style.background = "var(--success)";
+        errors++;
+    }
+    setTimeout(() => {
+        if(errors >= 3) {
+            alert("❌ 3 Λάθη! Πρέπει να ξαναπροσπαθήσεις το Level.");
+            xp = (level - 1) * 100;
+            updateXP();
+            nav('home');
+        } else if(idx < 4) {
+            renderQuestion(idx + 1);
+        } else {
+            updateXP();
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            setTimeout(() => { nav('home'); }, 2000);
+        }
+    }, 1200);
 }
 
 function updateXP() {
     level = Math.floor(xp / 100) + 1;
     document.getElementById('level_val').innerText = level;
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-    if(level >= 2) document.getElementById('badge_1').classList.add('unlocked');
-    if(level >= 5) document.getElementById('badge_2').classList.add('unlocked');
-    if(isPremium) document.getElementById('badge_3').classList.add('unlocked');
+    
+    // Ξεκλείδωμα Badges με ονόματα
+    if(level >= 2) {
+        document.getElementById('badge_1').classList.add('unlocked');
+    }
+    if(level >= 5) {
+        document.getElementById('badge_2').classList.add('unlocked');
+    }
+    if(isPremium) {
+        document.getElementById('badge_3').classList.add('unlocked');
+    }
 }
 
 function buyPremium() {
     isPremium = true;
     localStorage.setItem('isElite', 'true');
-    alert("💎 Συγχαρητήρια! Είσαι πλέον Elite μέλος.");
     location.reload();
-}
-
-function openDojo() {
-    if(!isPremium) { nav('premium'); return; }
-    alert("🥋 Sensei Dojo: Loading defense tactics...");
-}
-
-function openSOS() {
-    if(!isPremium) { nav('premium'); return; }
-    alert("🌍 Global SOS: Checking location for emergency codes...");
 }
 </script>
 </body>
