@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Stay Safe Elite</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#020617">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +18,8 @@
 }
 
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; transition: direction 0.3s; }
+body[dir="rtl"] { text-align: right; }
 
 .hidden { display: none !important; }
 
@@ -38,9 +38,14 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .user-rank-box { background: #1e293b; border-radius: 20px; padding: 6px 15px; font-size: 14px; color: var(--gold); border: 1px solid rgba(250, 204, 21, 0.3); }
 
+.lang-select {
+  background: #1e293b; color: white; border: 1px solid var(--accent);
+  padding: 5px 10px; border-radius: 10px; font-size: 12px; outline: none;
+}
+
 .xp-container { margin-top: 10px; }
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; }
-.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 15%; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
 /* Content Area */
 .content-area { padding: 20px 20px 100px; }
@@ -61,18 +66,17 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
   padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%;
   font-size: 15px; cursor: pointer; transition: 0.2s;
 }
-.quiz-options-grid button:active { background: var(--accent); color: #000; }
 
 /* Badges */
 .badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; transition: 0.3s; }
+.badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; }
 .badge.locked { opacity: 0.2; filter: grayscale(1); }
 .badge.unlocked { border-color: var(--gold); box-shadow: 0 0 15px rgba(250, 204, 21, 0.3); animation: pop 0.5s; }
 
 /* Navigation */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: 15px; }
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
-.nav-tab.active { color: var(--accent); transform: translateY(-5px); transition: 0.3s; }
+.nav-tab.active { color: var(--accent); }
 
 /* Overlay */
 .quiz-result { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; }
@@ -87,9 +91,9 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <section id="onboarding" class="onboarding-screen">
   <div class="onboarding-content">
     <div class="onboarding-icon">🛡️</div>
-    <h1 style="font-size: 32px;">Stay Safe Elite</h1>
-    <p style="color: var(--muted); margin-bottom: 30px;">Μάθε να προστατεύεις τον εαυτό σου και την περιουσία σου.</p>
-    <button id="btn-start" class="main-cta">ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ</button>
+    <h1 style="font-size: 32px;" data-i18n="welcome">Stay Safe Elite</h1>
+    <p style="color: var(--muted); margin-bottom: 30px;" data-i18n="upgrade_msg">Μάθε να προστατεύεις τον εαυτό σου.</p>
+    <button id="btn-start" class="main-cta" data-i18n="start_btn">ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ</button>
   </div>
 </section>
 
@@ -98,14 +102,21 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <header class="app-header">
   <div class="header-top">
     <div class="user-rank-box">🔥 <span id="streak">1 Day Streak</span></div>
-    <div style="color: var(--accent); font-weight: bold;">GR</div>
+    <select id="lang_select" class="lang-select" onchange="updateLanguage(this.value)">
+      <option value="el">🇬🇷 GR</option>
+      <option value="en">🇺🇸 EN</option>
+      <option value="de">🇩🇪 DE</option>
+      <option value="fr">🇫🇷 FR</option>
+      <option value="es">🇪🇸 ES</option>
+      <option value="ar">🇦🇪 AR</option>
+    </select>
   </div>
-  <h1 style="font-size: 24px;">Dashboard</h1>
+  <h1 style="font-size: 24px;" data-i18n="safety_dashboard">Dashboard</h1>
   <div class="xp-container">
     <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
     <div style="display:flex; justify-content:space-between; margin-top:5px;">
         <small style="color:var(--muted)">Progress</small>
-        <small style="color:var(--gold)">Level <span id="level_val">1</span></small>
+        <small style="color:var(--gold)"><span data-i18n="level">Level</span> <span id="level_val">1</span></small>
     </div>
   </div>
 </header>
@@ -113,10 +124,8 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <main class="content-area">
   <section id="screen_home" class="screen">
     <div class="glass-card">
-      <span style="color:var(--accent); font-size:12px; font-weight:bold; text-transform:uppercase;">Επιπεδο 1</span>
-      <h2 style="margin-top:10px;">Ασφάλεια Σπιτιού</h2>
-      <p style="color:var(--muted); font-size:14px;">Μάθε τις βασικές ενέργειες σε περίπτωση πυρκαγιάς ή διαρροής.</p>
-      <button class="main-cta" onclick="startQuiz()">ENTRY QUIZ</button>
+      <h2 data-i18n="home_tab">Ασφάλεια Σπιτιού</h2>
+      <button class="main-cta" onclick="startQuiz('free')">ENTRY QUIZ</button>
     </div>
   </section>
 
@@ -126,19 +135,19 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
   </section>
 
   <section id="screen_badges" class="screen hidden">
-    <h2 style="margin-bottom:20px;">Τα Τρόπαιά σου</h2>
+    <h2 style="margin-bottom:20px;" data-i18n="badges_tab">Τρόπαια</h2>
     <div class="badges-grid">
-      <div id="badge_home" class="badge locked">🏠<br><small style="font-size:12px; color:var(--muted)">Guardian</small></div>
-      <div id="badge_digital" class="badge locked">🛡️<br><small style="font-size:12px; color:var(--muted)">Cyber</small></div>
+      <div id="badge_home" class="badge locked">🏠</div>
+      <div id="badge_digital" class="badge locked">🛡️</div>
     </div>
   </section>
 
   <section id="screen_premium" class="screen hidden">
     <div class="glass-card" style="border: 1px solid var(--gold); text-align:center;">
       <div style="font-size:50px;">💎</div>
-      <h2>Elite Access</h2>
-      <p style="color:var(--muted);">Ξεκλείδωσε προηγμένα πρωτόκολλα ασφαλείας.</p>
-      <button class="main-cta" style="background:var(--gold)">ΑΝΑΒΑΘΜΙΣΗ €4.90</button>
+      <h2 data-i18n="premium_tab">Elite Access</h2>
+      <p data-i18n="upgrade_msg">Ξεκλείδωσε όλα τα επίπεδα.</p>
+      <button class="main-cta" style="background:var(--gold)" onclick="startQuiz('premium')">ELITE QUIZ</button>
     </div>
   </section>
 </main>
@@ -154,87 +163,100 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <div id="result_screen" class="quiz-result hidden">
   <div class="quiz-result-card">
     <div style="font-size:60px; margin-bottom:10px;">🏆</div>
-    <h2>Συγχαρητήρια!</h2>
+    <h2 id="result_title">Συγχαρητήρια!</h2>
     <p id="xp_gained" style="color:var(--gold); font-weight:bold; font-size:20px;">+50 XP</p>
-    <button class="main-cta" onclick="closeResult()">ΣΥΝΕΧΕΙΑ</button>
+    <button class="main-cta" onclick="closeResult()" data-i18n="continue">ΣΥΝΕΧΕΙΑ</button>
   </div>
 </div>
 
 <script>
-let xp = 0;
-let level = 1;
-let current_q = 0;
+// ΤΟ ΑΡΧΕΙΟ translations.js ΕΝΣΩΜΑΤΩΜΕΝΟ
+const translations = {
+  el: { welcome: "Καλώς ήρθες", start_btn: "Ξεκίνα", home_tab: "Αρχική", badges_tab: "Τρόπαια", premium_tab: "Elite", level: "Επίπεδο", continue: "ΣΥΝΕΧΕΙΑ", upgrade_msg: "Ξεκλείδωσε επίπεδα", safety_dashboard: "Πίνακας Ελέγχου" },
+  en: { welcome: "Welcome", start_btn: "Start", home_tab: "Home", badges_tab: "Badges", premium_tab: "Elite", level: "Level", continue: "CONTINUE", upgrade_msg: "Unlock levels", safety_dashboard: "Safety Dashboard" },
+  de: { welcome: "Willkommen", start_btn: "Starten", home_tab: "Start", badges_tab: "Abzeichen", premium_tab: "Elite", level: "Ebene", continue: "WEITER", upgrade_msg: "Level freischalten", safety_dashboard: "Dashboard" },
+  ar: { welcome: "مرحباً بك", start_btn: "ابدأ", home_tab: "الرئيسية", badges_tab: "الأوسمة", premium_tab: "النخبة", level: "المستوى", continue: "استمرار", upgrade_msg: "فتح المستويات", safety_dashboard: "لوحة التحكم" }
+};
 
-const quiz_data = [
-  { q: "Ποιος είναι ο ευρωπαϊκός αριθμός έκτακτης ανάγκης;", o: ["100", "112", "911"], a: 1 },
-  { q: "Τι κάνουμε αν μυρίσει υγραέριο στο σπίτι;", o: ["Ανάβουμε φως", "Ανοίγουμε παράθυρα", "Καλούμε την αστυνομία"], a: 1 }
-];
+let xp = 0, level = 1, current_q = 0, quiz_data = [];
+let currentLang = 'el';
 
 // Onboarding Start
 document.getElementById('btn-start').onclick = () => {
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('main_app').classList.remove('hidden');
+  updateLanguage('el');
 };
 
-// Navigation Function
+function updateLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('user_lang', lang);
+  document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+  });
+}
+
 function nav(id) {
-  // Hide all screens
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-  // Show target
   document.getElementById('screen_' + id).classList.remove('hidden');
-  
-  // Update Tabs
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
   event.currentTarget.classList.add('active');
 }
 
-function startQuiz() {
-  current_q = 0;
-  nav('quiz');
-  showQuestion();
+async function startQuiz(mode = 'free') {
+  const file = `questions_${mode}_${currentLang}.json`;
+  try {
+    const response = await fetch(file);
+    const data = await response.json();
+    quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
+    current_q = 0;
+    nav('quiz');
+    showQuestion();
+  } catch (err) {
+    alert("Please upload the JSON files to GitHub first!");
+  }
 }
 
 function showQuestion() {
   const qData = quiz_data[current_q];
   document.getElementById('question_box').innerText = qData.q;
-  
-  const optionsHTML = qData.o.map((opt, i) => 
+  document.getElementById('options_grid').innerHTML = qData.o.map((opt, i) => 
     `<button onclick="handleAnswer(${i})">${opt}</button>`
   ).join('');
-  
-  document.getElementById('options_grid').innerHTML = optionsHTML;
 }
 
-function handleAnswer(i) {
-  if (i === quiz_data[current_q].a) {
-    xp += 50;
-    updateProgress();
-    // Unlock Badge
+function handleAnswer(selectedIdx) {
+  const qData = quiz_data[current_q];
+  const buttons = document.querySelectorAll('#options_grid button');
+  buttons.forEach(btn => btn.disabled = true);
+
+  if (selectedIdx === qData.a) {
+    buttons[selectedIdx].style.background = "#22c55e"; 
+    xp += 50; updateProgress();
     document.getElementById('badge_home').classList.remove('locked');
     document.getElementById('badge_home').classList.add('unlocked');
+  } else {
+    buttons[selectedIdx].style.background = "#ef4444";
+    buttons[qData.a].style.background = "#22c55e";
   }
-  
-  document.getElementById('result_screen').classList.remove('hidden');
+
+  setTimeout(() => {
+    document.getElementById('result_screen').classList.remove('hidden');
+  }, 1000);
 }
 
 function updateProgress() {
-  const fill = document.getElementById('xp_fill');
-  const levelDisp = document.getElementById('level_val');
-  
-  let progress = (xp % 100);
-  fill.style.width = progress + "%";
-  
-  if (xp >= 100) {
-    level = Math.floor(xp / 100) + 1;
-    levelDisp.innerText = level;
-  }
+  document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+  document.getElementById('level_val').innerText = Math.floor(xp / 100) + 1;
 }
 
 function closeResult() {
   document.getElementById('result_screen').classList.add('hidden');
-  nav('badges');
+  nav('home');
 }
 </script>
-
 </body>
 </html>
