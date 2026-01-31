@@ -49,4 +49,14 @@
   { "q": "Griechenland: Notrufnummer der Polizei?", "o": ["199", "100", "166"], "a": 1 },
   { "q": "Griechenland: Notrufnummer der Feuerwehr?", "o": ["100", "199", "166"], "a": 1 },
   { "q": "Griechenland: Notrufnummer der Küstenwache?", "o": ["100", "108", "199"], "a": 1 }
+  { "q": "Was ist 'SIM-Swapping'?", "o": ["Wechsel der Handyhülle", "Betrüger stehlen Ihre Nummer, um 2FA zu umgehen", "Ein Weg, um mehr Datenvolumen zu erhalten"], "a": 1 },
+  { "q": "Was versteht man unter 'Juice Jacking'?", "o": ["Datendiebstahl über öffentliche USB-Ladestationen", "Ein Betrug mit kostenlosen Getränken", "Ein Trick zum Batteriesparen"], "a": 0 },
+  { "q": "Was tun, wenn Ihr Handy plötzlich stundenlang kein Signal hat?", "o": ["Bis morgen warten", "Sofort den Anbieter anrufen (Verdacht auf SIM-Swap)", "Handy neu starten"], "a": 1 },
+  { "q": "Was ist 'Typosquatting'?", "o": ["Gefälschte Websites mit ähnlichen Namen wie echte", "Sehr schnelles Tippen", "Eine neue Fitnessübung"], "a": 0 },
+  { "q": "Ist ein verschwommenes Foto Ihres Flugtickets sicher zu posten?", "o": ["Ja", "Nein, Barcodes können trotzdem gescannt werden", "Nur auf Instagram"], "a": 1 },
+  { "q": "Was ist der sicherste Weg, um 2FA-Codes zu speichern?", "o": ["SMS", "Authenticator-App oder Hardware-Schlüssel", "In einem Notizblock"], "a": 1 },
+  { "q": "Was kann ein 'Deepfake' in einem Videoanruf tun?", "o": ["Das Internet schneller machen", "Das Gesicht und die Stimme einer Person imitieren", "Einen lustigen Filter anwenden"], "a": 1 },
+  { "q": "Was ist ein 'Breadcrumb'-Betrug in sozialen Medien?", "o": ["Kochtipps", "Kleine persönliche Infos nutzen, um Vertrauen aufzubauen", "Kostenloses Brot gewinnen"], "a": 1 },
+  { "q": "Warum sind 'Metadaten' in Ihren Fotos gefährlich?", "o": ["Sie machen Fotos schwerer", "Sie können Ihren exakten GPS-Standort verraten", "Sie ruinieren die Bildqualität"], "a": 1 },
+  { "q": "Wie nutzt man öffentliches WLAN am sichersten, falls nötig?", "o": ["Einen VPN verwenden", "Inkognito-Modus", "Einfach ganz schnell sein"], "a": 0 }
 ]
