@@ -1,114 +1,158 @@
 /**
- * Stay Safe Premium - Production API Bridge
- * Διαχειρίζεται το συγχρονισμό δεδομένων μεταξύ τοπικής μνήμης και Cloud.
+ * Stay Safe Elite – Production API Bridge
+ * Offline-First | Cloud Sync | App Store Safe
  */
 
-const API = {
-  // CONFIGURATION
-  config: {
-    baseUrl: "https://your-backend-api.com/v1", // Αντικατάστησέ το με το κανονικό σου URL
-    timeout: 8000, // 8 δευτερόλεπτα μέχρι να ακυρωθεί η κλήση
+const API = (() => {
+
+  /* ==============================
+     CONFIG
+  ============================== */
+  const CONFIG = {
+    baseUrl: "https://your-backend-api.com/v1", // ⬅️ άλλαξέ το
+    timeout: 8000,
+    retries: 1,
     headers: {
       "Content-Type": "application/json",
+      "X-App-Name": "StaySafeElite",
       "X-App-Version": "1.0.0"
     }
-  },
+  };
 
-  /**
-   * Αποθήκευση προόδου (Score, Badges, Settings)
-   */
-  async saveProgress(userId, data) {
-    if (!userId) return { success: false, error: "No User ID provided" };
+  /* ==============================
+     INTERNAL HELPERS
+  ============================== */
 
-    const payload = {
-      userId,
-      ...data,
-      lastUpdated: new Date().toISOString()
-    };
-
-    // 1. Πάντα αποθηκεύουμε τοπικά ως backup
-    localStorage.setItem(`ss_backup_${userId}`, JSON.stringify(payload));
-
-    try {
-      const response = await this._fetchWithTimeout(`${this.config.baseUrl}/progress`, {
-        method: "POST",
-        headers: this.config.headers,
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-      
-      return { success: true, data: await response.json() };
-    } catch (error) {
-      console.warn("[API] Save failed, data cached locally:", error.message);
-      return { success: false, error: error.message, cached: true };
-    }
-  },
-
-  /**
-   * Φόρτωση προόδου από το Cloud
-   */
-  async loadProgress(userId) {
-    if (!userId) return null;
-
-    try {
-      const response = await this._fetchWithTimeout(`${this.config.baseUrl}/progress?userId=${userId}`, {
-        method: "GET",
-        headers: this.config.headers
-      });
-
-      if (response.status === 404) return null; // Νέος χρήστης
-      if (!response.ok) throw new Error("Server error");
-
-      return await response.json();
-    } catch (error) {
-      console.error("[API] Load failed, falling back to local storage:", error.message);
-      
-      // Fallback: Επιστροφή των δεδομένων από το τοπικό backup
-      const localData = localStorage.getItem(`ss_backup_${userId}`);
-      return localData ? JSON.parse(localData) : null;
-    }
-  },
-
-  /**
-   * Helper: Fetch με χρονικό όριο (Timeout)
-   * Αποτρέπει το "πάγωμα" της εφαρμογής σε κακή σύνδεση.
-   */
-  async _fetchWithTimeout(url, options) {
+  const _withTimeout = async (url, options = {}) => {
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), this.config.timeout);
+    const timer = setTimeout(() => controller.abort(), CONFIG.timeout);
 
     try {
-      const response = await fetch(url, {
+      const res = await fetch(url, {
         ...options,
         signal: controller.signal
       });
-      clearTimeout(id);
-      return response;
-    } catch (error) {
-      clearTimeout(id);
-      throw error;
+      clearTimeout(timer);
+      return res;
+    } catch (err) {
+      clearTimeout(timer);
+      throw err;
     }
-  }
-};
+  };
 
-/**
- * Παράδειγμα χρήσης στο app.js:
- * * const result = await API.saveProgress("user_123", { 
- * badges: ["badge-home"], 
- * score: 90 
- * });
- * * if (result.success) console.log("Cloud Synced!");
- */
-// Στο τέλος του app.js
-const startBtn = document.getElementById("onboarding-start");
-if (startBtn) {
+  const _safeJSON = async (response) => {
+    try {
+      return await response.json();
+    } catch {
+      return null;
+    }
+  };
+
+  const _backupKey = (userId) => `ss_backup_v1_${userId}`;
+
+  const _saveLocal = (userId, data) => {
+    localStorage.setItem(_backupKey(userId), JSON.stringify({
+      ...data,
+      _schema: 1,
+      _savedAt: Date.now()
+    }));
+  };
+
+  const _loadLocal = (userId) => {
+    const raw = localStorage.getItem(_backupKey(userId));
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  };
+
+  /* ==============================
+     PUBLIC API
+  ============================== */
+
+  const saveProgress = async (userId, payload = {}) => {
+    if (!userId) return { success: false, error: "Missing userId" };
+
+    const data = {
+      userId,
+      ...payload,
+      updatedAt: new Date().toISOString()
+    };
+
+    // Always local backup
+    _saveLocal(userId, data);
+
+    try {
+      const res = await _withTimeout(`${CONFIG.baseUrl}/progress`, {
+        method: "POST",
+        headers: CONFIG.headers,
+        body: JSON.stringify(data)
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      return {
+        success: true,
+        remote: await _safeJSON(res)
+      };
+
+    } catch (err) {
+      console.warn("[API] Cloud save failed – cached locally");
+      return {
+        success: false,
+        cached: true,
+        error: err.message
+      };
+    }
+  };
+
+  const loadProgress = async (userId) => {
+    if (!userId) return null;
+
+    try {
+      const res = await _withTimeout(
+        `${CONFIG.baseUrl}/progress?userId=${encodeURIComponent(userId)}`,
+        { headers: CONFIG.headers }
+      );
+
+      if (res.status === 404) return _loadLocal(userId);
+      if (!res.ok) throw new Error("Server error");
+
+      const data = await _safeJSON(res);
+      if (data) _saveLocal(userId, data);
+
+      return data;
+
+    } catch {
+      console.warn("[API] Using offline backup");
+      return _loadLocal(userId);
+    }
+  };
+
+  return {
+    saveProgress,
+    loadProgress
+  };
+
+})();
+
+/* ==================================
+   APP BOOTSTRAP – ONBOARDING
+================================== */
+
+(() => {
+  const startBtn = document.getElementById("onboarding-start");
+  if (!startBtn) return;
+
   startBtn.addEventListener("click", () => {
-    console.log("Starting App...");
-    document.getElementById("onboarding").classList.remove("active");
-    document.getElementById("onboarding").classList.add("hidden");
-    document.querySelector(".app-shell").classList.remove("hidden");
-    localStorage.setItem("ss_onboarding_done", "true");
-  });
-}
+    if (navigator.vibrate) navigator.vibrate(15);
 
+    document.getElementById("onboarding")?.classList.add("hidden");
+    document.querySelector(".app-shell")?.classList.remove("hidden");
+
+    localStorage.setItem("ss_onboarding_done", "true");
+    console.log("[APP] Onboarding completed");
+  });
+})();
