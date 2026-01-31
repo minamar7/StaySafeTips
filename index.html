@@ -7,6 +7,8 @@
 <meta name="theme-color" content="#020617">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
 <style>
 :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; }
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -48,6 +50,9 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 .mini-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
 .mini-card { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: inherit; display: block; transition: 0.3s; }
 .mini-card:active { background: rgba(56, 189, 248, 0.1); transform: scale(0.95); }
+
+/* ΠΡΟΣΘΗΚΗ: Στυλ για τη διαφήμιση */
+.ad-slot { margin: 15px 0; background: rgba(0,0,0,0.2); border-radius: 15px; text-align: center; overflow: hidden; }
 </style>
 </head>
 <body>
@@ -101,6 +106,11 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
         </div>
       </div>
 
+      <div class="ad-slot">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
       <div class="glass-card" style="text-align:center;">
         <h3 id="txt_social_title" style="color:var(--gold); font-size:15px; margin-bottom:15px;">Elite Security Tips</h3>
         <div style="display:flex; justify-content:center; gap:25px;">
@@ -138,15 +148,7 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <script>
 const ui = {
     el: { txt_streak: "Ημέρες Σερί", txt_home_title: "🛡️ Ασφάλεια Σπιτιού", txt_start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Συμβουλές", txt_badge_bar: "Πρόοδος Τροπαίων", txt_unlocked: "Ξεκλείδωτα", txt_badges_title: "🏅 Elite Τρόπαια", txt_b1_t: "Πρώτο Βήμα", txt_b2_t: "Φύλακας", txt_b3_t: "Συνήθεια", txt_b4_t: "Κοινωνικός", txt_next: "ΕΠΟΜΕΝΟ" },
-    en: { txt_streak: "Day Streak", txt_home_title: "🛡️ Home Security", txt_start_btn: "START TEST", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Tips", txt_badge_bar: "Badge Progress", txt_unlocked: "Unlocked", txt_badges_title: "🏅 Elite Awards", txt_b1_t: "First Step", txt_b2_t: "Guardian", txt_b3_t: "Habit", txt_b4_t: "Social", txt_next: "NEXT" },
-    de: { txt_streak: "Tage Streak", txt_home_title: "🛡️ Haussicherheit", txt_start_btn: "STARTEN", txt_scan: "Safe Scan", txt_alerts: "Live-Alarme", txt_social_title: "Elite-Tipps", txt_badge_bar: "Abzeichen-Fortschritt", txt_unlocked: "Freigeschaltet", txt_badges_title: "🏅 Elite-Erfolge", txt_b1_t: "Schritt 1", txt_b2_t: "Wächter", txt_b3_t: "Gewohnheit", txt_b4_t: "Sozial", txt_next: "WEITER" },
-    fr: { txt_streak: "Jours de Suite", txt_home_title: "🛡️ Sécurité Maison", txt_start_btn: "COMMENCER", txt_scan: "Safe Scan", txt_alerts: "Alertes Live", txt_social_title: "Conseils Elite", txt_badge_bar: "Progrès Badges", txt_unlocked: "Débloqués", txt_badges_title: "🏅 Prix Elite", txt_b1_t: "Étape 1", txt_b2_t: "Gardien", txt_b3_t: "Habitude", txt_b4_t: "Social", txt_next: "SUIVANT" },
-    es: { txt_streak: "Días de Racha", txt_home_title: "🛡️ Seguridad Hogar", txt_start_btn: "EMPEZAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Consejos Elite", txt_badge_bar: "Progreso Insignias", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Premios Elite", txt_b1_t: "Paso 1", txt_b2_t: "Guardián", txt_b3_t: "Hábito", txt_b4_t: "Social", txt_next: "SIGUIENTE" },
-    it: { txt_streak: "Giorni di Racha", txt_home_title: "🛡️ Sicurezza Casa", txt_start_btn: "INIZIA", txt_scan: "Safe Scan", txt_alerts: "Avvisi Live", txt_social_title: "Consigli Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Sbloccato", txt_badges_title: "🏅 Premi Elite", txt_b1_t: "Passo 1", txt_b2_t: "Guardiano", txt_b3_t: "Abitudine", txt_b4_t: "Social", txt_next: "AVANTI" },
-    pt: { txt_streak: "Dias de Racha", txt_home_title: "🛡️ Segurança Casa", txt_start_btn: "COMEÇAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Dicas Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Prêmios Elite", txt_b1_t: "Passo 1", txt_b2_t: "Guardião", txt_b3_t: "Hábito", txt_b4_t: "Social", txt_next: "PRÓXIMO" },
-    ru: { txt_streak: "Дней Подряд", txt_home_title: "🛡️ Безопасность", txt_start_btn: "НАЧАТЬ", txt_scan: "Safe Scan", txt_alerts: "Оποвещения", txt_social_title: "Elite Советы", txt_badge_bar: "Прогресс значков", txt_unlocked: "Открыτο", txt_badges_title: "🏅 Награды Elite", txt_b1_t: "Шаг 1", txt_b2_t: "Страж", txt_b3_t: "Привычка", txt_b4_t: "Соцсети", txt_next: "ДАΛΕΕ" },
-    zh: { txt_streak: "连续天数", txt_home_title: "🛡️ 家庭安全", txt_start_btn: "开始", txt_scan: "Safe Scan", txt_alerts: "实时警报", txt_social_title: "精英提示", txt_badge_bar: "徽章进度", txt_unlocked: "已解锁", txt_badges_title: "🏅 精英奖项", txt_b1_t: "第一步", txt_b2_t: "守护者", txt_b3_t: "习惯", txt_b4_t: "社交", txt_next: "下一步" },
-    hi: { txt_streak: "दिनों का सिलसिला", txt_home_title: "🛡️ घर की सुरक्षा", txt_start_btn: "शुरू करें", txt_scan: "Safe Scan", txt_alerts: "लाइव अलर्ट", txt_social_title: "एलीट टिप्स", txt_badge_bar: "बज प्रगति", txt_unlocked: "खुला है", txt_badges_title: "🏅 एलीट पुरस्कार", txt_b1_t: "पहला कदम", txt_b2_t: "रक्षक", txt_b3_t: "आदत", txt_b4_t: "सोशल", txt_next: "अगला" }
+    en: { txt_streak: "Day Streak", txt_home_title: "🛡️ Home Security", txt_start_btn: "START TEST", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Tips", txt_badge_bar: "Badge Progress", txt_unlocked: "Unlocked", txt_badges_title: "🏅 Elite Awards", txt_b1_t: "First Step", txt_b2_t: "Guardian", txt_b3_t: "Habit", txt_b4_t: "Social", txt_next: "NEXT" }
 };
 
 let currentLang = 'el', unlockedCount = 0, xp = 0, currentQ = 0, quizData = [];
@@ -201,7 +203,25 @@ function handleAnswer(idx) {
 function nextStep() {
     currentQ++;
     if(currentQ < quizData.length) showQuestion();
-    else { unlockBadge('badge_home'); nav('home', document.querySelectorAll('.nav-tab')[0]); confetti({particleCount:100}); }
+    else finishQuiz();
+}
+
+// ΠΡΟΣΘΗΚΗ: Εμφάνιση Διαφήμισης όταν τελειώνει το Level
+function finishQuiz() {
+    const quizSec = document.getElementById('screen_quiz');
+    quizSec.innerHTML = `
+        <div class="glass-card" style="text-align:center;">
+            <h2>🎉 Συγχαρητήρια!</h2>
+            <p>Ανέβηκες επίπεδο!</p>
+            <div class="ad-slot">
+                <p style="font-size:10px; color:var(--muted);">ADVERTISEMENT</p>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+            <button class="main-cta" onclick="nav('home', document.querySelectorAll('.nav-tab')[0])">ΕΠΙΣΤΡΟΦΗ</button>
+        </div>`;
+    unlockBadge('badge_home');
+    confetti({particleCount:100});
 }
 
 function updateXP() {
