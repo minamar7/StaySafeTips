@@ -1,0 +1,44 @@
+[
+  {
+    "level": 7,
+    "q": "Vous recevez un appel vidéo de votre patron. L'image est nette, mais la voix est métallique et il ne cligne presque pas des yeux. Il demande un virement urgent. Que faites-vous ?",
+    "o": ["Je fais le virement immédiatement.", "Je raccroche et je l'appelle sur son mobile pour vérifier.", "Je lui demande d'envoyer la demande par email."],
+    "a": 1,
+    "exp": "C'est un Deepfake. L'absence de clignement d'yeux et les voix robotiques sont des signes classiques de fraude par IA."
+  },
+  {
+    "level": 7,
+    "q": "Un ami envoie un message vocal demandant 50€ via Revolut car il a perdu son portefeuille. La voix est identique. Que faites-vous ?",
+    "o": ["Je les envoie, c'est mon ami.", "Je lui pose une pregunta que seul mon vrai ami connaîtrait.", "J'ignore le message."],
+    "a": 1,
+    "exp": "Attention au clonage de voix par IA ! Avec seulement 3 secondes d'audio, l'IA peut imiter n'importe quelle voix."
+  },
+  {
+    "level": 8,
+    "q": "Vous recevez un email indiquant que votre mot de passe a été divulgué sur le Dark Web. Quel est le risque ?",
+    "o": ["Aucun, je n'utilise plus cette app.", "Qu'ils l'utilisent pour accéder à mon email ou à ma banque.", "Que seule cette application soit piratée."],
+    "a": 1,
+    "exp": "Les escrocs utilisent le 'Credential Stuffing' : ils testent votre mot de passe sur tous les services majeurs."
+  },
+  {
+    "level": 8,
+    "q": "Un message d'extorsion contient un de vos anciens mots de passe. On vous demande des Bitcoins pour ne pas publier de vidéos privées. Que faites-vous ?",
+    "o": ["Je paie la somme.", "J'ignore et je change mes mots de passe. C'est une arnaque psychologique.", "J'essaie de négocier."],
+    "a": 1,
+    "exp": "C'est de la 'Sextortion'. Posséder un vieux mot de passe ne signifie pas qu'ils ont accès à votre caméra."
+  },
+  {
+    "level": 9,
+    "q": "Un 'Conseiller Financier' sur Telegram promet 200% de profit hebdomadaire en Crypto. Quelle est l'option la plus probable ?",
+    "o": ["Une opportunité en or.", "Une arnaque de type 'Pig Butchering'.", "Un investissement légitime si le site est beau."],
+    "a": 1,
+    "exp": "Les arnaques à l'investissement promettent des rendements irréels pour voler de grosses sommes."
+  },
+  {
+    "level": 9,
+    "q": "Que ne devez-vous JAMAIS partager, même avec le support officiel d'un portefeuille Crypto ?",
+    "o": ["Votre nom complet.", "Votre phrase de récupération de 12 mots (Seed Phrase).", "Votre adresse email."],
+    "a": 1,
+    "exp": "La phrase de récupération est la clé maîtresse. Celui qui la possède contrôle votre argent."
+  }
+]
