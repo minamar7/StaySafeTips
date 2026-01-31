@@ -106,8 +106,22 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
         <p>4,90€ / μήνα</p>
         <button class="main-cta" style="background:var(--gold); color:black;" onclick="buyPremium()">ΓΙΝΕ ELITE ΜΕΛΟΣ</button>
       </div>
-      <div class="glass-card" onclick="alert('Dojo...')"><h3>🥋 Sensei Dojo</h3></div>
-      <div class="glass-card" onclick="alert('SOS...')"><h3>🌍 Global SOS</h3></div>
+      
+      <div class="glass-card" onclick="openDojo()" style="display:flex; align-items:center; gap:15px; cursor:pointer; border:1px solid rgba(56,189,248,0.3); background:rgba(56,189,248,0.05);">
+        <div style="font-size:30px; background:rgba(56,189,248,0.1); padding:10px; border-radius:15px;">🥋</div>
+        <div style="text-align:left;">
+            <h3 style="margin:0; color:var(--accent);">Sensei Dojo</h3>
+            <p style="margin:0; font-size:11px; color:var(--muted);">Τεχνικές αυτοάμυνας Elite</p>
+        </div>
+      </div>
+
+      <div class="glass-card" onclick="openSOS()" style="display:flex; align-items:center; gap:15px; cursor:pointer; border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.05);">
+        <div style="font-size:30px; background:rgba(239,68,68,0.1); padding:10px; border-radius:15px;">🌍</div>
+        <div style="text-align:left;">
+            <h3 style="margin:0; color:var(--danger);">Global SOS</h3>
+            <p style="margin:0; font-size:11px; color:var(--muted);">Τηλέφωνα ανάγκης παγκοσμίως</p>
+        </div>
+      </div>
     </section>
 
     <section id="screen_quiz" class="hidden"></section>
@@ -122,7 +136,6 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <script>
 let currentLang = 'el', xp = 0, level = 1, isPremium = false, quizData = [], errors = 0;
 
-// Load Premium state from storage
 if(localStorage.getItem('isElite') === 'true') isPremium = true;
 
 function initApp(lang) {
@@ -142,11 +155,8 @@ function nav(id, btn) {
 }
 
 async function startQuiz() {
-    // Αν ο χρήστης είναι Level 7+ και δεν είναι Premium, τον στέλνουμε στην αγορά
     if(level >= 7 && !isPremium) { nav('premium'); return; }
-    
     errors = 0;
-    // ΕΔΩ ΓΙΝΕΤΑΙ Η ΕΠΙΛΟΓΗ ΤΟΥ ΣΩΣΤΟΥ JSON
     const mode = isPremium ? "premium" : "free";
     const jsonPath = `./questions_${mode}_${currentLang}.json`;
     
@@ -158,7 +168,7 @@ async function startQuiz() {
         renderQuestion(0);
         nav('quiz');
     } catch(e) { 
-        alert("Λείπει το αρχείο: questions_" + mode + "_" + currentLang + ".json στο GitHub!"); 
+        alert("Λείπει το αρχείο: questions_" + mode + "_" + currentLang + ".json"); 
     }
 }
 
@@ -183,7 +193,6 @@ function renderQuestion(idx) {
 window.check = (sel, cor, idx, btn) => {
     const btns = document.querySelectorAll('#quiz_options button');
     btns.forEach(b => b.disabled = true);
-    
     if(sel === cor) {
         btn.style.background = "var(--success)";
         xp += 20;
@@ -192,7 +201,6 @@ window.check = (sel, cor, idx, btn) => {
         btns[cor].style.background = "var(--success)";
         errors++;
     }
-    
     setTimeout(() => {
         if(errors >= 3) {
             alert("❌ 3 Λάθη! Πρέπει να ξαναπροσπαθήσεις το Level.");
@@ -203,7 +211,6 @@ window.check = (sel, cor, idx, btn) => {
             renderQuestion(idx + 1);
         } else {
             updateXP();
-            // Κομφετί μόνο στο τέλος του level
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             setTimeout(() => { nav('home'); }, 2000);
         }
@@ -214,10 +221,48 @@ function updateXP() {
     level = Math.floor(xp / 100) + 1;
     document.getElementById('level_val').innerText = level;
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-    
     if(level >= 2) document.getElementById('badge_1').classList.add('unlocked');
     if(level >= 5) document.getElementById('badge_2').classList.add('unlocked');
     if(isPremium) document.getElementById('badge_3').classList.add('unlocked');
+}
+
+async function openSOS() {
+    if(!isPremium) { nav('premium'); return; }
+    try {
+        const res = await fetch('./emergency_hub.json');
+        const data = await res.json();
+        let html = `<div class="glass-card" style="text-align:left; max-height:70vh; overflow-y:auto;">
+            <h2 style="color:var(--danger);">🌍 SOS Hub</h2><hr style="opacity:0.1; margin:15px 0;">`;
+        data.regions.forEach(r => {
+            html += `<h4 style="color:var(--accent); margin:15px 0 5px;">${r.area}</h4>`;
+            r.countries.forEach(c => {
+                html += `<div style="background:rgba(255,255,255,0.03); padding:8px; border-radius:10px; margin-bottom:5px; font-size:12px;">
+                    <strong>${c.name}</strong>: 🚓${c.police} 🚑${c.medical}</div>`;
+            });
+        });
+        html += `<button class="main-cta" style="margin-top:15px;" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button></div>`;
+        document.getElementById('screen_quiz').innerHTML = html;
+        nav('quiz');
+    } catch(e) { alert("Σφάλμα φόρτωσης SOS Hub"); }
+}
+
+async function openDojo() {
+    if(!isPremium) { nav('premium'); return; }
+    try {
+        const res = await fetch('./dojo.json');
+        const data = await res.json();
+        let html = `<div class="glass-card" style="text-align:left; max-height:70vh; overflow-y:auto;">
+            <h2 style="color:var(--accent);">🥋 Sensei Dojo</h2><hr style="opacity:0.1; margin:15px 0;">`;
+        data.techniques.forEach(t => {
+            html += `<div style="margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:10px;">
+                <h4 style="margin:0; color:var(--gold);">${t.emoji} ${t.name}</h4>
+                <p style="font-size:13px; line-height:1.4;">${t.description}</p>
+            </div>`;
+        });
+        html += `<button class="main-cta" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button></div>`;
+        document.getElementById('screen_quiz').innerHTML = html;
+        nav('quiz');
+    } catch(e) { alert("Σφάλμα φόρτωσης Dojo"); }
 }
 
 function buyPremium() {
