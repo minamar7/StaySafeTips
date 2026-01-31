@@ -1,0 +1,30 @@
+[
+  {
+    "level": 7,
+    "q": "Você recebe uma videochamada do seu chefe. A imagem é clara, mas a voz soa metálica e ele não pisca quase nunca. Ele pede uma transferência urgente. O que você faz?",
+    "o": ["Faço a transferência imediatamente.", "Desligo e ligo para o telemóvel dele para confirmar.", "Peço que ele envie o pedido por e-mail."],
+    "a": 1,
+    "exp": "É um Deepfake. A falta de piscar de olhos e as vozes robóticas são sinais clássicos de fraude por IA."
+  },
+  {
+    "level": 7,
+    "q": "Um amigo envia uma mensagem de voz pedindo 50€ via Revolut porque perdeu a carteira. A voz soa idêntica. O que você faz?",
+    "o": ["Envio imediatamente, é o meu amigo.", "Faço uma pergunta que apenas o meu amigo real saberia responder.", "Ignoro a mensagem."],
+    "a": 1,
+    "exp": "Cuidado com o Voice Cloning por IA! Com apenas 3 segundos de áudio, a IA pode imitar qualquer voz."
+  },
+  {
+    "level": 8,
+    "q": "Você recebe um e-mail dizendo que a sua palavra-passe vazou na Dark Web. Qual é o maior risco?",
+    "o": ["Nenhum, já não uso essa app.", "Que a usem para entrar no meu e-mail ou conta bancária.", "Que apenas essa app específica seja hackeada."],
+    "a": 1,
+    "exp": "Os burlões usam 'Credential Stuffing': testam a sua palavra-passe vazada em todos os serviços principais."
+  },
+  {
+    "level": 9,
+    "q": "Um 'Consultor Financeiro' no Telegram promete lucros de 200% semanais em Cripto. O que é mais provável?",
+    "o": ["Uma grande oportunidade.", "Uma fraude do tipo 'Pig Butchering'.", "Um investimento legítimo se o site for bonito."],
+    "a": 1,
+    "exp": "As fraudes de investimento prometem rentabilidades irreais para roubar grandes quantias de dinheiro."
+  }
+]
