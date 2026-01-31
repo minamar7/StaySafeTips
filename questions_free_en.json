@@ -59,5 +59,4 @@
   { "q": "What is a 'Breadcrumb' scam on social media?", "o": ["Cooking tips", "Small bits of personal info used to build trust", "Winning free bread"], "a": 1 },
   { "q": "Why is 'Metadata' in your photos dangerous?", "o": ["It makes photos heavy", "It can reveal your exact GPS location", "It ruins the quality"], "a": 1 },
   { "q": "What is the safest way to use public Wi-Fi if necessary?", "o": ["Use a VPN", "Incognito mode", "Just be fast"], "a": 0 }
-
 ]
