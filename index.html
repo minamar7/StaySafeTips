@@ -1,26 +1,282 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Stay Safe Elite</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#020617">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<style>
+:root {
+  --bg: #020617;
+  --card: #0f172a;
+  --accent: #38bdf8;
+  --gold: #facc15;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+}
+
+* { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; transition: direction 0.3s; }
+body[dir="rtl"] { text-align: right; }
+
+.hidden { display: none !important; }
+
+/* Onboarding */
+.onboarding-screen {
+  position: fixed; inset: 0;
+  background: radial-gradient(circle at top, #1e293b, #000);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.onboarding-content { text-align: center; padding: 30px; }
+.onboarding-icon { font-size: 80px; margin-bottom: 20px; filter: drop-shadow(0 0 20px var(--accent)); }
+
+/* App Header */
+.app-header { padding: 40px 20px 20px; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b; }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.user-rank-box { background: #1e293b; border-radius: 20px; padding: 6px 15px; font-size: 14px; color: var(--gold); border: 1px solid rgba(250, 204, 21, 0.3); }
+
+.lang-select {
+  background: #1e293b; color: white; border: 1px solid var(--accent);
+  padding: 5px 10px; border-radius: 10px; font-size: 12px; outline: none;
+}
+
+.xp-container { margin-top: 10px; }
+.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; }
+.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* Content Area */
+.content-area { padding: 20px 20px 100px; }
+.glass-card { background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 24px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+.main-cta {
+  background: linear-gradient(135deg, var(--accent), #0ea5e9);
+  border: none; color: #020617; padding: 18px; border-radius: 18px;
+  font-size: 16px; font-weight: 800; width: 100%; cursor: pointer;
+  transition: transform 0.2s;
+}
+.main-cta:active { transform: scale(0.96); }
+
+/* Quiz Styles */
+.quiz-question-box { background: #1e293b; padding: 20px; border-radius: 20px; margin-bottom: 20px; font-size: 18px; font-weight: 600; text-align: center; }
+.quiz-options-grid button {
+  background: #0f172a; border: 1px solid #334155; color: white;
+  padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%;
+  font-size: 15px; cursor: pointer; transition: 0.2s;
+}
+
+/* Badges */
+.badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; }
+.badge.locked { opacity: 0.2; filter: grayscale(1); }
+.badge.unlocked { border-color: var(--gold); box-shadow: 0 0 15px rgba(250, 204, 21, 0.3); animation: pop 0.5s; }
+
+/* Navigation */
+.nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: 15px; }
+.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+.nav-tab.active { color: var(--accent); }
+
+/* Overlay */
+.quiz-result { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+.quiz-result-card { background: #1e293b; padding: 40px; border-radius: 30px; text-align: center; width: 85%; border: 1px solid var(--accent); }
+
+@keyframes pop { 0% { transform: scale(0.8); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+</style>
+</head>
+
+<body>
+
+<section id="onboarding" class="onboarding-screen">
+  <div class="onboarding-content">
+    <div class="onboarding-icon">🛡️</div>
+    <h1 style="font-size: 32px;" data-i18n="welcome">Stay Safe Elite</h1>
+    <p style="color: var(--muted); margin-bottom: 30px;" data-i18n="upgrade_msg">Μάθε να προστατεύεις τον εαυτό σου.</p>
+    <button id="btn-start" class="main-cta" data-i18n="start_btn">ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ</button>
+  </div>
+</section>
+
+<div id="main_app" class="hidden">
+
+<header class="app-header">
+  <div class="header-top">
+    <div class="user-rank-box">🔥 <span id="streak">1 Day Streak</span></div>
+    <select id="lang_select" class="lang-select" onchange="updateLanguage(this.value)">
+      <option value="el">🇬🇷 GR</option>
+      <option value="en">🇺🇸 EN</option>
+      <option value="de">🇩🇪 DE</option>
+      <option value="fr">🇫🇷 FR</option>
+      <option value="es">🇪🇸 ES</option>
+      <option value="pt">🇵🇹 PT</option>
+      <option value="it">🇮🇹 IT</option>
+      <option value="ru">🇷🇺 RU</option>
+      <option value="zh">🇨🇳 ZH</option>
+      <option value="hi">🇮🇳 HI</option>
+      <option value="ar">🇦🇪 AR</option>
+    </select>
+  </div>
+  <h1 style="font-size: 24px;" data-i18n="safety_dashboard">Dashboard</h1>
+  <div class="xp-container">
+    <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
+    <div style="display:flex; justify-content:space-between; margin-top:5px;">
+        <small style="color:var(--muted)">Progress</small>
+        <small style="color:var(--gold)"><span data-i18n="level">Level</span> <span id="level_val">1</span></small>
+    </div>
+  </div>
+</header>
+
+<main class="content-area">
+  <section id="screen_home" class="screen">
+    <div class="glass-card">
+      <h2 data-i18n="home_tab">Ασφάλεια Σπιτιού</h2>
+      <button class="main-cta" onclick="startQuiz('free')" data-i18n="entry_quiz_btn">ENTRY QUIZ</button>
+    </div>
+  </section>
+
+  <section id="screen_quiz" class="screen hidden">
+    <div id="question_box" class="quiz-question-box"></div>
+    <div id="options_grid" class="quiz-options-grid"></div>
+  </section>
+
+  <section id="screen_badges" class="screen hidden">
+    <h2 style="margin-bottom:20px;" data-i18n="badges_tab">Τρόπαια</h2>
+    <div class="badges-grid">
+      <div id="badge_home" class="badge locked">🏠</div>
+      <div id="badge_digital" class="badge locked">🛡️</div>
+    </div>
+  </section>
+
+  <section id="screen_premium" class="screen hidden">
+    <div class="glass-card" style="border: 1px solid var(--gold); text-align:center;">
+      <div style="font-size:50px;">💎</div>
+      <h2 data-i18n="premium_tab">Elite Access</h2>
+      <p data-i18n="upgrade_msg">Ξεκλείδωσε όλα τα επίπεδα.</p>
+      <button class="main-cta" style="background:var(--gold)" onclick="startQuiz('premium')" data-i18n="elite_quiz_btn">ELITE QUIZ</button>
+    </div>
+  </section>
+</main>
+
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="nav('home')">🏠</button>
+  <button class="nav-tab" onclick="nav('badges')">🏅</button>
+  <button class="nav-tab" onclick="nav('premium')">💎</button>
+</nav>
+
+</div>
+
+<div id="result_screen" class="quiz-result hidden">
+  <div class="quiz-result-card">
+    <div style="font-size:60px; margin-bottom:10px;">🏆</div>
+    <h2 id="result_title" data-i18n="congrats">Συγχαρητήρια!</h2>
+    <p id="xp_gained" style="color:var(--gold); font-weight:bold; font-size:20px;">+50 XP</p>
+    <button class="main-cta" onclick="closeResult()" data-i18n="continue">ΣΥΝΕΧΕΙΑ</button>
+  </div>
+</div>
+
+<script>
+const translations = {
+  el: { welcome: "Stay Safe Elite", start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ", home_tab: "Ασφάλεια Σπιτιού", badges_tab: "Τρόπαια", premium_tab: "Elite Access", level: "Επίπεδο", continue: "ΣΥΝΕΧΕΙΑ", upgrade_msg: "Μάθε να προστατεύεις τον εαυτό σου.", safety_dashboard: "Πίνακας Ελέγχου", entry_quiz_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", elite_quiz_btn: "ELITE ΤΕΣΤ", congrats: "Συγχαρητήρια!" },
+  en: { welcome: "Stay Safe Elite", start_btn: "START JOURNEY", home_tab: "Home Safety", badges_tab: "Badges", premium_tab: "Elite Access", level: "Level", continue: "CONTINUE", upgrade_msg: "Learn how to protect yourself.", safety_dashboard: "Dashboard", entry_quiz_btn: "ENTRY QUIZ", elite_quiz_btn: "ELITE QUIZ", congrats: "Congratulations!" },
+  de: { welcome: "Stay Safe Elite", start_btn: "STARTEN", home_tab: "Heimsicherheit", badges_tab: "Abzeichen", premium_tab: "Elite Access", level: "Ebene", continue: "WEITER", upgrade_msg: "Lerne dich zu schützen.", safety_dashboard: "Dashboard", entry_quiz_btn: "QUIZ STARTEN", elite_quiz_btn: "ELITE QUIZ", congrats: "Glückwunsch!" },
+  fr: { welcome: "Stay Safe Elite", start_btn: "COMMENCER", home_tab: "Sécurité Maison", badges_tab: "Trophées", premium_tab: "Elite Access", level: "Niveau", continue: "CONTINUER", upgrade_msg: "Apprenez à vous protéger.", safety_dashboard: "Tableau de bord", entry_quiz_btn: "COMMENCER LE QUIZ", elite_quiz_btn: "QUIZ ÉLITE", congrats: "Félicitations!" },
+  es: { welcome: "Stay Safe Elite", start_btn: "EMPEZAR", home_tab: "Seguridad Hogar", badges_tab: "Insignias", premium_tab: "Elite Access", level: "Nivel", continue: "CONTINUAR", upgrade_msg: "Aprende a protegerte.", safety_dashboard: "Panel", entry_quiz_btn: "INICIAR CUESTIONARIO", elite_quiz_btn: "CUESTIONARIO ELITE", congrats: "¡Felicidades!" },
+  pt: { welcome: "Stay Safe Elite", start_btn: "COMEÇAR", home_tab: "Segurança Casa", badges_tab: "Conquistas", premium_tab: "Elite Access", level: "Nível", continue: "CONTINUAR", upgrade_msg: "Aprenda a se proteger.", safety_dashboard: "Painel", entry_quiz_btn: "INICIAR QUIZ", elite_quiz_btn: "QUIZ ELITE", congrats: "Parabéns!" },
+  it: { welcome: "Stay Safe Elite", start_btn: "INIZIA", home_tab: "Sicurezza Casa", badges_tab: "Premi", premium_tab: "Elite Access", level: "Livello", continue: "CONTINUA", upgrade_msg: "Impara a proteggerti.", safety_dashboard: "Dashboard", entry_quiz_btn: "INIZIA QUIZ", elite_quiz_btn: "QUIZ ELITE", congrats: "Congratulazioni!" },
+  ru: { welcome: "Stay Safe Elite", start_btn: "НАЧАТЬ", home_tab: "Безопасность дома", badges_tab: "Достижения", premium_tab: "Elite Access", level: "Уровень", continue: "ПРОДОЛЖИТЬ", upgrade_msg: "Узнайте, как защитить себя.", safety_dashboard: "Панель", entry_quiz_btn: "НАЧΑТЬ ТЕСТ", elite_quiz_btn: "ЭЛИТНЫЙ ТЕСТ", congrats: "Поздравляем!" },
+  zh: { welcome: "Stay Safe Elite", start_btn: "开始旅程", home_tab: "家庭安全", badges_tab: "奖章", premium_tab: "Elite Access", level: "等级", continue: "继续", upgrade_msg: "学习如何保护自己。", safety_dashboard: "仪表板", entry_quiz_btn: "开始测验", elite_quiz_btn: "精英测验", congrats: "恭喜！" },
+  hi: { welcome: "Stay Safe Elite", start_btn: "यात्रा शुरू करें", home_tab: "घर की सुरक्षा", badges_tab: "बैज", premium_tab: "Elite Access", level: "स्तर", continue: "जारी रखें", upgrade_msg: "खुद को बचाना सीखें।", safety_dashboard: "डैशबोर्ड", entry_quiz_btn: "प्रश्नावली शुरू करें", elite_quiz_btn: "एलीट प्रश्नावली", congrats: "बधाई हो!" },
+  ar: { welcome: "Stay Safe Elite", start_btn: "ابدأ الرحلة", home_tab: "أمن المنزل", badges_tab: "الأوسمة", premium_tab: "Elite Access", level: "المستوى", continue: "استمرار", upgrade_msg: "تعلم كيف تحمي نفسك.", safety_dashboard: "لوحة التحكم", entry_quiz_btn: "ابدأ الاختبار", elite_quiz_btn: "اختبار النخبة", congrats: "تهانينا!" }
+};
+
+let xp = 0, level = 1, current_q = 0, quiz_data = [];
+let currentLang = 'el';
+
+document.getElementById('btn-start').onclick = () => {
+  document.getElementById('onboarding').classList.add('hidden');
+  document.getElementById('main_app').classList.remove('hidden');
+  // Φόρτωση γλώσσας από localStorage αν υπάρχει, αλλιώς el
+  const savedLang = localStorage.getItem('user_lang') || 'el';
+  updateLanguage(savedLang);
+  document.getElementById('lang_select').value = savedLang;
+};
+
+function updateLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('user_lang', lang);
+  document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
+  });
+}
+
+function nav(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById('screen_' + id).classList.remove('hidden');
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  // Βρίσκουμε το σωστό κουμπί βάσει σειράς αν το event λείπει
+  if (event) {
+    event.currentTarget.classList.add('active');
+  }
+}
+
 async function startQuiz(mode = 'free') {
-  // Το ./ διασφαλίζει ότι ψάχνουμε στον φάκελο /StaySafeTips/
+  // Η ΣΗΜΑΝΤΙΚΗ ΑΛΛΑΓΗ: Προσθήκη ./ για GitHub Pages
   const fileName = `./questions_${mode}_${currentLang}.json`;
   
-  console.log("Φόρτωση αρχείου:", fileName);
-
   try {
     const response = await fetch(fileName);
-    
-    if (!response.ok) {
-      throw new Error(`Δεν βρέθηκε το αρχείο: ${fileName}`);
-    }
-    
+    if (!response.ok) throw new Error(`File not found: ${fileName}`);
     const data = await response.json();
-    
-    // Επιλογή 5 τυχαίων ερωτήσεων
     quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
     current_q = 0;
-    
     nav('quiz');
     showQuestion();
   } catch (err) {
-    console.error("Σφάλμα:", err);
-    alert("Πρόβλημα σύνδεσης: " + err.message);
+    console.error(err);
+    alert("Πρόβλημα σύνδεσης με τις ερωτήσεις. Βεβαιωθείτε ότι τα αρχεία .json είναι στον ίδιο φάκελο στο GitHub.");
   }
 }
+
+function showQuestion() {
+  const qData = quiz_data[current_q];
+  document.getElementById('question_box').innerText = qData.q;
+  document.getElementById('options_grid').innerHTML = qData.o.map((opt, i) => 
+    `<button onclick="handleAnswer(${i})">${opt}</button>`
+  ).join('');
+}
+
+function handleAnswer(selectedIdx) {
+  const qData = quiz_data[current_q];
+  const buttons = document.querySelectorAll('#options_grid button');
+  buttons.forEach(btn => btn.disabled = true);
+
+  if (selectedIdx === qData.a) {
+    buttons[selectedIdx].style.background = "#22c55e"; 
+    xp += 50; updateProgress();
+    document.getElementById('badge_home').classList.remove('locked');
+    document.getElementById('badge_home').classList.add('unlocked');
+  } else {
+    buttons[selectedIdx].style.background = "#ef4444";
+    buttons[qData.a].style.background = "#22c55e";
+  }
+
+  setTimeout(() => {
+    document.getElementById('result_screen').classList.remove('hidden');
+  }, 1000);
+}
+
+function updateProgress() {
+  document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+  document.getElementById('level_val').innerText = Math.floor(xp / 100) + 1;
+}
+
+function closeResult() {
+  document.getElementById('result_screen').classList.add('hidden');
+  nav('home');
+}
+</script>
+</body>
+</html>
