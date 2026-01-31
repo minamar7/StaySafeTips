@@ -49,4 +49,14 @@
   { "q": "En Grecia, ¿cuál es el número de la policía?", "o": ["199", "100", "166"], "a": 1 },
   { "q": "En Grecia, ¿cuál es el número de bomberos?", "o": ["100", "199", "166"], "a": 1 },
   { "q": "En Grecia, ¿cuál es el número de guardacostas?", "o": ["100", "108", "199"], "a": 1 }
+  { "q": "¿Qué es el 'SIM Swapping'?", "o": ["Cambiar la funda del móvil", "Robo del número de teléfono para saltarse el 2FA", "Una forma de obtener más datos"], "a": 1 },
+  { "q": "¿Qué se conoce como 'Juice Jacking'?", "o": ["Robo de datos a través de puertos de carga USB públicos", "Una estafa con bebidas gratis", "Un truco para ahorrar batería"], "a": 0 },
+  { "q": "¿Qué debes hacer si tu móvil pierde la señal de repente durante horas?", "o": ["Esperar hasta mañana", "Llamar a tu operador de inmediato (posible SIM swap)", "Reiniciar el móvil"], "a": 1 },
+  { "q": "¿Qué es el 'Typosquatting'?", "o": ["Sitios web falsos con nombres similares a los reales", "Escribir muy rápido", "Un nuevo ejercicio de gimnasio"], "a": 0 },
+  { "q": "¿Es seguro publicar una foto borrosa de tu billete de avión?", "o": ["Sí", "No, los códigos de barras aún pueden ser escaneados", "Solo en Instagram"], "a": 1 },
+  { "q": "¿Cuál es la forma más segura de guardar códigos 2FA?", "o": ["A través de SMS", "Aplicación de autenticación o llave física (Hardware Key)", "En un bloc de notas"], "a": 1 },
+  { "q": "¿Qué puede hacer un 'Deepfake' en una videollamada?", "o": ["Hacer el internet más rápido", "Suplantar la cara y la voz de alguien en tiempo real", "Poner un filtro divertido"], "a": 1 },
+  { "q": "¿Qué es la estafa 'Breadcrumb' en redes sociales?", "o": ["Recetas de cocina", "Recopilar pequeños datos personales para ganarse la confianza", "Ganar comida gratis"], "a": 1 },
+  { "q": "¿Por qué son peligrosos los 'Metadatos' en tus fotos?", "o": ["Hacen que las fotos pesen más", "Pueden revelar tu ubicación exacta por GPS", "Arruinan la calidad de imagen"], "a": 1 },
+  { "q": "¿Cuál es la forma más segura de usar Wi-Fi público si es necesario?", "o": ["Usar una VPN", "Modo incógnito", "Simplemente ser rápido"], "a": 0 }
 ]
