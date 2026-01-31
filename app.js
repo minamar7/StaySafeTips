@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Έλεγχος αν ο χρήστης έχει ολοκληρώσει το onboarding στο παρελθόν
   if (localStorage.getItem("ss_onboarding_done") === "true") {
     if (onboarding) onboarding.classList.add("hidden");
     if (appShell) appShell.classList.remove("hidden");
@@ -42,39 +41,51 @@ document.addEventListener("DOMContentLoaded", () => {
     tab.addEventListener("click", () => {
       const target = tab.getAttribute("data-target");
       showScreen(target);
+
+      // ΔΙΟΡΘΩΣΗ: Αν πατηθεί το κεντρικό Tab Quiz, ξεκινάει το γενικό QuizEngine
+      if (target === "quiz") {
+        window.launchQuiz("quiz"); 
+      }
     });
   });
 
   // --- 4. Quiz Launcher (Δυναμικό) ---
   window.launchQuiz = (badgeId) => {
-    // 1. Εντοπισμός επιλεγμένης γλώσσας
     const currentLang = langSelect ? langSelect.value : 'el';
-    
-    // 2. Μεταφορά στην οθόνη του Quiz
     showScreen("quiz");
 
-    // 3. Εκκίνηση της μηχανής του Quiz
     if (window.QuizEngine) {
       window.QuizEngine.start(currentLang, badgeId);
     } else {
-      console.error("QuizEngine not found! Make sure quiz.js is loaded.");
+      console.error("⚠️ QuizEngine not found!");
     }
   };
 
-  // --- 5. Event Listeners για όλα τα κουμπιά Quiz ---
-  // Home Quiz
+  // --- 5. Event Listeners για Κουμπιά Quiz ---
   document.getElementById("home-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-home"));
-  
-  // Digital Quiz
   document.getElementById("digital-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-digital"));
-  
-  // Scam Quiz (Αν υπάρχει κουμπί στο HTML)
   document.getElementById("scam-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-scam"));
-  
-  // Emergency Quiz (Αν υπάρχει κουμπί στο HTML)
   document.getElementById("emergency-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-emergency"));
 
-  // Φόρτωση ήδη κερδισμένων badges από το LocalStorage
+  // --- 6. Elite Hub Content (Δυναμική Φόρτωση) ---
+  const premiumList = document.getElementById("premium-list");
+  if (premiumList) {
+    const protocols = [
+      { id: "P-01", title: "Physical Breach Defense", desc: "Οδηγίες θωράκισης εισόδων σε κρίσιμες καταστάσεις." },
+      { id: "P-02", title: "Dark Web Scanner", desc: "Εργαλεία ελέγχου διαρροής των κωδικών σας." },
+      { id: "P-03", title: "Secure Travel Protocol", desc: "Προστασία δεδομένων και ασφάλεια σε ταξίδια εξωτερικού." }
+    ];
+
+    premiumList.innerHTML = protocols.map(p => `
+      <div class="daily-card" style="border-left: 4px solid #f59e0b; margin-bottom: 12px; padding: 15px; background: rgba(30, 41, 59, 0.5); border-radius: 10px;">
+        <span style="color: #f59e0b; font-size: 0.7rem; font-weight: bold;">${p.id}</span>
+        <h3 style="margin: 5px 0; color: #fff;">${p.title}</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8; margin: 0;">${p.desc}</p>
+      </div>
+    `).join('');
+  }
+
+  // --- 7. Badges Persistence ---
   const savedBadges = JSON.parse(localStorage.getItem("ss_badges") || "[]");
   savedBadges.forEach(badgeId => {
     const bEl = document.getElementById(badgeId);
