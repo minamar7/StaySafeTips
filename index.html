@@ -40,23 +40,39 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .main-cta:active { transform: scale(0.98); }
 .opt-btn { background: #0f172a; border: 1px solid #334155; color: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%; text-align: left; cursor: pointer; transition: 0.3s; }
 
-/* --- BADGES (SUPER EFFECT) --- */
-.badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; opacity: 0.15; filter: grayscale(1); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+/* --- ELITE BADGES DESIGN --- */
+.badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 10px; }
+.badge-wrapper { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.badge { 
+    background: linear-gradient(145deg, #1e293b, #0f172a); 
+    width: 90px; height: 90px; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 40px; border: 3px solid rgba(255,255,255,0.05);
+    opacity: 0.15; filter: grayscale(1);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+}
 .badge.unlocked { 
     opacity: 1; filter: grayscale(0); border-color: var(--gold); 
-    box-shadow: 0 0 25px rgba(250, 204, 21, 0.5); transform: scale(1.05); 
-    animation: badgePop 0.5s ease-out;
+    box-shadow: 0 0 25px rgba(250, 204, 21, 0.4), inset 0 0 15px rgba(250, 204, 21, 0.2);
+    transform: scale(1.05); animation: badgePop 0.6s ease-out;
 }
-@keyframes badgePop { 0% { transform: scale(0.5); } 100% { transform: scale(1.05); } }
+.badge.unlocked::after {
+    content: ''; position: absolute; inset: -5px; border-radius: 50%; 
+    border: 2px solid var(--gold); animation: badgePulse 2s infinite;
+}
+@keyframes badgePulse { 0% {transform: scale(1); opacity: 1;} 100% {transform: scale(1.3); opacity: 0;} }
+@keyframes badgePop { 0% {transform: scale(0.5); opacity: 0;} 100% {transform: scale(1.05); opacity: 1;} }
+
+.badge-title { font-size: 13px; font-weight: 800; color: var(--text); margin-top: 8px; }
+.badge-desc { font-size: 10px; color: var(--muted); line-height: 1.2; }
 
 /* --- NAV & OVERLAYS --- */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: 15px; z-index: 1000; }
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; }
 .nav-tab.active { color: var(--accent); }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; }
-
-/* --- LANGUAGE GRID --- */
 .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 320px; margin: 20px auto; }
 </style>
 </head>
@@ -68,7 +84,6 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     <div style="font-size:70px; margin-bottom:10px; filter:drop-shadow(0 0 20px var(--accent));">🛡️</div>
     <h1 style="font-size:32px; margin-bottom:5px;">Stay Safe Elite</h1>
     <p style="color:var(--muted); margin-bottom:20px;">Επιλέξτε Γλώσσα / Select Language</p>
-    
     <div class="lang-grid">
         <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('el', this)">🇬🇷 GR</button>
         <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('en', this)">🇺🇸 EN</button>
@@ -79,7 +94,6 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
         <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('ru', this)">🇷🇺 RU</button>
         <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('zh', this)">🇨🇳 ZH</button>
     </div>
-
     <button id="start_app_btn" class="main-cta" style="width:200px; margin-top: 20px; display: none;" onclick="startApp()">ΞΕΚΙΝΑ / START</button>
   </div>
 </section>
@@ -108,19 +122,11 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
       <div class="glass-card">
         <h2 style="margin-bottom:15px;">🛡️ Ασφάλεια Σπιτιού</h2>
         <button class="main-cta" onclick="startQuiz('free')">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
-        
         <div class="mini-stats-grid">
-            <div class="mini-card">
-                <span style="color:var(--accent); font-weight:bold; display:block;">100%</span>
-                <small style="font-size:10px; color:var(--muted)">Safe Scan</small>
-            </div>
-            <div class="mini-card" onclick="window.location.href='scam-alerts.html'" style="cursor:pointer">
-                <span style="color:#ef4444; font-weight:bold; display:block;">LIVE</span>
-                <small style="font-size:10px; color:var(--muted)">Scam Alerts</small>
-            </div>
+            <div class="mini-card"><span style="color:var(--accent); font-weight:bold; display:block;">100%</span><small style="font-size:10px; color:var(--muted)">Safe Scan</small></div>
+            <div class="mini-card" onclick="window.location.href='scam-alerts.html'" style="cursor:pointer"><span style="color:#ef4444; font-weight:bold; display:block;">LIVE</span><small style="font-size:10px; color:var(--muted)">Scam Alerts</small></div>
         </div>
       </div>
-
       <div class="glass-card" style="text-align:center;">
         <h3 style="color:var(--accent); font-size:16px; margin-bottom:15px;">Expert Security Tips</h3>
         <div class="social-container">
@@ -138,12 +144,12 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     </section>
 
     <section id="screen_badges" class="screen hidden">
-      <h2 style="margin-bottom:20px;">Τρόπαια Elite</h2>
+      <h2 style="margin-bottom:25px; text-align:center;">🏅 Elite Achievements</h2>
       <div class="badges-grid">
-        <div id="badge_home" class="badge">🏠</div>
-        <div id="badge_shield" class="badge">🛡️</div>
-        <div id="badge_streak" class="badge">🔥</div>
-        <div id="badge_secret" class="badge" style="border:2px dashed var(--accent)">👥</div>
+        <div class="badge-wrapper"><div id="badge_home" class="badge">🏠</div><span class="badge-title">First Steps</span><span class="badge-desc">Ολοκλήρωση 1ου Τεστ</span></div>
+        <div class="badge-wrapper"><div id="badge_shield" class="badge">🛡️</div><span class="badge-title">Guardian</span><span class="badge-desc">Φτάσατε Level 2</span></div>
+        <div class="badge-wrapper"><div id="badge_streak" class="badge">🔥</div><span class="badge-title">Elite Habit</span><span class="badge-desc">3 Ημέρες Σερί</span></div>
+        <div class="badge-wrapper"><div id="badge_secret" class="badge">👥</div><span class="badge-title">Social Scout</span><span class="badge-desc">Follow στους Experts</span></div>
       </div>
     </section>
   </main>
@@ -155,147 +161,76 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </div>
 
 <div id="ad_screen" class="overlay hidden" style="background:white; color:black; z-index:20000;">
-    <div>
-        <small style="color:gray">Advertisement</small>
-        <div style="width:300px; height:250px; background:#f0f0f0; margin:20px auto; border:2px dashed #ccc; display:flex; align-items:center; justify-content:center; color:#999;">Ad Content</div>
-        <button id="close_ad_btn" class="main-cta" style="background:black; color:white; width:200px; display:none;" onclick="closeAd()">ΚΛΕΙΣΙΜΟ</button>
-        <p id="ad_timer" style="font-weight:bold; font-size:14px;">Προβολή διαφήμισης σε 5...</p>
-    </div>
+    <div><small style="color:gray">Advertisement</small><div style="width:300px; height:250px; background:#f0f0f0; margin:20px auto; border:2px dashed #ccc; display:flex; align-items:center; justify-content:center; color:#999;">Ad Content</div><button id="close_ad_btn" class="main-cta" style="background:black; color:white; width:200px; display:none;" onclick="closeAd()">ΚΛΕΙΣΙΜΟ</button><p id="ad_timer" style="font-weight:bold; font-size:14px;">Προβολή διαφήμισης σε 5...</p></div>
 </div>
 
 <div id="level_up_modal" class="overlay hidden">
-    <div class="glass-card" style="text-align:center; width:85%; border:2px solid var(--gold);">
-        <div style="font-size:70px; filter: drop-shadow(0 0 15px var(--gold));">⭐</div>
-        <h2 style="color:var(--gold); font-size:30px; margin:10px 0;">LEVEL UP!</h2>
-        <p style="margin-bottom:20px;">Φτάσατε στο Επίπεδο <span id="new_lv_val">2</span></p>
-        <button class="main-cta" style="background:var(--gold); color:black;" onclick="closeLevelUp()">ΤΕΛΕΙΑ</button>
-    </div>
+    <div class="glass-card" style="text-align:center; width:85%; border:2px solid var(--gold);"><div style="font-size:70px; filter: drop-shadow(0 0 15px var(--gold));">⭐</div><h2 style="color:var(--gold); font-size:30px; margin:10px 0;">LEVEL UP!</h2><p style="margin-bottom:20px;">Φτάσατε στο Επίπεδο <span id="new_lv_val">2</span></p><button class="main-cta" style="background:var(--gold); color:black;" onclick="closeLevelUp()">ΤΕΛΕΙΑ</button></div>
 </div>
 
 <script>
 let xp = 0, level = 1, current_q = 0, quiz_data = [], current_lang = 'el';
 
-// --- ΑΡΧΙΚΗ ΕΠΙΛΟΓΗ ΓΛΩΣΣΑΣ ---
 function selectInitialLang(lang, btn) {
-    current_lang = lang;
-    document.getElementById('lang_select').value = lang;
-    
-    // Visual feedback
-    document.querySelectorAll('#onboarding .opt-btn').forEach(b => {
-        b.style.borderColor = "#334155";
-        b.style.background = "#0f172a";
-    });
-    btn.style.borderColor = "var(--accent)";
-    btn.style.background = "rgba(56, 189, 248, 0.1)";
-    
+    current_lang = lang; document.getElementById('lang_select').value = lang;
+    document.querySelectorAll('#onboarding .opt-btn').forEach(b => { b.style.borderColor = "#334155"; b.style.background = "#0f172a"; });
+    btn.style.borderColor = "var(--accent)"; btn.style.background = "rgba(56, 189, 248, 0.1)";
     document.getElementById('start_app_btn').style.display = 'block';
 }
 
-function startApp() {
-    document.getElementById('onboarding').classList.add('hidden');
-    document.getElementById('main_app').classList.remove('hidden');
-    confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
-}
+function startApp() { document.getElementById('onboarding').classList.add('hidden'); document.getElementById('main_app').classList.remove('hidden'); confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } }); }
 
-// --- STREAK SYSTEM ---
 function initStreak() {
-    const today = new Date().toDateString();
-    const lastVisit = localStorage.getItem('lastVisit');
-    let streak = parseInt(localStorage.getItem('streakCount')) || 1;
-
-    if (lastVisit && lastVisit !== today) {
-        const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-        if (lastVisit === yesterday.toDateString()) streak++;
-        else streak = 1;
-    }
-    localStorage.setItem('lastVisit', today);
-    localStorage.setItem('streakCount', streak);
+    const today = new Date().toDateString(); const lastVisit = localStorage.getItem('lastVisit'); let streak = parseInt(localStorage.getItem('streakCount')) || 1;
+    if (lastVisit && lastVisit !== today) { const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1); if (lastVisit === yesterday.toDateString()) streak++; else streak = 1; }
+    localStorage.setItem('lastVisit', today); localStorage.setItem('streakCount', streak);
     document.getElementById('streak_text').innerText = streak + " Day Streak";
     if(streak >= 3) unlockBadge('badge_streak');
 }
 
 function nav(id, btn) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-    document.getElementById('screen_'+id).classList.remove('hidden');
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden')); document.getElementById('screen_'+id).classList.remove('hidden');
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); btn.classList.add('active');
 }
 
 async function startQuiz(mode) {
     try {
-        const res = await fetch(`questions_${mode}_${current_lang}.json`);
-        const data = await res.json();
-        quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
-        current_q = 0; nav('quiz', document.querySelectorAll('.nav-tab')[0]); showQuestion();
-    } catch(e) { alert("Error loading JSON: Make sure files are in the same folder."); }
+        const res = await fetch(`questions_${mode}_${current_lang}.json`); const data = await res.json();
+        quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5); current_q = 0; nav('quiz', document.querySelectorAll('.nav-tab')[0]); showQuestion();
+    } catch(e) { alert("JSON Error: Σιγουρευτείτε ότι τα αρχεία είναι στο GitHub."); }
 }
 
 function showQuestion() {
-    const q = quiz_data[current_q];
-    document.getElementById('question_box').innerText = q.q;
-    document.getElementById('next_btn').style.display = 'none';
+    const q = quiz_data[current_q]; document.getElementById('question_box').innerText = q.q; document.getElementById('next_btn').style.display = 'none';
     document.getElementById('options_grid').innerHTML = q.o.map((opt, i) => `<button class="opt-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('');
 }
 
 function handleAnswer(idx) {
-    const q = quiz_data[current_q];
-    const btns = document.querySelectorAll('.opt-btn');
-    btns.forEach(b => b.disabled = true);
-    if(idx === q.a) { 
-        btns[idx].style.background = "#22c55e"; 
-        xp += 25; updateProgress(); 
-    } else { 
-        btns[idx].style.background = "#ef4444"; 
-        btns[q.a].style.background = "#22c55e"; 
-    }
+    const q = quiz_data[current_q]; const btns = document.querySelectorAll('.opt-btn'); btns.forEach(b => b.disabled = true);
+    if(idx === q.a) { btns[idx].style.background = "#22c55e"; xp += 25; updateProgress(); }
+    else { btns[idx].style.background = "#ef4444"; btns[q.a].style.background = "#22c55e"; }
     document.getElementById('next_btn').style.display = 'block';
 }
 
 function nextQuestion() {
-    current_q++;
-    if(current_q < quiz_data.length) showQuestion();
-    else { 
-        unlockBadge('badge_home'); 
-        nav('home', document.querySelectorAll('.nav-tab')[0]); 
-        confetti({ particleCount: 100, gravity: 0.6 }); 
-    }
+    current_q++; if(current_q < quiz_data.length) showQuestion();
+    else { unlockBadge('badge_home'); nav('home', document.querySelectorAll('.nav-tab')[0]); confetti({ particleCount: 100 }); }
 }
 
 function updateProgress() {
-    const nextLv = Math.floor(xp / 100) + 1;
-    document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-    document.getElementById('level_val').innerText = nextLv;
-    if(nextLv > level) { level = nextLv; showLevelUp(); }
+    const nextLv = Math.floor(xp / 100) + 1; document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+    document.getElementById('level_val').innerText = nextLv; if(nextLv > level) { level = nextLv; showLevelUp(); }
 }
 
-function showLevelUp() {
-    document.getElementById('new_lv_val').innerText = level;
-    document.getElementById('level_up_modal').classList.remove('hidden');
-    confetti({ particleCount: 300, spread: 100, origin: { y: 0.6 }, colors: ['#facc15', '#ffffff'] });
-    if(level >= 2) unlockBadge('badge_shield');
-}
-
-function closeLevelUp() {
-    document.getElementById('level_up_modal').classList.add('hidden');
-    showAd();
-}
-
+function showLevelUp() { document.getElementById('new_lv_val').innerText = level; document.getElementById('level_up_modal').classList.remove('hidden'); confetti({ particleCount: 300 }); if(level >= 2) unlockBadge('badge_shield'); }
+function closeLevelUp() { document.getElementById('level_up_modal').classList.add('hidden'); showAd(); }
 function showAd() {
-    document.getElementById('ad_screen').classList.remove('hidden');
-    let t = 5;
-    const inv = setInterval(() => {
-        t--; document.getElementById('ad_timer').innerText = `Προβολή διαφήμισης σε ${t}...`;
-        if(t <= 0) { 
-            clearInterval(inv); document.getElementById('ad_timer').style.display = 'none';
-            document.getElementById('close_ad_btn').style.display = 'block';
-        }
-    }, 1000);
+    document.getElementById('ad_screen').classList.remove('hidden'); let t = 5;
+    const inv = setInterval(() => { t--; document.getElementById('ad_timer').innerText = `Προβολή διαφήμισης σε ${t}...`; if(t <= 0) { clearInterval(inv); document.getElementById('ad_timer').style.display = 'none'; document.getElementById('close_ad_btn').style.display = 'block'; } }, 1000);
 }
-
 function closeAd() { document.getElementById('ad_screen').classList.add('hidden'); }
 function unlockBadge(id) { document.getElementById(id).classList.add('unlocked'); }
 
-// Init
 initStreak();
 </script>
 </body>
