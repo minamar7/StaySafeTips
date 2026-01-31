@@ -16,29 +16,31 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 80%); z-index: -1; }
 .hidden { display: none !important; }
 
-/* SPLASH SCREEN */
+/* SPLASH SCREEN - ΤΟ WOW DESIGN ΣΟΥ */
 .overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; }
 .logo-anim { font-size: 80px; filter: drop-shadow(0 0 20px var(--accent)); margin-bottom: 10px; animation: float 3s infinite ease-in-out; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 360px; margin-top: 20px; max-height: 60vh; overflow-y: auto; padding: 10px; }
-.lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
 
-/* UI ELEMENTS */
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 360px; margin-top: 20px; max-height: 55vh; overflow-y: auto; padding: 10px; }
+.lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+
+/* MAIN UI */
 .app-header { padding: 50px 20px 20px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
-.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
+.glass-card { background: var(--card); backdrop-filter: blur(15px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; }
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
+
+/* NAVIGATION */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
 .nav-tab.active { color: var(--accent); }
 
-/* LIVES ANIMATION */
-.lives-indicator { font-size: 22px; margin-bottom: 15px; font-weight: bold; color: #ef4444; display: flex; justify-content: center; gap: 5px; }
-.heart-pop { animation: pop 0.3s ease-out; }
-@keyframes pop { 0% { transform: scale(1.5); } 100% { transform: scale(1); } }
+/* QUIZ & HEARTS */
+.lives-box { font-size: 20px; margin-bottom: 15px; font-weight: bold; letter-spacing: 2px; }
+.option-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 18px; width: 100%; margin-bottom: 10px; color: var(--text); cursor: pointer; transition: 0.2s; font-size: 15px; }
 
-.ad-slot { margin: 15px 0; background: rgba(0,0,0,0.2); border-radius: 15px; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+.ad-slot { margin: 15px 0; background: rgba(0,0,0,0.2); border-radius: 20px; min-height: 100px; display: flex; align-items: center; justify-content: center; }
 </style>
 </head>
 <body>
@@ -46,7 +48,7 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <section id="onboarding" class="overlay">
   <div>
     <div class="logo-anim">🛡️</div>
-    <h1 style="font-size:26px;">Stay Safe Elite</h1>
+    <h1 style="font-size:28px;">Stay Safe Elite</h1>
     <div class="lang-grid">
         <div class="lang-btn" onclick="initApp('el')"><span>🇬🇷</span><small>GREEK</small></div>
         <div class="lang-btn" onclick="initApp('en')"><span>🇺🇸</span><small>ENGLISH</small></div>
@@ -56,7 +58,7 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
         <div class="lang-btn" onclick="initApp('it')"><span>🇮🇹</span><small>ITALIAN</small></div>
         <div class="lang-btn" onclick="initApp('pt')"><span>🇵🇹</span><small>PORTUGU</small></div>
         <div class="lang-btn" onclick="initApp('ru')"><span>🇷🇺</span><small>RUSSIAN</small></div>
-        <div class="lang-btn" onclick="initApp('zh')"><span >🇨🇳</span><small>CHINESE</small></div>
+        <div class="lang-btn" onclick="initApp('zh')"><span>🇨🇳</span><small>CHINESE</small></div>
         <div class="lang-btn" onclick="initApp('hi')"><span>🇮🇳</span><small>HINDI</small></div>
     </div>
   </div>
@@ -93,8 +95,8 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 
 <script>
 const ui = {
-    el: { txt_home_title: "🛡️ Ασφάλεια", txt_start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", txt_next: "ΕΠΟΜΕΝΟ", txt_lose: "GAME OVER! ΕΧΑΣΕΣ ΟΛΕΣ ΤΙΣ ΚΑΡΔΙΕΣ." },
-    en: { txt_home_title: "🛡️ Security", txt_start_btn: "START TEST", txt_next: "NEXT", txt_lose: "GAME OVER! YOU LOST ALL HEARTS." }
+    el: { txt_home_title: "🛡️ Ασφάλεια", txt_start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", txt_next: "ΕΠΟΜΕΝΟ", txt_lose: "GAME OVER! ΕΧΑΣΕΣ." },
+    en: { txt_home_title: "🛡️ Security", txt_start_btn: "START TEST", txt_next: "NEXT", txt_lose: "GAME OVER!" }
 };
 
 let currentLang = 'el', xp = 0, currentQ = 0, quizData = [], isPremium = false, lives = 3;
@@ -121,45 +123,39 @@ async function startQuiz() {
     } catch(e) { alert("Error loading quiz."); }
 }
 
-function getHearts() {
-    let h = "";
-    for(let i=0; i<3; i++) {
-        h += i < lives ? "❤️" : "🖤";
-    }
-    return h;
-}
-
 function showQuestion() {
     const q = quizData[currentQ];
     const quizSec = document.getElementById('screen_quiz');
-    const hearts = isPremium ? "💎 ELITE MODE" : getHearts();
+    const hearts = isPremium ? "💎 ELITE" : "❤️".repeat(lives) + "🖤".repeat(3 - lives);
 
     quizSec.innerHTML = `<div class="glass-card">
-        <div class="lives-indicator ${!isPremium ? 'heart-pop' : ''}">${hearts}</div>
-        <h3>${q.q}</h3>
-        <div id="options">${q.o.map((opt, i) => `<button class="mini-card" style="width:100%; margin-bottom:10px; padding:18px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:15px; color:white; cursor:pointer;" onclick="handleAnswer(${i})">${opt}</button>`).join('')}</div>
+        <div class="lives-box">${hearts}</div>
+        <h3 style="margin-bottom:25px;">${q.q}</h3>
+        <div id="options">${q.o.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('')}</div>
         <button id="next_q" class="main-cta" style="display:none; margin-top:15px;" onclick="nextStep()">${ui[currentLang]?.txt_next || 'NEXT'}</button>
     </div>`;
 }
 
 function handleAnswer(idx) {
     const q = quizData[currentQ];
-    const btns = document.querySelectorAll('#options button');
+    const btns = document.querySelectorAll('.option-btn');
     btns.forEach(b => b.disabled = true);
     
     if(idx === q.a) { 
         btns[idx].style.background = "#22c55e"; 
+        btns[idx].style.borderColor = "#22c55e";
         xp += 20; updateXP();
         document.getElementById('next_q').style.display = "block";
     } else { 
         btns[idx].style.background = "#ef4444"; 
+        btns[idx].style.borderColor = "#ef4444";
         btns[q.a].style.background = "#22c55e"; 
         
         if(!isPremium) {
             lives--;
-            document.querySelector('.lives-indicator').innerText = getHearts();
+            document.querySelector('.lives-box').innerText = "❤️".repeat(lives) + "🖤".repeat(3 - lives);
             if(lives <= 0) {
-                setTimeout(() => { alert(ui[currentLang]?.txt_lose || "GAME OVER"); nav('home'); }, 600);
+                setTimeout(() => { alert(ui[currentLang]?.txt_lose); nav('home'); }, 600);
                 return;
             }
         }
