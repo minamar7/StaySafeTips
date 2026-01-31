@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Security Checkup – Stay Safe Premium</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="./styles.css" />
 
   <style>
     :root {
@@ -13,12 +12,41 @@
       --card-bg: rgba(30, 41, 59, 0.7);
     }
 
-    body { background: var(--bg-dark); }
+    body {
+      margin: 0;
+      background: var(--bg-dark);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont;
+      color: #e5e7eb;
+    }
+
+    .app-shell {
+      max-width: 480px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .back-btn {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+
+    .app-header h1 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .sub {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
 
     .checkup-block {
       background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 20px;
       padding: 18px;
       margin-bottom: 16px;
@@ -27,7 +55,7 @@
 
     .checkup-block.scanning {
       border-color: var(--accent-gold);
-      box-shadow: 0 0 15px rgba(250, 204, 21, 0.1);
+      box-shadow: 0 0 18px rgba(250,204,21,0.15);
     }
 
     .checkup-block h3 {
@@ -36,22 +64,21 @@
       margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .status-text {
       font-size: 0.9rem;
       color: #94a3b8;
-      font-weight: 500;
     }
 
-    .status-text.warning { color: #fbbf24; }
-    .status-text.safe { color: #22c55e; }
+    .warning { color: #fbbf24; font-weight: 600; }
+    .safe { color: #22c55e; font-weight: 600; }
 
-    /* Progress Bar */
+    /* Progress */
     .scan-progress-container {
       height: 6px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       border-radius: 10px;
       margin: 20px 0;
       overflow: hidden;
@@ -62,129 +89,156 @@
       height: 100%;
       width: 0%;
       background: var(--accent-gold);
-      transition: width 0.2s ease;
+      transition: width 0.25s ease;
     }
 
     #run-checkup-btn {
+      width: 100%;
       background: linear-gradient(135deg, #facc15, #eab308);
       color: #422006;
-      font-weight: 800;
-      border-radius: 16px;
+      font-weight: 900;
+      border-radius: 18px;
       padding: 18px;
       margin-top: 10px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      border: none;
+      font-size: 1rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.35);
     }
 
-    .back-btn {
-      color: #64748b;
-      text-decoration: none;
-      font-size: 0.85rem;
-      margin-bottom: 20px;
-      display: block;
+    ul {
+      padding-left: 18px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #cbd5f5;
     }
   </style>
 </head>
 
 <body>
-  <div class="app-shell">
-    <a href="index.html" class="back-btn">← Πίσω στο Dashboard</a>
+<div class="app-shell">
 
-    <header class="app-header">
-      <div>
-        <h1 style="font-size: 1.5rem;">🔐 Security Checkup</h1>
-        <p class="sub">Πλήρης έλεγχος ψηφιακού αποτυπώματος</p>
-      </div>
-    </header>
+  <a href="index.html" class="back-btn">← Πίσω στο Dashboard</a>
 
-    <div class="scan-progress-container" id="progress-container">
-      <div class="scan-progress-bar" id="progress-bar"></div>
-    </div>
+  <header class="app-header">
+    <h1>🔐 Security Checkup</h1>
+    <p class="sub">Πλήρης έλεγχος ψηφιακής ασφάλειας</p>
+  </header>
 
-    <main>
-      <div class="checkup-block" id="block-pw">
-        <h3>🛡️ Password Strength</h3>
-        <p class="status-text" id="pw-strength">Κατάσταση: Αναμονή...</p>
-      </div>
-
-      <div class="checkup-block" id="block-2fa">
-        <h3>🔑 2-Factor Authentication</h3>
-        <p class="status-text" id="twofa-status">Κατάσταση: Αναμονή...</p>
-      </div>
-
-      <div class="checkup-block">
-        <h3>📱 Device Integrity</h3>
-        <ul style="color: #94a3b8; font-size: 0.85rem; padding-left: 18px; line-height: 1.6;">
-          <li>Screen lock & Biometrics</li>
-          <li>OS Update Status</li>
-          <li>Root/Jailbreak Check</li>
-        </ul>
-      </div>
-
-      <div class="checkup-block" id="block-risk">
-        <h3>⚠️ Scam Exposure Risk</h3>
-        <p class="status-text" id="risk-score">Επίπεδο ρίσκου: Μη υπολογισμένο</p>
-      </div>
-
-      <button id="run-checkup-btn">ΕΚΤΕΛΕΣΗ ΕΛΕΓΧΟΥ</button>
-    </main>
+  <div class="scan-progress-container" id="progress-container">
+    <div class="scan-progress-bar" id="progress-bar"></div>
   </div>
 
-  <script>
-    // Premium Logic
-    (function () {
-      const isPremium = localStorage.getItem("ss_premium") === "true"; // Χρήση του ss_premium κλειδιού
-      if (!isPremium) {
-        window.location.href = "index.html";
-        return;
-      }
-    })();
+  <main>
 
-    const runBtn = document.getElementById("run-checkup-btn");
-    const progressBar = document.getElementById("progress-bar");
-    const progressContainer = document.getElementById("progress-container");
+    <div class="checkup-block">
+      <h3>📊 Security Score</h3>
+      <p class="status-text" id="security-score">—</p>
+    </div>
 
-    const elements = {
-      pw: document.getElementById("pw-strength"),
-      twofa: document.getElementById("twofa-status"),
-      risk: document.getElementById("risk-score"),
-      blocks: document.querySelectorAll('.checkup-block')
-    };
+    <div class="checkup-block" id="block-pw">
+      <h3>🛡️ Password Strength</h3>
+      <p class="status-text" id="pw-strength">Κατάσταση: Αναμονή…</p>
+    </div>
 
-    runBtn.addEventListener("click", () => {
-      // UI Reset
-      runBtn.disabled = true;
-      runBtn.textContent = "Σάρωση σε εξέλιξη...";
-      progressContainer.style.display = "block";
-      let progress = 0;
+    <div class="checkup-block" id="block-2fa">
+      <h3>🔑 2-Factor Authentication</h3>
+      <p class="status-text" id="twofa-status">Κατάσταση: Αναμονή…</p>
+    </div>
 
-      // Simulation Logic
-      const interval = setInterval(() => {
-        progress += Math.random() * 15;
-        if (progress > 100) progress = 100;
-        progressBar.style.width = progress + "%";
+    <div class="checkup-block">
+      <h3>📱 Device Integrity</h3>
+      <ul>
+        <li>Screen Lock & Biometrics</li>
+        <li>OS Update Status</li>
+        <li>Root / Jailbreak Detection</li>
+      </ul>
+    </div>
 
-        if (progress >= 100) {
-          clearInterval(interval);
-          completeCheckup();
-        }
-      }, 150);
+    <div class="checkup-block" id="block-risk">
+      <h3>⚠️ Scam Exposure Risk</h3>
+      <p class="status-text" id="risk-score">Επίπεδο ρίσκου: —</p>
+    </div>
 
-      // Visual feedback during scan
-      elements.blocks.forEach(b => b.classList.add('scanning'));
-    });
+    <div class="checkup-block">
+      <h3>🚀 Προτεινόμενες Ενέργειες</h3>
+      <ul>
+        <li>Ενεργοποίησε 2FA παντού</li>
+        <li>Χρησιμοποίησε password manager</li>
+        <li>Απόφυγε links από άγνωστους</li>
+      </ul>
+    </div>
 
-    function completeCheckup() {
-      // Final Results
-      elements.pw.innerHTML = "Κατάσταση: <span class='warning'>Μέτρια</span> — Χρειάζεστε μεγαλύτερους κωδικούς.";
-      elements.twofa.innerHTML = "Κατάσταση: <span class='warning'>Ελλιπής</span> — Ενεργοποιήστε το 2FA παντού.";
-      elements.risk.innerHTML = "Επίπεδο ρίσκου: <span class='safe'>Χαμηλό</span> — Τακτικές ενημερώσεις ενεργές.";
+    <button id="run-checkup-btn">ΕΚΤΕΛΕΣΗ ΕΛΕΓΧΟΥ</button>
 
-      elements.blocks.forEach(b => b.classList.remove('scanning'));
-      runBtn.disabled = false;
-      runBtn.textContent = "ΕΠΑΝΑΛΗΨΗ ΕΛΕΓΧΟΥ";
-      
-      if (window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
+  </main>
+</div>
+
+<script>
+/* PREMIUM GUARD */
+(function(){
+  if (localStorage.getItem("ss_premium") !== "true") {
+    window.location.href = "index.html";
+  }
+})();
+
+const runBtn = document.getElementById("run-checkup-btn");
+const progressBar = document.getElementById("progress-bar");
+const progressContainer = document.getElementById("progress-container");
+
+const el = {
+  pw: document.getElementById("pw-strength"),
+  twofa: document.getElementById("twofa-status"),
+  risk: document.getElementById("risk-score"),
+  score: document.getElementById("security-score"),
+  blocks: document.querySelectorAll(".checkup-block")
+};
+
+const scanSteps = [
+  () => el.pw.textContent = "Έλεγχος ισχύος κωδικών…",
+  () => el.twofa.textContent = "Ανάλυση 2FA προστασίας…",
+  () => el.risk.textContent = "Υπολογισμός scam risk…"
+];
+
+runBtn.addEventListener("click", () => {
+  runBtn.disabled = true;
+  runBtn.textContent = "Σάρωση σε εξέλιξη…";
+  progressContainer.style.display = "block";
+  el.blocks.forEach(b => b.classList.add("scanning"));
+
+  let progress = 0;
+  let step = 0;
+
+  const interval = setInterval(() => {
+    progress += Math.random() * 14;
+    if (progress > 100) progress = 100;
+    progressBar.style.width = progress + "%";
+
+    if (step < scanSteps.length && progress > (step + 1) * 30) {
+      scanSteps[step++]();
     }
-  </script>
+
+    if (progress >= 100) {
+      clearInterval(interval);
+      completeCheckup();
+    }
+  }, 160);
+});
+
+function completeCheckup() {
+  const score = Math.floor(78 + Math.random() * 18);
+
+  el.score.innerHTML = `Σκορ: <span class="${score >= 85 ? 'safe' : 'warning'}">${score}/100</span>`;
+  el.pw.innerHTML = "Κατάσταση: <span class='warning'>Μέτρια</span> — Χρησιμοποίησε μεγαλύτερους κωδικούς.";
+  el.twofa.innerHTML = "Κατάσταση: <span class='warning'>Ελλιπής</span> — Ενεργοποίησε 2FA.";
+  el.risk.innerHTML = "Επίπεδο ρίσκου: <span class='safe'>Χαμηλό</span>";
+
+  el.blocks.forEach(b => b.classList.remove("scanning"));
+  runBtn.disabled = false;
+  runBtn.textContent = "ΕΠΑΝΑΛΗΨΗ ΕΛΕΓΧΟΥ";
+
+  navigator.vibrate?.([100, 50, 100]);
+}
+</script>
+
 </body>
 </html>
