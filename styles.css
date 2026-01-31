@@ -6,7 +6,7 @@
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  -webkit-tap-highlight-color: transparent; /* Αφαιρεί το μπλε flash στο mobile */
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {
@@ -29,13 +29,13 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center; /* Κεντράρισμα σε desktop */
+  align-items: flex-start; /* Αλλαγή για καλύτερο scrolling στο mobile */
   padding: 16px;
   overflow-x: hidden;
 }
 
 /* =========================================================
-   APP SHELL (The Container)
+   APP SHELL & NAVIGATION
 ========================================================= */
 .app-shell {
   width: 100%;
@@ -44,42 +44,36 @@ body {
   background: var(--bg-main);
   border-radius: 32px;
   border: 1px solid var(--border);
-  padding: 24px;
+  padding: 20px;
   position: relative;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
 }
 
-.hidden { display: none !important; }
-
-/* =========================================================
-   HEADER & NAVIGATION
-========================================================= */
-.app-header {
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+/* ΚΡΙΣΙΜΟ: Διαχείριση οθονών */
+.app-screen {
+  display: none; /* Κρύβει όλες τις οθόνες εξ ορισμού */
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.app-header h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
-.app-header p { font-size: 0.85rem; color: var(--text-soft); }
+.app-screen.active {
+  display: block !important; /* Δείχνει μόνο την ενεργή */
+}
 
-#lang-select {
-  background: var(--bg-soft);
-  color: var(--text-main);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  outline: none;
+.hidden { display: none !important; }
+
+.app-header {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .nav-tabs {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 5px;
   background: var(--bg-soft);
   padding: 6px;
   border-radius: 20px;
@@ -96,33 +90,19 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  transition: 0.3s;
-  margin-top: 0; /* Override global button margin */
+  cursor: pointer;
 }
-
-.nav-tab .icon { font-size: 1.2rem; }
 
 .nav-tab.active {
   background: var(--bg-main);
   color: var(--accent);
   border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 /* =========================================================
-   SCREENS & CARDS
+   CARDS & UI ELEMENTS
 ========================================================= */
-.app-screen {
-  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-grow: 1;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.snapshot, .daily-card {
+.snapshot, .q-card {
   background: var(--bg-card);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
@@ -136,52 +116,32 @@ body {
   color: var(--accent);
   padding: 4px 12px;
   border-radius: 99px;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
 /* =========================================================
-   QUIZ & INTERACTIVE
+   QUIZ INTERFACE
 ========================================================= */
-.quiz-options {
+.quiz-question-box h3 {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.quiz-options-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.opt-btn { /* Χρησιμοποιούμε κλάση αντί για σκέτο button */
-  background: var(--bg-soft);
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  padding: 16px;
-  border-radius: 16px;
-  text-align: left;
-  font-size: 0.95rem;
-  transition: 0.2s;
-  margin-top: 0;
-}
-
-.opt-btn:hover { background: rgba(255,255,255,0.05); }
-
-.opt-btn.correct {
-  background: var(--accent) !important;
-  color: var(--bg-main);
-  font-weight: 700;
-  border-color: transparent;
-}
-
-.opt-btn.wrong {
-  background: var(--error) !important;
-  color: white;
-  border-color: transparent;
+  gap: 10px;
 }
 
 /* =========================================================
-   BUTTONS
+   BUTTONS (Main CTA & Others)
 ========================================================= */
-button {
+.main-cta, button {
+  width: 100%;
   background: linear-gradient(135deg, var(--accent), var(--accent-dark));
   color: white;
   border: none;
@@ -190,78 +150,85 @@ button {
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.2s, filter 0.2s;
-  margin-top: 12px;
+  transition: 0.2s;
 }
 
-button:active { transform: scale(0.96); }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* =========================================================
-   PREMIUM & ONBOARDING
-========================================================= */
-.upgrade-banner {
-  background: linear-gradient(135deg, var(--premium), #ca8a04);
-  color: #422006;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
-  font-weight: 800;
-  margin-top: 20px;
-  box-shadow: 0 10px 20px rgba(250, 204, 21, 0.2);
-}
-
-.onboarding-screen {
-  position: fixed;
-  inset: 0;
-  background: var(--bg-main);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  justify-content: space-between;
-}
-
-.onboarding-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-.onboarding-slide h1 {
-  font-size: 2.2rem;
-  margin-bottom: 16px;
-  background: linear-gradient(to right, #fff, var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.secondary-btn {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--text-soft);
 }
 
 /* =========================================================
-   BADGES GRID
+   BADGES SYSTEM
 ========================================================= */
 .badges-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 16px;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .badge {
   background: var(--bg-soft);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 20px 10px;
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  padding: 25px 10px;
   text-align: center;
-  opacity: 0.4;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.5s ease;
+}
+
+.badge small { font-size: 0.8rem; color: var(--text-soft); }
+
+.badge.locked {
   filter: grayscale(1);
-  transition: 0.5s;
+  opacity: 0.3;
 }
 
 .badge.unlocked {
-  opacity: 1;
   filter: grayscale(0);
+  opacity: 1;
   border-color: var(--accent);
-  background: radial-gradient(circle at center, rgba(34, 197, 94, 0.15), var(--bg-soft));
+  background: radial-gradient(circle at center, rgba(34, 197, 94, 0.2), var(--bg-soft));
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   QUIZ RESULT MODAL
+========================================================= */
+.quiz-result {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.95);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.quiz-result-card {
+  background: var(--bg-soft);
+  border: 1px solid var(--accent);
+  padding: 40px 24px;
+  border-radius: 32px;
+  text-align: center;
+  width: 100%;
+  max-width: 350px;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
