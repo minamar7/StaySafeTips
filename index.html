@@ -4,160 +4,254 @@
 <meta charset="UTF-8">
 <title>Stay Safe Elite</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#020617">
+<meta name="theme-color" content="#0b1121">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
 <style>
-:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; }
+:root { 
+    --bg: #0b1121; 
+    --card: #161e2f; 
+    --accent: #0ea5e9; 
+    --text: #ffffff; 
+}
+
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
-body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 80%); z-index: -1; }
+
+body { 
+    margin: 0; 
+    background-color: var(--bg); 
+    color: var(--text); 
+    overflow-x: hidden; 
+    min-height: 100vh;
+}
+
 .hidden { display: none !important; }
 
-/* SPLASH SCREEN - Το "Super Wow" Design σου */
-.overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; }
-.logo-anim { font-size: 80px; filter: drop-shadow(0 0 20px var(--accent)); margin-bottom: 10px; animation: float 3s infinite ease-in-out; }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 360px; margin-top: 20px; max-height: 60vh; overflow-y: auto; padding: 10px; border-radius: 20px; }
-.lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.lang-btn:active { transform: scale(0.95); background: rgba(56, 189, 248, 0.2); }
-.lang-flag { font-size: 28px; }
-.lang-name { font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+/* HEADER - ΟΠΩΣ ΣΤΗ ΦΩΤΟ */
+.app-header { 
+    padding: 30px 20px 10px; 
+    background: var(--bg);
+}
 
-/* UI ELEMENTS */
-.app-header { padding: 50px 20px 20px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
-.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
-.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; }
-.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
-.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
-.nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
-.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
-.nav-tab.active { color: var(--accent); }
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
 
-/* AD SLOT */
-.ad-slot { margin: 15px 0; background: rgba(0,0,0,0.2); border-radius: 15px; min-height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.streak { color: #ff9800; font-weight: bold; font-size: 20px; }
+.level-label { color: #38bdf8; font-weight: 800; font-size: 18px; }
+
+.xp-container {
+    width: 100%;
+    background: #1e293b;
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+}
+
+.xp-fill { 
+    background: #334155; 
+    height: 100%; 
+    width: 0%; 
+    transition: 0.5s; 
+}
+
+/* MAIN CARD DESIGN */
+.main-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.glass-card { 
+    background: var(--card); 
+    border-radius: 40px; 
+    padding: 45px 25px; 
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.card-title { font-size: 24px; font-weight: 600; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+/* ΤΟ ΓΑΛΑΖΙΟ ΚΟΥΜΠΙ ΣΟΥ */
+.main-cta { 
+    background: var(--accent); 
+    border: none; 
+    color: #000000; 
+    padding: 22px; 
+    border-radius: 35px; 
+    font-size: 18px; 
+    font-weight: 800; 
+    width: 100%; 
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+}
+
+/* QUIZ OPTIONS */
+.option-btn {
+    background: #1e293b;
+    border: none;
+    border-radius: 20px;
+    padding: 18px;
+    width: 100%;
+    margin-bottom: 12px;
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* ADS AREA */
+.ad-slot { 
+    margin-top: 25px; 
+    min-height: 100px; 
+    background: rgba(15, 23, 42, 0.5); 
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* NAVIGATION */
+.nav-tabs { 
+    position: fixed; 
+    bottom: 0; 
+    width: 100%; 
+    height: 85px; 
+    background: var(--bg); 
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center;
+    border-top: 1px solid #1e293b;
+}
+
+.nav-tab { font-size: 32px; cursor: pointer; opacity: 0.4; filter: grayscale(1); }
+.nav-tab.active { opacity: 1; filter: grayscale(0); }
+
+/* ONBOARDING / SPLASH SCREEN */
+.overlay { 
+    position: fixed; inset: 0; background: var(--bg); 
+    display: flex; flex-direction: column; align-items: center; justify-content: center; 
+    z-index: 10000; padding: 20px; 
+}
+.lang-grid { 
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
+    width: 100%; max-width: 340px; margin-top: 20px;
+    max-height: 60vh; overflow-y: auto;
+}
+.lang-btn { 
+    background: #1e293b; border-radius: 15px; padding: 15px; 
+    text-align: center; color: white; cursor: pointer; 
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+}
 </style>
 </head>
 <body>
 
 <section id="onboarding" class="overlay">
-  <div>
-    <div class="logo-anim">🛡️</div>
-    <h1 style="font-size:26px; margin-bottom:5px;">Stay Safe Elite</h1>
-    <p style="color:var(--muted); font-size:14px;">Select your language</p>
-    <div class="lang-grid">
-        <div class="lang-btn" onclick="initApp('el')"><span class="lang-flag">🇬🇷</span><span class="lang-name">GREEK</span></div>
-        <div class="lang-btn" onclick="initApp('en')"><span class="lang-flag">🇺🇸</span><span class="lang-name">ENGLISH</span></div>
-        <div class="lang-btn" onclick="initApp('de')"><span class="lang-flag">🇩🇪</span><span class="lang-name">GERMAN</span></div>
-        <div class="lang-btn" onclick="initApp('fr')"><span class="lang-flag">🇫🇷</span><span class="lang-name">FRENCH</span></div>
-        <div class="lang-btn" onclick="initApp('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">SPANISH</span></div>
-        <div class="lang-btn" onclick="initApp('it')"><span class="lang-flag">🇮🇹</span><span class="lang-name">ITALIAN</span></div>
-        <div class="lang-btn" onclick="initApp('pt')"><span class="lang-flag">🇵🇹</span><span class="lang-name">PORTUGU</span></div>
-        <div class="lang-btn" onclick="initApp('ru')"><span class="lang-flag">🇷🇺</span><span class="lang-name">RUSSIAN</span></div>
-        <div class="lang-btn" onclick="initApp('zh')"><span class="lang-flag">🇨🇳</span><span class="lang-name">CHINESE</span></div>
-        <div class="lang-btn" onclick="initApp('hi')"><span class="lang-flag">🇮🇳</span><span class="lang-name">HINDI</span></div>
-    </div>
+  <div style="font-size: 60px;">🛡️</div>
+  <h1 style="margin: 15px 0;">Stay Safe Elite</h1>
+  <div class="lang-grid">
+      <div class="lang-btn" onclick="initApp('el')"><span>🇬🇷</span><small>GREEK</small></div>
+      <div class="lang-btn" onclick="initApp('en')"><span>🇺🇸</span><small>ENGLISH</small></div>
+      <div class="lang-btn" onclick="initApp('de')"><span>🇩🇪</span><small>GERMAN</small></div>
+      <div class="lang-btn" onclick="initApp('fr')"><span>🇫🇷</span><small>FRENCH</small></div>
+      <div class="lang-btn" onclick="initApp('es')"><span>🇪🇸</span><small>SPANISH</small></div>
+      <div class="lang-btn" onclick="initApp('it')"><span>🇮🇹</span><small>ITALIAN</small></div>
+      <div class="lang-btn" onclick="initApp('pt')"><span>🇵🇹</span><small>PORTUGU</small></div>
+      <div class="lang-btn" onclick="initApp('ru')"><span>🇷🇺</span><small>RUSSIAN</small></div>
+      <div class="lang-btn" onclick="initApp('zh')"><span>🇨🇳</span><small>CHINESE</small></div>
+      <div class="lang-btn" onclick="initApp('hi')"><span>🇮🇳</span><small>HINDI</small></div>
   </div>
 </section>
 
 <div id="main_app" class="hidden">
   <header class="app-header">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_streak">Days</span></div>
-      <div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
+    <div class="header-top">
+      <div class="streak">🔥 <span id="streak_val">1</span></div>
+      <div class="level-label">LEVEL <span id="level_val">1</span></div>
     </div>
-    <div class="xp-bar" style="margin-top:10px;"><div id="xp_fill" class="xp-fill"></div></div>
+    <div class="xp-container"><div id="xp_fill" class="xp-fill"></div></div>
   </header>
 
-  <main style="padding: 20px 20px 100px;">
+  <main class="main-container">
     <section id="screen_home">
       <div class="glass-card">
-        <h2 id="txt_home_title">🛡️ Stay Safe</h2>
+        <div class="card-title">🛡️ Security Check</div>
         <button id="txt_start_btn" class="main-cta" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
-        
         <div id="ad_container" class="ad-slot">
-          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto"></ins>
-          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
       </div>
     </section>
-
     <section id="screen_quiz" class="hidden"></section>
   </main>
 
   <nav class="nav-tabs">
-    <button class="nav-tab active" onclick="nav('home', this)">🏠</button>
-    <button class="nav-tab" onclick="nav('premium', this)">💎</button>
+    <div class="nav-tab active" onclick="nav('home', this)">🏠</div>
+    <div class="nav-tab" onclick="nav('premium', this)">💎</div>
   </nav>
 </div>
 
 <script>
-const ui = {
-    el: { txt_streak: "Ημέρες", txt_home_title: "🛡️ Ασφάλεια", txt_start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", txt_next: "ΕΠΟΜΕΝΟ" },
-    en: { txt_streak: "Days", txt_home_title: "🛡️ Security", txt_start_btn: "START TEST", txt_next: "NEXT" },
-    de: { txt_streak: "Tage", txt_home_title: "🛡️ Sicherheit", txt_start_btn: "TEST STARTEN", txt_next: "WEITER" },
-    fr: { txt_streak: "Jours", txt_home_title: "🛡️ Sécurité", txt_start_btn: "DÉMARRER", txt_next: "SUIVANT" },
-    es: { txt_streak: "Días", txt_home_title: "🛡️ Seguridad", txt_start_btn: "EMPEZAR", txt_next: "SIGUIENTE" },
-    it: { txt_streak: "Giorni", txt_home_title: "🛡️ Sicurezza", txt_start_btn: "INIZIA", txt_next: "AVANTI" },
-    pt: { txt_streak: "Dias", txt_home_title: "🛡️ Segurança", txt_start_btn: "INICIAR", txt_next: "PRÓXIMO" },
-    ru: { txt_streak: "Дни", txt_home_title: "🛡️ Защита", txt_start_btn: "НАЧΑΤЬ", txt_next: "ДАΛΕΕ" },
-    zh: { txt_streak: "天", txt_home_title: "🛡️ 安全", txt_start_btn: "开始测试", txt_next: "下一步" },
-    hi: { txt_streak: "दिन", txt_home_title: "🛡️ सुरक्षा", txt_start_btn: "शुरू करें", txt_next: "अगला" }
-};
-
 let currentLang = 'el', xp = 0, currentQ = 0, quizData = [], isPremium = false;
 
-// Έλεγχος αν είναι Premium
-if(localStorage.getItem('isPremium') === 'true') isPremium = true;
+if(localStorage.getItem('isPremium') === 'true') {
+    isPremium = true;
+    document.getElementById('ad_container')?.classList.add('hidden');
+}
 
 function initApp(lang) {
     currentLang = lang;
-    const dict = ui[lang] || ui['en'];
-    for (let id in dict) { if(document.getElementById(id)) document.getElementById(id).innerText = dict[id]; }
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
-    if(isPremium) document.getElementById('ad_container')?.classList.add('hidden');
 }
 
 async function startQuiz() {
     const mode = isPremium ? "premium" : "free";
-    const fileName = `questions_${mode}_${currentLang}.json`;
+    const fileName = `./questions_${mode}_${currentLang}.json`;
     
     try {
-        const res = await fetch('./' + fileName);
+        const res = await fetch(fileName);
         if(!res.ok) throw new Error();
-        const data = await res.json();
-        quizData = data.sort(() => Math.random() - 0.5).slice(0, 5);
-        currentQ = 0; 
-        showQuestion(); 
-        nav('quiz');
+        quizData = (await res.json()).sort(() => Math.random() - 0.5).slice(0, 5);
+        currentQ = 0; showQuestion(); nav('quiz');
     } catch(e) {
-        alert("Error loading: " + fileName);
+        alert("Error: Δεν βρέθηκε το " + fileName);
     }
 }
 
 function showQuestion() {
     const q = quizData[currentQ];
-    const quizSec = document.getElementById('screen_quiz');
-    quizSec.innerHTML = `<div class="glass-card">
-        <h3>${q.q}</h3>
-        <div id="options">${q.o.map((opt, i) => `<button class="mini-card" style="width:100%; margin-bottom:10px; padding:18px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:15px; color:white; cursor:pointer;" onclick="handleAnswer(${i})">${opt}</button>`).join('')}</div>
-        <button id="next_q" class="main-cta" style="display:none; margin-top:15px;" onclick="nextStep()">${ui[currentLang]?.txt_next || 'NEXT'}</button>
-    </div>`;
+    document.getElementById('screen_quiz').innerHTML = `
+      <div class="glass-card">
+        <h3 style="margin-bottom:25px; line-height:1.4;">${q.q}</h3>
+        <div id="options">${q.o.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('')}</div>
+        <button id="next_q" class="main-cta" style="display:none; margin-top:20px;" onclick="nextStep()">ΕΠΟΜΕΝΟ</button>
+      </div>`;
 }
 
 function handleAnswer(idx) {
     const q = quizData[currentQ];
-    const btns = document.querySelectorAll('#options button');
+    const btns = document.querySelectorAll('.option-btn');
     btns.forEach(b => b.disabled = true);
+    
     if(idx === q.a) { 
-        btns[idx].style.background = "#22c55e"; 
+        btns[idx].style.background = "#10b981"; 
         xp += 20; updateXP();
     } else { 
         btns[idx].style.background = "#ef4444"; 
-        btns[q.a].style.background = "#22c55e"; 
+        btns[q.a].style.background = "#10b981"; 
     }
     document.getElementById('next_q').style.display = "block";
 }
@@ -165,7 +259,7 @@ function handleAnswer(idx) {
 function nextStep() {
     currentQ++;
     if(currentQ < quizData.length) showQuestion();
-    else { nav('home'); confetti({particleCount: 150, spread: 70, origin: { y: 0.6 }}); }
+    else { nav('home'); confetti({particleCount: 150}); }
 }
 
 function updateXP() {
@@ -174,12 +268,10 @@ function updateXP() {
 }
 
 function nav(id, btn) {
-    document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-    document.getElementById('screen_' + id).classList.remove('hidden');
-    if(btn) {
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-    }
+    document.getElementById('screen_home').classList.add('hidden');
+    document.getElementById('screen_quiz').classList.add('hidden');
+    if(id === 'home') document.getElementById('screen_home').classList.remove('hidden');
+    else document.getElementById('screen_quiz').classList.remove('hidden');
 }
 </script>
 </body>
