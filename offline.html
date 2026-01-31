@@ -2,55 +2,96 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8" />
-  <title>Offline Mode – Stay Safe Premium</title>
+  <title>Offline Mode – Stay Safe Elite</title>
+
+  <!-- Mobile Safe -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#020617" />
+
   <link rel="stylesheet" href="./styles.css" />
 
   <style>
     :root {
       --safe-green: #22c55e;
-      --low-power-bg: #020617;
-      --card-border: rgba(255, 255, 255, 0.05);
+      --elite-yellow: #facc15;
+      --bg-main: #020617;
+      --card-bg: rgba(15, 23, 42, 0.85);
+      --card-border: rgba(255, 255, 255, 0.06);
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
     }
 
     body {
-      background-color: var(--low-power-bg);
-      color: #e2e8f0;
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Battery Saving Card Style */
+    .app-shell {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .app-header {
+      margin-bottom: 20px;
+    }
+
+    .offline-indicator {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--safe-green);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 6px 0;
+      font-size: 1.5rem;
+    }
+
+    .sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
     .offline-block {
-      background: rgba(15, 23, 42, 0.8);
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 18px;
-      padding: 20px;
+      padding: 18px;
       margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      animation: fadeIn 0.35s ease-out both;
     }
 
     .offline-block h3 {
-      margin-bottom: 12px;
-      color: #facc15;
-      font-size: 1.1rem;
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+      color: var(--elite-yellow);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .offline-block ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     .offline-block li {
-      color: #94a3b8;
-      font-size: 0.95rem;
-      margin-bottom: 10px;
-      line-height: 1.4;
       display: flex;
-      align-items: flex-start;
       gap: 8px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: var(--text-muted);
     }
 
     .offline-block li::before {
@@ -59,42 +100,32 @@
       font-weight: bold;
     }
 
-    /* Offline Badge */
-    .offline-indicator {
-      display: inline-block;
-      padding: 4px 12px;
-      background: rgba(34, 197, 94, 0.1);
-      color: var(--safe-green);
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
     #refresh-offline-btn {
-      background: linear-gradient(135deg, #334155, #0f172a);
-      color: #facc15;
-      border: 1px solid #facc15;
-      font-weight: bold;
+      width: 100%;
+      margin-top: 8px;
       padding: 16px;
       border-radius: 14px;
-      margin-top: 10px;
-      width: 100%;
+      font-weight: 800;
+      letter-spacing: 0.03em;
       cursor: pointer;
+      background: linear-gradient(135deg, #334155, #0f172a);
+      color: var(--elite-yellow);
+      border: 1px solid var(--elite-yellow);
     }
 
     #refresh-offline-btn:active {
-      background: #facc15;
+      background: var(--elite-yellow);
       color: #000;
-    }
-    
-    .extra-offline {
-      animation: fadeIn 0.4s ease-out forwards;
     }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Reduced motion respect */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
@@ -103,124 +134,132 @@
   <div class="app-shell">
 
     <header class="app-header">
-      <div>
-        <span class="offline-indicator">✓ OFFLINE READY</span>
-        <h1>📱 Offline Mode</h1>
-        <p class="sub">Πρωτόκολλα ασφαλείας χωρίς ανάγκη δικτύου</p>
-      </div>
+      <span class="offline-indicator">✓ OFFLINE READY</span>
+      <h1>📱 Offline Mode</h1>
+      <p class="sub">Πρωτόκολλα ασφάλειας χωρίς ανάγκη σύνδεσης</p>
     </header>
 
-    <main class="app-screen active" id="offline-container">
+    <main id="offline-container" aria-live="polite">
 
       <div class="offline-block">
         <h3>🛡️ Οδηγός Επιβίωσης</h3>
         <ul>
-          <li>Μείνετε σε σημεία ορατά από άλλους ανθρώπους.</li>
-          <li>Αποφύγετε τη μετακίνηση σε άγνωστες, απομονωμένες περιοχές.</li>
-          <li>Ενημερώστε κάποιον για την τελευταία γνωστή τοποθεσία σας.</li>
+          <li>Μείνετε σε σημεία με κίνηση και ορατότητα.</li>
+          <li>Αποφύγετε απομονωμένες περιοχές.</li>
+          <li>Ενημερώστε κάποιον για την τοποθεσία σας.</li>
         </ul>
       </div>
 
       <div class="offline-block">
         <h3>🔋 Εξοικονόμηση Μπαταρίας</h3>
         <ul>
-          <li>Χαμηλώστε τη φωτεινότητα της οθόνης στο ελάχιστο.</li>
-          <li>Απενεργοποιήστε Bluetooth, Wi‑Fi και Hotspot.</li>
-          <li>Κλείστε όλες τις εφαρμογές που τρέχουν στο παρασκήνιο.</li>
+          <li>Χαμηλώστε τη φωτεινότητα στο ελάχιστο.</li>
+          <li>Κλείστε Wi-Fi, Bluetooth και Hotspot.</li>
+          <li>Κλείστε εφαρμογές παρασκηνίου.</li>
         </ul>
       </div>
 
       <div class="offline-block">
         <h3>🛠️ Offline Εργαλεία</h3>
         <ul>
-          <li>Χρησιμοποιήστε τον φακό μόνο αν είναι απολύτως απαραίτητο.</li>
-          <li>Έχετε αποθηκευμένους τους αριθμούς ανάγκης στις "Επαφές".</li>
-          <li>Κρατήστε ένα φυσικό αντίγραφο των βασικών εγγράφων σας.</li>
+          <li>Χρησιμοποιήστε τον φακό μόνο αν χρειάζεται.</li>
+          <li>Έχετε αποθηκευμένους αριθμούς ανάγκης.</li>
+          <li>Κρατήστε φυσικό αντίγραφο εγγράφων.</li>
         </ul>
       </div>
 
-      </main>
+    </main>
 
     <button id="refresh-offline-btn">ΑΝΑΝΕΩΣΗ ΣΥΜΒΟΥΛΩΝ</button>
   </div>
 
   <script>
-    // Premium gate (ss_premium κλειδί συνέπειας)
-    (function () {
-      const isPremium = localStorage.getItem("ss_premium") === "true";
-      if (!isPremium) {
-        window.location.href = "index.html";
+    (() => {
+      "use strict";
+
+      /* =========================
+         SECURITY / PREMIUM GATE
+      ========================= */
+      if (localStorage.getItem("ss_premium") !== "true") {
+        location.replace("index.html");
         return;
       }
-    })();
 
-    const refreshBtn = document.getElementById("refresh-offline-btn");
-    const container = document.getElementById("offline-container");
+      /* =========================
+         UTILITIES
+      ========================= */
+      const haptic = (ms = 12) => navigator.vibrate?.(ms);
 
-    const extraBlocks = [
-      {
-        title: "⚠️ Τι να ΑΠΟΦΥΓΕΤΕ",
-        items: [
-          "Μην περιπλανιέστε τυχαία χωρίς συγκεκριμένο πλάνο.",
-          "Μην σπαταλάτε μπαταρία σε social media ή παιχνίδια.",
-          "Μην εμπιστεύεστε τη συσκευή σας σε αγνώστους."
-        ]
-      },
-      {
-        title: "📍 Προσανατολισμός χωρίς GPS",
-        items: [
-          "Χρησιμοποιήστε τοπόσημα (καταστήματα, κεντρικούς δρόμους).",
-          "Κινηθείτε προς καλά φωτισμένες περιοχές με κίνηση.",
-          "Αποφύγετε αδιέξοδα και στενά δρομάκια."
-        ]
-      },
-      {
-        title: "🛑 Σενάριο Ανάγκης",
-        items: [
-          "Αν νιώθετε ότι σας παρακολουθούν, μπείτε σε ένα ανοιχτό κατάστημα.",
-          "Προσποιηθείτε ότι μιλάτε στο τηλέφωνο αν νιώθετε άβολα.",
-          "Κρατήστε τα κλειδιά σας έτοιμα στο χέρι πριν φτάσετε στην πόρτα."
-        ]
-      }
-    ];
+      const analytics = (event, data = {}) => {
+        // Hook-ready: GA, Segment, self-hosted
+        console.log("📊", event, data);
+      };
 
-    let lastIndex = -1;
+      /* =========================
+         OFFLINE CONTENT ROTATION
+      ========================= */
+      const container = document.getElementById("offline-container");
+      const refreshBtn = document.getElementById("refresh-offline-btn");
 
-    refreshBtn.addEventListener("click", () => {
-      // Αφαίρεση προηγούμενων extra tips
-      const existing = container.querySelectorAll(".extra-offline");
-      existing.forEach(e => e.remove());
+      const blocks = [
+        {
+          title: "⚠️ Τι να ΑΠΟΦΥΓΕΤΕ",
+          items: [
+            "Μην περιπλανιέστε χωρίς πλάνο.",
+            "Μην σπαταλάτε μπαταρία άσκοπα.",
+            "Μην εμπιστεύεστε αγνώστους."
+          ]
+        },
+        {
+          title: "📍 Προσανατολισμός χωρίς GPS",
+          items: [
+            "Χρησιμοποιήστε τοπόσημα.",
+            "Κινηθείτε σε φωτισμένους δρόμους.",
+            "Αποφύγετε αδιέξοδα."
+          ]
+        },
+        {
+          title: "🛑 Σενάριο Ανάγκης",
+          items: [
+            "Μπείτε σε ανοιχτό κατάστημα.",
+            "Προσποιηθείτε τηλεφωνική κλήση.",
+            "Έχετε τα κλειδιά έτοιμα."
+          ]
+        }
+      ];
 
-      // Επιλογή τυχαίου block (διαφορετικό από το προηγούμενο)
-      let currentIndex;
-      do {
-        currentIndex = Math.floor(Math.random() * extraBlocks.length);
-      } while (currentIndex === lastIndex);
-      
-      lastIndex = currentIndex;
-      const block = extraBlocks[currentIndex];
+      let lastIndex = -1;
 
-      const div = document.createElement("div");
-      div.className = "offline-block extra-offline";
+      refreshBtn.addEventListener("click", () => {
+        haptic(15);
+        analytics("offline_refresh");
 
-      const h3 = document.createElement("h3");
-      h3.textContent = block.title;
-      div.appendChild(h3);
+        container.querySelectorAll(".extra").forEach(e => e.remove());
 
-      const ul = document.createElement("ul");
-      block.items.forEach(i => {
-        const li = document.createElement("li");
-        li.textContent = i;
-        ul.appendChild(li);
+        let idx;
+        do { idx = Math.floor(Math.random() * blocks.length); }
+        while (idx === lastIndex);
+        lastIndex = idx;
+
+        const data = blocks[idx];
+        const card = document.createElement("div");
+        card.className = "offline-block extra";
+
+        const h3 = document.createElement("h3");
+        h3.textContent = data.title;
+
+        const ul = document.createElement("ul");
+        data.items.forEach(text => {
+          const li = document.createElement("li");
+          li.textContent = text;
+          ul.appendChild(li);
+        });
+
+        card.append(h3, ul);
+        container.appendChild(card);
       });
 
-      div.appendChild(ul);
-      container.appendChild(div);
-
-      // Feedback δόνησης
-      if (window.navigator.vibrate) window.navigator.vibrate(15);
-    });
+    })();
   </script>
-
 </body>
 </html>
