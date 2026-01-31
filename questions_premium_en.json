@@ -1,0 +1,86 @@
+[
+  {
+    "level": 7,
+    "q": "You receive a video call from your boss. The image is clear, but the voice has a slight metallic tint and they don't blink often. They ask for an urgent wire transfer. What do you do?",
+    "o": ["Execute the transfer immediately.", "Hang up and call them on their mobile to verify.", "Ask them to send the request via email."],
+    "a": 1,
+    "exp": "This is a Deepfake. Lack of blinking and robotic voices are classic signs of AI fraud."
+  },
+  {
+    "level": 7,
+    "q": "A friend sends a voice memo asking for $50 via Revolut because they lost their wallet. The voice sounds exactly like them. What is your move?",
+    "o": ["Send it immediately, it's my friend.", "Ask a question only the real friend would know the answer to.", "Ignore the message."],
+    "a": 1,
+    "exp": "Beware of AI Voice Cloning! With just a 3-second sample, AI can mimic any voice."
+  },
+  {
+    "level": 7,
+    "q": "You see an ad with a famous celebrity promoting a high-return investment platform. What's the first thing you check?",
+    "o": ["If the lip movement perfectly syncs with the audio.", "How many likes the ad has.", "If the celebrity is wearing expensive clothes."],
+    "a": 0,
+    "exp": "Deepfakes often have a slight delay (desync) between audio and lip movement."
+  },
+  {
+    "level": 8,
+    "q": "You get an email stating your password was leaked on the Dark Web from an old app. What is the risk?",
+    "o": ["None, since I don't use that app anymore.", "Hackers might use it to access my email or e-banking.", "Only that specific app will be hacked."],
+    "a": 1,
+    "exp": "Scammers use 'Credential Stuffing': they try your leaked password on every major service."
+  },
+  {
+    "level": 8,
+    "q": "An extortion message contains one of your old passwords. They demand Bitcoin to not release private clips. How do you react?",
+    "o": ["Pay the amount.", "Ignore and change passwords. It's a psychological scam.", "Try to negotiate."],
+    "a": 1,
+    "exp": "This is 'Sextortion'. Owning an old password doesn't mean they have access to your camera."
+  },
+  {
+    "level": 8,
+    "q": "At the airport, you connect to 'Airport_Free_HighSpeed' Wi-Fi. What should you avoid?",
+    "o": ["Reading news.", "Logging into e-banking or social media without a VPN.", "Simple web browsing."],
+    "a": 1,
+    "exp": "Man-in-the-Middle attacks allow hackers to 'see' what you type on open networks."
+  },
+  {
+    "level": 8,
+    "q": "Your phone suddenly loses signal (No Service) and doesn't come back. What might be happening?",
+    "o": ["Simple provider outage.", "A 'SIM Swapping' attack to steal your SMS 2FA codes.", "Battery failure."],
+    "a": 1,
+    "exp": "If you lose signal abruptly, someone might have transferred your number to their SIM to bypass security."
+  },
+  {
+    "level": 9,
+    "q": "A 'Financial Advisor' on Telegram promises 200% weekly returns on Crypto. What is the most likely scenario?",
+    "o": ["Great opportunity.", "A 'Pig Butchering' scam.", "A legitimate investment if the site looks good."],
+    "a": 1,
+    "exp": "Investment scams promise unrealistic returns to steal large sums of money."
+  },
+  {
+    "level": 9,
+    "q": "What should you NEVER share, even with the official support of a Crypto Wallet?",
+    "o": ["Your full name.", "Your 12-word Seed Phrase.", "Your email address."],
+    "a": 1,
+    "exp": "The Seed Phrase is the master key. Whoever has it, controls your funds."
+  },
+  {
+    "level": 9,
+    "q": "A 'valuable' NFT is sent to your wallet for free, asking you to connect to a site to 'unlock' it. What do you do?",
+    "o": ["Connect immediately to claim the gift.", "Never connect my wallet; it's a trap (Drainer).", "Send it to a friend."],
+    "a": 1,
+    "exp": "Malicious NFTs contain contracts that, if signed, empty your entire wallet."
+  },
+  {
+    "level": 9,
+    "q": "What is the safest place to store large amounts of Crypto long-term?",
+    "o": ["On an exchange (e.g., Binance).", "In a Hardware Wallet (Cold Storage).", "In a Word file on my PC."],
+    "a": 1,
+    "exp": "Hardware Wallets are not connected to the internet, so they cannot be hacked remotely."
+  },
+  {
+    "level": 9,
+    "q": "You receive a message saying you won a Crypto 'Airdrop' from a company you don't know. What is it?",
+    "o": ["Free money.", "A Phishing trap to steal your wallet details.", "An advertisement."],
+    "a": 1,
+    "exp": "Nobody gives away crypto for no reason. This is a common Phishing scam."
+  }
+]
