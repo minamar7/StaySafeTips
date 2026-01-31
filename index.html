@@ -108,6 +108,11 @@ body[dir="rtl"] { text-align: right; }
       <option value="de">🇩🇪 DE</option>
       <option value="fr">🇫🇷 FR</option>
       <option value="es">🇪🇸 ES</option>
+      <option value="pt">🇵🇹 PT</option>
+      <option value="it">🇮🇹 IT</option>
+      <option value="ru">🇷🇺 RU</option>
+      <option value="zh">🇨🇳 ZH</option>
+      <option value="hi">🇮🇳 HI</option>
       <option value="ar">🇦🇪 AR</option>
     </select>
   </div>
@@ -170,18 +175,24 @@ body[dir="rtl"] { text-align: right; }
 </div>
 
 <script>
-// ΤΟ ΑΡΧΕΙΟ translations.js ΕΝΣΩΜΑΤΩΜΕΝΟ
+// ΤΟ ΑΡΧΕΙΟ translations.js ΜΕ ΟΛΕΣ ΤΙΣ ΓΛΩΣΣΕΣ
 const translations = {
-  el: { welcome: "Καλώς ήρθες", start_btn: "Ξεκίνα", home_tab: "Αρχική", badges_tab: "Τρόπαια", premium_tab: "Elite", level: "Επίπεδο", continue: "ΣΥΝΕΧΕΙΑ", upgrade_msg: "Ξεκλείδωσε επίπεδα", safety_dashboard: "Πίνακας Ελέγχου" },
-  en: { welcome: "Welcome", start_btn: "Start", home_tab: "Home", badges_tab: "Badges", premium_tab: "Elite", level: "Level", continue: "CONTINUE", upgrade_msg: "Unlock levels", safety_dashboard: "Safety Dashboard" },
-  de: { welcome: "Willkommen", start_btn: "Starten", home_tab: "Start", badges_tab: "Abzeichen", premium_tab: "Elite", level: "Ebene", continue: "WEITER", upgrade_msg: "Level freischalten", safety_dashboard: "Dashboard" },
-  ar: { welcome: "مرحباً بك", start_btn: "ابدأ", home_tab: "الرئيسية", badges_tab: "الأوسمة", premium_tab: "النخبة", level: "المستوى", continue: "استمرار", upgrade_msg: "فتح المستويات", safety_dashboard: "لوحة التحكم" }
+  el: { welcome: "Stay Safe Elite", start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ", home_tab: "Ασφάλεια Σπιτιού", badges_tab: "Τρόπαια", premium_tab: "Elite Access", level: "Επίπεδο", continue: "ΣΥΝΕΧΕΙΑ", upgrade_msg: "Μάθε να προστατεύεις τον εαυτό σου.", safety_dashboard: "Πίνακας Ελέγχου" },
+  en: { welcome: "Stay Safe Elite", start_btn: "START JOURNEY", home_tab: "Home Safety", badges_tab: "Badges", premium_tab: "Elite Access", level: "Level", continue: "CONTINUE", upgrade_msg: "Learn how to protect yourself.", safety_dashboard: "Dashboard" },
+  de: { welcome: "Stay Safe Elite", start_btn: "STARTEN", home_tab: "Heimsicherheit", badges_tab: "Abzeichen", premium_tab: "Elite Access", level: "Ebene", continue: "WEITER", upgrade_msg: "Lerne dich zu schützen.", safety_dashboard: "Dashboard" },
+  fr: { welcome: "Stay Safe Elite", start_btn: "COMMENCER", home_tab: "Sécurité Maison", badges_tab: "Trophées", premium_tab: "Elite Access", level: "Niveau", continue: "CONTINUER", upgrade_msg: "Apprenez à vous protéger.", safety_dashboard: "Tableau de bord" },
+  es: { welcome: "Stay Safe Elite", start_btn: "EMPEZAR", home_tab: "Seguridad Hogar", badges_tab: "Insignias", premium_tab: "Elite Access", level: "Nivel", continue: "CONTINUAR", upgrade_msg: "Aprende a protegerte.", safety_dashboard: "Panel" },
+  pt: { welcome: "Stay Safe Elite", start_btn: "COMEÇAR", home_tab: "Segurança Casa", badges_tab: "Conquistas", premium_tab: "Elite Access", level: "Nível", continue: "CONTINUAR", upgrade_msg: "Aprenda a se proteger.", safety_dashboard: "Painel" },
+  it: { welcome: "Stay Safe Elite", start_btn: "INIZIA", home_tab: "Sicurezza Casa", badges_tab: "Premi", premium_tab: "Elite Access", level: "Livello", continue: "CONTINUA", upgrade_msg: "Impara a proteggerti.", safety_dashboard: "Dashboard" },
+  ru: { welcome: "Stay Safe Elite", start_btn: "НАЧАТЬ", home_tab: "Безопасность дома", badges_tab: "Достижения", premium_tab: "Elite Access", level: "Уровень", continue: "ПΡΟДОЛЖИТЬ", upgrade_msg: "Узнайте, как защитить себя.", safety_dashboard: "Панель" },
+  zh: { welcome: "Stay Safe Elite", start_btn: "开始旅程", home_tab: "家庭安全", badges_tab: "奖章", premium_tab: "Elite Access", level: "等级", continue: "继续", upgrade_msg: "学习如何保护自己。", safety_dashboard: "仪表板" },
+  hi: { welcome: "Stay Safe Elite", start_btn: "यात्रा शुरू करें", home_tab: "घर की सुरक्षा", badges_tab: "बैज", premium_tab: "Elite Access", level: "स्तर", continue: "जारी रखें", upgrade_msg: "खुद को बचाना सीखें।", safety_dashboard: "डैशबोर्ड" },
+  ar: { welcome: "Stay Safe Elite", start_btn: "ابدأ الرحلة", home_tab: "أمن المنزل", badges_tab: "الأوسمة", premium_tab: "Elite Access", level: "المستوى", continue: "استمرار", upgrade_msg: "تعلم كيف تحمي نفسك.", safety_dashboard: "لوحة التحكم" }
 };
 
 let xp = 0, level = 1, current_q = 0, quiz_data = [];
 let currentLang = 'el';
 
-// Onboarding Start
 document.getElementById('btn-start').onclick = () => {
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('main_app').classList.remove('hidden');
@@ -203,20 +214,22 @@ function nav(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   document.getElementById('screen_' + id).classList.remove('hidden');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  const target = event ? event.currentTarget : null;
+  if(target) target.classList.add('active');
 }
 
 async function startQuiz(mode = 'free') {
   const file = `questions_${mode}_${currentLang}.json`;
   try {
     const response = await fetch(file);
+    if (!response.ok) throw new Error('File not found');
     const data = await response.json();
     quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
     current_q = 0;
     nav('quiz');
     showQuestion();
   } catch (err) {
-    alert("Please upload the JSON files to GitHub first!");
+    alert("Please upload the JSON files (questions_free_" + currentLang + ".json) to GitHub first!");
   }
 }
 
