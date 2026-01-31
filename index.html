@@ -10,149 +10,47 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
 <style>
-:root { 
-    --bg: #0b1121; 
-    --card: #161e2f; 
-    --accent: #0ea5e9; 
-    --text: #ffffff; 
-}
-
+:root { --bg: #0b1121; --card: #161e2f; --accent: #0ea5e9; --text: #ffffff; }
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-
-body { 
-    margin: 0; 
-    background-color: var(--bg); 
-    color: var(--text); 
-    overflow-x: hidden; 
-    min-height: 100vh;
-}
-
+body { margin: 0; background-color: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 .hidden { display: none !important; }
 
-/* HEADER - ΟΠΩΣ ΣΤΗ ΦΩΤΟ */
-.app-header { 
-    padding: 30px 20px 10px; 
-    background: var(--bg);
-}
-
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
+/* HEADER / DOJO AREA */
+.app-header { padding: 30px 20px 10px; background: var(--bg); }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .streak { color: #ff9800; font-weight: bold; font-size: 20px; }
 .level-label { color: #38bdf8; font-weight: 800; font-size: 18px; }
+.xp-container { width: 100%; background: #1e293b; border-radius: 10px; height: 6px; overflow: hidden; }
+.xp-fill { background: #334155; height: 100%; width: 0%; transition: 0.5s; }
 
-.xp-container {
-    width: 100%;
-    background: #1e293b;
-    border-radius: 10px;
-    height: 6px;
-    overflow: hidden;
-}
-
-.xp-fill { 
-    background: #334155; 
-    height: 100%; 
-    width: 0%; 
-    transition: 0.5s; 
-}
-
-/* MAIN CARD DESIGN */
-.main-container {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 60vh;
-}
-
+/* MAIN UI */
+.main-container { padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 60vh; }
 .glass-card { 
-    background: var(--card); 
-    border-radius: 40px; 
-    padding: 45px 25px; 
-    width: 100%;
-    max-width: 350px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-    text-align: center;
-    border: 1px solid rgba(255,255,255,0.03);
+    background: var(--card); border-radius: 40px; padding: 45px 25px; width: 100%; max-width: 350px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7); text-align: center; border: 1px solid rgba(255,255,255,0.03);
 }
-
 .card-title { font-size: 24px; font-weight: 600; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-/* ΤΟ ΓΑΛΑΖΙΟ ΚΟΥΜΠΙ ΣΟΥ */
+/* ΤΟ ΓΑΛΑΖΙΟ ΚΟΥΜΠΙ */
 .main-cta { 
-    background: var(--accent); 
-    border: none; 
-    color: #000000; 
-    padding: 22px; 
-    border-radius: 35px; 
-    font-size: 18px; 
-    font-weight: 800; 
-    width: 100%; 
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+    background: var(--accent); border: none; color: #000000; padding: 22px; border-radius: 35px; 
+    font-size: 18px; font-weight: 800; width: 100%; cursor: pointer; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
 }
 
-/* QUIZ OPTIONS */
-.option-btn {
-    background: #1e293b;
-    border: none;
-    border-radius: 20px;
-    padding: 18px;
-    width: 100%;
-    margin-bottom: 12px;
-    color: white;
-    font-size: 16px;
-    text-align: left;
-    cursor: pointer;
-}
+.option-btn { background: #1e293b; border: none; border-radius: 20px; padding: 18px; width: 100%; margin-bottom: 12px; color: white; font-size: 16px; text-align: left; cursor: pointer; }
 
-/* ADS AREA */
-.ad-slot { 
-    margin-top: 25px; 
-    min-height: 100px; 
-    background: rgba(15, 23, 42, 0.5); 
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+/* ADS */
+.ad-slot { margin-top: 25px; min-height: 100px; background: rgba(15, 23, 42, 0.5); border-radius: 20px; display: flex; align-items: center; justify-content: center; }
 
-/* NAVIGATION */
-.nav-tabs { 
-    position: fixed; 
-    bottom: 0; 
-    width: 100%; 
-    height: 85px; 
-    background: var(--bg); 
-    display: flex; 
-    justify-content: space-around; 
-    align-items: center;
-    border-top: 1px solid #1e293b;
-}
-
+/* TABS */
+.nav-tabs { position: fixed; bottom: 0; width: 100%; height: 85px; background: var(--bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #1e293b; }
 .nav-tab { font-size: 32px; cursor: pointer; opacity: 0.4; filter: grayscale(1); }
 .nav-tab.active { opacity: 1; filter: grayscale(0); }
 
-/* ONBOARDING / SPLASH SCREEN */
-.overlay { 
-    position: fixed; inset: 0; background: var(--bg); 
-    display: flex; flex-direction: column; align-items: center; justify-content: center; 
-    z-index: 10000; padding: 20px; 
-}
-.lang-grid { 
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
-    width: 100%; max-width: 340px; margin-top: 20px;
-    max-height: 60vh; overflow-y: auto;
-}
-.lang-btn { 
-    background: #1e293b; border-radius: 15px; padding: 15px; 
-    text-align: center; color: white; cursor: pointer; 
-    display: flex; flex-direction: column; align-items: center; gap: 5px;
-}
+/* ONBOARDING - 10 ΣΗΜΑΙΑΚΙΑ */
+.overlay { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 340px; margin-top: 20px; max-height: 60vh; overflow-y: auto; }
+.lang-btn { background: #161e2f; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; text-align: center; color: white; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; }
 </style>
 </head>
 <body>
@@ -187,7 +85,7 @@ body {
     <section id="screen_home">
       <div class="glass-card">
         <div class="card-title">🛡️ Security Check</div>
-        <button id="txt_start_btn" class="main-cta" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
+        <button class="main-cta" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
         <div id="ad_container" class="ad-slot">
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto"></ins>
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -206,11 +104,6 @@ body {
 <script>
 let currentLang = 'el', xp = 0, currentQ = 0, quizData = [], isPremium = false;
 
-if(localStorage.getItem('isPremium') === 'true') {
-    isPremium = true;
-    document.getElementById('ad_container')?.classList.add('hidden');
-}
-
 function initApp(lang) {
     currentLang = lang;
     document.getElementById('onboarding').classList.add('hidden');
@@ -219,6 +112,7 @@ function initApp(lang) {
 
 async function startQuiz() {
     const mode = isPremium ? "premium" : "free";
+    // ΔΙΟΡΘΩΣΗ: Διαβάζει τα αρχεία απευθείας από το root του GitHub
     const fileName = `./questions_${mode}_${currentLang}.json`;
     
     try {
@@ -227,7 +121,7 @@ async function startQuiz() {
         quizData = (await res.json()).sort(() => Math.random() - 0.5).slice(0, 5);
         currentQ = 0; showQuestion(); nav('quiz');
     } catch(e) {
-        alert("Error: Δεν βρέθηκε το " + fileName);
+        alert("Σφάλμα: Δεν βρέθηκε το αρχείο " + fileName);
     }
 }
 
@@ -235,7 +129,7 @@ function showQuestion() {
     const q = quizData[currentQ];
     document.getElementById('screen_quiz').innerHTML = `
       <div class="glass-card">
-        <h3 style="margin-bottom:25px; line-height:1.4;">${q.q}</h3>
+        <h3 style="margin-bottom:25px;">${q.q}</h3>
         <div id="options">${q.o.map((opt, i) => `<button class="option-btn" onclick="handleAnswer(${i})">${opt}</button>`).join('')}</div>
         <button id="next_q" class="main-cta" style="display:none; margin-top:20px;" onclick="nextStep()">ΕΠΟΜΕΝΟ</button>
       </div>`;
@@ -245,7 +139,6 @@ function handleAnswer(idx) {
     const q = quizData[currentQ];
     const btns = document.querySelectorAll('.option-btn');
     btns.forEach(b => b.disabled = true);
-    
     if(idx === q.a) { 
         btns[idx].style.background = "#10b981"; 
         xp += 20; updateXP();
@@ -259,7 +152,7 @@ function handleAnswer(idx) {
 function nextStep() {
     currentQ++;
     if(currentQ < quizData.length) showQuestion();
-    else { nav('home'); confetti({particleCount: 150}); }
+    else { nav('home'); confetti(); }
 }
 
 function updateXP() {
@@ -270,8 +163,7 @@ function updateXP() {
 function nav(id, btn) {
     document.getElementById('screen_home').classList.add('hidden');
     document.getElementById('screen_quiz').classList.add('hidden');
-    if(id === 'home') document.getElementById('screen_home').classList.remove('hidden');
-    else document.getElementById('screen_quiz').classList.remove('hidden');
+    document.getElementById('screen_' + id)?.classList.remove('hidden');
 }
 </script>
 </body>
