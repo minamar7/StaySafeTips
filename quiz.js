@@ -13,7 +13,6 @@ window.QuizEngine = {
     this.score = 0;
     this.badge = badgeId;
     
-    // Κρύβουμε τυχόν προηγούμενα αποτελέσματα
     const res = document.getElementById("quiz-result");
     if (res) res.classList.add("hidden");
     
@@ -66,13 +65,12 @@ window.QuizEngine = {
     if (res) res.classList.remove("hidden");
     if (scoreText) scoreText.textContent = `Σκορ: ${percent}%`;
 
-    // Αν το σκορ είναι πάνω από 80%, ξεκλείδωσε το Badge
     if (percent >= 80) {
       const b = document.getElementById(this.badge);
       if (b) {
         b.classList.remove("locked");
         b.classList.add("unlocked");
-        // Αποθήκευση badge στην τοπική μνήμη
+        
         let saved = JSON.parse(localStorage.getItem("ss_badges") || "[]");
         if (!saved.includes(this.badge)) {
           saved.push(this.badge);
@@ -85,7 +83,7 @@ window.QuizEngine = {
     if (continueBtn) {
       continueBtn.onclick = () => {
         res.classList.add("hidden");
-        // Επιστροφή στην αρχική οθόνη
+        // Επιστροφή στο Home χρησιμοποιώντας το κουμπί του μενού
         document.querySelector('[data-target="home"]').click();
       };
     }
