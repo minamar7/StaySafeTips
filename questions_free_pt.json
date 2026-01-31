@@ -49,4 +49,15 @@
   { "q": "Na Grécia, qual o número da polícia?", "o": ["199", "100", "166"], "a": 1 },
   { "q": "Na Grécia, qual o número dos bombeiros?", "o": ["100", "199", "166"], "a": 1 },
   { "q": "Na Grécia, qual o número da guarda costeira?", "o": ["100", "108", "199"], "a": 1 }
+  { "q": "O que é 'SIM Swapping'?", "o": ["Trocar a capa do telemóvel/celular", "Roubo do número para contornar o 2FA", "Uma forma de ganhar mais dados"], "a": 1 },
+  { "q": "O que se entende por 'Juice Jacking'?", "o": ["Roubo de dados via portas de carregamento USB públicas", "Uma fraude com bebidas grátis", "Um truque para poupar bateria"], "a": 0 },
+  { "q": "O que fazer se o telemóvel perder o sinal subitamente por horas?", "o": ["Esperar até amanhã", "Ligar ao operador imediatamente (possível SIM swap)", "Reiniciar o aparelho"], "a": 1 },
+  { "q": "O que é 'Typosquatting'?", "o": ["Sites falsos com nomes parecidos aos reais", "Digitar muito rápido", "Um novo exercício de ginásio"], "a": 0 },
+  { "q": "É seguro publicar uma foto desfocada do seu bilhete de avião?", "o": ["Sim", "Não, os códigos de barras ainda podem ser lidos", "Apenas no Instagram"], "a": 1 },
+  { "q": "Qual é a forma mais segura de guardar códigos 2FA?", "o": ["Via SMS", "App de autenticação ou chave física (Hardware Key)", "Num bloco de notas"], "a": 1 },
+  { "q": "O que pode um 'Deepfake' fazer numa videochamada?", "o": ["Aumentar a velocidade da internet", "Imitar o rosto e a voz de alguém em tempo real", "Aplicar um filtro engraçado"], "a": 1 },
+  { "q": "O que é a fraude 'Breadcrumb' nas redes sociais?", "o": ["Dicas de culinária", "Recolher pequenos dados pessoais para ganhar confiança", "Ganhar comida grátis"], "a": 1 },
+  { "q": "Por que os 'Metadados' nas suas fotos são perigosos?", "o": ["Tornam as fotos pesadas", "Podem revelar a sua localização GPS exata", "Estragam a qualidade da imagem"], "a": 1 },
+  { "q": "Qual a forma mais segura de usar Wi-Fi público se necessário?", "o": ["Usar uma VPN", "Modo incógnito", "Apenas ser muito rápido"], "a": 0 }
+
 ]
