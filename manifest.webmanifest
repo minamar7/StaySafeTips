@@ -1,12 +1,12 @@
 {
   "name": "Stay Safe Elite",
   "short_name": "StaySafe",
-  "description": "Premium Interactive Safety Companion",
-  "start_url": "index.html",
+  "description": "Premium Safety Experience & Interactive Quizzes",
+  "start_url": "./index.html",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#020617",
   "theme_color": "#020617",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icons/icon-192.png",
@@ -18,15 +18,6 @@
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Stay Safe Dashboard"
     }
   ]
 }
