@@ -229,3 +229,22 @@ body {
   font-weight: 900;
   box-shadow: 0 10px 25px var(--premium-glow);
 }
+/* Σιγουρευόμαστε ότι το hidden εξαφανίζει τα πάντα */
+.hidden, #quiz-result.hidden {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Το Overlay όταν είναι ενεργό */
+#quiz-result {
+    position: fixed;
+    inset: 0;
+    z-index: 9999; /* Να είναι πάνω από όλα */
+    background: rgba(2, 6, 23, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
