@@ -2,254 +2,106 @@
 <html lang="el">
 <head>
 <meta charset="UTF-8">
-<title>Scam Radar – Stay Safe Elite</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Live Scam Alerts | Stay Safe Elite</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <style>
-:root {
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --bg-dark: #0f172a;
-  --glass: rgba(255,255,255,0.05);
-  --glass-border: rgba(255,255,255,0.1);
-}
+:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --danger: #ef4444; --text: #f8fafc; --muted: #94a3b8; }
+* { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; min-height: 100vh; }
 
-body {
-  margin:0;
-  font-family: 'Inter', sans-serif;
-  background: radial-gradient(circle at top, #1e1b4b, var(--bg-dark));
-  color: #f1f5f9;
-}
+/* Background Animation */
+body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(239, 68, 68, 0.05) 0%, transparent 80%); z-index: -1; }
 
-.app-shell {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
+/* Header */
+.header { padding: 50px 20px 20px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(239, 68, 68, 0.3); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 15px; }
+.live-dot { height: 10px; width: 10px; background-color: var(--danger); border-radius: 50%; display: inline-block; animation: blink 1.2s infinite; box-shadow: 0 0 10px var(--danger); }
+@keyframes blink { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
 
-.app-header h1 {
-  margin:0;
-  font-size:1.8rem;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+/* Alerts Styling */
+.alert-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin: 15px; border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.alert-card:hover { transform: translateY(-5px); border-color: var(--danger); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.1); }
+.alert-tag { background: rgba(239, 68, 68, 0.15); color: #ff5f5f; padding: 6px 14px; border-radius: 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+.alert-time { color: var(--muted); font-size: 12px; font-weight: 500; }
+.alert-title { font-size: 19px; font-weight: 800; margin: 15px 0 10px; line-height: 1.3; color: #fff; }
+.alert-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 15px; }
 
-.sub {
-  font-size:0.9rem;
-  color:#94a3b8;
-  margin-top:4px;
-}
+.read-more { display: inline-flex; align-items: center; color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px; gap: 5px; }
 
-#live-indicator {
-  color:#22c55e;
-  font-weight:bold;
-  font-size:0.7rem;
-  animation: pulse 2s infinite;
-}
+.back-btn { background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 10px 18px; border-radius: 16px; text-decoration: none; font-size: 14px; font-weight: 700; transition: 0.3s; }
+.back-btn:active { transform: scale(0.9); }
 
-@keyframes pulse {
-  0%, 100% { opacity:1; }
-  50% { opacity:0.4; }
-}
-
-/* Alerts Feed */
-.alert-feed {
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-  margin-top:20px;
-}
-
-.alert-block {
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border-radius:16px;
-  border:1px solid var(--glass-border);
-  padding:18px;
-  position:relative;
-  opacity:0;
-  transform: translateX(20px);
-  animation: slideIn 0.4s forwards;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.alert-block:hover {
-  transform: translateX(0) scale(1.02);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
-
-@keyframes slideIn {
-  to { opacity:1; transform: translateX(0); }
-}
-
-.threat-level {
-  position:absolute;
-  top:15px;
-  right:15px;
-  font-size:0.65rem;
-  font-weight:900;
-  padding:4px 8px;
-  border-radius:6px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.alert-block h3 {
-  margin:0 0 10px 0;
-  font-size:1.1rem;
-  color:#fff;
-}
-
-.alert-block ul {
-  padding-left:18px;
-  margin:10px 0;
-}
-
-.alert-block li {
-  color:#cbd5e1;
-  font-size:0.85rem;
-  line-height:1.4;
-}
-
-.action-box {
-  background: rgba(0,0,0,0.3);
-  border-radius:10px;
-  border:1px dashed rgba(255,255,255,0.2);
-  padding:12px;
-  margin-top:12px;
-}
-
-.action-box strong {
-  color:#facc15;
-  font-size:0.75rem;
-  display:block;
-  text-transform:uppercase;
-  margin-bottom:4px;
-}
-
-.action-box p {
-  font-size:0.85rem;
-  margin:0;
-  color:#fff;
-}
-
-/* Buttons */
-#refresh-alerts-btn {
-  margin-top:20px;
-  width:100%;
-  padding:16px;
-  border-radius:14px;
-  border:1px solid #facc15;
-  background: linear-gradient(135deg,#1e293b,#0f172a);
-  color:#facc15;
-  font-weight:800;
-  cursor:pointer;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  transition:all 0.2s;
-}
-
-#refresh-alerts-btn:active {
-  transform:scale(0.97);
-  background:#facc15;
-  color:#000;
-}
-
-/* Threat Colors */
-.level-high { border-left:5px solid var(--danger); }
-.level-high .threat-level { background: var(--danger); color:#fff; }
-
-.level-medium { border-left:5px solid var(--warning); }
-.level-medium .threat-level { background: var(--warning); color:#000; }
-
-.level-info { border-left:5px solid var(--info); }
-.level-info .threat-level { background: var(--info); color:#fff; }
+/* Skeleton Loader */
+.skeleton { background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%); background-size: 200% 100%; animation: loading 1.5s infinite; height: 150px; border-radius: 28px; margin: 15px; }
+@keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 </style>
 </head>
-
 <body>
-<div class="app-shell">
-  <header class="app-header">
-    <div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <h1>🛑 Scam Radar</h1>
-        <span id="live-indicator">• LIVE</span>
-      </div>
-      <p class="sub">Πραγματική παρακολούθηση νέων απειλών</p>
+
+<header class="header">
+    <a href="index.html" class="back-btn">←</a>
+    <div style="flex-grow:1;">
+        <h1 style="font-size: 22px; margin:0; letter-spacing: -0.5px;">Live Alerts</h1>
+        <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--danger); font-weight: 800;">
+            <span class="live-dot"></span> REAL-TIME THREAT MONITOR
+        </div>
     </div>
-  </header>
+</header>
 
-  <main class="alert-feed" id="alerts-container"></main>
-
-  <button id="refresh-alerts-btn">Σάρωση για νέες απειλές</button>
-</div>
+<main id="alerts-container">
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+</main>
 
 <script>
-(function() {
-  if(localStorage.getItem("ss_premium")!=="true") {
-    window.location.href="index.html";
-  }
-})();
+// Χρησιμοποιούμε το RSS feed της Δίωξης Ηλεκτρονικού Εγκλήματος μέσω Google API
+const RSS_API = `https://api.rss2json.com/v1/api.json?rss_url=https://www.cyberalert.gr/feed/`;
 
-const alertsData = [
-  {
-    title:"SMS Τράπεζας",
-    level:"high",
-    bullets:["Μήνυμα για κλείδωμα λογαριασμού","Link προς ψεύτικη σελίδα","Επείγουσα γλώσσα για πίεση"],
-    action:"Μην πατάτε συνδέσμους. Μπείτε από το επίσημο app."
-  },
-  {
-    title:"Συγγενής σε ανάγκη",
-    level:"high",
-    bullets:["Άγνωστο άτομο καλεί για ατύχημα","Ζητά άμεση μεταφορά χρημάτων","Μπορεί να χρησιμοποιηθεί AI φωνής"],
-    action:"Κλείστε το τηλέφωνο, καλέστε τον γνωστό αριθμό του συγγενή."
-  },
-  {
-    title:"Ψεύτικο ειδοποιητήριο δέματος",
-    level:"medium",
-    bullets:["Email/SMS για εκκρεμές δέμα","Ζητά πληρωμή για έξοδα αποστολής","Οδηγεί σε phishing site"],
-    action:"Ελέγξτε απευθείας στο επίσημο site της εταιρείας."
-  },
-  {
-    title:"Απάτες Crypto",
-    level:"medium",
-    bullets:["Υποσχέσεις εγγυημένων κερδών","Πίεση να επενδύσετε άμεσα","Ψεύτικα κέρδη σε πλατφόρμες"],
-    action:"Αγνοήστε ψεύτικες διαφημίσεις. Δεν υπάρχει εγγυημένο κέρδος."
-  }
-];
+async function loadAlerts() {
+    const container = document.getElementById('alerts-container');
+    
+    try {
+        const response = await fetch(RSS_API);
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+            container.innerHTML = data.items.map(item => {
+                // Φιλτράρουμε την ημερομηνία
+                const date = new Date(item.pubDate).toLocaleDateString('el-GR', {
+                    day: 'numeric', month: 'long'
+                });
 
-const container=document.getElementById("alerts-container");
-const refreshBtn=document.getElementById("refresh-alerts-btn");
-
-function renderAlerts() {
-  container.innerHTML="";
-  const shuffled=alertsData.sort(()=>0.5-Math.random()).slice(0,3);
-  shuffled.forEach((alert,index)=>{
-    setTimeout(()=>{
-      const div=document.createElement("div");
-      div.className=`alert-block level-${alert.level}`;
-      div.innerHTML=`
-        <span class="threat-level">${alert.level==="high"?"CRITICAL":"WARNING"}</span>
-        <h3>${alert.title}</h3>
-        <ul>${alert.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
-        <div class="action-box"><strong>ΟΔΗΓΙΑ ΑΣΦΑΛΕΙΑΣ:</strong><p>${alert.action}</p></div>
-      `;
-      container.appendChild(div);
-      if(navigator.vibrate) navigator.vibrate(10);
-    },index*150);
-  });
+                return `
+                    <div class="alert-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="alert-tag">SCAM REPORT</span>
+                            <span class="alert-time">${date}</span>
+                        </div>
+                        <div class="alert-title">${item.title}</div>
+                        <div class="alert-desc">
+                            ${item.description.replace(/<[^>]*>?/gm, '').substring(0, 130)}...
+                        </div>
+                        <a href="${item.link}" target="_blank" class="read-more">
+                            ΜΑΘΕΤΕ ΠΕΡΙΣΣΟΤΕΡΑ <span>→</span>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            throw new Error();
+        }
+    } catch (e) {
+        container.innerHTML = `
+            <div style="padding:40px; text-align:center; color:var(--muted);">
+                <p>⚠️ Αδυναμία σύνδεσης με τη βάση δεδομένων.</p>
+                <button onclick="location.reload()" class="back-btn" style="background:none;">Επαναδοκιμή</button>
+            </div>
+        `;
+    }
 }
 
-refreshBtn.addEventListener("click",()=>{
-  refreshBtn.textContent="Σάρωση...";
-  setTimeout(()=>{
-    renderAlerts();
-    refreshBtn.textContent="Σάρωση για νέες απειλές";
-  },800);
-});
-
-renderAlerts();
+// Φόρτωση μετά από 1 δευτερόλεπτο για να φανεί το εφέ
+setTimeout(loadAlerts, 1000);
 </script>
 </body>
 </html>
