@@ -12,32 +12,30 @@
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 
-/* Animated Background που αναπνέει */
+/* Background Animation */
 body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 80%); z-index: -1; animation: pulseBg 8s infinite alternate; }
 @keyframes pulseBg { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 1; transform: scale(1.1); } }
 
 .hidden { display: none !important; }
 
 /* --- ONBOARDING / SPLASH --- */
-.overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 30px; }
-.logo-anim { font-size: 80px; filter: drop-shadow(0 0 20px var(--accent)); margin-bottom: 10px; animation: float 3s infinite ease-in-out; }
+.overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; overflow-y: auto; }
+.logo-anim { font-size: 70px; filter: drop-shadow(0 0 20px var(--accent)); margin-bottom: 5px; animation: float 3s infinite ease-in-out; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 350px; margin-top: 25px; }
+/* Μεγάλες Σημαίες */
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 400px; margin-top: 25px; padding-bottom: 40px; }
+.lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 18px 10px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.lang-btn:active { transform: scale(0.95); background: rgba(56, 189, 248, 0.2); border-color: var(--accent); }
+.lang-flag { font-size: 35px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+.lang-name { font-size: 13px; font-weight: 800; letter-spacing: 1px; }
 
 /* --- UI ELEMENTS --- */
 .app-header { padding: 50px 20px 20px; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; }
-.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 10px var(--gold); }
-.badge-progress-fill { background: linear-gradient(90deg, var(--accent), #0ea5e9); box-shadow: 0 0 10px var(--accent); }
-
-/* --- SOCIAL & STATS --- */
-.mini-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-.mini-card { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: inherit; }
-.social-btn { width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; text-decoration: none; transition: 0.3s; }
-.ig-btn { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); }
-.tt-btn { background: #000; border: 1px solid #25f4ee; }
+.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; box-shadow: 0 0 10px var(--gold); }
+.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; }
 
 /* --- NAVIGATION --- */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 85px; background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: 20px; }
@@ -45,8 +43,14 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 .nav-tab.active { color: var(--accent); filter: drop-shadow(0 0 8px var(--accent)); }
 
 /* --- BADGES --- */
-.badge { width: 85px; height: 85px; background: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; border: 2px solid transparent; opacity: 0.15; transition: 0.6s; margin: 0 auto 8px; }
+.badge { width: 80px; height: 80px; background: #0f172a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; border: 2px solid transparent; opacity: 0.15; transition: 0.6s; margin: 0 auto 8px; }
 .badge.unlocked { opacity: 1; border-color: var(--gold); box-shadow: 0 0 20px rgba(250, 204, 21, 0.4); }
+
+.mini-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.mini-card { background: rgba(255,255,255,0.03); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: inherit; }
+.social-btn { width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; text-decoration: none; }
+.ig-btn { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); }
+.tt-btn { background: #000; border: 1px solid #25f4ee; }
 </style>
 </head>
 <body>
@@ -54,19 +58,20 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <section id="onboarding" class="overlay">
   <div>
     <div class="logo-anim">🛡️</div>
-    <h1 style="font-size:36px; margin-bottom:5px; letter-spacing:-1px;">Stay Safe Elite</h1>
-    <p style="color:var(--muted);">Protecting your digital world</p>
+    <h1 style="font-size:32px; margin-bottom:5px;">Stay Safe Elite</h1>
+    <p style="color:var(--muted); margin-bottom: 10px;">Select Language</p>
+    
     <div class="lang-grid">
-        <button class="mini-card" style="padding:10px;" onclick="initApp('el')">🇬🇷 GR</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('en')">🇺🇸 EN</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('de')">🇩🇪 DE</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('fr')">🇫🇷 FR</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('es')">🇪🇸 ES</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('it')">🇮🇹 IT</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('pt')">🇵Τ PT</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('ru')">🇷🇺 RU</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('zh')">🇨🇳 ZH</button>
-        <button class="mini-card" style="padding:10px;" onclick="initApp('hi')">🇮🇳 HI</button>
+        <div class="lang-btn" onclick="initApp('el')"><span class="lang-flag">🇬🇷</span><span class="lang-name">GREEK</span></div>
+        <div class="lang-btn" onclick="initApp('en')"><span class="lang-flag">🇺🇸</span><span class="lang-name">ENGLISH</span></div>
+        <div class="lang-btn" onclick="initApp('de')"><span class="lang-flag">🇩🇪</span><span class="lang-name">GERMAN</span></div>
+        <div class="lang-btn" onclick="initApp('fr')"><span class="lang-flag">🇫🇷</span><span class="lang-name">FRENCH</span></div>
+        <div class="lang-btn" onclick="initApp('es')"><span class="lang-flag">🇪🇸</span><span class="lang-name">SPANISH</span></div>
+        <div class="lang-btn" onclick="initApp('it')"><span class="lang-flag">🇮🇹</span><span class="lang-name">ITALIAN</span></div>
+        <div class="lang-btn" onclick="initApp('pt')"><span class="lang-flag">🇵Τ</span><span class="lang-name">PORTUGU</span></div>
+        <div class="lang-btn" onclick="initApp('ru')"><span class="lang-flag">🇷🇺</span><span class="lang-name">RUSSIAN</span></div>
+        <div class="lang-btn" onclick="initApp('zh')"><span class="lang-flag">🇨🇳</span><span class="lang-name">CHINESE</span></div>
+        <div class="lang-btn" onclick="initApp('hi')"><span class="lang-flag">🇮🇳</span><span class="lang-name">HINDI</span></div>
     </div>
   </div>
 </section>
@@ -86,8 +91,7 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
     <section id="screen_home">
       <div class="glass-card">
         <h2 id="txt_home_title">🛡️ Ασφάλεια Σπιτιού</h2>
-        <button id="txt_start_btn" style="background:linear-gradient(135deg, var(--accent), #0ea5e9); border:none; color:#020617; padding:18px; border-radius:18px; font-size:16px; font-weight:800; width:100%; cursor:pointer;" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
-        
+        <button id="txt_start_btn" class="main-cta" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
         <div class="mini-stats-grid">
             <a href="https://minamar7.github.io/StaySafeTips/" class="mini-card">
                 <span style="color:var(--accent); font-weight:bold; display:block;">100%</span>
@@ -110,7 +114,7 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 
       <div class="glass-card">
         <h3 id="txt_badge_bar" style="font-size:14px; margin-top:0;">Badge Progress</h3>
-        <div class="xp-bar" style="height:8px; margin:10px 0;"><div id="badge_fill" class="xp-fill badge-progress-fill"></div></div>
+        <div class="xp-bar" style="height:8px; margin:10px 0;"><div id="badge_fill" class="xp-fill" style="background:var(--accent); width:0%;"></div></div>
         <p style="font-size:11px; color:var(--muted); margin:0;"><span id="badge_count">0</span> / 4 <span id="txt_unlocked">Unlocked</span></p>
       </div>
     </section>
@@ -124,6 +128,8 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
         <div style="text-align:center;"><div id="badge_secret" class="badge">👥</div><b id="txt_b4_t">Social</b><br><small id="txt_b4_d">Follow Us</small></div>
       </div>
     </section>
+
+    <section id="screen_quiz" class="hidden"></section>
   </main>
 
   <nav class="nav-tabs">
@@ -134,19 +140,19 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 
 <script>
 const ui = {
-    el: { txt_streak: "Ημέρες Σερί", txt_home_title: "🛡️ Ασφάλεια Σπιτιού", txt_start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Συμβουλές", txt_badge_bar: "Πρόοδος Τροπαίων", txt_unlocked: "Ξεκλείδωτα", txt_badges_title: "🏅 Elite Τρόπαια", txt_b1_t: "Πρώτο Βήμα", txt_b1_d: "1ο Τεστ", txt_b2_t: "Φύλακας", txt_b2_d: "Level 2", txt_b3_t: "Συνήθεια", txt_b3_d: "3 Μέρες", txt_b4_t: "Κοινωνικός", txt_b4_d: "Follow Us" },
-    en: { txt_streak: "Day Streak", txt_home_title: "🛡️ Home Security", txt_start_btn: "START TEST", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Tips", txt_badge_bar: "Badge Progress", txt_unlocked: "Unlocked", txt_badges_title: "🏅 Elite Awards", txt_b1_t: "First Step", txt_b1_d: "1st Quiz", txt_b2_t: "Guardian", txt_b2_d: "Level 2", txt_b3_t: "Habit", txt_b3_d: "3 Days", txt_b4_t: "Social", txt_b4_d: "Follow Us" },
-    de: { txt_streak: "Tage Streak", txt_home_title: "🛡️ Haussicherheit", txt_start_btn: "STARTEN", txt_scan: "Safe Scan", txt_alerts: "Live-Alarme", txt_social_title: "Elite-Tipps", txt_badge_bar: "Abzeichen-Fortschritt", txt_unlocked: "Freigeschaltet", txt_badges_title: "🏅 Elite-Erfolge", txt_b1_t: "Schritt 1", txt_b1_d: "1. Quiz", txt_b2_t: "Wächter", txt_b2_d: "Level 2", txt_b3_t: "Gewohnheit", txt_b3_d: "3 Tage", txt_b4_t: "Sozial", txt_b4_d: "Folgen" },
-    fr: { txt_streak: "Jours de Suite", txt_home_title: "🛡️ Sécurité Maison", txt_start_btn: "COMMENCER", txt_scan: "Safe Scan", txt_alerts: "Alertes Live", txt_social_title: "Conseils Elite", txt_badge_bar: "Progrès Badges", txt_unlocked: "Débloqués", txt_badges_title: "🏅 Prix Elite", txt_b1_t: "Étape 1", txt_b1_d: "1er Quiz", txt_b2_t: "Gardien", txt_b2_d: "Niveau 2", txt_b3_t: "Habitude", txt_b3_d: "3 Jours", txt_b4_t: "Social", txt_b4_d: "Suivez-nous" },
-    es: { txt_streak: "Días de Racha", txt_home_title: "🛡️ Seguridad Hogar", txt_start_btn: "EMPEZAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Consejos Elite", txt_badge_bar: "Progreso Insignias", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Premios Elite", txt_b1_t: "Paso 1", txt_b1_d: "1er Quiz", txt_b2_t: "Guardián", txt_b2_d: "Nivel 2", txt_b3_t: "Hábito", txt_b3_d: "3 Días", txt_b4_t: "Social", txt_b4_d: "Síguenos" },
-    it: { txt_streak: "Giorni di Racha", txt_home_title: "🛡️ Sicurezza Casa", txt_start_btn: "INIZIA", txt_scan: "Safe Scan", txt_alerts: "Avvisi Live", txt_social_title: "Consigli Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Sbloccato", txt_badges_title: "🏅 Premi Elite", txt_b1_t: "Passo 1", txt_b1_d: "1° Quiz", txt_b2_t: "Guardiano", txt_b2_d: "Livello 2", txt_b3_t: "Abitudine", txt_b3_d: "3 Giorni", txt_b4_t: "Social", txt_b4_d: "Seguici" },
-    pt: { txt_streak: "Dias de Racha", txt_home_title: "🛡️ Segurança Casa", txt_start_btn: "COMEÇAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Dicas Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Prêmios Elite", txt_b1_t: "Passo 1", txt_b1_d: "1° Quiz", txt_b2_t: "Guardião", txt_b2_d: "Nível 2", txt_b3_t: "Hábito", txt_b3_d: "3 Dias", txt_b4_t: "Social", txt_b4_d: "Siga-nos" },
-    ru: { txt_streak: "Дней Подряд", txt_home_title: "🛡️ Безопасность", txt_start_btn: "НАЧАТЬ", txt_scan: "Safe Scan", txt_alerts: "Оповещения", txt_social_title: "Elite Советы", txt_badge_bar: "Прогресс значков", txt_unlocked: "Открыто", txt_badges_title: "🏅 Награды Elite", txt_b1_t: "Шаг 1", txt_b1_d: "1-й тест", txt_b2_t: "Страж", txt_b2_d: "Уровень 2", txt_b3_t: "Привычка", txt_b3_d: "3 дня", txt_b4_t: "Соцсети", txt_b4_d: "Подписаться" },
-    zh: { txt_streak: "连续天数", txt_home_title: "🛡️ 家庭安全", txt_start_btn: "开始", txt_scan: "Safe Scan", txt_alerts: "实时警报", txt_social_title: "精英提示", txt_badge_bar: "徽章进度", txt_unlocked: "已解锁", txt_badges_title: "🏅 精英奖项", txt_b1_t: "第一步", txt_b1_d: "第一次测试", txt_b2_t: "守护者", txt_b2_d: "2级", txt_b3_t: "习惯", txt_b3_d: "3天", txt_b4_t: "社交", txt_b4_d: "关注我们" },
-    hi: { txt_streak: "दिनों का सिलसिला", txt_home_title: "🛡️ घर की सुरक्षा", txt_start_btn: "शुरू करें", txt_scan: "Safe Scan", txt_alerts: "लाइव अलर्ट", txt_social_title: "एलीट टिप्स", txt_badge_bar: "बज प्रगति", txt_unlocked: "खुला है", txt_badges_title: "🏅 एलीट पुरस्कार", txt_b1_t: "पहला कदम", txt_b1_d: "पहला क्विज़", txt_b2_t: "रक्षक", txt_b2_d: "लेवल 2", txt_b3_t: "आदत", txt_b3_d: "3 दिन", txt_b4_t: "सोशल", txt_b4_d: "फॉलो करें" }
+    el: { txt_streak: "Ημέρες Σερί", txt_home_title: "🛡️ Ασφάλεια Σπιτιού", txt_start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Συμβουλές", txt_badge_bar: "Πρόοδος Τροπαίων", txt_unlocked: "Ξεκλείδωτα", txt_badges_title: "🏅 Elite Τρόπαια", txt_b1_t: "Πρώτο Βήμα", txt_b1_d: "1ο Τεστ", txt_b2_t: "Φύλακας", txt_b2_d: "Level 2", txt_b3_t: "Συνήθεια", txt_b3_d: "3 Μέρες", txt_b4_t: "Κοινωνικός", txt_b4_d: "Follow Us", txt_next: "ΕΠΟΜΕΝΟ" },
+    en: { txt_streak: "Day Streak", txt_home_title: "🛡️ Home Security", txt_start_btn: "START TEST", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Tips", txt_badge_bar: "Badge Progress", txt_unlocked: "Unlocked", txt_badges_title: "🏅 Elite Awards", txt_b1_t: "First Step", txt_b1_d: "1st Quiz", txt_b2_t: "Guardian", txt_b2_d: "Level 2", txt_b3_t: "Habit", txt_b3_d: "3 Days", txt_b4_t: "Social", txt_b4_d: "Follow Us", txt_next: "NEXT" },
+    de: { txt_streak: "Tage Streak", txt_home_title: "🛡️ Haussicherheit", txt_start_btn: "STARTEN", txt_scan: "Safe Scan", txt_alerts: "Live-Alarme", txt_social_title: "Elite-Tipps", txt_badge_bar: "Abzeichen-Fortschritt", txt_unlocked: "Freigeschaltet", txt_badges_title: "🏅 Elite-Erfolge", txt_b1_t: "Schritt 1", txt_b1_d: "1. Quiz", txt_b2_t: "Wächter", txt_b2_d: "Level 2", txt_b3_t: "Gewohnheit", txt_b3_d: "3 Tage", txt_b4_t: "Sozial", txt_b4_d: "Folgen", txt_next: "WEITER" },
+    fr: { txt_streak: "Jours de Suite", txt_home_title: "🛡️ Sécurité Maison", txt_start_btn: "COMMENCER", txt_scan: "Safe Scan", txt_alerts: "Alertes Live", txt_social_title: "Conseils Elite", txt_badge_bar: "Progrès Badges", txt_unlocked: "Débloqués", txt_badges_title: "🏅 Prix Elite", txt_b1_t: "Étape 1", txt_b1_d: "1er Quiz", txt_b2_t: "Gardien", txt_b2_d: "Niveau 2", txt_b3_t: "Habitude", txt_b3_d: "3 Jours", txt_b4_t: "Social", txt_b4_d: "Suivez-nous", txt_next: "SUIVANT" },
+    es: { txt_streak: "Días de Racha", txt_home_title: "🛡️ Seguridad Hogar", txt_start_btn: "EMPEZAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Consejos Elite", txt_badge_bar: "Progreso Insignias", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Premios Elite", txt_b1_t: "Paso 1", txt_b1_d: "1er Quiz", txt_b2_t: "Guardián", txt_b2_d: "Nivel 2", txt_b3_t: "Hábito", txt_b3_d: "3 Días", txt_b4_t: "Social", txt_b4_d: "Síguenos", txt_next: "SIGUIENTE" },
+    it: { txt_streak: "Giorni di Racha", txt_home_title: "🛡️ Sicurezza Casa", txt_start_btn: "INIZIA", txt_scan: "Safe Scan", txt_alerts: "Avvisi Live", txt_social_title: "Consigli Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Sbloccato", txt_badges_title: "🏅 Premi Elite", txt_b1_t: "Passo 1", txt_b1_d: "1° Quiz", txt_b2_t: "Guardiano", txt_b2_d: "Livello 2", txt_b3_t: "Abitudine", txt_b3_d: "3 Giorni", txt_b4_t: "Social", txt_b4_d: "Seguici", txt_next: "AVANTI" },
+    pt: { txt_streak: "Dias de Racha", txt_home_title: "🛡️ Segurança Casa", txt_start_btn: "COMEÇAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Dicas Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Prêmios Elite", txt_b1_t: "Passo 1", txt_b1_d: "1° Quiz", txt_b2_t: "Guardião", txt_b2_d: "Nível 2", txt_b3_t: "Hábito", txt_b3_d: "3 Dias", txt_b4_t: "Social", txt_b4_d: "Siga-nos", txt_next: "PRÓXIMO" },
+    ru: { txt_streak: "Дней Подряд", txt_home_title: "🛡️ Безопасность", txt_start_btn: "НАЧАТЬ", txt_scan: "Safe Scan", txt_alerts: "Оποвещения", txt_social_title: "Elite Советы", txt_badge_bar: "Прогресс значков", txt_unlocked: "Открыτο", txt_badges_title: "🏅 Награды Elite", txt_b1_t: "Шаг 1", txt_b1_d: "1-й тест", txt_b2_t: "Страж", txt_b2_d: "Уровень 2", txt_b3_t: "Привычка", txt_b3_d: "3 дня", txt_b4_t: "Соцсети", txt_b4_d: "Подписаться", txt_next: "ДАΛΕΕ" },
+    zh: { txt_streak: "连续天数", txt_home_title: "🛡️ 家庭安全", txt_start_btn: "开始", txt_scan: "Safe Scan", txt_alerts: "实时警报", txt_social_title: "精英提示", txt_badge_bar: "徽章进度", txt_unlocked: "已解锁", txt_badges_title: "🏅 精英奖项", txt_b1_t: "第一步", txt_b1_d: "第一次测试", txt_b2_t: "守护者", txt_b2_d: "2级", txt_b3_t: "习惯", txt_b3_d: "3天", txt_b4_t: "社交", txt_b4_d: "关注我们", txt_next: "下一步" },
+    hi: { txt_streak: "दिनों का सिलसिला", txt_home_title: "🛡️ घर की सुरक्षा", txt_start_btn: "शुरू करें", txt_scan: "Safe Scan", txt_alerts: "लाइव अलर्ट", txt_social_title: "एलीट टिप्स", txt_badge_bar: "बज प्रगति", txt_unlocked: "खुला है", txt_badges_title: "🏅 एलीट पुरस्कार", txt_b1_t: "पहला कदम", txt_b1_d: "पहλα क्विज़", txt_b2_t: "रक्षक", txt_b2_d: "लेवल 2", txt_b3_t: "आदत", txt_b3_d: "3 दिन", txt_b4_t: "सोशल", txt_b4_d: "फॉलो करें", txt_next: "अगला" }
 };
 
-let currentLang = 'el', unlockedCount = 0, xp = 0;
+let currentLang = 'el', unlockedCount = 0, xp = 0, currentQ = 0, quizData = [];
 
 function initApp(lang) {
     currentLang = lang;
@@ -158,28 +164,77 @@ function initApp(lang) {
 }
 
 function nav(id, btn) {
-    document.getElementById('screen_home').classList.add('hidden');
-    document.getElementById('screen_badges').classList.add('hidden');
+    document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
     document.getElementById('screen_'+id).classList.remove('hidden');
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
+    if(btn) {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+    }
+}
+
+async function startQuiz() {
+    try {
+        const res = await fetch(`questions_free_${currentLang}.json`);
+        quizData = (await res.json()).sort(() => Math.random() - 0.5).slice(0, 5);
+        currentQ = 0;
+        showQuestion();
+        nav('quiz');
+    } catch(e) { alert("Error loading quiz files."); }
+}
+
+function showQuestion() {
+    const q = quizData[currentQ];
+    const quizSec = document.getElementById('screen_quiz');
+    const nextTxt = ui[currentLang]?.txt_next || "Next";
+    quizSec.innerHTML = `
+        <div class="glass-card" style="text-align:center;">
+            <p style="font-size:12px; color:var(--accent);">Q ${currentQ+1}/${quizData.length}</p>
+            <h3 style="margin-bottom:20px;">${q.q}</h3>
+            <div id="options">
+                ${q.o.map((opt, i) => `<button class="mini-card" style="width:100%; margin-bottom:10px; padding:15px; cursor:pointer;" onclick="handleAnswer(${i})">${opt}</button>`).join('')}
+            </div>
+            <button id="quiz_next_btn" class="main-cta" style="display:none; margin-top:10px;" onclick="nextStep()">${nextTxt}</button>
+        </div>
+    `;
+}
+
+function handleAnswer(idx) {
+    const q = quizData[currentQ];
+    const btns = document.querySelectorAll('#options button');
+    btns.forEach(b => b.disabled = true);
+    if(idx === q.a) {
+        btns[idx].style.background = "#22c55e"; xp += 20; updateXP();
+    } else {
+        btns[idx].style.background = "#ef4444"; btns[q.a].style.background = "#22c55e";
+    }
+    document.getElementById('quiz_next_btn').style.display = "block";
+}
+
+function nextStep() {
+    currentQ++;
+    if(currentQ < quizData.length) showQuestion();
+    else { unlockBadge('badge_home'); nav('home', document.querySelectorAll('.nav-tab')[0]); confetti({particleCount:100}); }
+}
+
+function updateXP() {
+    document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+    let lv = Math.floor(xp / 100) + 1;
+    if(lv > parseInt(document.getElementById('level_val').innerText)) {
+        document.getElementById('level_val').innerText = lv;
+        unlockBadge('badge_shield');
+        confetti({particleCount:200});
+    }
 }
 
 function unlockBadge(id) {
     const b = document.getElementById(id);
-    if(!b.classList.contains('unlocked')) {
+    if(b && !b.classList.contains('unlocked')) {
         b.classList.add('unlocked');
         unlockedCount++;
         document.getElementById('badge_count').innerText = unlockedCount;
         document.getElementById('badge_fill').style.width = (unlockedCount / 4 * 100) + "%";
-        confetti({ particleCount: 50, colors: ['#facc15', '#38bdf8'] });
+        confetti({ particleCount: 50 });
     }
-}
-
-function startQuiz() {
-    // Παράδειγμα ξεκλειδώματος με το ξεκίνημα
-    unlockBadge('badge_home');
-    alert(currentLang === 'el' ? "Φόρτωση Τεστ..." : "Loading Quiz...");
 }
 </script>
 </body>
