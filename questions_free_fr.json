@@ -49,4 +49,14 @@
   { "q": "En Grèce, quel est le numéro de la police ?", "o": ["199", "100", "166"], "a": 1 },
   { "q": "En Grèce, quel est le numéro des pompiers ?", "o": ["100", "199", "166"], "a": 1 },
   { "q": "En Grèce, quel est le numéro des garde-côtes ?", "o": ["100", "108", "199"], "a": 1 }
+  { "q": "Qu'est-ce que le 'SIM Swapping' ?", "o": ["Changer la coque du téléphone", "Le vol de votre numéro pour contourner l'authentification 2FA", "Un moyen d'avoir plus de données"], "a": 1 },
+  { "q": "Qu'appelle-t-on le 'Juice Jacking' ?", "o": ["Le vol de données via des ports de charge USB publics", "Une arnaque avec des boissons gratuites", "Une astuce pour économiser la batterie"], "a": 0 },
+  { "q": "Que faire si votre téléphone perd soudainement tout signal pendant des heures ?", "o": ["Attendre demain", "Appeler votre opérateur immédiatement (risque de SIM swap)", "Redémarrer le téléphone"], "a": 1 },
+  { "q": "Qu'est-ce que le 'Typosquatting' ?", "o": ["De faux sites web avec des noms proches des vrais", "Taper très vite au clavier", "Un nouvel exercice de sport"], "a": 0 },
+  { "q": "Est-il sûr de poster une photo floue de votre billet d'avion ?", "o": ["Oui", "Non, les codes-barres peuvent toujours être scannés", "Uniquement sur Instagram"], "a": 1 },
+  { "q": "Quel est le moyen le plus sûr de stocker vos codes 2FA ?", "o": ["Par SMS", "Une application d'authentification ou une clé physique", "Dans un bloc-notes"], "a": 1 },
+  { "q": "Que peut faire un 'Deepfake' lors d'un appel vidéo ?", "o": ["Accélérer la connexion internet", "Imiter le visage et la voix d'une personne en temps réel", "Appliquer un filtre rigolo"], "a": 1 },
+  { "q": "Qu'est-ce que l'arnaque 'Breadcrumb' sur les réseaux sociaux ?", "o": ["Des astuces de cuisine", "Collecter de petites infos personnelles pour gagner votre confiance", "Gagner de la nourriture gratuite"], "a": 1 },
+  { "q": "Pourquoi les 'Métadonnées' de vos photos sont-elles dangereuses ?", "o": ["Elles alourdissent les photos", "Elles peuvent révéler votre position GPS exacte", "Elles gâchent la qualité"], "a": 1 },
+  { "q": "Quel est le moyen le plus sûr d'utiliser un Wi-Fi public si nécessaire ?", "o": ["Utiliser un VPN", "Le mode incognito", "Être simplement très rapide"], "a": 0 }
 ]
