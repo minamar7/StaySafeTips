@@ -38,7 +38,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 /* --- QUIZ & BUTTONS --- */
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; transition: 0.2s; }
 .main-cta:active { transform: scale(0.98); }
-.opt-btn { background: #0f172a; border: 1px solid #334155; color: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%; text-align: left; cursor: pointer; }
+.opt-btn { background: #0f172a; border: 1px solid #334155; color: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%; text-align: left; cursor: pointer; transition: 0.3s; }
 
 /* --- BADGES (SUPER EFFECT) --- */
 .badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -55,21 +55,36 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; }
 .nav-tab.active { color: var(--accent); }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; }
+
+/* --- LANGUAGE GRID --- */
+.lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 320px; margin: 20px auto; }
 </style>
 </head>
 
 <body>
 
 <section id="onboarding" class="overlay">
-  <div>
-    <div style="font-size:80px; margin-bottom:20px; filter:drop-shadow(0 0 20px var(--accent));">🛡️</div>
-    <h1 style="font-size:32px; margin-bottom:10px;">Stay Safe Elite</h1>
-    <p style="color:var(--muted); margin-bottom:30px;">Η απόλυτη προστασία ξεκινά εδώ.</p>
-    <button class="main-cta" style="width:220px;" onclick="document.getElementById('onboarding').classList.add('hidden')">ΞΕΚΙΝΑ</button>
+  <div style="width: 100%;">
+    <div style="font-size:70px; margin-bottom:10px; filter:drop-shadow(0 0 20px var(--accent));">🛡️</div>
+    <h1 style="font-size:32px; margin-bottom:5px;">Stay Safe Elite</h1>
+    <p style="color:var(--muted); margin-bottom:20px;">Επιλέξτε Γλώσσα / Select Language</p>
+    
+    <div class="lang-grid">
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('el', this)">🇬🇷 GR</button>
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('en', this)">🇺🇸 EN</button>
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('de', this)">🇩🇪 DE</button>
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('fr', this)">🇫🇷 FR</button>
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('es', this)">🇪🇸 ES</button>
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('it', this)">🇮🇹 IT</button>
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('ru', this)">🇷🇺 RU</button>
+        <button class="opt-btn" style="margin-bottom:0; text-align:center;" onclick="selectInitialLang('zh', this)">🇨🇳 ZH</button>
+    </div>
+
+    <button id="start_app_btn" class="main-cta" style="width:200px; margin-top: 20px; display: none;" onclick="startApp()">ΞΕΚΙΝΑ / START</button>
   </div>
 </section>
 
-<div id="main_app">
+<div id="main_app" class="hidden">
   <header class="app-header">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
       <div style="color:var(--gold); font-weight:bold; background:rgba(250,204,21,0.1); padding:5px 12px; border-radius:15px;">
@@ -142,14 +157,14 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <div id="ad_screen" class="overlay hidden" style="background:white; color:black; z-index:20000;">
     <div>
         <small style="color:gray">Advertisement</small>
-        <div style="width:300px; height:250px; background:#f0f0f0; margin:20px auto; border:2px dashed #ccc; display:flex; align-items:center; justify-content:center; color:#999;">AdSlot</div>
+        <div style="width:300px; height:250px; background:#f0f0f0; margin:20px auto; border:2px dashed #ccc; display:flex; align-items:center; justify-content:center; color:#999;">Ad Content</div>
         <button id="close_ad_btn" class="main-cta" style="background:black; color:white; width:200px; display:none;" onclick="closeAd()">ΚΛΕΙΣΙΜΟ</button>
         <p id="ad_timer" style="font-weight:bold; font-size:14px;">Προβολή διαφήμισης σε 5...</p>
     </div>
 </div>
 
 <div id="level_up_modal" class="overlay hidden">
-    <div class="glass-card" style="text-align:center; width:85%; border:2px solid var(--gold); animation: badgePop 0.5s ease-out;">
+    <div class="glass-card" style="text-align:center; width:85%; border:2px solid var(--gold);">
         <div style="font-size:70px; filter: drop-shadow(0 0 15px var(--gold));">⭐</div>
         <h2 style="color:var(--gold); font-size:30px; margin:10px 0;">LEVEL UP!</h2>
         <p style="margin-bottom:20px;">Φτάσατε στο Επίπεδο <span id="new_lv_val">2</span></p>
@@ -160,7 +175,29 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <script>
 let xp = 0, level = 1, current_q = 0, quiz_data = [], current_lang = 'el';
 
-// --- STREAK SYSTEM (ΑΥΤΟΜΑΤΟ) ---
+// --- ΑΡΧΙΚΗ ΕΠΙΛΟΓΗ ΓΛΩΣΣΑΣ ---
+function selectInitialLang(lang, btn) {
+    current_lang = lang;
+    document.getElementById('lang_select').value = lang;
+    
+    // Visual feedback
+    document.querySelectorAll('#onboarding .opt-btn').forEach(b => {
+        b.style.borderColor = "#334155";
+        b.style.background = "#0f172a";
+    });
+    btn.style.borderColor = "var(--accent)";
+    btn.style.background = "rgba(56, 189, 248, 0.1)";
+    
+    document.getElementById('start_app_btn').style.display = 'block';
+}
+
+function startApp() {
+    document.getElementById('onboarding').classList.add('hidden');
+    document.getElementById('main_app').classList.remove('hidden');
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
+}
+
+// --- STREAK SYSTEM ---
 function initStreak() {
     const today = new Date().toDateString();
     const lastVisit = localStorage.getItem('lastVisit');
@@ -190,7 +227,7 @@ async function startQuiz(mode) {
         const data = await res.json();
         quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
         current_q = 0; nav('quiz', document.querySelectorAll('.nav-tab')[0]); showQuestion();
-    } catch(e) { alert("JSON Error: Σιγουρευτείτε ότι τα αρχεία είναι στο GitHub."); }
+    } catch(e) { alert("Error loading JSON: Make sure files are in the same folder."); }
 }
 
 function showQuestion() {
