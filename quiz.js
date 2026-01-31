@@ -1,5 +1,4 @@
 window.QuizEngine = {
-  // Όλες οι ερωτήσεις συγκεντρωμένες ανά γλώσσα και κατηγορία
   content: {
     el: {
       "badge-home": [
@@ -19,6 +18,11 @@ window.QuizEngine = {
       "badge-emergency": [
         { q: "Ποιος είναι ο ευρωπαϊκός αριθμός έκτακτης ανάγκης;", options: ["100", "911", "112"], correct: 2 },
         { q: "Τι κάνουμε σε περίπτωση σεισμού;", options: ["Τρέχουμε έξω", "Μπαίνουμε κάτω από γραφείο", "Παίρνουμε ασανσέρ"], correct: 1 }
+      ],
+      "quiz": [ // Γενικό Safety IQ Quiz για το κεντρικό TAB
+        { q: "Ποια είναι η πιο ασφαλής μέθοδος κλειδώματος κινητού;", options: ["PIN 4 ψηφίων", "Μοτίβο", "Βιομετρικά στοιχεία"], correct: 2 },
+        { q: "Τι προσφέρει η χρήση ενός VPN;", options: ["Ταχύτερο ίντερνετ", "Κρυπτογράφηση σύνδεσης", "Δωρεάν συνδρομές"], correct: 1 },
+        { q: "Κοινό password σε όλους τους λογαριασμούς είναι:", options: ["Καλή πρακτική", "Επικίνδυνο", "βολικό και ασφαλές"], correct: 1 }
       ]
     },
     en: {
@@ -39,6 +43,11 @@ window.QuizEngine = {
       "badge-emergency": [
         { q: "What is the European emergency number?", options: ["100", "911", "112"], correct: 2 },
         { q: "What to do during an earthquake?", options: ["Run outside", "Hide under a desk", "Take the elevator"], correct: 1 }
+      ],
+      "quiz": [
+        { q: "What is the most secure phone lock method?", options: ["4-digit PIN", "Pattern", "Biometrics"], correct: 2 },
+        { q: "What does a VPN provide?", options: ["Faster internet", "Connection encryption", "Free accounts"], correct: 1 },
+        { q: "Using the same password everywhere is:", options: ["Good practice", "Dangerous", "Convenient and safe"], correct: 1 }
       ]
     }
   },
@@ -51,28 +60,31 @@ window.QuizEngine = {
 
   start: function(lang, badgeId) {
     this.currentLang = lang || 'el';
-    this.badge = badgeId || 'badge-home';
+    this.badge = badgeId || 'quiz'; // Default στο γενικό quiz
     
-    // Φόρτωση σωστών ερωτήσεων
-    this.activeQuestions = this.content[this.currentLang][this.badge] || this.content[this.currentLang]["badge-home"];
+    // Επιλογή σωστού σετ ερωτήσεων
+    this.activeQuestions = this.content[this.currentLang][this.badge] || this.content[this.currentLang]["quiz"];
     
     this.currentIndex = 0;
     this.score = 0;
     
-    document.getElementById("quiz-result")?.classList.add("hidden");
+    const res = document.getElementById("quiz-result");
+    if (res) res.classList.add("hidden");
+    
     this.render();
   },
 
   render: function() {
+    if (!this.activeQuestions || this.activeQuestions.length === 0) return;
+
     const qData = this.activeQuestions[this.currentIndex];
     const qBox = document.getElementById("quiz-question");
     const oBox = document.getElementById("quiz-options");
     const pill = document.getElementById("quiz-pill");
 
     const label = this.currentLang === 'el' ? 'Ερώτηση' : 'Question';
-    const total = this.activeQuestions.length;
-
-    if (pill) pill.textContent = `${label} ${this.currentIndex + 1} / ${total}`;
+    if (pill) pill.textContent = `${label} ${this.currentIndex + 1} / ${this.activeQuestions.length}`;
+    
     if (qBox) qBox.innerHTML = `<div class="q-card"><p class="q-text">${qData.q}</p></div>`;
     
     if (oBox) {
@@ -111,8 +123,8 @@ window.QuizEngine = {
     const scoreLabel = this.currentLang === 'el' ? 'Σκορ' : 'Score';
     if (scoreText) scoreText.textContent = `${scoreLabel}: ${percent}%`;
 
-    // Ξεκλείδωμα αν το σκορ είναι >= 80%
-    if (percent >= 80) {
+    // Ξεκλείδωμα Badge (μόνο αν το badgeId αντιστοιχεί σε πραγματικό badge)
+    if (percent >= 80 && this.badge.startsWith('badge-')) {
       const b = document.getElementById(this.badge);
       if (b) {
         b.classList.remove("locked");
@@ -126,9 +138,14 @@ window.QuizEngine = {
       }
     }
 
-    document.getElementById("quiz-result-continue").onclick = () => {
-      res.classList.add("hidden");
-      document.querySelector('[data-target="home"]').click();
-    };
+    const continueBtn = document.getElementById("quiz-result-continue");
+    if (continueBtn) {
+      continueBtn.onclick = () => {
+        res.classList.add("hidden");
+        // Επιστροφή στο Home
+        const homeTab = document.querySelector('[data-target="home"]');
+        if (homeTab) homeTab.click();
+      };
+    }
   }
 };
