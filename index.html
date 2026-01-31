@@ -15,7 +15,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 80%); z-index: -1; }
 .hidden { display: none !important; }
 
-/* --- SPLASH SCREEN --- */
+/* --- ONBOARDING & FLAGS --- */
 .overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; }
 .lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 380px; margin-top: 20px; }
 .lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
@@ -29,19 +29,18 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; box-shadow: 0 0 10px var(--gold); }
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; }
 
-/* --- ELITE BADGES WITH NAMES --- */
+/* --- ELITE BADGES --- */
 .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
 .badge-slot { 
     background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.7));
     padding: 20px 5px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);
     text-align: center; opacity: 0.2; grayscale: 1; transition: 0.8s;
 }
-.badge-slot span { font-size: 40px; display: block; margin-bottom: 8px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
-.badge-name { font-size: 9px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
+.badge-slot span { font-size: 40px; display: block; margin-bottom: 8px; }
+.badge-name { font-size: 9px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .badge-slot.unlocked { 
     opacity: 1; grayscale: 0; border-color: var(--gold); transform: scale(1.05);
     background: linear-gradient(145deg, rgba(250, 204, 21, 0.1), rgba(15, 23, 42, 0.9));
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 .badge-slot.unlocked .badge-name { color: var(--gold); }
 
@@ -90,9 +89,9 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
       <div class="glass-card" style="text-align:center;">
         <h3 style="color:var(--gold); font-size:14px; margin-bottom:5px;">Elite Rank</h3>
         <div class="badge-grid">
-            <div id="badge_1" class="badge-slot"><span>🎖️</span><div class="badge-name" id="name_b1">Rookie<br>Guard</div></div>
-            <div id="badge_2" class="badge-slot"><span>🛡️</span><div class="badge-name" id="name_b2">Silver<br>Guardian</div></div>
-            <div id="badge_3" class="badge-slot"><span>💎</span><div class="badge-name" id="name_b3">Elite<br>Master</div></div>
+            <div id="badge_1" class="badge-slot"><span>🎖️</span><div class="badge-name">Rookie<br>Guard</div></div>
+            <div id="badge_2" class="badge-slot"><span>🛡️</span><div class="badge-name">Silver<br>Guardian</div></div>
+            <div id="badge_3" class="badge-slot"><span>💎</span><div class="badge-name">Elite<br>Master</div></div>
         </div>
       </div>
 
@@ -123,6 +122,9 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <script>
 let currentLang = 'el', xp = 0, level = 1, isPremium = false, quizData = [], errors = 0;
 
+// Load Premium state from storage
+if(localStorage.getItem('isElite') === 'true') isPremium = true;
+
 function initApp(lang) {
     currentLang = lang;
     document.getElementById('onboarding').classList.add('hidden');
@@ -140,16 +142,24 @@ function nav(id, btn) {
 }
 
 async function startQuiz() {
+    // Αν ο χρήστης είναι Level 7+ και δεν είναι Premium, τον στέλνουμε στην αγορά
     if(level >= 7 && !isPremium) { nav('premium'); return; }
+    
     errors = 0;
+    // ΕΔΩ ΓΙΝΕΤΑΙ Η ΕΠΙΛΟΓΗ ΤΟΥ ΣΩΣΤΟΥ JSON
     const mode = isPremium ? "premium" : "free";
+    const jsonPath = `./questions_${mode}_${currentLang}.json`;
+    
     try {
-        const res = await fetch(`./questions_${mode}_${currentLang}.json`);
+        const res = await fetch(jsonPath);
+        if(!res.ok) throw new Error();
         const data = await res.json();
         quizData = data.sort(() => 0.5 - Math.random()).slice(0, 5);
         renderQuestion(0);
         nav('quiz');
-    } catch(e) { alert("JSON error!"); }
+    } catch(e) { 
+        alert("Λείπει το αρχείο: questions_" + mode + "_" + currentLang + ".json στο GitHub!"); 
+    }
 }
 
 function renderQuestion(idx) {
@@ -173,6 +183,7 @@ function renderQuestion(idx) {
 window.check = (sel, cor, idx, btn) => {
     const btns = document.querySelectorAll('#quiz_options button');
     btns.forEach(b => b.disabled = true);
+    
     if(sel === cor) {
         btn.style.background = "var(--success)";
         xp += 20;
@@ -181,6 +192,7 @@ window.check = (sel, cor, idx, btn) => {
         btns[cor].style.background = "var(--success)";
         errors++;
     }
+    
     setTimeout(() => {
         if(errors >= 3) {
             alert("❌ 3 Λάθη! Πρέπει να ξαναπροσπαθήσεις το Level.");
@@ -191,6 +203,7 @@ window.check = (sel, cor, idx, btn) => {
             renderQuestion(idx + 1);
         } else {
             updateXP();
+            // Κομφετί μόνο στο τέλος του level
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             setTimeout(() => { nav('home'); }, 2000);
         }
@@ -202,16 +215,9 @@ function updateXP() {
     document.getElementById('level_val').innerText = level;
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
     
-    // Ξεκλείδωμα Badges με ονόματα
-    if(level >= 2) {
-        document.getElementById('badge_1').classList.add('unlocked');
-    }
-    if(level >= 5) {
-        document.getElementById('badge_2').classList.add('unlocked');
-    }
-    if(isPremium) {
-        document.getElementById('badge_3').classList.add('unlocked');
-    }
+    if(level >= 2) document.getElementById('badge_1').classList.add('unlocked');
+    if(level >= 5) document.getElementById('badge_2').classList.add('unlocked');
+    if(isPremium) document.getElementById('badge_3').classList.add('unlocked');
 }
 
 function buyPremium() {
