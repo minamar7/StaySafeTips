@@ -1,0 +1,30 @@
+[
+  {
+    "level": 7,
+    "q": "Ricevi una videochiamata dal tuo capo. L'immagine è chiara, ma la voce è metallica e non batte ciglio. Ti chiede un bonifico urgente. Cosa fai?",
+    "o": ["Eseguo il bonifico immediatamente.", "Riaggancio e lo chiamo sul cellulare per confermare.", "Gli chiedo di inviare la richiesta via email."],
+    "a": 1,
+    "exp": "È un Deepfake. L'assenza di battito di ciglia e le voci robotiche sono segni classici di frode AI."
+  },
+  {
+    "level": 7,
+    "q": "Un amico ti invia un messaggio vocale chiedendo 50€ via Revolut perché ha perso il portafoglio. La voce è identica. Cosa fai?",
+    "o": ["Li invio subito, è il mio amico.", "Gli faccio una domanda che solo il mio vero amico conoscerebbe.", "Ignoro il messaggio."],
+    "a": 1,
+    "exp": "Attenzione al Voice Cloning! Con soli 3 secondi di audio, l'AI può imitare qualsiasi voce."
+  },
+  {
+    "level": 8,
+    "q": "Ricevi un'email che dice che la tua password è finita nel Dark Web. Qual è il rischio maggiore?",
+    "o": ["Nessuno, non uso più quell'app.", "Che la usino per accedere alla mia email o banca.", "Solo quell'app specifica verrà hackerata."],
+    "a": 1,
+    "exp": "I truffatori usano il 'Credential Stuffing': provano la tua password su tutti i servizi principali."
+  },
+  {
+    "level": 9,
+    "q": "Un 'Consulente Finanziario' su Telegram promette guadagni del 200% a settimana in Cripto. Cosa è più probabile?",
+    "o": ["Una grande opportunità.", "Una truffa di tipo 'Pig Butchering'.", "Un investimento legale se il sito è ben fatto."],
+    "a": 1,
+    "exp": "Le truffe sugli investimenti promettono rendimenti irrealistici per rubare grandi somme."
+  }
+]
