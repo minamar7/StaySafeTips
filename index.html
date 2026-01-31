@@ -47,6 +47,9 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 .mini-card:active { background: rgba(56, 189, 248, 0.1); transform: scale(0.95); }
 
 .ad-slot { margin: 15px 0; background: rgba(0,0,0,0.2); border-radius: 15px; text-align: center; overflow: hidden; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+
+/* Premium Card Style */
+.premium-glow { border: 1px solid var(--gold) !important; box-shadow: 0 0 20px rgba(250, 204, 21, 0.15); }
 </style>
 </head>
 <body>
@@ -76,7 +79,7 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
   <header class="app-header">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
       <div style="color:var(--gold); font-weight:bold; background:rgba(250,204,21,0.1); padding:5px 12px; border-radius:15px; font-size:13px;">
-        🔥 <span id="streak_val">1</span> <span id="txt_streak">Day Streak</span>
+        🔥 <span id="streak_val">1</span> <span id="txt_streak">Ημέρες Σερί</span>
       </div>
       <div style="font-weight:900; color:var(--accent); font-size:14px;">LEVEL <span id="level_val">1</span></div>
     </div>
@@ -89,44 +92,45 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
         <h2 id="txt_home_title" style="margin-top:0;">🛡️ Ασφάλεια Σπιτιού</h2>
         <button id="txt_start_btn" class="main-cta" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
         <div class="mini-stats-grid">
-            <a href="https://minamar7.github.io/StaySafeTips/" class="mini-card">
+            <div class="mini-card">
                 <span style="color:var(--accent); font-weight:bold; display:block; font-size:18px;">100%</span>
-                <small id="txt_scan">Safe Scan</small>
-            </a>
-            <a href="scam-alerts.html" class="mini-card">
+                <small>Safe Scan</small>
+            </div>
+            <div class="mini-card">
                 <span style="color:#ef4444; font-weight:bold; display:block; font-size:18px;">LIVE</span>
-                <small id="txt_alerts">Scam Alerts</small>
-            </a>
+                <small>Live Alerts</small>
+            </div>
         </div>
       </div>
 
-      <div class="ad-slot">
+      <div id="ad_container" class="ad-slot">
         <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
 
       <div class="glass-card" style="text-align:center;">
-        <h3 id="txt_social_title" style="color:var(--gold); font-size:15px; margin-bottom:15px;">Elite Security Tips</h3>
+        <h3 style="color:var(--gold); font-size:15px; margin-bottom:15px;">Elite Συμβουλές</h3>
         <div style="display:flex; justify-content:center; gap:25px;">
-          <a href="https://www.instagram.com/stay_safe_tips?igsh=c2FyYWtyb3c4MzB5" target="_blank" style="text-decoration:none; font-size:32px;">📸</a>
-          <a href="https://www.tiktok.com/@securitydefense?_r=1&_t=ZN-93XEPsx5DBm" target="_blank" style="text-decoration:none; font-size:32px;">📱</a>
+          <a href="https://www.instagram.com/stay_safe_tips" target="_blank" style="text-decoration:none; font-size:32px;">📸</a>
+          <a href="https://www.tiktok.com/@securitydefense" target="_blank" style="text-decoration:none; font-size:32px;">📱</a>
         </div>
-      </div>
-
-      <div class="glass-card">
-        <h3 id="txt_badge_bar" style="font-size:13px; margin:0 0 10px;">Badge Progress</h3>
-        <div class="xp-bar" style="height:6px;"><div id="badge_fill" class="xp-fill" style="background:var(--accent); width:0%;"></div></div>
-        <p style="font-size:11px; color:var(--muted); margin-top:8px;"><span id="badge_count">0</span> / 4 <span id="txt_unlocked">Unlocked</span></p>
       </div>
     </section>
 
-    <section id="screen_badges" class="hidden">
-      <h2 id="txt_badges_title" style="text-align:center; margin-bottom:25px;">🏅 Elite Awards</h2>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-        <div style="text-align:center;"><div id="badge_home" class="badge">🏠</div><b id="txt_b1_t">Step 1</b></div>
-        <div style="text-align:center;"><div id="badge_shield" class="badge">🛡️</div><b id="txt_b2_t">Guardian</b></div>
-        <div style="text-align:center;"><div id="badge_streak" class="badge">🔥</div><b id="txt_b3_t">Habit</b></div>
-        <div style="text-align:center;"><div id="badge_secret" class="badge">👥</div><b id="txt_b4_t">Social</b></div>
+    <section id="screen_premium" class="hidden">
+      <div class="glass-card premium-glow" style="text-align:center;">
+        <span style="font-size:50px;">💎</span>
+        <h2 style="color:var(--gold);">Stay Safe Elite</h2>
+        <p style="color:var(--muted);">Ξεκλείδωσε όλες τις ερωτήσεις και αφαίρεσε τις διαφημίσεις.</p>
+        <button class="main-cta" onclick="activatePremium()" style="background:linear-gradient(135deg, #facc15, #eab308);">ΓΙΝΕ PREMIUM</button>
+      </div>
+      <div class="glass-card">
+        <h3>Γιατί Premium;</h3>
+        <ul style="text-align:left; color:var(--muted); font-size:14px; line-height:1.6;">
+            <li>✅ Πρόσβαση στα Premium JSON ερωτηματολόγια</li>
+            <li>✅ Μηδενικές διαφημίσεις</li>
+            <li>✅ Αποκλειστικά σήματα (Elite Badges)</li>
+        </ul>
       </div>
     </section>
 
@@ -135,33 +139,23 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 
   <nav class="nav-tabs">
     <button class="nav-tab active" onclick="nav('home', this)">🏠</button>
-    <button class="nav-tab" onclick="nav('badges', this)">🏅</button>
+    <button class="nav-tab" onclick="nav('premium', this)">💎</button>
   </nav>
 </div>
 
 <script>
-const ui = {
-    el: { txt_streak: "Ημέρες Σερί", txt_home_title: "🛡️ Ασφάλεια Σπιτιού", txt_start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Συμβουλές", txt_badge_bar: "Πρόοδος Τροπαίων", txt_unlocked: "Ξεκλείδωτα", txt_badges_title: "🏅 Elite Τρόπαια", txt_b1_t: "Πρώτο Βήμα", txt_b2_t: "Φύλακας", txt_b3_t: "Συνήθεια", txt_b4_t: "Κοινωνικός", txt_next: "ΕΠΟΜΕΝΟ" },
-    en: { txt_streak: "Day Streak", txt_home_title: "🛡️ Home Security", txt_start_btn: "START TEST", txt_scan: "Safe Scan", txt_alerts: "Live Alerts", txt_social_title: "Elite Tips", txt_badge_bar: "Badge Progress", txt_unlocked: "Unlocked", txt_badges_title: "🏅 Elite Awards", txt_b1_t: "First Step", txt_b2_t: "Guardian", txt_b3_t: "Habit", txt_b4_t: "Social", txt_next: "NEXT" },
-    de: { txt_streak: "Tage Streak", txt_home_title: "🛡️ Haussicherheit", txt_start_btn: "STARTEN", txt_scan: "Safe Scan", txt_alerts: "Live-Alarme", txt_social_title: "Elite-Tipps", txt_badge_bar: "Abzeichen-Fortschritt", txt_unlocked: "Freigeschaltet", txt_badges_title: "🏅 Elite-Erfolge", txt_b1_t: "Schritt 1", txt_b2_t: "Wächter", txt_b3_t: "Gewohnheit", txt_b4_t: "Sozial", txt_next: "WEITER" },
-    fr: { txt_streak: "Jours de Suite", txt_home_title: "🛡️ Sécurité Maison", txt_start_btn: "COMMENCER", txt_scan: "Safe Scan", txt_alerts: "Alertes Live", txt_social_title: "Conseils Elite", txt_badge_bar: "Progrès Badges", txt_unlocked: "Débloqués", txt_badges_title: "🏅 Prix Elite", txt_b1_t: "Étape 1", txt_b2_t: "Gardien", txt_b3_t: "Habitude", txt_b4_t: "Social", txt_next: "SUIVANT" },
-    es: { txt_streak: "Días de Racha", txt_home_title: "🛡️ Seguridad Hogar", txt_start_btn: "EMPEZAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Consejos Elite", txt_badge_bar: "Progreso Insignias", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Premios Elite", txt_b1_t: "Paso 1", txt_b2_t: "Guardián", txt_b3_t: "Hábito", txt_b4_t: "Social", txt_next: "SIGUIENTE" },
-    it: { txt_streak: "Giorni di Racha", txt_home_title: "🛡️ Sicurezza Casa", txt_start_btn: "INIZIA", txt_scan: "Safe Scan", txt_alerts: "Avvisi Live", txt_social_title: "Consigli Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Sbloccato", txt_badges_title: "🏅 Premi Elite", txt_b1_t: "Passo 1", txt_b2_t: "Guardiano", txt_b3_t: "Abitudine", txt_b4_t: "Social", txt_next: "AVANTI" },
-    pt: { txt_streak: "Dias de Racha", txt_home_title: "🛡️ Segurança Casa", txt_start_btn: "COMEÇAR", txt_scan: "Safe Scan", txt_alerts: "Alertas Live", txt_social_title: "Dicas Elite", txt_badge_bar: "Progresso Badge", txt_unlocked: "Desbloqueado", txt_badges_title: "🏅 Prêmios Elite", txt_b1_t: "Passo 1", txt_b2_t: "Guardião", txt_b3_t: "Hábito", txt_b4_t: "Social", txt_next: "PRÓXIMO" },
-    ru: { txt_streak: "Дней Подряд", txt_home_title: "🛡️ Безопасность", txt_start_btn: "НАЧАТЬ", txt_scan: "Safe Scan", txt_alerts: "Оповещения", txt_social_title: "Elite Советы", txt_badge_bar: "Прогресс значков", txt_unlocked: "Открыто", txt_badges_title: "🏅 Награды Elite", txt_b1_t: "Шаг 1", txt_b2_t: "Страж", txt_b3_t: "Привычка", txt_b4_t: "Соцсети", txt_next: "ДАЛЕΕ" },
-    zh: { txt_streak: "连续天数", txt_home_title: "🛡️ 家庭安全", txt_start_btn: "开始", txt_scan: "Safe Scan", txt_alerts: "实时警报", txt_social_title: "精英提示", txt_badge_bar: "徽章进度", txt_unlocked: "已解锁", txt_badges_title: "🏅 精英奖项", txt_b1_t: "第一步", txt_b2_t: "守护者", txt_b3_t: "习惯", txt_b4_t: "社交", txt_next: "下一步" },
-    hi: { txt_streak: "दिनों का सिलसिला", txt_home_title: "🛡️ घर की सुरक्षा", txt_start_btn: "शुरू करें", txt_scan: "Safe Scan", txt_alerts: "लाइव अलर्ट", txt_social_title: "एलीट टिप्स", txt_badge_bar: "बज प्रगति", txt_unlocked: "खुला है", txt_badges_title: "🏅 एलीट पुरस्कार", txt_b1_t: "पहला कदम", txt_b2_t: "रक्षक", txt_b3_t: "आदत", txt_b4_t: "सोशल", txt_next: "अगला" }
-};
+let currentLang = 'el', xp = 0, currentQ = 0, quizData = [], isPremium = false;
 
-let currentLang = 'el', unlockedCount = 0, xp = 0, currentQ = 0, quizData = [];
+// Έλεγχος αν ο χρήστης είναι ήδη Premium
+if(localStorage.getItem('isPremium') === 'true') {
+    isPremium = true;
+    document.getElementById('ad_container')?.classList.add('hidden');
+}
 
 function initApp(lang) {
     currentLang = lang;
-    const dict = ui[lang] || ui['en'];
-    for (let id in dict) { let el = document.getElementById(id); if (el) el.innerText = dict[id]; }
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
-    confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 } });
 }
 
 function nav(id, btn) {
@@ -174,74 +168,74 @@ function nav(id, btn) {
 }
 
 async function startQuiz() {
+    // Επιλογή αρχείου βάσει Premium status
+    const mode = isPremium ? "premium" : "free";
+    const fileName = `./questions_${mode}_${currentLang}.json`;
+    
     try {
-        const res = await fetch(`questions_free_${currentLang}.json`);
-        quizData = (await res.json()).sort(() => Math.random() - 0.5).slice(0, 5);
-        currentQ = 0; showQuestion(); nav('quiz');
-    } catch(e) { alert("JSON Error: Check filenames on GitHub!"); }
+        const res = await fetch(fileName);
+        if(!res.ok) throw new Error();
+        const data = await res.json();
+        quizData = data.sort(() => Math.random() - 0.5).slice(0, 5);
+        currentQ = 0; 
+        showQuestion(); 
+        nav('quiz');
+    } catch(e) {
+        alert("Σφάλμα: Δεν βρέθηκε το αρχείο " + fileName + " στο GitHub!");
+    }
 }
 
 function showQuestion() {
     const q = quizData[currentQ];
     const quizSec = document.getElementById('screen_quiz');
-    const nextTxt = ui[currentLang]?.txt_next || "Next";
-    quizSec.innerHTML = `<div class="glass-card" style="text-align:center;">
-        <p style="font-size:12px; color:var(--accent);">Q ${currentQ+1}/${quizData.length}</p>
-        <h3 style="margin-bottom:20px;">${q.q}</h3>
-        <div id="options">${q.o.map((opt, i) => `<button class="mini-card" style="width:100%; margin-bottom:10px; cursor:pointer;" onclick="handleAnswer(${i})">${opt}</button>`).join('')}</div>
-        <button id="quiz_next_btn" class="main-cta" style="display:none; margin-top:10px;" onclick="nextStep()">${nextTxt}</button>
-    </div>`;
+    quizSec.innerHTML = `
+        <div class="glass-card" style="text-align:center;">
+            <p style="font-size:12px; color:var(--accent);">Ερώτηση ${currentQ+1}/5</p>
+            <h3 style="margin-bottom:20px; color:white;">${q.q}</h3>
+            <div id="options">
+                ${q.o.map((opt, i) => `
+                    <button class="mini-card" style="width:100%; margin-bottom:10px; cursor:pointer; color:white;" 
+                    onclick="handleAnswer(${i})">${opt}</button>
+                `).join('')}
+            </div>
+            <button id="next_btn" class="main-cta" style="display:none; margin-top:15px;" onclick="nextStep()">ΕΠΟΜΕΝΟ</button>
+        </div>`;
 }
 
 function handleAnswer(idx) {
     const q = quizData[currentQ];
     const btns = document.querySelectorAll('#options button');
     btns.forEach(b => b.disabled = true);
-    if(idx === q.a) { btns[idx].style.background = "#22c55e"; xp += 20; updateXP(); }
-    else { btns[idx].style.background = "#ef4444"; btns[q.a].style.background = "#22c55e"; }
-    document.getElementById('quiz_next_btn').style.display = "block";
+    if(idx === q.a) { 
+        btns[idx].style.background = "#22c55e"; 
+        xp += 20; updateXP();
+    } else { 
+        btns[idx].style.background = "#ef4444"; 
+        btns[q.a].style.background = "#22c55e"; 
+    }
+    document.getElementById('next_btn').style.display = "block";
 }
 
 function nextStep() {
     currentQ++;
     if(currentQ < quizData.length) showQuestion();
-    else finishQuiz();
-}
-
-function finishQuiz() {
-    const quizSec = document.getElementById('screen_quiz');
-    quizSec.innerHTML = `
-        <div class="glass-card" style="text-align:center;">
-            <h2>🎉 Συγχαρητήρια!</h2>
-            <p>Ανέβηκες επίπεδο!</p>
-            <div class="ad-slot">
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                <script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>
-            </div>
-            <button class="main-cta" onclick="nav('home', document.querySelectorAll('.nav-tab')[0])">ΕΠΙΣΤΡΟΦΗ</button>
-        </div>`;
-    unlockBadge('badge_home');
-    confetti({particleCount:100});
+    else {
+        nav('home');
+        confetti({particleCount: 150, spread: 70});
+    }
 }
 
 function updateXP() {
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-    let lv = Math.floor(xp / 100) + 1;
-    let lvDisplay = document.getElementById('level_val');
-    if(lv > parseInt(lvDisplay.innerText)) {
-        lvDisplay.innerText = lv;
-        unlockBadge('badge_shield'); confetti({particleCount:200});
-    }
+    document.getElementById('level_val').innerText = Math.floor(xp / 100) + 1;
 }
 
-function unlockBadge(id) {
-    const b = document.getElementById(id);
-    if(b && !b.classList.contains('unlocked')) {
-        b.classList.add('unlocked');
-        unlockedCount++;
-        document.getElementById('badge_count').innerText = unlockedCount;
-        document.getElementById('badge_fill').style.width = (unlockedCount / 4 * 100) + "%";
-    }
+function activatePremium() {
+    isPremium = true;
+    localStorage.setItem('isPremium', 'true');
+    document.getElementById('ad_container')?.classList.add('hidden');
+    alert("💎 Το Premium ενεργοποιήθηκε! Τώρα μπορείς να παίξεις τις Premium ερωτήσεις.");
+    nav('home', document.querySelectorAll('.nav-tab')[0]);
 }
 </script>
 </body>
