@@ -5,45 +5,50 @@ document.addEventListener("DOMContentLoaded", () => {
   const appShell = document.querySelector(".app-shell");
   const startBtn = document.getElementById("onboarding-start");
 
-  // --- 1. Onboarding Logic ---
+  // --- 1. Λειτουργία Εναλλαγής Οθονών ---
+  function showScreen(targetId) {
+    screens.forEach(s => {
+      s.classList.remove("active");
+      if (s.id === `screen-${targetId}`) s.classList.add("active");
+    });
+    tabs.forEach(t => {
+      t.classList.toggle("active", t.getAttribute("data-target") === targetId);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  // --- 2. Onboarding Logic ---
   if (startBtn) {
     startBtn.addEventListener("click", () => {
-      onboarding.style.display = "none";
+      onboarding.classList.add("hidden"); // Χρήση class για συνέπεια
       appShell.classList.remove("hidden");
       localStorage.setItem("ss_onboarding_done", "true");
+      showScreen("home");
     });
   }
 
   if (localStorage.getItem("ss_onboarding_done") === "true") {
-    if (onboarding) onboarding.style.display = "none";
+    if (onboarding) onboarding.classList.add("hidden");
     if (appShell) appShell.classList.remove("hidden");
+    showScreen("home");
   }
 
-  // --- 2. Navigation Logic ---
+  // --- 3. Navigation Logic ---
   tabs.forEach(tab => {
     tab.addEventListener("click", () => {
       const target = tab.getAttribute("data-target");
-      
-      tabs.forEach(t => t.classList.remove("active"));
-      tab.classList.add("active");
-
-      screens.forEach(s => {
-        s.classList.toggle("active", s.id === `screen-${target}`);
-      });
+      showScreen(target);
     });
   });
 
-  // --- 3. Quiz Launcher ---
+  // --- 4. Quiz Launcher ---
   window.launchQuiz = (badgeId) => {
-    // Ενεργοποιούμε το tab του quiz
-    const quizTab = document.querySelector('[data-target="quiz"]');
-    if (quizTab) quizTab.click();
-
+    showScreen("quiz");
     if (window.QuizEngine) {
       window.QuizEngine.start('el', badgeId);
     }
   };
 
-  document.getElementById("home-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-home"));
-  document.getElementById("digital-quiz-btn")?.addEventListener("click", () => launchQuiz("badge-digital"));
+  document.getElementById("home-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-home"));
+  document.getElementById("digital-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-digital"));
 });
