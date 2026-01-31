@@ -10,67 +10,68 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-:root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --gold: #facc15; --text: #e5e7eb; --muted: #94a3b8; }
+:root {
+  --bg: #020617;
+  --card: #0f172a;
+  --accent: #38bdf8;
+  --gold: #facc15;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+}
+
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
 .hidden { display: none !important; }
 
-/* Header & Progress */
-.app-header { padding: 40px 20px 20px; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 100; }
-.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; margin-top: 10px; }
+/* --- ΓΡΑΦΙΚΑ & GLASSMORPHISM --- */
+.app-header { padding: 40px 20px 20px; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b; }
+.glass-card { background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 24px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; }
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-/* Social Buttons */
+/* --- SOCIAL BUTTONS --- */
 .social-container { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
 .social-btn { width: 70px; height: 70px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 32px; text-decoration: none; transition: 0.3s; box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
 .ig-btn { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%); }
 .tt-btn { background: #000; border: 2px solid #25f4ee; border-right-color: #fe2c55; border-bottom-color: #fe2c55; }
 
-/* Quiz & Content */
-.content-area { padding: 20px 20px 100px; }
-.glass-card { background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 24px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+/* --- QUIZ & BUTTONS --- */
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; }
-.quiz-question-box { background: #1e293b; padding: 25px; border-radius: 20px; margin-bottom: 20px; text-align: center; font-weight: bold; min-height: 80px; display: flex; align-items: center; justify-content: center; }
-.quiz-options-grid button { background: #0f172a; border: 1px solid #334155; color: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%; font-size: 15px; cursor: pointer; text-align: left; }
+.opt-btn { background: #0f172a; border: 1px solid #334155; color: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%; text-align: left; cursor: pointer; }
 
-/* Badges */
+/* --- BADGES --- */
 .badges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; opacity: 0.15; filter: grayscale(1); transition: 0.5s; }
+.badge { background: #0f172a; padding: 25px; border-radius: 22px; text-align: center; font-size: 35px; border: 2px solid transparent; transition: 0.5s; opacity: 0.15; filter: grayscale(1); }
 .badge.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--gold); box-shadow: 0 0 20px rgba(250, 204, 21, 0.4); }
 
-/* Navigation */
+/* --- NAV --- */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); display: flex; border-top: 1px solid #1e293b; padding-bottom: 15px; }
-.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; }
 .nav-tab.active { color: var(--accent); }
-
-/* Overlays */
-.quiz-result { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; }
-.quiz-result-card { background: #1e293b; padding: 30px; border-radius: 30px; text-align: center; width: 85%; border: 1px solid var(--accent); }
 </style>
 </head>
 
 <body>
 
-<section id="onboarding" class="onboarding-screen" style="position:fixed; inset:0; background:#000; z-index:9999; display:flex; align-items:center; justify-content:center; text-align:center;">
+<section id="onboarding" style="position:fixed; inset:0; background:radial-gradient(circle at top, #1e293b, #000); display:flex; align-items:center; justify-content:center; z-index:9999; text-align:center;">
   <div>
-    <h1 style="font-size:40px;">🛡️</h1>
-    <h2>Stay Safe Elite</h2>
-    <button class="main-cta" onclick="document.getElementById('onboarding').classList.add('hidden')">ΞΕΚΙΝΑ</button>
+    <div style="font-size:80px; margin-bottom:20px; filter:drop-shadow(0 0 20px var(--accent));">🛡️</div>
+    <h1 style="font-size:32px;">Stay Safe Elite</h1>
+    <button class="main-cta" style="width:200px;" onclick="document.getElementById('onboarding').classList.add('hidden')">ΞΕΚΙΝΑ</button>
   </div>
 </section>
 
 <div id="main_app">
   <header class="app-header">
-    <div class="header-top">
-      <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> Day Streak</div>
-      <select id="lang_select" style="background:#1e293b; color:white; border:1px solid var(--accent); border-radius:8px; padding:4px;" onchange="changeLang(this.value)">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+      <div style="color:var(--gold); font-weight:bold;">🔥 1 Day Streak</div>
+      <select id="lang_select" style="background:#1e293b; color:white; border:1px solid var(--accent); padding:5px; border-radius:10px;" onchange="current_lang = this.value">
         <option value="el">🇬🇷 GR</option>
         <option value="en">🇺🇸 EN</option>
         <option value="de">🇩🇪 DE</option>
         <option value="fr">🇫🇷 FR</option>
-        <option value="it">🇮🇹 IT</option>
         <option value="es">🇪🇸 ES</option>
+        <option value="it">🇮🇹 IT</option>
         <option value="pt">🇵Τ PT</option>
         <option value="ru">🇷🇺 RU</option>
         <option value="zh">🇨🇳 ZH</option>
@@ -78,33 +79,32 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
       </select>
     </div>
     <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
-    <div style="display:flex; justify-content:space-between; font-size:12px; margin-top:5px;">
-        <span>Progress</span>
-        <span>Level <span id="level_val">1</span></span>
+    <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:12px;">
+      <span>Progress</span>
+      <span>Level <span id="level_val">1</span></span>
     </div>
   </header>
 
-  <main class="content-area">
+  <main style="padding: 20px 20px 100px;">
     <section id="screen_home" class="screen">
       <div class="glass-card">
-        <h2 id="txt_home_title">Ασφάλεια Σπιτιού</h2>
+        <h2>Ασφάλεια Σπιτιού</h2>
         <button class="main-cta" onclick="startQuiz('free')">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
       </div>
-
       <div class="glass-card" style="text-align:center;">
         <h3 style="color:var(--accent);">Expert Tips</h3>
         <div class="social-container">
-          <a href="https://instagram.com/YOUR_FRIEND" target="_blank" class="social-btn ig-btn" onclick="unlockSecret()">📸</a>
-          <a href="https://tiktok.com/@YOUR_FRIEND" target="_blank" class="social-btn tt-btn" onclick="unlockSecret()">📱</a>
+          <a href="https://instagram.com/USERNAME" target="_blank" class="social-btn ig-btn" onclick="unlockBadge('badge_secret')">📸</a>
+          <a href="https://tiktok.com/@USERNAME" target="_blank" class="social-btn tt-btn" onclick="unlockBadge('badge_secret')">📱</a>
         </div>
         <p style="font-size:12px; color:var(--gold);">🎁 Secret Badge Unlock!</p>
       </div>
     </section>
 
     <section id="screen_quiz" class="screen hidden">
-      <div id="question_box" class="quiz-question-box"></div>
-      <div id="options_grid" class="quiz-options-grid"></div>
-      <button id="next_btn" class="main-cta" onclick="nextQuestion()" style="display:none; background:var(--gold); color:black;">ΣΥΝΕΧΕΙΑ</button>
+      <div id="question_box" class="glass-card" style="text-align:center; font-weight:bold; min-height:100px; display:flex; align-items:center; justify-content:center;"></div>
+      <div id="options_grid"></div>
+      <button id="next_btn" class="main-cta" onclick="nextQuestion()" style="display:none; background:var(--gold); color:black; margin-top:10px;">ΣΥΝΕΧΕΙΑ</button>
     </section>
 
     <section id="screen_badges" class="screen hidden">
@@ -124,21 +124,12 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
   </nav>
 </div>
 
-<div id="level_up_modal" class="quiz-result hidden">
-    <div class="quiz-result-card" style="border: 3px solid var(--gold);">
-        <h1 style="color:var(--gold); font-size:40px;">⭐</h1>
-        <h2>LEVEL UP!</h2>
+<div id="level_up_modal" class="hidden" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:10000;">
+    <div class="glass-card" style="text-align:center; width:80%; border:2px solid var(--gold);">
+        <div style="font-size:60px;">⭐</div>
+        <h2 style="color:var(--gold);">LEVEL UP!</h2>
         <p>Φτάσατε στο Επίπεδο <span id="new_lv_val">2</span></p>
-        <button class="main-cta" onclick="closeLevelUp()">ΤΕΛΕΙΑ!</button>
-    </div>
-</div>
-
-<div id="ad_screen" class="quiz-result hidden" style="background:white; color:black; text-align:center;">
-    <div>
-        <small>Advertisement</small>
-        <div style="width:300px; height:250px; background:#eee; margin:20px auto; border:1px dashed #ccc;"></div>
-        <button id="close_ad_btn" class="main-cta" style="background:black; color:white; display:none;" onclick="closeAd()">ΚΛΕΙΣΙΜΟ</button>
-        <p id="ad_timer">Κλείσιμο σε 5...</p>
+        <button class="main-cta" onclick="document.getElementById('level_up_modal').classList.add('hidden')">ΤΕΛΕΙΑ</button>
     </div>
 </div>
 
@@ -152,15 +143,13 @@ function nav(id, btn) {
     btn.classList.add('active');
 }
 
-function changeLang(val) { current_lang = val; }
-
 async function startQuiz(mode) {
     try {
         const res = await fetch(`questions_${mode}_${current_lang}.json`);
         const data = await res.json();
         quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
         current_q = 0; nav('quiz', document.querySelectorAll('.nav-tab')[0]); showQuestion();
-    } catch(e) { alert("Σφάλμα: Βεβαιωθείτε ότι τα JSON αρχεία είναι στον ίδιο φάκελο!"); }
+    } catch(e) { alert("Σφάλμα: Βεβαιωθείτε ότι όλα τα JSON είναι στον ίδιο φάκελο!"); }
 }
 
 function showQuestion() {
@@ -184,11 +173,7 @@ function handleAnswer(idx) {
 function nextQuestion() {
     current_q++;
     if(current_q < quiz_data.length) showQuestion();
-    else { 
-        unlockBadge('badge_home'); 
-        nav('home', document.querySelectorAll('.nav-tab')[0]); 
-        confetti({particleCount: 150, zIndex: 60000}); 
-    }
+    else { unlockBadge('badge_home'); nav('home', document.querySelectorAll('.nav-tab')[0]); confetti({particleCount:150}); }
 }
 
 function updateProgress() {
@@ -197,44 +182,13 @@ function updateProgress() {
     document.getElementById('level_val').innerText = nextLv;
     if(nextLv > level) { 
         level = nextLv; 
-        setTimeout(() => triggerLevelUp(level), 500);
-        if(level === 2) unlockBadge('badge_shield');
-        if(level === 3) unlockBadge('badge_streak');
+        document.getElementById('new_lv_val').innerText = level;
+        document.getElementById('level_up_modal').classList.remove('hidden');
+        confetti({particleCount:200});
     }
 }
 
-function triggerLevelUp(lv) {
-    document.getElementById('new_lv_val').innerText = lv;
-    document.getElementById('level_up_modal').classList.remove('hidden');
-    confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 }, zIndex: 60000 });
-}
-
-function closeLevelUp() { document.getElementById('level_up_modal').classList.add('hidden'); showAd(); }
-
-function showAd() {
-    document.getElementById('ad_screen').classList.remove('hidden');
-    let t = 5;
-    const inv = setInterval(() => {
-        t--; document.getElementById('ad_timer').innerText = `Κλείσιμο σε ${t}...`;
-        if(t <= 0) { 
-            clearInterval(inv); 
-            document.getElementById('ad_timer').classList.add('hidden');
-            document.getElementById('close_ad_btn').style.display = 'block';
-        }
-    }, 1000);
-}
-
-function closeAd() { document.getElementById('ad_screen').classList.add('hidden'); }
-
 function unlockBadge(id) { document.getElementById(id).classList.add('unlocked'); }
-
-function unlockSecret() {
-    setTimeout(() => { 
-        unlockBadge('badge_secret'); 
-        confetti({particleCount: 100, colors: ['#ff0050', '#00f2ea'], zIndex: 60000}); 
-    }, 2000);
-}
 </script>
-
 </body>
 </html>
