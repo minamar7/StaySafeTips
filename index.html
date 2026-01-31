@@ -2,16 +2,16 @@
 <html lang="el">
 <head>
   <meta charset="UTF-8" />
-  <title>Stay Safe Premium</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Stay Safe Elite</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#020617" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <meta name="description" content="Stay Safe Premium — Διαδραστική εμπειρία ασφάλειας με κουίζ, σήματα και προστασία εκτός σύνδεσης.">
-  <meta property="og:title" content="Stay Safe Premium">
-  <meta property="og:description" content="Ο προσωπικός σας σύμβουλος ασφαλείας με σενάρια από την πραγματική ζωή.">
-  <meta property="og:type" content="website">
+  <meta name="description" content="Stay Safe Elite — Η απόλυτη εμπειρία ψηφιακής και φυσικής ασφάλειας.">
+  <meta property="og:title" content="Stay Safe Elite">
+  <meta property="og:image" content="icons/icon-512.png">
 
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="stylesheet" href="./styles.css" />
@@ -24,165 +24,146 @@
 
 <section id="onboarding" class="onboarding-screen">
   <div class="onboarding-content">
-    <div class="onboarding-slide active">
-      <div class="onboarding-icon">🛡️</div>
-      <h1>Stay Safe Elite</h1>
-      <p>Προστάτεψε την ψηφιακή και την πραγματική σου ζωή.</p>
+    <div class="onboarding-slider">
+      <div class="onboarding-slide active" data-index="0">
+        <div class="onboarding-icon">🛡️</div>
+        <h1>Stay Safe Elite</h1>
+        <p>Προστάτεψε την ψηφιακή και την πραγματική σου ζωή με κορυφαία πρωτόκολλα.</p>
+      </div>
+      <div class="onboarding-slide" data-index="1" style="display:none">
+        <div class="onboarding-icon">🧠</div>
+        <h1>Μάθε στην Πράξη</h1>
+        <p>Αντιμετώπισε ρεαλιστικά σενάρια κινδύνου και πάρε τις σωστές αποφάσεις.</p>
+      </div>
+      <div class="onboarding-slide" data-index="2" style="display:none">
+        <div class="onboarding-icon">🏅</div>
+        <h1>Γίνε Elite</h1>
+        <p>Κέρδισε σπάνια Badges και ξεκλείδωσε προηγμένα εργαλεία προστασίας.</p>
+      </div>
     </div>
-    <div class="onboarding-slide hidden">
-      <div class="onboarding-icon">🧠</div>
-      <h1>Μάθε στην πράξη</h1>
-      <p>Πραγματικά σενάρια. Γρήγορες αποφάσεις.</p>
+    
+    <div class="onboarding-dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
     </div>
-    <div class="onboarding-slide hidden">
-      <div class="onboarding-icon">🏅</div>
-      <h1>Κέρδισε Badges</h1>
-      <p>Χτίσε δεξιότητες ασφαλείας κάθε μέρα.</p>
-    </div>
-    <button id="onboarding-start">Ξεκίνα το Ταξίδι</button>
+
+    <button id="onboarding-start" class="main-cta pulse">Ξεκίνα το Ταξίδι</button>
   </div>
 </section>
 
 <div class="app-shell hidden">
 
   <header class="app-header">
+    <div class="header-top">
+      <div class="user-rank-box">
+        <span class="rank-icon">🔥</span>
+        <span id="user-streak-val">1 Day Streak</span>
+      </div>
+      <select id="lang-select" class="lang-minimal">
+        <option value="el">GR</option>
+        <option value="en">EN</option>
+      </select>
+    </div>
     <div class="title-block">
       <h1 data-i18n="t-app-title">Stay Safe Elite</h1>
-      <p data-i18n="t-app-subtitle">Premium Safety Experience</p>
+      <div class="xp-container">
+        <div class="xp-bar"><div id="xp-fill" class="xp-fill" style="width: 15%;"></div></div>
+        <small>Level <span id="user-level">1</span></small>
+      </div>
     </div>
-    <select id="lang-select" class="lang-select">
-      <option value="el">Ελληνικά</option>
-      <option value="en">English</option>
-    </select>
   </header>
 
-  <nav class="nav-tabs">
-    <button class="nav-tab active" data-target="home">
-      <span class="icon">🏠</span>
-      <span data-i18n="t-tab-home">Home</span>
-    </button>
-    <button class="nav-tab" data-target="digital">
-      <span class="icon">💻</span>
-      <span data-i18n="t-tab-digital">Digital</span>
-    </button>
-    <button class="nav-tab" data-target="quiz">
-      <span class="icon">❓</span>
-      <span data-i18n="t-tab-quiz">Quiz</span>
-    </button>
-    <button class="nav-tab" data-target="badges">
-      <span class="icon">🏅</span>
-      <span data-i18n="t-tab-badges">Badges</span>
-    </button>
-    <button class="nav-tab" data-target="premium">
-      <span class="icon">⭐</span>
-      <span data-i18n="t-tab-premium">Elite</span>
-    </button>
-  </nav>
-
   <main class="content-area">
+    
     <section id="screen-home" class="app-screen active">
-      <h2 data-i18n="t-home-title">Ασφάλεια Σπιτιού</h2>
-      <p class="sub" data-i18n="t-home-sub">Daily protection</p>
-      <span class="pill" data-i18n="t-home-pill">Level 1 · Basics</span>
-      <ul id="home-list" class="feature-list"></ul>
-      <div class="snapshot">
-        <h3 data-i18n="t-home-snap-title">Home Safety Snapshot</h3>
-        <div class="progress-row">
-          <span data-i18n="t-home-quiz-label">Πρόοδος Quiz</span>
-          <span id="t-home-quiz-progress">0%</span>
-        </div>
+      <div class="glass-card">
+        <h2 data-i18n="t-home-title">Ασφάλεια Σπιτιού</h2>
+        <span class="pill" data-i18n="t-home-pill">Level 1 · Basics</span>
+        <ul id="home-list" class="feature-list"></ul>
+        <button id="home-quiz-btn" class="main-cta">Entry Quiz</button>
       </div>
-      <button id="home-quiz-btn" class="main-cta" data-i18n="t-home-btn">Έναρξη Home Quiz</button>
     </section>
 
     <section id="screen-digital" class="app-screen">
-      <h2 data-i18n="t-digital-title">Ψηφιακή Ασφάλεια</h2>
-      <p class="sub" data-i18n="t-digital-sub">Online protection</p>
-      <span class="pill" data-i18n="t-digital-pill">Level 2 · Online</span>
-      <ul id="digital-list" class="feature-list"></ul>
-      <div class="snapshot">
-        <h3 data-i18n="t-digital-snap-title">Digital Shield View</h3>
-        <div class="progress-row">
-          <span data-i18n="t-digital-quiz-label">Πρόοδος Quiz</span>
-          <span id="t-digital-quiz-progress">0%</span>
-        </div>
+      <div class="glass-card">
+        <h2 data-i18n="t-digital-title">Ψηφιακή Ασπίδα</h2>
+        <span class="pill" data-i18n="t-digital-pill">Level 2 · Online</span>
+        <ul id="digital-list" class="feature-list"></ul>
+        <button id="digital-quiz-btn" class="main-cta">Scan Network Quiz</button>
       </div>
-      <button id="digital-quiz-btn" class="main-cta" data-i18n="t-digital-btn">Έναρξη Digital Quiz</button>
     </section>
 
     <section id="screen-quiz" class="app-screen">
-      <h2 data-i18n="t-quiz-title">Safety Quiz</h2>
-      <p class="sub" data-i18n="t-quiz-sub">Σενάρια πραγματικής ζωής</p>
-      <div class="quiz-status-bar">
-        <span class="pill" id="quiz-pill">Question 1</span>
-        <div id="quiz-timer" class="timer"></div>
+      <div class="quiz-header">
+        <span id="quiz-pill" class="pill">Question 1/3</span>
       </div>
-      <div id="quiz-question" class="quiz-question-box"></div>
+      <div id="quiz-question" class="quiz-question-box animate-in"></div>
       <div id="quiz-options" class="quiz-options-grid"></div>
-      <button id="quiz-next-btn" class="main-cta" disabled data-i18n="t-quiz-next">Επόμενο</button>
     </section>
 
     <section id="screen-badges" class="app-screen">
-      <h2 data-i18n="t-badges-title">Τα Σήματά σου</h2>
-      <p class="sub" data-i18n="t-badges-sub">Η πορεία σου προς την ασφάλεια</p>
+      <h2 data-i18n="t-badges-title">Τρόπαια</h2>
       <div class="badges-grid">
-        <div id="badge-home" class="badge locked">🏠 <small>Home</small></div>
-        <div id="badge-digital" class="badge locked">🛡️ <small>Digital</small></div>
-        <div id="badge-scam" class="badge locked">🚫 <small>Scam</small></div>
+        <div id="badge-home" class="badge locked">🏠 <small>Guardian</small></div>
+        <div id="badge-digital" class="badge locked">🛡️ <small>Cyber</small></div>
+        <div id="badge-scam" class="badge locked">🚫 <small>Scam Buster</small></div>
         <div id="badge-emergency" class="badge locked">🚨 <small>Ready</small></div>
       </div>
-      <button id="badges-req-btn" class="secondary-btn" data-i18n="t-badges-req">Απαιτήσεις</button>
     </section>
 
     <section id="screen-premium" class="app-screen">
       <h2 data-i18n="t-premium-title">Elite Hub</h2>
-      <p class="sub">Προηγμένα εργαλεία προστασίας</p>
-      
       <div id="premium-list" class="premium-list-container">
-          </div>
-
-      <div id="upgrade-banner" class="upgrade-banner hidden" onclick="window.location.href='premium-paywall.html'">
-        Unlock All Protocols – €4.90
+        </div>
+      <div class="upgrade-card">
+          <h3 data-i18n="t-premium-sub">Unlock Pro Protocols</h3>
+          <button class="premium-btn pulse">Upgrade €4.90</button>
       </div>
-
-      <footer class="app-footer">
-        <a href="#" id="t-privacy-link">Privacy Policy</a>
-        <span>v1.0.0 Elite</span>
-      </footer>
     </section>
+
   </main>
+
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-target="home">
+      <span class="icon">🏠</span><span data-i18n="t-tab-home">Home</span>
+    </button>
+    <button class="nav-tab" data-target="digital">
+      <span class="icon">🛡️</span><span data-i18n="t-tab-digital">Digital</span>
+    </button>
+    <button class="nav-tab" data-target="quiz">
+      <span class="icon">❓</span><span data-i18n="t-tab-quiz">Quiz</span>
+    </button>
+    <button class="nav-tab" data-target="badges">
+      <span class="icon">🏅</span><span data-i18n="t-tab-badges">Badges</span>
+    </button>
+    <button class="nav-tab" data-target="premium">
+      <span class="icon">💎</span><span data-i18n="t-tab-premium">Elite</span>
+    </button>
+  </nav>
+
 </div>
 
 <div id="quiz-result" class="quiz-result hidden">
   <div class="quiz-result-card">
-    <div class="result-icon">🏆</div>
-    <h2 id="quiz-result-title">Quiz Completed</h2>
-    <p id="quiz-result-score">Score: 0%</p>
-    <div class="share-actions">
-        <button id="quiz-share-btn" class="share-btn">Μοιράσου το 🚀</button>
-        <button id="quiz-result-continue" class="main-cta">Συνέχεια</button>
-    </div>
+    <div class="result-confetti">✨</div>
+    <h2 id="quiz-result-score">Score: 0%</h2>
+    <p id="xp-gained">+50 XP Gained</p>
+    <button id="quiz-result-continue" class="main-cta">Συνέχεια</button>
   </div>
 </div>
 
-<div id="loading-overlay" class="loading-overlay hidden">
-  <div class="loader"></div>
-  <p>Loading Shield...</p>
-</div>
-
 <script src="./i18n.js"></script>
-<script src="./analytics.js"></script>
-<script src="./api.js"></script>
 <script src="./quiz.js"></script>
 <script src="./app.js"></script>
 
 <script>
-  // GitHub Pages Friendly Service Worker
+  // Service Worker Registration for PWA
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("./sw.js")
-        .then(reg => console.log("🛡️ Shield Active: ", reg.scope))
-        .catch(err => console.log("⚠️ Shield Error: ", err));
+        .then(reg => console.log("🛡️ Shield Active"))
+        .catch(err => console.log("⚠️ Shield Error"));
     });
   }
 </script>
