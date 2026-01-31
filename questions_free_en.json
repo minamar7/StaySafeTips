@@ -49,4 +49,15 @@
   { "q": "What is 'Malware'?", "o": ["Good software", "Malicious software", "Hardware"], "a": 1 },
   { "q": "What is the Ambulance emergency number in Greece?", "o": ["100", "166", "199"], "a": 1 },
   { "q": "Is it safe to publish your home address on the Internet?", "o": ["Yes", "No", "Only in my profile"], "a": 1 }
+  { "q": "What is 'SIM Swapping'?", "o": ["Changing your phone case", "Scammers stealing your number to bypass 2FA", "A way to get more data"], "a": 1 },
+  { "q": "What is 'Juice Jacking'?", "o": ["Stealing data via public USB charging ports", "A scam with free drinks", "A battery saving trick"], "a": 0 },
+  { "q": "What should you do if your phone suddenly loses signal for hours?", "o": ["Wait until tomorrow", "Call your provider immediately (possible SIM swap)", "Restart the phone"], "a": 1 },
+  { "q": "What is 'Typosquatting'?", "o": ["Fake websites with names similar to real ones", "Typing very fast", "A new gym exercise"], "a": 0 },
+  { "q": "Is a blurred photo of your flight ticket safe to post?", "o": ["Yes", "No, barcodes can still be scanned", "Only on Instagram"], "a": 1 },
+  { "q": "What is the safest way to store 2FA codes?", "o": ["SMS", "Authenticator App or Hardware Key", "In a notepad"], "a": 1 },
+  { "q": "What can a 'Deepfake' do in a video call?", "o": ["Make the internet faster", "Impersonate someone's face and voice", "Apply a funny filter"], "a": 1 },
+  { "q": "What is a 'Breadcrumb' scam on social media?", "o": ["Cooking tips", "Small bits of personal info used to build trust", "Winning free bread"], "a": 1 },
+  { "q": "Why is 'Metadata' in your photos dangerous?", "o": ["It makes photos heavy", "It can reveal your exact GPS location", "It ruins the quality"], "a": 1 },
+  { "q": "What is the safest way to use public Wi-Fi if necessary?", "o": ["Use a VPN", "Incognito mode", "Just be fast"], "a": 0 }
+
 ]
