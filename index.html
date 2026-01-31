@@ -152,7 +152,7 @@ body[dir="rtl"] { text-align: right; }
       <div style="font-size:50px;">💎</div>
       <h2 data-i18n="premium_tab">Elite Access</h2>
       <p data-i18n="upgrade_msg">Ξεκλείδωσε όλα τα επίπεδα.</p>
-      <button class="main-cta" style="background:var(--gold)" onclick="startQuiz('premium')" data-i18n="elite_quiz_btn">ELITE QUIZ</button>
+      <button class="main-cta" style="background:var(--gold)" onclick="openPaywall()" data-i18n="elite_quiz_btn">ELITE QUIZ</button>
     </div>
   </section>
 </main>
@@ -165,11 +165,24 @@ body[dir="rtl"] { text-align: right; }
 
 </div>
 
+<div id="paywall_screen" class="quiz-result hidden">
+    <div class="quiz-result-card" style="border: 2px solid var(--gold);">
+      <div style="font-size:50px; margin-bottom:10px;">👑</div>
+      <h2 style="color:var(--gold)">Stay Safe Elite</h2>
+      <p style="font-size:14px; margin-bottom:20px;">Γίνε μέλος και ξεκλείδωσε όλες τις ερωτήσεις και τα ειδικά σήματα!</p>
+      <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:20px;">
+          <h3 style="margin:0; font-size:24px;">2.99€ <small style="font-size:12px;">/ μήνα</small></h3>
+      </div>
+      <button class="main-cta" style="background:var(--gold); color:black; margin-bottom:10px;" onclick="alert('Σύνδεση με PayPal...')">ΕΓΓΡΑΦΗ ΤΩΡΑ</button>
+      <button onclick="closePaywall()" style="background:none; border:none; color:var(--muted); cursor:pointer;">Ίσως αργότερα</button>
+    </div>
+</div>
+
 <div id="result_screen" class="quiz-result hidden">
   <div class="quiz-result-card">
     <div style="font-size:60px; margin-bottom:10px;">🏆</div>
     <h2 id="result_title" data-i18n="congrats">Συγχαρητήρια!</h2>
-    <p id="xp_gained" style="color:var(--gold); font-weight:bold; font-size:20px;">+50 XP</p>
+    <p id="xp_gained_text" style="color:var(--gold); font-weight:bold; font-size:20px;">+100 XP</p>
     <button class="main-cta" onclick="closeResult()" data-i18n="continue">ΣΥΝΕΧΕΙΑ</button>
   </div>
 </div>
@@ -195,7 +208,6 @@ let currentLang = 'el';
 document.getElementById('btn-start').onclick = () => {
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('main_app').classList.remove('hidden');
-  // Φόρτωση γλώσσας από localStorage αν υπάρχει, αλλιώς el
   const savedLang = localStorage.getItem('user_lang') || 'el';
   updateLanguage(savedLang);
   document.getElementById('lang_select').value = savedLang;
@@ -205,7 +217,6 @@ function updateLanguage(lang) {
   currentLang = lang;
   localStorage.setItem('user_lang', lang);
   document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
-
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
@@ -216,27 +227,24 @@ function nav(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   document.getElementById('screen_' + id).classList.remove('hidden');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-  // Βρίσκουμε το σωστό κουμπί βάσει σειράς αν το event λείπει
-  if (event) {
-    event.currentTarget.classList.add('active');
-  }
+  if (event && event.currentTarget) event.currentTarget.classList.add('active');
 }
 
+function openPaywall() { document.getElementById('paywall_screen').classList.remove('hidden'); }
+function closePaywall() { document.getElementById('paywall_screen').classList.add('hidden'); }
+
 async function startQuiz(mode = 'free') {
-  // Η ΣΗΜΑΝΤΙΚΗ ΑΛΛΑΓΗ: Προσθήκη ./ για GitHub Pages
   const fileName = `./questions_${mode}_${currentLang}.json`;
-  
   try {
     const response = await fetch(fileName);
-    if (!response.ok) throw new Error(`File not found: ${fileName}`);
+    if (!response.ok) throw new Error(`Not found: ${fileName}`);
     const data = await response.json();
     quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
     current_q = 0;
     nav('quiz');
     showQuestion();
   } catch (err) {
-    console.error(err);
-    alert("Πρόβλημα σύνδεσης με τις ερωτήσεις. Βεβαιωθείτε ότι τα αρχεία .json είναι στον ίδιο φάκελο στο GitHub.");
+    alert("Σφάλμα: Ανεβάστε τα αρχεία .json στο GitHub για να ξεκινήσει το τεστ.");
   }
 }
 
@@ -255,16 +263,21 @@ function handleAnswer(selectedIdx) {
 
   if (selectedIdx === qData.a) {
     buttons[selectedIdx].style.background = "#22c55e"; 
-    xp += 50; updateProgress();
-    document.getElementById('badge_home').classList.remove('locked');
-    document.getElementById('badge_home').classList.add('unlocked');
+    xp += 20; updateProgress();
   } else {
     buttons[selectedIdx].style.background = "#ef4444";
     buttons[qData.a].style.background = "#22c55e";
   }
 
   setTimeout(() => {
-    document.getElementById('result_screen').classList.remove('hidden');
+    current_q++;
+    if (current_q < quiz_data.length) {
+        showQuestion();
+    } else {
+        document.getElementById('result_screen').classList.remove('hidden');
+        document.getElementById('badge_home').classList.remove('locked');
+        document.getElementById('badge_home').classList.add('unlocked');
+    }
   }, 1000);
 }
 
