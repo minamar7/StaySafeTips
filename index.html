@@ -7,6 +7,10 @@
 <meta name="theme-color" content="#020617">
 <meta name="apple-mobile-web-app-capable" content="yes">
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
 :root {
   --bg: #020617;
@@ -37,10 +41,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .user-rank-box { background: #1e293b; border-radius: 20px; padding: 6px 15px; font-size: 14px; color: var(--gold); border: 1px solid rgba(250, 204, 21, 0.3); }
 
-.lang-select {
-  background: #1e293b; color: white; border: 1px solid var(--accent);
-  padding: 5px 10px; border-radius: 10px; font-size: 12px; outline: none;
-}
+.lang-select { background: #1e293b; color: white; border: 1px solid var(--accent); padding: 5px 10px; border-radius: 10px; font-size: 12px; outline: none; }
 
 .xp-container { margin-top: 10px; }
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 12px; overflow: hidden; }
@@ -53,8 +54,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .main-cta {
   background: linear-gradient(135deg, var(--accent), #0ea5e9);
   border: none; color: #020617; padding: 18px; border-radius: 18px;
-  font-size: 16px; font-weight: 800; width: 100%; cursor: pointer;
-  transition: transform 0.2s;
+  font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; transition: 0.2s;
 }
 .main-cta:active { transform: scale(0.96); }
 
@@ -65,8 +65,6 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
   padding: 16px; border-radius: 16px; margin-bottom: 12px; width: 100%;
   font-size: 15px; cursor: pointer; transition: 0.2s;
 }
-
-/* Next Button in Quiz */
 #next_btn { margin-top: 10px; background: var(--gold); color: black; display: none; }
 
 /* Badges */
@@ -80,11 +78,11 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
 .nav-tab.active { color: var(--accent); }
 
-/* Result Overlays */
+/* Overlays */
 .quiz-result { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000; }
-.quiz-result-card { background: #1e293b; padding: 40px; border-radius: 30px; text-align: center; width: 85%; border: 1px solid var(--accent); }
+.quiz-result-card { background: #1e293b; padding: 30px; border-radius: 30px; text-align: center; width: 85%; border: 1px solid var(--accent); }
 
-@keyframes pop { 0% { transform: scale(0.8); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.social-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; text-decoration: none; color: white; }
 </style>
 </head>
 
@@ -100,109 +98,113 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </section>
 
 <div id="main_app" class="hidden">
-
-<header class="app-header">
-  <div class="header-top">
-    <div class="user-rank-box">🔥 <span id="streak">1 Day Streak</span></div>
-    <select id="lang_select" class="lang-select" onchange="updateLanguage(this.value)">
-      <option value="el">🇬🇷 GR</option>
-      <option value="en">🇺🇸 EN</option>
-      <option value="de">🇩🇪 DE</option>
-      <option value="fr">🇫🇷 FR</option>
-      <option value="es">🇪🇸 ES</option>
-      <option value="pt">🇵🇹 PT</option>
-      <option value="it">🇮🇹 IT</option>
-      <option value="ru">🇷🇺 RU</option>
-      <option value="zh">🇨🇳 ZH</option>
-      <option value="hi">🇮🇳 HI</option>
-      <option value="ar">🇦🇪 AR</option>
-    </select>
-  </div>
-  <h1 style="font-size: 24px;" data-i18n="safety_dashboard">Dashboard</h1>
-  <div class="xp-container">
-    <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
-    <div style="display:flex; justify-content:space-between; margin-top:5px;">
-        <small style="color:var(--muted)">Progress</small>
-        <small style="color:var(--gold)"><span data-i18n="level">Level</span> <span id="level_val">1</span></small>
+  <header class="app-header">
+    <div class="header-top">
+      <div class="user-rank-box">🔥 <span id="streak">1 Day Streak</span></div>
+      <select id="lang_select" class="lang-select" onchange="updateLanguage(this.value)">
+        <option value="el">🇬🇷 GR</option>
+        <option value="en">🇺🇸 EN</option>
+      </select>
     </div>
-  </div>
-</header>
-
-<main class="content-area">
-  <section id="screen_home" class="screen">
-    <div class="glass-card">
-      <h2 data-i18n="home_tab">Ασφάλεια Σπιτιού</h2>
-      <button class="main-cta" onclick="startQuiz('free')" data-i18n="entry_quiz_btn">ENTRY QUIZ</button>
+    <h1 style="font-size: 24px;" data-i18n="safety_dashboard">Dashboard</h1>
+    <div class="xp-container">
+      <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
+      <div style="display:flex; justify-content:space-between; margin-top:5px;">
+          <small style="color:var(--muted)">Progress</small>
+          <small style="color:var(--gold)"><span data-i18n="level">Level</span> <span id="level_val">1</span></small>
+      </div>
     </div>
-  </section>
+  </header>
 
-  <section id="screen_quiz" class="screen hidden">
-    <div id="question_box" class="quiz-question-box"></div>
-    <div id="options_grid" class="quiz-options-grid"></div>
-    <button id="next_btn" class="main-cta" onclick="nextQuestion()" data-i18n="continue">ΣΥΝΕΧΕΙΑ</button>
-  </section>
+  <main class="content-area">
+    <section id="screen_home" class="screen">
+      <div class="glass-card">
+        <h2 data-i18n="home_tab">Ασφάλεια Σπιτιού</h2>
+        <button class="main-cta" onclick="startQuiz('free')" data-i18n="entry_quiz_btn">ENTRY QUIZ</button>
+      </div>
 
-  <section id="screen_badges" class="screen hidden">
-    <h2 style="margin-bottom:20px;" data-i18n="badges_tab">Τρόπαια</h2>
-    <div class="badges-grid">
-      <div id="badge_home" class="badge locked">🏠</div>
-      <div id="badge_digital" class="badge locked">🛡️</div>
+      <div class="glass-card" style="text-align:center;">
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">Official Security Partner</p>
+        <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 10px;">
+          <a href="https://instagram.com/YOUR_FRIEND" target="_blank" class="social-icon" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #bc1888);">📸</a>
+          <a href="https://tiktok.com/@YOUR_FRIEND" target="_blank" class="social-icon" style="background: black; border: 1px solid #25f4ee;">📱</a>
+        </div>
+        <p style="font-size: 12px; color: var(--accent);">4K+ Experts Community</p>
+      </div>
+    </section>
+
+    <section id="screen_quiz" class="screen hidden">
+      <div id="question_box" class="quiz-question-box"></div>
+      <div id="options_grid" class="quiz-options-grid"></div>
+      <button id="next_btn" class="main-cta" onclick="nextQuestion()" data-i18n="continue">ΣΥΝΕΧΕΙΑ</button>
+    </section>
+
+    <section id="screen_badges" class="screen hidden">
+      <h2 style="margin-bottom:20px;" data-i18n="badges_tab">Τρόπαια</h2>
+      <div class="badges-grid">
+        <div id="badge_home" class="badge locked">🏠</div>
+        <div id="badge_digital" class="badge locked">🛡️</div>
+      </div>
+    </section>
+
+    <section id="screen_premium" class="screen hidden">
+      <div class="glass-card" style="border: 1px solid var(--gold); text-align:center;">
+        <div style="font-size:50px;">👑</div>
+        <h2 data-i18n="premium_tab">Elite Access</h2>
+        <button class="main-cta" style="background:var(--gold); color:black;" onclick="openPaywall()" data-i18n="elite_quiz_btn">ELITE QUIZ</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="nav('home')">🏠</button>
+    <button class="nav-tab" onclick="nav('badges')">🏅</button>
+    <button class="nav-tab" onclick="nav('premium')">💎</button>
+  </nav>
+</div>
+
+<div id="ad_screen" class="quiz-result hidden" style="background: white; z-index: 50000;">
+    <div style="text-align: center; color: black; width: 100%;">
+        <small style="color:#999;">Advertisement</small>
+        <div id="ad-placeholder" style="width:300px; height:250px; background:#eee; margin: 20px auto; display:flex; align-items:center; justify-content:center; border:1px dashed #ccc;">
+            <p style="color:#666; font-size:12px;">Google Ad Slot</p>
+        </div>
+        <button id="close_ad_btn" class="main-cta" style="background:black; color:white; width:80%; display:none;" onclick="closeAd()">ΚΛΕΙΣΙΜΟ</button>
+        <p id="ad_timer_text" style="font-size:12px; color:#666;">Κλείσιμο σε 5...</p>
     </div>
-  </section>
+</div>
 
-  <section id="screen_premium" class="screen hidden">
-    <div class="glass-card" style="border: 1px solid var(--gold); text-align:center;">
-      <div style="font-size:50px;">💎</div>
-      <h2 data-i18n="premium_tab">Elite Access</h2>
-      <p data-i18n="upgrade_msg">Ξεκλείδωσε όλα τα επίπεδα.</p>
-      <button class="main-cta" style="background:var(--gold); color:black;" onclick="openPaywall()" data-i18n="elite_quiz_btn">ELITE QUIZ</button>
+<div id="level_up_modal" class="quiz-result hidden" style="z-index: 40000;">
+    <div class="quiz-result-card" style="border: 3px solid var(--gold); transform: scale(0); transition: 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.49);">
+        <div style="font-size: 70px;">⭐</div>
+        <h1 style="color: var(--gold); font-size: 35px;">LEVEL UP!</h1>
+        <p>Φτάσατε στο Επίπεδο <span id="new_lv_val">2</span></p>
+        <button class="main-cta" style="background:var(--gold); color:black;" onclick="closeLevelUp()">ΤΕΛΕΙΑ!</button>
     </div>
-  </section>
-</main>
-
-<nav class="nav-tabs">
-  <button class="nav-tab active" onclick="nav('home')">🏠</button>
-  <button class="nav-tab" onclick="nav('badges')">🏅</button>
-  <button class="nav-tab" onclick="nav('premium')">💎</button>
-</nav>
-
 </div>
 
 <div id="paywall_screen" class="quiz-result hidden">
-    <div class="quiz-result-card" style="border: 2px solid var(--gold);">
-      <div style="font-size:50px; margin-bottom:10px;">👑</div>
-      <h2 style="color:var(--gold)">Stay Safe Elite</h2>
-      <p style="font-size:14px; margin-bottom:20px;">Γίνε μέλος και ξεκλείδωσε όλες τις ερωτήσεις!</p>
-      <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:20px;">
-          <h3 style="margin:0; font-size:24px;">2.99€ <small style="font-size:12px;">/ μήνα</small></h3>
-      </div>
-      <button class="main-cta" style="background:var(--gold); color:black; margin-bottom:10px;" onclick="alert('Ανακατεύθυνση σε ασφαλές περιβάλλον πληρωμής...')">ΕΓΓΡΑΦΗ ΤΩΡΑ</button>
-      <button onclick="closePaywall()" style="background:none; border:none; color:var(--muted); cursor:pointer;">Ίσως αργότερα</button>
+    <div class="quiz-result-card" style="border-color: var(--gold);">
+        <h2 style="color:var(--gold)">Elite Subscription</h2>
+        <p>2.99€ / μήνα</p>
+        <button class="main-cta" onclick="alert('Σύνδεση με πύλη πληρωμών...')">ΑΓΟΡΑ</button>
+        <button onclick="closePaywall()" style="background:none; border:none; color:var(--muted); margin-top:15px;">Ίσως αργότερα</button>
     </div>
 </div>
 
 <div id="result_screen" class="quiz-result hidden">
   <div class="quiz-result-card">
-    <div style="font-size:60px; margin-bottom:10px;">🏆</div>
+    <div style="font-size:60px;">🏆</div>
     <h2 data-i18n="congrats">Συγχαρητήρια!</h2>
-    <p id="xp_gained_text" style="color:var(--gold); font-weight:bold; font-size:20px;">+100 XP</p>
-    <button class="main-cta" onclick="closeResult()" data-i18n="continue">ΤΕΛΟΣ</button>
+    <p style="color:var(--gold); font-weight:bold;">Τέλος του Τεστ</p>
+    <button class="main-cta" onclick="closeResult()" data-i18n="continue">ΠΙΣΩ</button>
   </div>
 </div>
 
 <script>
 const translations = {
-  el: { welcome: "Stay Safe Elite", start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ", home_tab: "Ασφάλεια Σπιτιού", badges_tab: "Τρόπαια", premium_tab: "Elite Access", level: "Επίπεδο", continue: "ΣΥΝΕΧΕΙΑ", upgrade_msg: "Μάθε να προστατεύεις τον εαυτό σου.", safety_dashboard: "Πίνακας Ελέγχου", entry_quiz_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", elite_quiz_btn: "ELITE ΤΕΣΤ", congrats: "Συγχαρητήρια!" },
-  en: { welcome: "Stay Safe Elite", start_btn: "START JOURNEY", home_tab: "Home Safety", badges_tab: "Badges", premium_tab: "Elite Access", level: "Level", continue: "CONTINUE", upgrade_msg: "Learn how to protect yourself.", safety_dashboard: "Dashboard", entry_quiz_btn: "ENTRY QUIZ", elite_quiz_btn: "ELITE QUIZ", congrats: "Congratulations!" },
-  de: { welcome: "Stay Safe Elite", start_btn: "STARTEN", home_tab: "Heimsicherheit", badges_tab: "Abzeichen", premium_tab: "Elite Access", level: "Ebene", continue: "WEITER", upgrade_msg: "Lerne dich zu schützen.", safety_dashboard: "Dashboard", entry_quiz_btn: "QUIZ STARTEN", elite_quiz_btn: "ELITE QUIZ", congrats: "Glückwunsch!" },
-  fr: { welcome: "Stay Safe Elite", start_btn: "COMMENCER", home_tab: "Sécurité Maison", badges_tab: "Trophées", premium_tab: "Elite Access", level: "Niveau", continue: "CONTINUER", upgrade_msg: "Apprenez à vous protéger.", safety_dashboard: "Tableau de bord", entry_quiz_btn: "COMMENCER LE QUIZ", elite_quiz_btn: "QUIZ ÉLITE", congrats: "Félicitations!" },
-  es: { welcome: "Stay Safe Elite", start_btn: "EMPEZAR", home_tab: "Seguridad Hogar", badges_tab: "Insignias", premium_tab: "Elite Access", level: "Nivel", continue: "CONTINUAR", upgrade_msg: "Aprende a protegerte.", safety_dashboard: "Panel", entry_quiz_btn: "INICIAR CUESTIONARIO", elite_quiz_btn: "CUESTIONARIO ELITE", congrats: "¡Felicidades!" },
-  pt: { welcome: "Stay Safe Elite", start_btn: "COMEÇAR", home_tab: "Segurança Casa", badges_tab: "Conquistas", premium_tab: "Elite Access", level: "Nível", continue: "CONTINUAR", upgrade_msg: "Aprenda a se proteger.", safety_dashboard: "Painel", entry_quiz_btn: "INICIAR QUIZ", elite_quiz_btn: "QUIZ ELITE", congrats: "Parabéns!" },
-  it: { welcome: "Stay Safe Elite", start_btn: "INIZIA", home_tab: "Sicurezza Casa", badges_tab: "Premi", premium_tab: "Elite Access", level: "Livello", continue: "CONTINUA", upgrade_msg: "Impara a proteggerti.", safety_dashboard: "Dashboard", entry_quiz_btn: "INIZIA QUIZ", elite_quiz_btn: "QUIZ ELITE", congrats: "Congratulazioni!" },
-  ru: { welcome: "Stay Safe Elite", start_btn: "НАЧАТЬ", home_tab: "Безопасность дома", badges_tab: "Достижения", premium_tab: "Elite Access", level: "Уровень", continue: "ПΡΟΔОЛЖИТЬ", upgrade_msg: "Узнайте, как защитить себя.", safety_dashboard: "Панель", entry_quiz_btn: "НАЧАТЬ ТЕСТ", elite_quiz_btn: "ЭΛИТНЫЙ ТЕСТ", congrats: "Поздравляем!" },
-  zh: { welcome: "Stay Safe Elite", start_btn: "开始旅程", home_tab: "家庭安全", badges_tab: "奖章", premium_tab: "Elite Access", level: "等级", continue: "继续", upgrade_msg: "学习如何保护自己。", safety_dashboard: "仪表板", entry_quiz_btn: "开始测验", elite_quiz_btn: "精英测验", congrats: "恭喜！" },
-  hi: { welcome: "Stay Safe Elite", start_btn: "यात्रा शुरू करें", home_tab: "घर की सुरक्षा", badges_tab: "बैज", premium_tab: "Elite Access", level: "स्तर", continue: "जारी रखें", upgrade_msg: "खुद को बचाना सीखें।", safety_dashboard: "डैशबोर्ड", entry_quiz_btn: "प्रश्नावली शुरू करें", elite_quiz_btn: "एलीट प्रश्नावली", congrats: "बधाई हो!" },
-  ar: { welcome: "Stay Safe Elite", start_btn: "ابدأ الرحلة", home_tab: "أمن المنزل", badges_tab: "الأوسمة", premium_tab: "Elite Access", level: "المستوى", continue: "استمرار", upgrade_msg: "تعلم كيف تحمي نفسك.", safety_dashboard: "لوحة التحكم", entry_quiz_btn: "ابدأ الاختبار", elite_quiz_btn: "اختبار النخبة", congrats: "تهانينا!" }
+  el: { welcome: "Stay Safe Elite", start_btn: "ΞΕΚΙΝΑ ΤΟ ΤΑΞΙΔΙ", home_tab: "Ασφάλεια Σπιτιού", badges_tab: "Τρόπαια", premium_tab: "Elite Access", level: "Επίπεδο", continue: "ΣΥΝΕΧΕΙΑ", upgrade_msg: "Μάθε να προστατεύεις τον εαυτό σου.", safety_dashboard: "Dashboard", entry_quiz_btn: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", elite_quiz_btn: "ELITE ΤΕΣΤ", congrats: "Συγχαρητήρια!" },
+  en: { welcome: "Stay Safe Elite", start_btn: "START JOURNEY", home_tab: "Home Safety", badges_tab: "Badges", premium_tab: "Elite Access", level: "Level", continue: "CONTINUE", upgrade_msg: "Learn how to protect yourself.", safety_dashboard: "Dashboard", entry_quiz_btn: "ENTRY QUIZ", elite_quiz_btn: "ELITE QUIZ", congrats: "Congratulations!" }
 };
 
 let xp = 0, level = 1, current_q = 0, quiz_data = [];
@@ -211,50 +213,28 @@ let currentLang = 'el';
 document.getElementById('btn-start').onclick = () => {
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('main_app').classList.remove('hidden');
-  const savedLang = localStorage.getItem('user_lang') || 'el';
-  updateLanguage(savedLang);
-  document.getElementById('lang_select').value = savedLang;
 };
-
-function updateLanguage(lang) {
-  currentLang = lang;
-  localStorage.setItem('user_lang', lang);
-  document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
-  });
-}
 
 function nav(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   document.getElementById('screen_' + id).classList.remove('hidden');
   document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-  if (event && event.currentTarget) event.currentTarget.classList.add('active');
+  if (event) event.currentTarget.classList.add('active');
 }
 
-function openPaywall() { document.getElementById('paywall_screen').classList.remove('hidden'); }
-function closePaywall() { document.getElementById('paywall_screen').classList.add('hidden'); }
-
 async function startQuiz(mode = 'free') {
-  const fileName = `./questions_${mode}_${currentLang}.json`;
   try {
-    const response = await fetch(fileName);
-    if (!response.ok) throw new Error("File not found");
+    const response = await fetch(`./questions_${mode}_${currentLang}.json`);
     const data = await response.json();
     quiz_data = data.sort(() => Math.random() - 0.5).slice(0, 5);
-    current_q = 0;
-    nav('quiz');
-    showQuestion();
-  } catch (err) {
-    alert("Πρόβλημα: Βεβαιωθείτε ότι τα JSON αρχεία είναι στο GitHub.");
-  }
+    current_q = 0; nav('quiz'); showQuestion();
+  } catch (err) { alert("Ανέβασε τα JSON αρχεία στο GitHub!"); }
 }
 
 function showQuestion() {
   const qData = quiz_data[current_q];
   document.getElementById('question_box').innerText = qData.q;
-  document.getElementById('next_btn').style.display = 'none'; // Κρύβουμε το κουμπί Συνέχεια
+  document.getElementById('next_btn').style.display = 'none';
   document.getElementById('options_grid').innerHTML = qData.o.map((opt, i) => 
     `<button class="opt-btn" onclick="handleAnswer(${i})">${opt}</button>`
   ).join('');
@@ -264,7 +244,6 @@ function handleAnswer(selectedIdx) {
   const qData = quiz_data[current_q];
   const buttons = document.querySelectorAll('.opt-btn');
   buttons.forEach(btn => btn.disabled = true);
-
   if (selectedIdx === qData.a) {
     buttons[selectedIdx].style.background = "#22c55e"; 
     xp += 20; updateProgress();
@@ -272,31 +251,54 @@ function handleAnswer(selectedIdx) {
     buttons[selectedIdx].style.background = "#ef4444";
     buttons[qData.a].style.background = "#22c55e";
   }
-
-  // ΕΜΦΑΝΙΖΟΥΜΕ το κουμπί Συνέχεια για να πάει ο χρήστης στην επόμενη ερώτηση
   document.getElementById('next_btn').style.display = 'block';
 }
 
 function nextQuestion() {
   current_q++;
-  if (current_q < quiz_data.length) {
-    showQuestion();
-  } else {
-    document.getElementById('result_screen').classList.remove('hidden');
-    document.getElementById('badge_home').classList.remove('locked');
-    document.getElementById('badge_home').classList.add('unlocked');
-  }
+  if (current_q < quiz_data.length) { showQuestion(); } 
+  else { document.getElementById('result_screen').classList.remove('hidden'); }
 }
 
 function updateProgress() {
+  const newLevel = Math.floor(xp / 100) + 1;
   document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-  document.getElementById('level_val').innerText = Math.floor(xp / 100) + 1;
+  document.getElementById('level_val').innerText = newLevel;
+  if (newLevel > level) { level = newLevel; triggerLevelUp(newLevel); }
 }
 
-function closeResult() {
-  document.getElementById('result_screen').classList.add('hidden');
-  nav('home');
+function triggerLevelUp(lv) {
+  document.getElementById('new_lv_val').innerText = lv;
+  const modal = document.getElementById('level_up_modal');
+  modal.classList.remove('hidden');
+  setTimeout(() => { modal.querySelector('.quiz-result-card').style.transform = "scale(1)"; }, 100);
+  confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors:['#38bdf8', '#facc15'] });
 }
+
+function closeLevelUp() {
+  document.getElementById('level_up_modal').classList.add('hidden');
+  showAd();
+}
+
+function showAd() {
+  const adScreen = document.getElementById('ad_screen');
+  adScreen.classList.remove('hidden');
+  let time = 5;
+  const timer = setInterval(() => {
+    time--;
+    document.getElementById('ad_timer_text').innerText = `Κλείσιμο σε ${time}...`;
+    if(time <= 0) {
+      clearInterval(timer);
+      document.getElementById('ad_timer_text').style.display = 'none';
+      document.getElementById('close_ad_btn').style.display = 'block';
+    }
+  }, 1000);
+}
+
+function closeAd() { document.getElementById('ad_screen').classList.add('hidden'); }
+function openPaywall() { document.getElementById('paywall_screen').classList.remove('hidden'); }
+function closePaywall() { document.getElementById('paywall_screen').classList.add('hidden'); }
+function closeResult() { document.getElementById('result_screen').classList.add('hidden'); nav('home'); }
 </script>
 </body>
 </html>
