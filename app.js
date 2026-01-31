@@ -1,108 +1,155 @@
-(function() {
-  const initApp = () => {
-    console.log("🚀 Stay Safe Elite Initialized");
+/**
+ * Stay Safe Elite – Core App Controller
+ * Navigation • Onboarding • Quiz Bridge • UX Enhancements
+ */
 
-    // Elements
-    const onboarding = document.getElementById("onboarding");
-    const appShell = document.querySelector(".app-shell");
-    const startBtn = document.getElementById("onboarding-start");
-    const screens = document.querySelectorAll(".app-screen");
-    const tabs = document.querySelectorAll(".nav-tab");
-    
-    // Στοιχεία Αποτελέσματος
-    const resultOverlay = document.getElementById("quiz-result");
-    const resultContinueBtn = document.getElementById("quiz-result-continue");
+(() => {
+  "use strict";
 
-    // --- 1. Λειτουργία Εναλλαγής Οθονών ---
-    window.showScreen = (targetId) => {
-      console.log("Navigating to:", targetId);
-      
-      screens.forEach(s => {
-        if (s.id === `screen-${targetId}`) {
-          s.style.display = "block";
-          s.classList.add("active");
-        } else {
-          s.style.display = "none";
-          s.classList.remove("active");
-        }
-      });
+  const log = (...args) => console.log("🛡️", ...args);
 
-      tabs.forEach(t => {
-        t.classList.toggle("active", t.getAttribute("data-target") === targetId);
-      });
+  /* ============================
+     STATE
+  ============================ */
+  const state = {
+    currentScreen: "home",
+    onboardingDone: localStorage.getItem("ss_onboarding_done") === "true"
+  };
 
-      // Αν κλείνουμε το Quiz, σιγουρευόμαστε ότι το overlay φεύγει
-      if (targetId !== 'quiz' && resultOverlay) {
-        resultOverlay.classList.add("hidden");
-        resultOverlay.style.display = "none";
+  /* ============================
+     DOM CACHE
+  ============================ */
+  const DOM = {
+    onboarding: document.getElementById("onboarding"),
+    appShell: document.querySelector(".app-shell"),
+    startBtn: document.getElementById("onboarding-start"),
+    screens: document.querySelectorAll(".app-screen"),
+    tabs: document.querySelectorAll(".nav-tab"),
+    resultOverlay: document.getElementById("quiz-result"),
+    resultContinue: document.getElementById("quiz-result-continue"),
+    langSelect: document.getElementById("lang-select")
+  };
+
+  /* ============================
+     UTILITIES
+  ============================ */
+  const haptic = (ms = 10) => {
+    if (navigator.vibrate) navigator.vibrate(ms);
+  };
+
+  const hideResultOverlay = () => {
+    if (!DOM.resultOverlay) return;
+    DOM.resultOverlay.classList.add("hidden");
+    DOM.resultOverlay.style.display = "none";
+  };
+
+  /* ============================
+     NAVIGATION
+  ============================ */
+  const showScreen = (target) => {
+    if (!target || state.currentScreen === target) return;
+
+    log("Navigate →", target);
+    state.currentScreen = target;
+
+    DOM.screens.forEach(screen => {
+      const isActive = screen.id === `screen-${target}`;
+      screen.classList.toggle("active", isActive);
+      screen.style.display = isActive ? "block" : "none";
+    });
+
+    DOM.tabs.forEach(tab => {
+      tab.classList.toggle(
+        "active",
+        tab.dataset.target === target
+      );
+    });
+
+    if (target !== "quiz") hideResultOverlay();
+  };
+
+  window.showScreen = showScreen; // exposed intentionally
+
+  /* ============================
+     ONBOARDING
+  ============================ */
+  const completeOnboarding = () => {
+    log("Onboarding completed");
+    haptic(15);
+
+    DOM.onboarding?.classList.add("hidden");
+    DOM.appShell?.classList.remove("hidden");
+    DOM.appShell.style.display = "block";
+
+    localStorage.setItem("ss_onboarding_done", "true");
+    showScreen("home");
+  };
+
+  /* ============================
+     QUIZ BRIDGE
+  ============================ */
+  window.launchQuiz = (badgeId) => {
+    const lang = DOM.langSelect?.value || "el";
+
+    haptic(12);
+    showScreen("quiz");
+
+    requestAnimationFrame(() => {
+      if (window.QuizEngine?.start) {
+        window.QuizEngine.start(lang, badgeId);
+      } else {
+        console.error("❌ QuizEngine missing");
       }
-    };
+    });
+  };
 
-    // --- 2. Κλείσιμο του Result Overlay (ΣΥΝΕΧΕΙΑ) ---
-    if (resultContinueBtn) {
-      resultContinueBtn.addEventListener("click", () => {
-        console.log("Continuing to home...");
-        if (resultOverlay) {
-          resultOverlay.classList.add("hidden");
-          resultOverlay.style.display = "none";
-        }
-        window.showScreen("home");
-      });
-    }
+  /* ============================
+     EVENT BINDINGS
+  ============================ */
+  const bindEvents = () => {
 
-    // --- 3. Onboarding Logic ---
-    const completeOnboarding = () => {
-      if (onboarding) onboarding.style.display = "none";
-      if (appShell) {
-        appShell.classList.remove("hidden");
-        appShell.style.display = "block";
-      }
-      localStorage.setItem("ss_onboarding_done", "true");
-      window.showScreen("home");
-    };
+    DOM.startBtn?.addEventListener("click", completeOnboarding);
 
-    if (startBtn) {
-      startBtn.addEventListener("click", completeOnboarding);
-    }
+    DOM.resultContinue?.addEventListener("click", () => {
+      haptic(10);
+      hideResultOverlay();
+      showScreen("home");
+    });
 
-    // Έλεγχος αν έχει ήδη γίνει το onboarding
-    if (localStorage.getItem("ss_onboarding_done") === "true") {
-      completeOnboarding();
-    } else {
-      if (onboarding) onboarding.style.display = "flex";
-    }
-    
-    // --- 4. Tab Navigation ---
-    tabs.forEach(tab => {
+    DOM.tabs.forEach(tab => {
       tab.addEventListener("click", () => {
-        const target = tab.getAttribute("data-target");
-        window.showScreen(target);
+        haptic(8);
+        showScreen(tab.dataset.target);
       });
     });
 
-    // --- 5. Quiz Launchers (Σύνδεση με το quiz.js) ---
-    window.launchQuiz = (badgeId) => {
-      const lang = document.getElementById("lang-select")?.value || 'el';
-      window.showScreen("quiz");
-      
-      setTimeout(() => {
-        if (window.QuizEngine) {
-          window.QuizEngine.start(lang, badgeId);
-        } else {
-          console.error("QuizEngine not found!");
-        }
-      }, 100);
-    };
+    document.getElementById("home-quiz-btn")
+      ?.addEventListener("click", () => launchQuiz("badge-home"));
 
-    // Event Listeners για τα κουμπιά των Quizzes
-    document.getElementById("home-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-home"));
-    document.getElementById("digital-quiz-btn")?.addEventListener("click", () => window.launchQuiz("badge-digital"));
+    document.getElementById("digital-quiz-btn")
+      ?.addEventListener("click", () => launchQuiz("badge-digital"));
   };
 
-  // Safe Start
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initApp);
-  } else {
-    initApp();
-  }
+  /* ============================
+     BOOTSTRAP
+  ============================ */
+  const init = () => {
+    log("Stay Safe Elite Initialized");
+
+    bindEvents();
+
+    if (state.onboardingDone) {
+      DOM.onboarding?.classList.add("hidden");
+      DOM.appShell?.classList.remove("hidden");
+      DOM.appShell.style.display = "block";
+      showScreen("home");
+    } else {
+      DOM.onboarding.style.display = "flex";
+    }
+  };
+
+  document.readyState === "loading"
+    ? document.addEventListener("DOMContentLoaded", init)
+    : init();
+
 })();
