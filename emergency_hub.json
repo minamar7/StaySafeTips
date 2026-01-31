@@ -1,0 +1,45 @@
+{
+  "global_standard": {
+    "title": "Universal Emergency",
+    "number": "112",
+    "note": "Works in most countries worldwide (EU, USA, AU, etc.)"
+  },
+  "regions": [
+    {
+      "area": "Europe (EU)",
+      "countries": [
+        {"name": "Greece", "police": "100", "medical": "166", "fire": "199", "universal": "112"},
+        {"name": "Cyprus", "police": "112", "medical": "112", "fire": "112"},
+        {"name": "Germany", "police": "110", "medical": "112", "fire": "112"},
+        {"name": "France", "police": "17", "medical": "15", "fire": "18", "universal": "112"},
+        {"name": "Italy", "police": "113", "medical": "118", "fire": "115", "universal": "112"},
+        {"name": "United Kingdom", "police": "999", "medical": "999", "fire": "999", "universal": "112"}
+      ]
+    },
+    {
+      "area": "Americas",
+      "countries": [
+        {"name": "USA & Canada", "police": "911", "medical": "911", "fire": "911"},
+        {"name": "Brazil", "police": "190", "medical": "192", "fire": "193"},
+        {"name": "Mexico", "police": "911", "medical": "911", "fire": "911"}
+      ]
+    },
+    {
+      "area": "Asia & Oceania",
+      "countries": [
+        {"name": "Australia", "police": "000", "medical": "000", "fire": "000"},
+        {"name": "China", "police": "110", "medical": "120", "fire": "119"},
+        {"name": "Japan", "police": "110", "medical": "119", "fire": "119"},
+        {"name": "India", "police": "100", "medical": "102", "fire": "101", "universal": "112"}
+      ]
+    },
+    {
+      "area": "Africa & Middle East",
+      "countries": [
+        {"name": "South Africa", "police": "10111", "medical": "10177", "fire": "10177"},
+        {"name": "UAE", "police": "999", "medical": "998", "fire": "997"},
+        {"name": "Israel", "police": "100", "medical": "101", "fire": "102"}
+      ]
+    }
+  ]
+}
