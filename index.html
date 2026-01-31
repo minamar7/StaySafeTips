@@ -1,115 +1,267 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-  <meta charset="UTF-8" />
-  <title>Stay Safe Elite</title>
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#020617" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta charset="UTF-8">
+<title>Stay Safe Elite</title>
 
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="stylesheet" href="./styles.css" />
-  
-  <link rel="icon" type="image/png" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#020617">
 
-  <style>
-    .hidden { display: none !important; visibility: hidden !important; }
-    #quiz-result.hidden { display: none !important; }
-    #onboarding { z-index: 10000; position: fixed; inset: 0; background: #020617; }
-  </style>
+<link rel="icon" href="icons/icon-192.png">
+
+<style>
+:root{
+  --bg:#020617;
+  --card:#0f172a;
+  --accent:#38bdf8;
+  --gold:#facc15;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+}
+
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+}
+
+.hidden{display:none!important}
+
+h1,h2{margin:0 0 8px}
+
+.main-cta{
+  background:linear-gradient(135deg,var(--accent),#0ea5e9);
+  border:none;color:#020617;
+  padding:14px 20px;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:700;
+  width:100%;
+}
+
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(56,189,248,.6)}
+  70%{box-shadow:0 0 0 20px rgba(56,189,248,0)}
+}
+
+.onboarding-screen{
+  position:fixed;inset:0;
+  background:radial-gradient(circle at top,#020617,#000);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+}
+.onboarding-content{text-align:center;padding:20px}
+.onboarding-icon{font-size:64px;margin-bottom:20px}
+
+.app-header{
+  padding:16px;
+  background:linear-gradient(180deg,#020617,#020617cc);
+}
+.header-top{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.user-rank-box{
+  background:#020617;border-radius:999px;
+  padding:6px 12px;font-size:13px;color:var(--gold)
+}
+.lang-minimal{
+  background:#020617;color:white;border-radius:8px;border:1px solid #1e293b
+}
+
+.xp-bar{
+  background:#020617;border-radius:999px;height:10px;overflow:hidden
+}
+.xp-fill{
+  background:linear-gradient(90deg,var(--gold),#fde047);
+  height:100%;width:0%;transition:.4s
+}
+
+.content-area{padding:16px 16px 90px}
+.glass-card{
+  background:linear-gradient(180deg,#0f172a,#020617);
+  border-radius:18px;padding:16px;margin-bottom:16px;
+  box-shadow:0 10px 40px rgba(0,0,0,.5)
+}
+.pill{
+  background:#020617;color:var(--muted);
+  padding:4px 10px;border-radius:999px;font-size:12px
+}
+
+.feature-list{padding-left:18px;color:var(--muted)}
+
+.quiz-question-box{
+  background:var(--card);
+  padding:16px;border-radius:16px;
+  margin-bottom:12px
+}
+.quiz-options-grid button{
+  background:#020617;border:1px solid #1e293b;
+  color:white;padding:12px;border-radius:14px;
+  margin-bottom:10px;width:100%
+}
+
+.badges-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:14px
+}
+.badge{
+  background:var(--card);
+  padding:20px;border-radius:18px;
+  text-align:center;font-size:28px
+}
+.badge.locked{opacity:.3}
+.badge.unlocked{
+  box-shadow:0 0 0 2px var(--gold)
+}
+
+.nav-tabs{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#020617;
+  display:flex;border-top:1px solid #1e293b
+}
+.nav-tab{
+  flex:1;background:none;border:none;color:var(--muted);
+  padding:10px;font-size:12px
+}
+.nav-tab.active{color:var(--accent)}
+
+.quiz-result{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  display:flex;align-items:center;justify-content:center
+}
+.quiz-result-card{
+  background:var(--card);
+  padding:20px;border-radius:20px;
+  text-align:center;width:80%
+}
+</style>
 </head>
 
 <body>
 
 <section id="onboarding" class="onboarding-screen">
   <div class="onboarding-content">
-    <div class="onboarding-slider">
-      <div class="onboarding-slide active">
-        <div class="onboarding-icon">🛡️</div>
-        <h1>Stay Safe Elite</h1>
-        <p>Προστάτεψε την ψηφιακή και την πραγματική σου ζωή.</p>
-      </div>
-    </div>
-    <button id="onboarding-start" class="main-cta pulse">Ξεκίνα το Ταξίδι</button>
+    <div class="onboarding-icon">🛡️</div>
+    <h1>Stay Safe Elite</h1>
+    <p>Ο προσωπικός σου σύμμαχος ασφάλειας.</p>
+    <button id="onboarding-start" class="main-cta pulse">Ξεκίνα</button>
   </div>
 </section>
 
-<div class="app-shell hidden" id="main-app" style="display:none;">
+<div id="main-app" class="hidden">
 
-  <header class="app-header">
-    <div class="header-top">
-      <div class="user-rank-box">🔥 <span id="user-streak-val">1 Day Streak</span></div>
-      <select id="lang-select" class="lang-minimal">
-        <option value="el">GR</option>
-        <option value="en">EN</option>
-      </select>
-    </div>
-    <div class="title-block">
-      <h1>Stay Safe Elite</h1>
-      <div class="xp-container">
-        <div class="xp-bar"><div id="xp-fill" class="xp-fill" style="width: 10%;"></div></div>
-        <small>Level <span id="user-level">1</span></small>
-      </div>
-    </div>
-  </header>
+<header class="app-header">
+  <div class="header-top">
+    <div class="user-rank-box">🔥 <span id="streak">1 Day</span></div>
+    <select class="lang-minimal">
+      <option>GR</option><option>EN</option>
+    </select>
+  </div>
+  <h1>Stay Safe Elite</h1>
+  <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
+  <small>Level <span id="level">1</span></small>
+</header>
 
-  <main class="content-area">
-    <section id="screen-home" class="app-screen active">
-      <div class="glass-card">
-        <h2>Ασφάλεια Σπιτιού</h2>
-        <span class="pill">Level 1 · Basics</span>
-        <ul id="home-list" class="feature-list"></ul>
-        <button id="home-quiz-btn" class="main-cta">Entry Quiz</button>
-      </div>
-    </section>
+<main class="content-area">
 
-    <section id="screen-digital" class="app-screen" style="display:none;">
-      <div class="glass-card">
-        <h2>Ψηφιακή Ασπίδα</h2>
-        <span class="pill">Level 2 · Online</span>
-        <ul id="digital-list" class="feature-list"></ul>
-        <button id="digital-quiz-btn" class="main-cta">Start Quiz</button>
-      </div>
-    </section>
+<section id="home" class="screen">
+  <div class="glass-card">
+    <h2>Ασφάλεια Σπιτιού</h2>
+    <ul class="feature-list">
+      <li>Κίνδυνοι πυρκαγιάς</li>
+      <li>Πρώτες ενέργειες</li>
+    </ul>
+    <button class="main-cta" onclick="startQuiz()">Ξεκίνα Quiz</button>
+  </div>
+</section>
 
-    <section id="screen-quiz" class="app-screen" style="display:none;">
-      <div class="quiz-header"><span id="quiz-pill" class="pill">Question 1</span></div>
-      <div id="quiz-question" class="quiz-question-box"></div>
-      <div id="quiz-options" class="quiz-options-grid"></div>
-    </section>
+<section id="quiz" class="screen hidden">
+  <div id="question" class="quiz-question-box"></div>
+  <div id="options" class="quiz-options-grid"></div>
+</section>
 
-    <section id="screen-badges" class="app-screen" style="display:none;">
-      <h2>Τρόπαια</h2>
-      <div class="badges-grid">
-        <div id="badge-home" class="badge locked">🏠 <small>Guardian</small></div>
-        <div id="badge-digital" class="badge locked">🛡️ <small>Cyber</small></div>
-      </div>
-    </section>
-  </main>
+<section id="badges" class="screen hidden">
+  <h2>Τα Τρόπαιά σου</h2>
+  <div class="badges-grid">
+    <div id="badge-home" class="badge locked">🏠<br><small>Home</small></div>
+    <div id="badge-digital" class="badge locked">🛡️<br><small>Digital</small></div>
+  </div>
+</section>
 
-  <nav class="nav-tabs">
-    <button class="nav-tab active" data-target="home">🏠<span>Home</span></button>
-    <button class="nav-tab" data-target="digital">🛡️<span>Digital</span></button>
-    <button class="nav-tab" data-target="badges">🏅<span>Badges</span></button>
-    <button class="nav-tab" data-target="premium">💎<span>Elite</span></button>
-  </nav>
+<section id="premium" class="screen hidden">
+  <div class="glass-card">
+    <h2>Elite Access</h2>
+    <p>Ξεκλείδωσε όλα τα επίπεδα & αφαίρεσε διαφημίσεις.</p>
+    <button class="main-cta">Αναβάθμιση</button>
+  </div>
+</section>
+
+</main>
+
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="nav('home')">🏠</button>
+  <button class="nav-tab" onclick="nav('badges')">🏅</button>
+  <button class="nav-tab" onclick="nav('premium')">💎</button>
+</nav>
+
 </div>
 
-<div id="quiz-result" class="quiz-result hidden" style="display:none; position:fixed; z-index:99999;">
+<div id="result" class="quiz-result hidden">
   <div class="quiz-result-card">
-    <div class="result-confetti">🏆</div>
-    <h2 id="quiz-result-score">Score: 0%</h2>
-    <p id="xp-gained">+50 XP Gained</p>
-    <button id="quiz-result-continue" class="main-cta">ΣΥΝΕΧΕΙΑ</button>
+    <h2>🏆 Τέλεια!</h2>
+    <p>+50 XP</p>
+    <button class="main-cta" onclick="closeResult()">Συνέχεια</button>
   </div>
 </div>
 
-<script src="./i18n.js"></script>
-<script src="./quiz.js"></script>
-<script src="./app.js"></script>
+<script>
+let xp=0,level=1,qIndex=0;
+const quiz=[
+ {q:"Τι κάνεις σε φωτιά;",o:["Καλώ 112","Ανοίγω παράθυρα"],a:0}
+];
+
+onboardingStart.onclick=()=>{
+  onboarding.classList.add("hidden");
+  main-app.classList.remove("hidden");
+}
+
+function nav(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  document.querySelectorAll(".nav-tab").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+}
+
+function startQuiz(){
+  nav("quiz");
+  showQ();
+}
+
+function showQ(){
+  question.innerText=quiz[qIndex].q;
+  options.innerHTML="";
+  quiz[qIndex].o.forEach((t,i)=>{
+    const b=document.createElement("button");
+    b.innerText=t;
+    b.onclick=()=>answer(i);
+    options.appendChild(b);
+  });
+}
+
+function answer(i){
+  if(i===quiz[qIndex].a){
+    xp+=50;
+    xp-fill.style.width=(xp%100)+"%";
+    badge-home.classList.remove("locked");
+    badge-home.classList.add("unlocked");
+  }
+  result.classList.remove("hidden");
+}
+
+function closeResult(){
+  result.classList.add("hidden");
+  nav("badges");
+}
+</script>
 
 </body>
 </html>
