@@ -1,24 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Privacy Policy - Stay Safe Premium</title>
-    <style>
-        body { font-family: sans-serif; padding: 40px; line-height: 1.6; color: #333; }
-        h1 { color: #0f172a; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Privacy Policy – Stay Safe Elite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg-dark: #020617;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --gold: #facc15;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1e1b4b, var(--bg-dark));
+      font-family: Inter, system-ui, sans-serif;
+      color: #e5e7eb;
+      line-height: 1.7;
+    }
+
+    .policy-container {
+      max-width: 760px;
+      margin: auto;
+      padding: 50px 20px 80px;
+      animation: fade .6s ease;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .policy-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 32px;
+      backdrop-filter: blur(12px);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+      background: linear-gradient(#fff,#94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .updated {
+      font-size: .8rem;
+      color: #94a3b8;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      margin-top: 32px;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+
+    p {
+      font-size: .95rem;
+      color: #cbd5e1;
+      margin: 10px 0;
+    }
+
+    ul {
+      margin: 12px 0 12px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      font-size: .95rem;
+      color: #cbd5e1;
+    }
+
+    strong {
+      color: #fff;
+    }
+
+    .footer {
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: #422006;
+      font-weight: 800;
+      padding: 12px 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg,var(--gold),#eab308);
+      box-shadow: 0 10px 25px rgba(234,179,8,.25);
+    }
+
+    .trust {
+      font-size: .75rem;
+      color: #64748b;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Privacy Policy</h1>
-    <p>Last updated: January 2026</p>
-    <p>Stay Safe Premium values your privacy. This app:</p>
-    <ul>
-        <li><strong>Does not</strong> collect personal identification information.</li>
-        <li><strong>Does not</strong> sell your data to third parties.</li>
-        <li>Uses <strong>local storage</strong> only to save your quiz progress and badges.</li>
-        <li>Uses optional analytics to improve the user experience.</li>
-    </ul>
-    <p>For any questions, contact us via our GitHub repository.</p>
-    <a href="index.html">Back to App</a>
+
+  <div class="policy-container">
+    <div class="policy-card">
+
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: January 2026</p>
+
+      <p>
+        <strong>Stay Safe Elite</strong> is designed with privacy as a core principle.
+        Your safety should never come at the cost of your personal data.
+      </p>
+
+      <h2>🔐 Data Collection</h2>
+      <p>
+        The application <strong>does not collect</strong>, store, or process personally identifiable information.
+      </p>
+
+      <ul>
+        <li>No name, email, phone number, or location tracking</li>
+        <li>No background surveillance or behavioral profiling</li>
+        <li>No third-party data brokers</li>
+      </ul>
+
+      <h2>💾 Local Storage</h2>
+      <p>
+        All progress, preferences, quiz results, and premium access status are stored
+        <strong>locally on your device</strong> using browser or app storage.
+      </p>
+
+      <ul>
+        <li>Quiz progress & earned badges</li>
+        <li>Language & interface preferences</li>
+        <li>Premium activation flag</li>
+      </ul>
+
+      <h2>📊 Analytics</h2>
+      <p>
+        Optional, anonymized analytics may be used solely to improve app performance,
+        stability, and usability. No data is ever linked to individual users.
+      </p>
+
+      <h2>🤝 Third Parties</h2>
+      <p>
+        Stay Safe Elite <strong>does not sell, rent, or share</strong> user data with advertisers,
+        marketers, or external entities.
+      </p>
+
+      <h2>🛡️ Security</h2>
+      <p>
+        We follow best practices to ensure local data integrity and minimize attack surfaces.
+        However, no system can be guaranteed 100% secure.
+      </p>
+
+      <h2>📬 Contact</h2>
+      <p>
+        For privacy questions or concerns, please contact us through our official GitHub repository
+        or project page.
+      </p>
+
+      <div class="footer">
+        <a href="index.html" class="back-btn">← Back to App</a>
+        <span class="trust">Privacy-First • No Tracking • User-Controlled</span>
+      </div>
+
+    </div>
+  </div>
+
 </body>
 </html>
