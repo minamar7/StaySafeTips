@@ -2,60 +2,89 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Live Scam Alerts</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Global Scam Alerts – Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <style>
-        :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --danger: #ef4444; --text: #f8fafc; --muted: #94a3b8; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: sans-serif; }
-        .header { padding: 50px 20px 20px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(239, 68, 68, 0.3); display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 100; }
-        .back-btn { background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); color: var(--accent); padding: 8px 15px; border-radius: 12px; text-decoration: none; font-weight: bold; }
-        .alert-card { background: var(--card); border-radius: 24px; padding: 20px; margin: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .live-dot { height: 10px; width: 10px; background: var(--danger); border-radius: 50%; display: inline-block; animation: blink 1s infinite; box-shadow: 0 0 10px var(--danger); }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .alert-title { font-size: 18px; font-weight: bold; margin: 10px 0; color: #fff; }
-        .alert-desc { font-size: 14px; color: var(--muted); line-height: 1.5; }
-        .tag { background: rgba(239,68,68,0.1); color: var(--danger); padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; }
+        :root { --danger: #ef4444; --bg: #020617; --card: #1e293b; --accent: #38bdf8; --gold: #facc15; }
+        body { margin: 0; background: var(--bg); font-family: system-ui, sans-serif; color: #f8fafc; padding: 20px; }
+        
+        .header { text-align: center; margin-bottom: 25px; }
+        .header h1 { color: var(--gold); font-size: 1.5rem; margin: 0; }
+        .live-indicator { font-size: 0.7rem; color: var(--danger); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        .back-btn { color: #64748b; text-decoration: none; font-size: 0.9rem; display: block; margin-bottom: 15px; }
+        
+        #alerts-container { display: grid; gap: 15px; }
+        
+        .alert-card { 
+            background: var(--card); border-radius: 20px; padding: 18px; 
+            border-left: 4px solid var(--danger); transition: 0.3s;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .alert-card h3 { margin: 0 0 8px; font-size: 1rem; color: var(--text); line-height: 1.3; }
+        .alert-card p { margin: 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .alert-date { font-size: 0.7rem; color: var(--accent); margin-bottom: 5px; display: block; }
+        .read-more { display: inline-block; margin-top: 10px; color: var(--gold); text-decoration: none; font-size: 0.8rem; font-weight: bold; }
+
+        .loader { text-align: center; padding: 50px; color: var(--accent); font-weight: bold; }
     </style>
 </head>
 <body>
 
-<header class="header">
-    <a href="index.html" class="back-btn">←</a>
-    <div>
-        <h1 style="font-size: 20px; margin: 0;">Live Alerts</h1>
-        <div style="font-size: 11px; color: var(--danger); font-weight: bold;"><span class="live-dot"></span> ΑΥΤΟΜΑΤΗ ΕΝΗΜΕΡΩΣΗ</div>
-    </div>
-</header>
+    <a href="index.html" class="back-btn">← Επιστροφή</a>
+    <header class="header">
+        <div class="live-indicator">● LIVE SCAM FEED</div>
+        <h1>Global Scam Alerts</h1>
+        <p style="font-size: 0.8rem; color: #94a3b8;">Διεθνής ενημέρωση για νέες απάτες</p>
+    </header>
 
-<div id="alerts-container">
-    <p style="text-align:center; padding:50px; color:var(--muted);">Φόρτωση επίσημων ανακοινώσεων...</p>
-</div>
+    <div id="loader" class="loader">ΦΟΡΤΩΣΗ ΠΡΟΣΦΑΤΩΝ ΑΠΕΙΛΩΝ...</div>
+    <div id="alerts-container"></div>
 
 <script>
-    // Σύνδεση με το επίσημο Feed της Δίωξης Ηλεκτρονικού Εγκλήματος
-    const API_URL = "https://api.rss2json.com/v1/api.json?rss_url=https://www.cyberalert.gr/feed/";
+    // Έλεγχος Premium
+    if(localStorage.getItem('isElite') !== 'true') {
+        alert("Απαιτείται Elite Membership!");
+        window.location.href = 'index.html';
+    }
 
-    async function fetchAlerts() {
+    async function fetchScams() {
+        // Χρησιμοποιούμε το RSS feed της FTC (Consumer Alerts)
+        const rssUrl = 'https://www.consumer.ftc.gov/blog/feed';
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
         try {
-            const res = await fetch(API_URL);
-            const data = await res.json();
-            const container = document.getElementById('alerts-container');
+            const response = await fetch(apiUrl);
+            const data = await response.json();
             
-            if (data.status === 'ok') {
-                container.innerHTML = data.items.map(item => `
-                    <div class="alert-card">
-                        <span class="tag">ΕΠΕΙΓΟΝ</span>
-                        <div class="alert-title">${item.title}</div>
-                        <div class="alert-desc">${item.description.replace(/<[^>]*>?/gm, '').substring(0, 150)}...</div>
-                        <a href="${item.link}" target="_blank" style="color:var(--accent); text-decoration:none; font-size:13px; display:block; margin-top:10px; font-weight:bold;">ΔΙΑΒΑΣΤΕ ΠΕΡΙΣΣΟΤΕΡΑ →</a>
-                    </div>
-                `).join('');
-            }
-        } catch (e) {
-            document.getElementById('alerts-container').innerHTML = "<p style='text-align:center; padding:20px;'>Πρόβλημα στη φόρτωση. Δοκιμάστε ξανά.</p>";
+            document.getElementById('loader').style.display = 'none';
+            const container = document.getElementById('alerts-container');
+
+            data.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'alert-card';
+                
+                // Format ημερομηνίας
+                const date = new Date(item.pubDate).toLocaleDateString('el-GR');
+
+                card.innerHTML = `
+                    <span class="alert-date">${date}</span>
+                    <h3>${item.title}</h3>
+                    <p>${item.description.replace(/<[^>]*>?/gm, '')}</p>
+                    <a href="${item.link}" target="_blank" class="read-more">ΔΙΑΒΑΣΕ ΠΕΡΙΣΣΟΤΕΡΑ →</a>
+                `;
+                container.appendChild(card);
+            });
+        } catch (error) {
+            document.getElementById('loader').innerText = "Σφάλμα κατά τη φόρτωση. Δοκιμάστε ξανά.";
         }
     }
-    fetchAlerts();
+
+    fetchScams();
 </script>
+
 </body>
 </html>
