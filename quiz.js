@@ -20,7 +20,9 @@ window.QuizEngine = {
       ]
     },
     en: {
-      "quiz": [{ q: "What is the most secure phone lock method?", options: ["4-digit PIN", "Pattern", "Biometrics"], correct: 2, explain: "Biometrics are harder to bypass." }]
+      "quiz": [
+        { q: "What is the most secure phone lock method?", options: ["4-digit PIN", "Pattern", "Biometrics"], correct: 2, explain: "Biometrics are harder to bypass." }
+      ]
     }
   },
 
@@ -39,39 +41,51 @@ window.QuizEngine = {
     const userLvl = parseInt(document.getElementById("user-level")?.textContent) || 1;
     const isPremium = localStorage.getItem("isPremiumUser") === "true";
 
-    // 1. Paywall Logic: Κλείδωμα στο Level 7 αν δεν είναι premium
+    // Paywall
     if (userLvl >= 7 && !isPremium) {
       this.showPaywall();
       return;
     }
 
-    // 2. Φόρτωση ερωτήσεων με Cache Busting για να μην παίζει τις ίδιες λόγω cache
     let questionsPool = [];
     const sourceFile = userLvl >= 7 ? this.sources.premium : this.sources.free;
 
     try {
-      // Το ?v=Date.now() αναγκάζει το GitHub να δώσει το πιο πρόσφατο αρχείο
       const resp = await fetch(`${sourceFile}?v=${Date.now()}`);
       const data = await resp.json();
-      questionsPool = data[lang]?.[badgeId] || data[lang]?.["quiz"] || this.content[lang][badgeId] || this.content[lang]["quiz"];
-    } catch(e) { 
+
+      const levelKey = String(userLvl);
+
+      // ⭐ NEW LEVEL-BASED LOADING ⭐
+      questionsPool =
+        data[lang]?.levels?.[levelKey] ||     // ← FREE/PREMIUM LEVELS
+        data[lang]?.[badgeId] ||              // fallback
+        data[lang]?.quiz ||                   // fallback
+        this.content[lang][badgeId] ||        // local fallback
+        this.content[lang].quiz;
+
+    } catch (e) {
       console.warn("Using local content as fallback.");
-      questionsPool = this.content[lang][badgeId] || this.content[lang]["quiz"];
+
+      const levelKey = String(userLvl);
+
+      questionsPool =
+        this.content[lang]?.levels?.[levelKey] ||
+        this.content[lang][badgeId] ||
+        this.content[lang].quiz;
     }
 
-    // 3. Σύστημα Μνήμης (No Repeats): Φιλτράρισμα βάσει ιστορικού
+    // No-repeat system
     const masteredKey = `mastered_${lang}_${badgeId}`;
     const mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
-    
+
     let available = questionsPool.filter(q => !mastered.includes(q.q));
 
-    // Αν τελειώσουν όλες οι ερωτήσεις, μηδενίζουμε τη μνήμη για να ξεκινήσει κύκλος
     if (available.length === 0) {
-      available = questionsPool; 
+      available = questionsPool;
       localStorage.setItem(masteredKey, "[]");
     }
 
-    // 4. Επιλογή 3 τυχαίων από τις ΔΙΑΘΕΣΙΜΕΣ που δεν έχει απαντήσει σωστά
     this.activeQuestions = available.sort(() => Math.random() - 0.5).slice(0, 3);
     this.currentIndex = 0;
     this.score = 0;
@@ -90,13 +104,10 @@ window.QuizEngine = {
     if (res) {
       res.classList.remove("hidden");
       res.style.display = "flex";
-      scoreText.innerHTML = `<span style="color:var(--gold); font-size: 1.4rem; font-weight: bold;">Level 7+ Required 🔒</span><br><p style="margin-top:10px; padding: 0 10px;">Έφτασες στο επίπεδο Premium! Ξεκλείδωσε το πλήρες περιεχόμενο για να συνεχίσεις.</p>`;
+      scoreText.innerHTML =
+        `<span style="color:var(--gold); font-size: 1.4rem; font-weight: bold;">Level 7+ Required 🔒</span><br><p style="margin-top:10px; padding: 0 10px;">Έφτασες στο επίπεδο Premium! Ξεκλείδωσε το πλήρες περιεχόμενο για να συνεχίσεις.</p>`;
       btn.textContent = "Unlock Premium";
-      btn.onclick = () => {
-        // Εδώ συνδέεται το Store API (Google/Apple)
-        alert("Redirecting to Purchase...");
-        // Για δοκιμή: localStorage.setItem("isPremiumUser", "true"); location.reload();
-      };
+      btn.onclick = () => alert("Redirecting to Purchase...");
     }
   },
 
@@ -107,12 +118,14 @@ window.QuizEngine = {
     const pill = document.getElementById("quiz-pill");
 
     if (pill) {
-      pill.textContent = (this.currentLang === "el" ? "Ερώτηση" : "Question") + 
-                         ` ${this.currentIndex + 1} / ${this.activeQuestions.length}`;
+      pill.textContent =
+        (this.currentLang === "el" ? "Ερώτηση" : "Question") +
+        ` ${this.currentIndex + 1} / ${this.activeQuestions.length}`;
     }
 
     if (qBox) {
-      qBox.innerHTML = `<p class="q-text" style="font-size:1.2rem;font-weight:bold;text-align:center;">${qData.q}</p>`;
+      qBox.innerHTML =
+        `<p class="q-text" style="font-size:1.2rem;font-weight:bold;text-align:center;">${qData.q}</p>`;
     }
 
     if (oBox) {
@@ -140,8 +153,7 @@ window.QuizEngine = {
     if (idx === qData.correct) {
       this.score++;
       this.streak++;
-      
-      // ΑΠΟΘΗΚΕΥΣΗ: Η ερώτηση θεωρείται "ολοκληρωμένη" και δεν θα ξαναεμφανιστεί
+
       const masteredKey = `mastered_${this.currentLang}_${this.badge}`;
       let mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
       if (!mastered.includes(qData.q)) {
@@ -156,12 +168,15 @@ window.QuizEngine = {
 
     if (qData.explain) {
       const qBox = document.getElementById("quiz-question");
-      qBox.innerHTML += `<p class="explain" style="margin-top:10px; color: var(--gold); padding: 5px;">💡 ${qData.explain}</p>`;
+      qBox.innerHTML +=
+        `<p class="explain" style="margin-top:10px; color: var(--gold); padding: 5px;">💡 ${qData.explain}</p>`;
     }
 
     setTimeout(() => {
       this.currentIndex++;
-      this.currentIndex < this.activeQuestions.length ? this.render() : this.showResult();
+      this.currentIndex < this.activeQuestions.length
+        ? this.render()
+        : this.showResult();
     }, 1200);
   },
 
@@ -171,9 +186,15 @@ window.QuizEngine = {
     const percent = Math.round((this.score / this.activeQuestions.length) * 100);
 
     if (res) { res.classList.remove("hidden"); res.style.display = "flex"; }
-    if (scoreText) { scoreText.textContent = (this.currentLang === "el" ? "Σκορ" : "Score") + `: ${percent}%`; }
+    if (scoreText) {
+      scoreText.textContent =
+        (this.currentLang === "el" ? "Σκορ" : "Score") + `: ${percent}%`;
+    }
 
-    localStorage.setItem(`quiz_${this.badge}`, JSON.stringify({ percent, date: Date.now() }));
+    localStorage.setItem(
+      `quiz_${this.badge}`,
+      JSON.stringify({ percent, date: Date.now() })
+    );
 
     if (percent >= 60) {
       const xp = 50 * (this.difficulty[this.badge] || 1);
@@ -191,11 +212,11 @@ window.QuizEngine = {
     if (!xpFill || !lv) return;
 
     let currentW = parseFloat(xpFill.style.width) || 0;
-    let nextW = currentW + (amount / 5);
+    let nextW = currentW + amount / 5;
 
     if (nextW >= 100) {
       lv.textContent = parseInt(lv.textContent) + 1;
-      xpFill.style.width = (nextW - 100) + "%";
+      xpFill.style.width = nextW - 100 + "%";
     } else {
       xpFill.style.width = nextW + "%";
     }
