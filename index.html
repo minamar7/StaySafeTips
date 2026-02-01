@@ -2,165 +2,196 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Elite Security Scan – Stay Safe</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#020617">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --accent: #facc15; --bg: #020617; --card: rgba(30, 41, 59, 0.7); --success: #22c55e; --warning: #fbbf24; --danger: #ef4444; }
-        body { margin: 0; background: var(--bg); font-family: system-ui, sans-serif; color: #e5e7eb; padding: 20px; }
-        
-        .app-shell { max-width: 480px; margin: auto; }
-        .back-btn { color: #64748b; text-decoration: none; font-size: 0.9rem; display: block; margin-bottom: 20px; }
-        
-        /* Header & Score */
-        .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #1e293b; margin: 20px auto; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; position: relative; }
-        .score-val { font-size: 2rem; font-weight: 900; }
-        .score-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
+        :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
+        * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+        .hidden { display: none !important; }
 
-        /* Blocks */
-        .checkup-block { background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(10px); transition: 0.3s; }
-        .scanning { border-color: var(--accent); box-shadow: 0 0 15px rgba(250, 204, 21, 0.2); transform: scale(1.02); }
-        
-        h3 { font-size: 1rem; margin: 0 0 10px; display: flex; align-items: center; gap: 10px; }
-        .insight { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); display: none; }
-        
-        /* Progress & Logs */
-        .log-text { font-family: monospace; font-size: 0.75rem; color: var(--accent); text-align: center; height: 20px; margin-bottom: 10px; }
-        .scan-progress { height: 6px; background: #1e293b; border-radius: 10px; overflow: hidden; margin-bottom: 30px; }
-        .bar { height: 100%; width: 0%; background: var(--accent); transition: 0.3s; }
+        /* ANIMATIONS */
+        @keyframes float {
+            0% { transform: translateY(0px); filter: drop-shadow(0 5px 15px rgba(56, 189, 248, 0.4)); }
+            50% { transform: translateY(-10px); filter: drop-shadow(0 15px 25px rgba(56, 189, 248, 0.2)); }
+            100% { transform: translateY(0px); filter: drop-shadow(0 5px 15px rgba(56, 189, 248, 0.4)); }
+        }
+        .shield-icon { font-size: 65px; animation: float 3s ease-in-out infinite; margin-bottom: 15px; display: inline-block; }
 
-        .btn-main { width: 100%; background: var(--accent); color: #422006; border: none; padding: 20px; border-radius: 20px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin-left: auto; }
+        /* UI ELEMENTS */
+        .app-header { padding: 45px 20px 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
+        .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
+        .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
+        .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
+        .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; }
+
+        /* ELITE HUB TOOLS */
+        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.3s; }
+        .tool-card i { font-size: 30px; display: block; margin-bottom: 10px; }
+        
+        /* XP MAP */
+        .map-container { display: flex; flex-direction: column; gap: 15px; margin: 25px 0; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 30px; border: 1px inset rgba(255,255,255,0.05); }
+        .map-step { display: flex; align-items: center; gap: 15px; opacity: 0.3; transition: 0.5s; }
+        .map-step.active { opacity: 1; }
+        .step-dot { width: 35px; height: 35px; border-radius: 50%; background: #1e293b; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid var(--muted); }
+        .active .step-dot { background: var(--accent); border-color: #fff; box-shadow: 0 0 10px var(--accent); }
+
+        /* COMPARISON TABLE */
+        .comp-table { width: 100%; margin-top: 15px; font-size: 12px; border-collapse: collapse; }
+        .comp-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .comp-table td:last-child { text-align: right; color: var(--gold); font-weight: bold; }
+
+        .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); }
+        .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; }
+        .nav-tab.active { color: var(--accent); }
+
+        /* GRID ΓΛΩΣΣΩΝ */
+        .overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 10000; text-align: center; padding: 20px; overflow-y: auto; }
+        .lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; max-width: 320px; margin-top: 10px; }
+        .lang-btn { background: rgba(255, 255, 255, 0.05); border-radius: 18px; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer; display: flex; flex-direction: column; align-items: center; }
     </style>
 </head>
 <body>
 
-<div class="app-shell">
-    <a href="index.html" class="back-btn">← Επιστροφή</a>
-    
-    <header style="text-align:center;">
-        <h1>🔐 Security Checkup</h1>
-        <div class="score-circle" id="score-circle">
-            <span class="score-val" id="score-num">--</span>
-            <span class="score-label">Score</span>
+<section id="onboarding" class="overlay">
+    <div>
+        <div class="shield-icon">🛡️</div>
+        <h1 style="font-size: 24px;">Stay Safe Elite</h1>
+        <div class="lang-grid">
+            <div class="lang-btn" onclick="initApp('el')"><span>🇬🇷</span><small>GREEK</small></div>
+            <div class="lang-btn" onclick="initApp('en')"><span>🇺🇸</span><small>ENGLISH</small></div>
+            <div class="lang-btn" onclick="initApp('de')"><span>🇩🇪</span><small>GERMAN</small></div>
+            <div class="lang-btn" onclick="initApp('fr')"><span>🇫🇷</span><small>FRENCH</small></div>
         </div>
-        <p id="score-desc" style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px;">Ξεκινήστε τη σάρωση για ανάλυση</p>
+    </div>
+</section>
+
+<div id="main_app" class="hidden">
+    <header class="app-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div id="ui_streak" style="color:var(--gold); font-weight:bold;">🔥 1 DAYS</div>
+            <div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
+        </div>
+        <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
     </header>
 
-    <div class="log-text" id="scan-log"></div>
-    <div class="scan-progress"><div class="bar" id="scan-bar"></div></div>
-
-    <main id="results">
-        <div class="checkup-block" id="block-pw">
-            <h3>🛡️ Passwords <span class="status-badge" style="background:#1e293b">ΑΝΑΜΟΝΗ</span></h3>
-            <div class="insight" id="ins-pw">
-                <b>🟡 Insight:</b> Βρέθηκαν επαναλαμβανόμενοι κωδικοί. <br>
-                <span style="color:var(--accent)">👉 Δράση:</span> Χρησιμοποίησε Passphrase 12+ χαρακτήρων με σύμβολα (#, @).
+    <main style="padding: 20px 20px 110px;">
+        <section id="screen_home">
+            <div class="glass-card">
+                <h2 style="margin-top:0;">🛡️ Security Training</h2>
+                <button class="main-cta" onclick="handleStart()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
             </div>
-        </div>
-
-        <div class="checkup-block" id="block-2fa">
-            <h3>🔑 2FA Protection <span class="status-badge" style="background:#1e293b">ΑΝΑΜΟΝΗ</span></h3>
-            <div class="insight" id="ins-2fa">
-                <b>🔴 Insight:</b> Το 2FA είναι ανενεργό σε βασικές εφαρμογές. <br>
-                <span style="color:var(--accent)">👉 Δράση:</span> Ενεργοποίησε το Google Authenticator για Instagram & Facebook.
+            
+            <div class="badge-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;">
+                <div id="badge_1" class="badge-slot" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:20px; text-align:center; opacity:0.2;">🎖️</div>
+                <div id="badge_2" class="badge-slot" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:20px; text-align:center; opacity:0.2;">🛡️</div>
+                <div id="badge_3" class="badge-slot" style="background:rgba(255,255,255,0.05); padding:15px; border-radius:20px; text-align:center; opacity:0.2;">💎</div>
             </div>
-        </div>
 
-        <div class="checkup-block" id="block-device">
-            <h3>📱 Device Integrity <span class="status-badge" style="background:#1e293b">ΑΝΑΜΟΝΗ</span></h3>
-            <div class="insight" id="ins-device">
-                <b>🟢 Insight:</b> Το λογισμικό είναι ενημερωμένο. <br>
-                <span style="color:var(--accent)">👉 Δράση:</span> Μην παραλείπεις τα Security Patches του επόμενου μήνα.
+            <div style="display:flex; justify-content:center; gap:20px; margin-top:30px;">
+                <a href="https://www.tiktok.com/@securitydefense" style="text-decoration:none; font-size:25px;">📱</a>
+                <a href="https://www.instagram.com/stay_safe_tips" style="text-decoration:none; font-size:25px;">📸</a>
             </div>
-        </div>
+        </section>
+
+        <section id="screen_premium" class="hidden">
+            <div id="prem_locked">
+                <div class="glass-card" style="border:2px solid var(--gold); text-align:center;">
+                    <div class="shield-icon" style="font-size:40px;">💎</div>
+                    <h2 style="color:var(--gold); margin:5px 0;">Elite Membership</h2>
+                    <table class="comp-table">
+                        <tr><td>Advanced Quizzes</td><td>✅</td></tr>
+                        <tr><td>Security Scan Hub</td><td>✅</td></tr>
+                        <tr><td>No Advertisements</td><td>✅</td></tr>
+                    </table>
+                    <button class="main-cta" style="background:var(--gold); color:black; margin-top:20px;" onclick="buyPremium()">ΞΕΚΛΕΙΔΩΣΕ ΤΟ (4.90€)</button>
+                </div>
+            </div>
+
+            <div id="prem_tools" class="hidden">
+                <h3 style="text-align:center; color:var(--gold);">🛡️ Elite Control Center</h3>
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="location.href='checkup.html'">
+                        <i style="color:var(--accent);">🔍</i><small>SCAN HUB</small>
+                        <div style="font-size:9px; color:var(--success); margin-top:5px;">● ΕΝΕΡΓΟ</div>
+                    </div>
+                    <div class="tool-card" style="border-color:var(--danger);" onclick="alert('SOS Hub: Coming Soon')">
+                        <i style="color:var(--danger);">🚨</i><small>SOS HUB</small>
+                    </div>
+                    <div class="tool-card" style="grid-column: span 2;" onclick="alert('Dojo: Training Ready')">
+                        <i style="color:var(--gold);">🥋</i><small>SECURITY DOJO</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <h4 style="margin: 0; font-size: 14px; color: var(--accent);">ΔΙΑΔΡΟΜΗ ΠΡΟΟΔΟΥ</h4>
+                <div class="map-step" id="step_lvl1"><div class="step-dot">1</div><div><small>Rookie</small></div></div>
+                <div class="map-step" id="step_lvl7"><div class="step-dot">7</div><div><small>Elite Access</small></div></div>
+            </div>
+        </section>
+
+        <section id="screen_quiz" class="hidden"></section>
     </main>
 
-    <button class="btn-main" id="start-btn">ΕΚΤΕΛΕΣΗ ΠΛΗΡΟΥΣ ΕΛΕΓΧΟΥ</button>
+    <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="nav('home', this)">🏠</button>
+        <button class="nav-tab" onclick="nav('premium', this)">💎</button>
+    </nav>
 </div>
 
 <script>
-    const btn = document.getElementById('start-btn');
-    const bar = document.getElementById('scan-bar');
-    const log = document.getElementById('scan-log');
+let currentLang = 'el', xp = 0, level = 1, isPremium = false;
+
+function initApp(lang) {
+    currentLang = lang;
+    xp = parseInt(localStorage.getItem('ss_xp')) || 0;
+    isPremium = localStorage.getItem('isElite') === 'true';
+    document.getElementById('onboarding').classList.add('hidden');
+    document.getElementById('main_app').classList.remove('hidden');
+    updateUI();
+}
+
+function updateUI() {
+    level = Math.floor(xp / 100) + 1;
+    document.getElementById('level_val').innerText = level;
+    document.getElementById('xp_fill').style.width = (xp % 100) + "%";
     
-    const scanSteps = [
-        { msg: "🔍 Έλεγχος ισχύος κωδικών...", block: "block-pw" },
-        { msg: "🔐 Έλεγχος 2-Factor Authentication...", block: "block-2fa" },
-        { msg: "📱 Σάρωση συσκευής για Root/Jailbreak...", block: "block-device" },
-        { msg: "⚖️ Υπολογισμός Risk Score...", block: null }
-    ];
-
-    btn.onclick = async () => {
-        if(localStorage.getItem('isElite') !== 'true') {
-            alert("Απαιτείται Elite Membership για αυτή τη λειτουργία!");
-            return;
-        }
-
-        btn.disabled = true;
-        btn.textContent = "ΣΑΡΩΣΗ...";
-        resetUI();
-
-        for (let i = 0; i < scanSteps.length; i++) {
-            log.textContent = scanSteps[i].msg;
-            if(scanSteps[i].block) document.getElementById(scanSteps[i].block).classList.add('scanning');
-            
-            await new Promise(r => setTimeout(r, 1200)); // Real-time αίσθηση
-            
-            bar.style.width = ((i + 1) * 25) + "%";
-            if(scanSteps[i].block) document.getElementById(scanSteps[i].block).classList.remove('scanning');
-        }
-
-        showResults();
-    };
-
-    function resetUI() {
-        bar.style.width = "0%";
-        document.querySelectorAll('.insight').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.status-badge').forEach(el => {
-            el.textContent = "ΑΝΑΜΟΝΗ";
-            el.style.background = "#1e293b";
-        });
+    // Badges & Map
+    if(level >= 2) document.getElementById('badge_1').style.opacity = "1";
+    if(level >= 5) document.getElementById('badge_2').style.opacity = "1";
+    if(level >= 1) document.getElementById('step_lvl1').classList.add('active');
+    
+    if(isPremium) {
+        document.getElementById('badge_3').style.opacity = "1";
+        document.getElementById('prem_locked').classList.add('hidden');
+        document.getElementById('prem_tools').classList.remove('hidden');
+        document.getElementById('step_lvl7').classList.add('active');
     }
+}
 
-    function showResults() {
-        const score = 78; // Σταθερό score για το παράδειγμα insight
-        
-        // Score Counter Animation
-        let current = 0;
-        const interval = setInterval(() => {
-            current++;
-            document.getElementById('score-num').textContent = current;
-            if(current >= score) {
-                clearInterval(interval);
-                finalize();
-            }
-        }, 20);
+function nav(id, btn) {
+    document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+    document.getElementById('screen_'+id).classList.remove('hidden');
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+}
 
-        function finalize() {
-            log.textContent = "Η ΣΑΡΩΣΗ ΟΛΟΚΛΗΡΩΘΗΚΕ";
-            document.getElementById('score-circle').style.borderColor = "var(--warning)";
-            document.getElementById('score-desc').innerHTML = "<span style='color:var(--warning)'>Προσοχή:</span> Αδύναμοι κωδικοί & 2FA σε λίγα apps";
-            
-            // Εμφάνιση Insights & Badges
-            setResult('block-pw', 'ins-pw', 'ΜΕΤΡΙΑ', 'var(--warning)');
-            setResult('block-2fa', 'ins-2fa', 'ΕΛΛΙΠΗΣ', 'var(--danger)');
-            setResult('block-device', 'ins-device', 'ΑΣΦΑΛΗΣ', 'var(--success)');
+function handleStart() {
+    if (level >= 7 && !isPremium) { nav('premium'); return; }
+    // Start Quiz logic here...
+    alert("Ξεκινάει το Quiz επιπέδου " + level);
+}
 
-            btn.disabled = false;
-            btn.textContent = "ΕΠΑΝΑΛΗΨΗ ΕΛΕΓΧΟΥ";
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
-        }
-    }
-
-    function setResult(blockId, insId, text, color) {
-        const block = document.getElementById(blockId);
-        const badge = block.querySelector('.status-badge');
-        badge.textContent = text;
-        badge.style.background = color;
-        document.getElementById(insId).style.display = 'block';
-    }
+function buyPremium() {
+    isPremium = true;
+    localStorage.setItem('isElite', 'true');
+    updateUI();
+    confetti({ particleCount: 150, spread: 70 });
+}
 </script>
-
 </body>
 </html>
