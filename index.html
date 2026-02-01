@@ -31,17 +31,10 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 
 /* --- ELITE BADGES --- */
 .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
-.badge-slot { 
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.7));
-    padding: 20px 5px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);
-    text-align: center; opacity: 0.2; grayscale: 1; transition: 0.8s;
-}
+.badge-slot { background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(15, 23, 42, 0.7)); padding: 20px 5px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); text-align: center; opacity: 0.2; grayscale: 1; transition: 0.8s; }
 .badge-slot span { font-size: 40px; display: block; margin-bottom: 8px; }
 .badge-name { font-size: 9px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-.badge-slot.unlocked { 
-    opacity: 1; grayscale: 0; border-color: var(--gold); transform: scale(1.05);
-    background: linear-gradient(145deg, rgba(250, 204, 21, 0.1), rgba(15, 23, 42, 0.9));
-}
+.badge-slot.unlocked { opacity: 1; grayscale: 0; border-color: var(--gold); transform: scale(1.05); background: linear-gradient(145deg, rgba(250, 204, 21, 0.1), rgba(15, 23, 42, 0.9)); }
 .badge-slot.unlocked .badge-name { color: var(--gold); }
 
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 85px; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(20px); display: flex; border-top: 1px solid rgba(56, 189, 248, 0.1); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
@@ -82,8 +75,8 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
   <main style="padding: 20px 20px 120px;">
     <section id="screen_home">
       <div class="glass-card">
-        <h2 style="margin-top:0;">🛡️ Ασφάλεια Σπιτιού</h2>
-        <button class="main-cta" style="width:100%" onclick="startQuiz('badge-home')">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
+        <h2 style="margin-top:0;">🛡️ Ασφάλεια & Εκπαίδευση</h2>
+        <button class="main-cta" style="width:100%" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
       </div>
 
       <div class="glass-card" style="text-align:center;">
@@ -106,7 +99,6 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
         <p>4,90€ / μήνα</p>
         <button class="main-cta" style="background:var(--gold); color:black;" onclick="buyPremium()">ΓΙΝΕ ELITE ΜΕΛΟΣ</button>
       </div>
-      
       <div class="glass-card" onclick="openDojo()" style="display:flex; align-items:center; gap:15px; cursor:pointer; border:1px solid rgba(56,189,248,0.3); background:rgba(56,189,248,0.05);">
         <div style="font-size:30px; background:rgba(56,189,248,0.1); padding:10px; border-radius:15px;">🥋</div>
         <div style="text-align:left;">
@@ -114,7 +106,6 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
             <p style="margin:0; font-size:11px; color:var(--muted);">Τεχνικές αυτοάμυνας Elite</p>
         </div>
       </div>
-
       <div class="glass-card" onclick="openSOS()" style="display:flex; align-items:center; gap:15px; cursor:pointer; border:1px solid rgba(239,68,68,0.3); background:rgba(239,68,68,0.05);">
         <div style="font-size:30px; background:rgba(239,68,68,0.1); padding:10px; border-radius:15px;">🌍</div>
         <div style="text-align:left;">
@@ -136,57 +127,45 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <script>
 let currentLang = 'el', xp = 0, level = 1, isPremium = false, quizData = [], errors = 0;
 
-// Φόρτωση προόδου και status
 if(localStorage.getItem('isElite') === 'true') isPremium = true;
 if(localStorage.getItem('ss_xp')) {
     xp = parseInt(localStorage.getItem('ss_xp'));
-    level = Math.floor(xp / 100) + 1;
 }
 
 function initApp(lang) {
     currentLang = lang;
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
-    updateXP(0); // Αρχικοποίηση μπάρας
+    updateUI();
 }
 
 function nav(id, btn) {
     document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-    const target = document.getElementById('screen_'+id);
-    if(target) target.classList.remove('hidden');
+    document.getElementById('screen_'+id).classList.remove('hidden');
     if(btn) {
         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
     }
 }
 
-async function startQuiz(badgeId = 'quiz') {
+async function startQuiz() {
     if(level >= 7 && !isPremium) { nav('premium'); return; }
     errors = 0;
     const mode = isPremium ? "premium" : "free";
-    // Προσθήκη timestamp για αποφυγή cache στο GitHub
     const jsonPath = `./questions_${mode}_${currentLang}.json?v=${Date.now()}`;
     
     try {
         const res = await fetch(jsonPath);
         if(!res.ok) throw new Error();
         const data = await res.json();
+        const langRoot = data[currentLang] || data;
+        const questionsPool = langRoot.levels ? langRoot.levels[String(level)] : langRoot;
         
-        // Λογική εύρεσης ερωτήσεων: 1. Βάσει Level 2. Βάσει BadgeId 3. Γενικό Quiz
-        const levelKey = String(level);
-        const questionsPool = data.levels?.[levelKey] || data[badgeId] || data['quiz'] || [];
-        
-        if(questionsPool.length === 0) {
-            alert("Δεν βρέθηκαν ερωτήσεις για αυτό το επίπεδο.");
-            return;
-        }
-
+        if(!questionsPool) { alert("Level not found."); return; }
         quizData = questionsPool.sort(() => 0.5 - Math.random()).slice(0, 5);
         renderQuestion(0);
         nav('quiz');
-    } catch(e) { 
-        alert("Σφάλμα σύνδεσης. Βεβαιωθείτε ότι το αρχείο " + jsonPath + " υπάρχει στο GitHub."); 
-    }
+    } catch(e) { alert("Σφάλμα σύνδεσης με GitHub JSON."); }
 }
 
 function renderQuestion(idx) {
@@ -195,73 +174,65 @@ function renderQuestion(idx) {
     s.innerHTML = `
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-bottom:15px;">
-                <span>Ερώτηση ${idx+1}/${quizData.length}</span>
+                <span>Ερώτηση ${idx+1}/5</span>
                 <span style="color:var(--danger)">Λάθη: ${errors}/3</span>
             </div>
             <h3 style="text-align:center; margin-bottom:25px;">${q.q}</h3>
             <div id="quiz_options">
-                ${q.options.map((opt, i) => `
-                    <button class="main-cta" style="background:#1e293b; margin-bottom:12px; width:100%; color:white; border: 1px solid rgba(255,255,255,0.1);" 
-                    onclick="check(${i},${q.correct},${idx}, this)">${opt}</button>
+                ${q.o.map((opt, i) => `
+                    <button class="main-cta" style="background:#1e293b; margin-bottom:12px; width:100%; color:white; border:1px solid rgba(255,255,255,0.1);" 
+                    onclick="check(${i},${q.a},${idx}, this)">${opt}</button>
                 `).join('')}
             </div>
-            <div id="explain_box" style="margin-top:15px; display:none;"></div>
+            <div id="exp_box" style="margin-top:20px; display:none;"></div>
         </div>`;
 }
 
 window.check = (sel, cor, idx, btn) => {
     const btns = document.querySelectorAll('#quiz_options button');
     const q = quizData[idx];
-    const explainBox = document.getElementById('explain_box');
-    
     btns.forEach(b => b.disabled = true);
-
+    
     if(sel === cor) {
         btn.style.background = "var(--success)";
-        btn.style.borderColor = "var(--success)";
-        updateXP(20);
+        xp += 20;
     } else {
         btn.style.background = "var(--danger)";
-        btn.style.borderColor = "var(--danger)";
         btns[cor].style.background = "var(--success)";
-        btns[cor].style.borderColor = "var(--success)";
         errors++;
     }
 
-    if(q.explain) {
-        explainBox.style.display = "block";
-        explainBox.innerHTML = `<p style="color:var(--gold); font-size:13px; text-align:center; background:rgba(250,204,21,0.05); padding:10px; border-radius:12px;">💡 ${q.explain}</p>`;
+    if(q.exp) {
+        const box = document.getElementById('exp_box');
+        box.style.display = "block";
+        box.innerHTML = `<p style="color:var(--gold); font-size:13px; text-align:center; background:rgba(250,204,21,0.05); padding:15px; border-radius:15px; border:1px solid rgba(250,204,21,0.2);">💡 ${q.exp}</p>`;
     }
 
     setTimeout(() => {
-        // Διαφημίσεις Google (Interstitial logic) - Μόνο για Free
-        if(!isPremium && (idx === quizData.length - 1 || errors >= 3)) {
+        if(!isPremium && (idx === 4 || errors >= 3)) {
             if(window.adsbygoogle) (adsbygoogle = window.adsbygoogle || []).push({});
         }
 
         if(errors >= 3) {
-            alert("❌ 3 Λάθη! Πρέπει να ξαναπροσπαθήσεις το Level.");
+            alert("❌ Πολύ επικίνδυνο! Πρέπει να μελετήσεις ξανά αυτό το Level.");
             nav('home');
-        } else if(idx < quizData.length - 1) {
+        } else if(idx < 4) {
             renderQuestion(idx + 1);
         } else {
+            updateUI();
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             setTimeout(() => { nav('home'); }, 2000);
         }
-    }, 1500);
+    }, q.exp ? 3500 : 1200);
 }
 
-function updateXP(amount) {
-    xp += amount;
+function updateUI() {
     level = Math.floor(xp / 100) + 1;
     document.getElementById('level_val').innerText = level;
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-    
-    // Ξεκλείδωμα Badges
     if(level >= 2) document.getElementById('badge_1').classList.add('unlocked');
     if(level >= 5) document.getElementById('badge_2').classList.add('unlocked');
     if(isPremium) document.getElementById('badge_3').classList.add('unlocked');
-    
     localStorage.setItem('ss_xp', xp);
 }
 
@@ -271,7 +242,7 @@ async function openSOS() {
         const res = await fetch('./emergency_hub.json');
         const data = await res.json();
         let html = `<div class="glass-card" style="text-align:left; max-height:70vh; overflow-y:auto;">
-            <h2 style="color:var(--danger);">🌍 SOS Hub</h2><hr style="opacity:0.1; margin:15px 0;">`;
+            <h2 style="color:var(--danger);">🌍 Global SOS Hub</h2><hr style="opacity:0.1; margin:15px 0;">`;
         data.regions.forEach(r => {
             html += `<h4 style="color:var(--accent); margin:15px 0 5px;">${r.area}</h4>`;
             r.countries.forEach(c => {
@@ -282,7 +253,7 @@ async function openSOS() {
         html += `<button class="main-cta" style="margin-top:15px;" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button></div>`;
         document.getElementById('screen_quiz').innerHTML = html;
         nav('quiz');
-    } catch(e) { alert("Σφάλμα φόρτωσης SOS Hub"); }
+    } catch(e) { alert("Σφάλμα SOS Hub"); }
 }
 
 async function openDojo() {
@@ -301,13 +272,12 @@ async function openDojo() {
         html += `<button class="main-cta" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button></div>`;
         document.getElementById('screen_quiz').innerHTML = html;
         nav('quiz');
-    } catch(e) { alert("Σφάλμα φόρτωσης Dojo"); }
+    } catch(e) { alert("Σφάλμα Dojo"); }
 }
 
 function buyPremium() {
     isPremium = true;
     localStorage.setItem('isElite', 'true');
-    alert("Συγχαρητήρια! Ξεκλειδώσατε το Elite περιεχόμενο.");
     location.reload();
 }
 </script>
