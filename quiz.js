@@ -39,37 +39,39 @@ window.QuizEngine = {
     const userLvl = parseInt(document.getElementById("user-level")?.textContent) || 1;
     const isPremium = localStorage.getItem("isPremiumUser") === "true";
 
-    // 1. Paywall Logic: Κλείδωμα στο Level 7
+    // 1. Paywall Logic: Κλείδωμα στο Level 7 αν δεν είναι premium
     if (userLvl >= 7 && !isPremium) {
       this.showPaywall();
       return;
     }
 
-    // 2. Φόρτωση ερωτήσεων από το κατάλληλο αρχείο
+    // 2. Φόρτωση ερωτήσεων με Cache Busting για να μην παίζει τις ίδιες λόγω cache
     let questionsPool = [];
     const sourceFile = userLvl >= 7 ? this.sources.premium : this.sources.free;
 
     try {
-      const resp = await fetch(sourceFile);
+      // Το ?v=Date.now() αναγκάζει το GitHub να δώσει το πιο πρόσφατο αρχείο
+      const resp = await fetch(`${sourceFile}?v=${Date.now()}`);
       const data = await resp.json();
       questionsPool = data[lang]?.[badgeId] || data[lang]?.["quiz"] || this.content[lang][badgeId] || this.content[lang]["quiz"];
     } catch(e) { 
-      console.warn("Could not fetch JSON, using fallback content.");
+      console.warn("Using local content as fallback.");
       questionsPool = this.content[lang][badgeId] || this.content[lang]["quiz"];
     }
 
-    // 3. Σύστημα Μνήμης (No Repeats) - Ανά γλώσσα και badge
+    // 3. Σύστημα Μνήμης (No Repeats): Φιλτράρισμα βάσει ιστορικού
     const masteredKey = `mastered_${lang}_${badgeId}`;
     const mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
     
     let available = questionsPool.filter(q => !mastered.includes(q.q));
 
+    // Αν τελειώσουν όλες οι ερωτήσεις, μηδενίζουμε τη μνήμη για να ξεκινήσει κύκλος
     if (available.length === 0) {
       available = questionsPool; 
       localStorage.setItem(masteredKey, "[]");
     }
 
-    // 4. Επιλογή 3 τυχαίων από τις ΔΙΑΘΕΣΙΜΕΣ
+    // 4. Επιλογή 3 τυχαίων από τις ΔΙΑΘΕΣΙΜΕΣ που δεν έχει απαντήσει σωστά
     this.activeQuestions = available.sort(() => Math.random() - 0.5).slice(0, 3);
     this.currentIndex = 0;
     this.score = 0;
@@ -88,10 +90,10 @@ window.QuizEngine = {
     if (res) {
       res.classList.remove("hidden");
       res.style.display = "flex";
-      scoreText.innerHTML = `<span style="color:var(--gold); font-size: 1.4rem; font-weight: bold;">Level 7+ Required 🔒</span><br><p style="margin-top:10px;">Ξεκλείδωσε την Premium έκδοση για να συνεχίσεις την εκπαίδευση.</p>`;
+      scoreText.innerHTML = `<span style="color:var(--gold); font-size: 1.4rem; font-weight: bold;">Level 7+ Required 🔒</span><br><p style="margin-top:10px; padding: 0 10px;">Έφτασες στο επίπεδο Premium! Ξεκλείδωσε το πλήρες περιεχόμενο για να συνεχίσεις.</p>`;
       btn.textContent = "Unlock Premium";
       btn.onclick = () => {
-        // Εδώ συνδέεται το Store API
+        // Εδώ συνδέεται το Store API (Google/Apple)
         alert("Redirecting to Purchase...");
         // Για δοκιμή: localStorage.setItem("isPremiumUser", "true"); location.reload();
       };
@@ -139,7 +141,7 @@ window.QuizEngine = {
       this.score++;
       this.streak++;
       
-      // Αποθήκευση στη μνήμη No-Repeat (ανά γλώσσα/badge)
+      // ΑΠΟΘΗΚΕΥΣΗ: Η ερώτηση θεωρείται "ολοκληρωμένη" και δεν θα ξαναεμφανιστεί
       const masteredKey = `mastered_${this.currentLang}_${this.badge}`;
       let mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
       if (!mastered.includes(qData.q)) {
@@ -154,7 +156,7 @@ window.QuizEngine = {
 
     if (qData.explain) {
       const qBox = document.getElementById("quiz-question");
-      qBox.innerHTML += `<p class="explain" style="margin-top:10px; color: var(--gold);">💡 ${qData.explain}</p>`;
+      qBox.innerHTML += `<p class="explain" style="margin-top:10px; color: var(--gold); padding: 5px;">💡 ${qData.explain}</p>`;
     }
 
     setTimeout(() => {
