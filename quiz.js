@@ -1,7 +1,7 @@
 window.QuizEngine = {
   sources: {
-    free: "quiz.json",
-    premium: "questions_premium.json"
+    free: lang => `questions_free_${lang}.json`,
+    premium: lang => `questions_premium_${lang}.json`
   },
 
   content: {
@@ -48,7 +48,11 @@ window.QuizEngine = {
     }
 
     let questionsPool = [];
-    const sourceFile = userLvl >= 7 ? this.sources.premium : this.sources.free;
+
+    // ⭐ Dynamic file loading based on language
+    const sourceFile = userLvl >= 7
+      ? this.sources.premium(lang)
+      : this.sources.free(lang);
 
     try {
       const resp = await fetch(`${sourceFile}?v=${Date.now()}`);
@@ -56,12 +60,12 @@ window.QuizEngine = {
 
       const levelKey = String(userLvl);
 
-      // ⭐ NEW LEVEL-BASED LOADING ⭐
+      // ⭐ Level-based loading
       questionsPool =
-        data[lang]?.levels?.[levelKey] ||     // ← FREE/PREMIUM LEVELS
-        data[lang]?.[badgeId] ||              // fallback
-        data[lang]?.quiz ||                   // fallback
-        this.content[lang][badgeId] ||        // local fallback
+        data[lang]?.levels?.[levelKey] ||
+        data[lang]?.[badgeId] ||
+        data[lang]?.quiz ||
+        this.content[lang][badgeId] ||
         this.content[lang].quiz;
 
     } catch (e) {
