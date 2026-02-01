@@ -17,11 +17,18 @@
         .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
 
         /* UI Cards */
-        .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); }
-        .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
+        .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
+        .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        
+        /* Quiz feedback colors */
+        .quiz-opt { margin-top: 10px; transition: 0.3s; border: 2px solid transparent; background: #1e293b; color: white; }
+        .correct { background: var(--success) !important; color: white !important; border-color: #fff !important; }
+        .wrong { background: var(--danger) !important; color: white !important; }
 
-        /* XP Map */
-        .map-container { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 20px; }
+        /* XP Map & Premium Floating Button */
+        .map-container { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 20px; position: relative; }
+        .prem-float-btn { position: absolute; bottom: -10px; right: 0; background: var(--gold); color: #000; padding: 8px 12px; border-radius: 12px; font-size: 10px; font-weight: 900; text-decoration: none; box-shadow: 0 4px 15px rgba(250,204,21,0.3); z-index: 5; cursor: pointer; border: none; }
+
         .map-step { display: flex; align-items: center; gap: 12px; opacity: 0.3; transition: 0.5s; }
         .map-step.active { opacity: 1; }
         .step-dot { width: 30px; height: 30px; border-radius: 50%; background: #1e293b; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
@@ -31,11 +38,6 @@
         .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
         .badge { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; text-align: center; font-size: 24px; filter: grayscale(1); opacity: 0.3; transition: 0.5s; }
         .badge.unlocked { filter: grayscale(0); opacity: 1; border: 1px solid var(--gold); }
-
-        /* Tools Grid */
-        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
-        .tool-card i { font-size: 30px; display: block; margin-bottom: 8px; }
 
         /* Nav */
         .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); }
@@ -52,18 +54,18 @@
 <section id="onboarding" class="overlay">
     <div>
         <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
-        <h1>Stay Safe Elite</h1>
+        <h1 id="txt_welcome">Stay Safe Elite</h1>
         <div class="lang-grid">
-            <div class="lang-btn" onclick="initApp()">🇬🇷 Greek</div>
-            <div class="lang-btn" onclick="initApp()">🇺🇸 English</div>
-            <div class="lang-btn" onclick="initApp()">🇩🇪 German</div>
-            <div class="lang-btn" onclick="initApp()">🇫🇷 French</div>
-            <div class="lang-btn" onclick="initApp()">🇪🇸 Spanish</div>
-            <div class="lang-btn" onclick="initApp()">🇮🇹 Italian</div>
-            <div class="lang-btn" onclick="initApp()">🇵🇹 Portuguese</div>
-            <div class="lang-btn" onclick="initApp()">🇷🇺 Russian</div>
-            <div class="lang-btn" onclick="initApp()">🇨🇳 Chinese</div>
-            <div class="lang-btn" onclick="initApp()">🇮🇳 Hindi</div>
+            <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
+            <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
+            <div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
+            <div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
+            <div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
+            <div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
+            <div class="lang-btn" onclick="initApp('pt')">🇵🇹 Portuguese</div>
+            <div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
+            <div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
+            <div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
         </div>
     </div>
 </section>
@@ -71,7 +73,7 @@
 <div id="main_app" class="hidden">
     <header class="app-header">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> DAYS</div>
+            <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
             <div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
         </div>
         <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
@@ -82,13 +84,13 @@
 
         <section id="screen_home">
             <div class="glass-card" id="quiz_container">
-                <h2 style="margin:0;">🛡️ Daily Training</h2>
-                <p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος για τις σημερινές προκλήσεις;</p>
+                <h2 id="txt_training">🛡️ Daily Training</h2>
+                <p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος;</p>
                 <div id="quiz_options"></div>
                 <button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
             </div>
 
-            <h3 style="font-size:1rem; margin-bottom:10px;">🏆 Επιτεύγματα</h3>
+            <h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Επιτεύγματα</h3>
             <div class="badge-grid">
                 <div id="badge1" class="badge">🎖️</div>
                 <div id="badge2" class="badge">🛡️</div>
@@ -96,7 +98,8 @@
             </div>
 
             <div class="map-container">
-                <h4 style="margin:0 0 10px; color:var(--accent); font-size:0.8rem;">ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
+                <button id="float_prem" class="prem-float-btn" onclick="nav('premium', document.querySelectorAll('.nav-tab')[1])">PREMIUM 4.90€</button>
+                <h4 style="margin:0 0 10px; color:var(--accent); font-size:0.8rem;" id="txt_map">ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
                 <div class="map-step active" id="step1"><div class="step-dot">1</div><small>Rookie</small></div>
                 <div class="map-step" id="step2"><div class="step-dot">5</div><small>Expert</small></div>
                 <div class="map-step" id="step3"><div class="step-dot">10</div><small>Elite</small></div>
@@ -106,29 +109,18 @@
         <section id="screen_premium" class="hidden">
             <div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
                 <h2 style="color:var(--gold);">Elite Access</h2>
-                <p style="font-size:0.9rem;">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας και αφαιρέστε τις διαφημίσεις.</p>
+                <p id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.</p>
                 <button class="main-cta" style="background:var(--gold); color:black;" onclick="buyPremium()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
             </div>
 
             <div id="prem_unlocked" class="hidden">
-               <div class="tools-grid">
-    <div class="tool-card" onclick="window.location.href='checkup.html'">
-        <i>🔍</i><small>CHECKUP</small>
-    </div>
-    
-    <div class="tool-card" onclick="window.location.href='sos_hub.html'">
-        <i>🚨</i><small>SOS HUB</small>
-    </div>
-    
-    <div class="tool-card" onclick="window.location.href='scam-alerts.html'">
-        <i>⚠️</i><small>ALERTS</small>
-    </div>
-    
-    <div class="tool-card" onclick="window.location.href='dojo.html'">
-        <i>⚡</i><small>DOJO</small>
-    </div>
-</div>
-
+                <div class="tools-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <div class="tool-card" onclick="location.href='checkup.html'"><i>🔍</i><small>CHECKUP</small></div>
+                    <div class="tool-card" onclick="location.href='sos_hub.html'"><i>🚨</i><small>SOS HUB</small></div>
+                    <div class="tool-card" onclick="location.href='scam-alerts.html'"><i>⚠️</i><small>ALERTS</small></div>
+                    <div class="tool-card" onclick="location.href='dojo.html'"><i>⚡</i><small>DOJO</small></div>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -139,77 +131,122 @@
 </div>
 
 <script>
-    let xp = 0;
-    let isElite = false;
+    let xp = parseInt(localStorage.getItem('xp')) || 0;
+    let isElite = localStorage.getItem('isElite') === 'true';
+    let currentLang = 'el';
+    let dailyQuestions = [];
+    let currentQIdx = 0;
 
-    const questions = [
-        { q: "Τι είναι το Phishing;", a: ["Τρόπος ψαρέματος", "Απάτη μέσω email", "Είδος ιού"], c: 1 },
-        { q: "Πόσο συχνά αλλάζουμε κωδικούς;", a: ["Κάθε χρόνο", "Ποτέ", "Κάθε 3-6 μήνες"], c: 2 }
-    ];
+    const translations = {
+        el: { welcome: "Stay Safe Elite", training: "🛡️ Daily Training", achievements: "🏆 Επιτεύγματα", map: "ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ", days: "ΗΜΕΡΕΣ", prem_desc: "Ξεκλειδώστε όλα τα εργαλεία.", start: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ" },
+        en: { welcome: "Stay Safe Elite", training: "🛡️ Daily Training", achievements: "🏆 Achievements", map: "TRAINING MAP", days: "DAYS", prem_desc: "Unlock all security tools.", start: "START QUIZ" },
+        de: { welcome: "Stay Safe Elite", training: "🛡️ Tägliches Training", achievements: "🏆 Erfolge", map: "TRAININGSKARTE", days: "TAGE", prem_desc: "Alle Tools freischalten.", start: "STARTEN" },
+        fr: { welcome: "Stay Safe Elite", training: "🛡️ Entraînement", achievements: "🏆 Succès", map: "CARTE", days: "JOURS", prem_desc: "Débloquez les outils.", start: "LANCER" },
+        es: { welcome: "Stay Safe Elite", training: "🛡️ Entrenamiento", achievements: "🏆 Logros", map: "MAPA", days: "DÍAS", prem_desc: "Desbloquea herramientas.", start: "INICIAR" },
+        it: { welcome: "Stay Safe Elite", training: "🛡️ Allenamento", achievements: "🏆 Traguardi", map: "MAPPA", days: "GIORNI", prem_desc: "Sblocca strumenti.", start: "INIZIA" },
+        pt: { welcome: "Stay Safe Elite", training: "🛡️ Treino Diário", achievements: "🏆 Conquistas", map: "MAPA", days: "DIAS", prem_desc: "Desbloqueie ferramentas.", start: "INICIAR" },
+        ru: { welcome: "Stay Safe Elite", training: "🛡️ Обучение", achievements: "🏆 Достижения", map: "КАΡТА", days: "ДНЕЙ", prem_desc: "Разблокировать инструменты.", start: "НАЧАТЬ" },
+        zh: { welcome: "Stay Safe Elite", training: "🛡️ 每日训练", achievements: "🏆 成就", map: "训练地图", days: "天", prem_desc: "解锁所有安全工具。", start: "开始" },
+        hi: { welcome: "Stay Safe Elite", training: "🛡️ दैनिक प्रशिक्षण", achievements: "🏆 उपलब्धियां", map: "मानचित्र", days: "दिन", prem_desc: "टूल अनलॉक करें।", start: "शुरू करें" }
+    };
 
-    function initApp() {
+    function initApp(lang) {
+        currentLang = lang;
+        applyTranslations();
         document.getElementById('onboarding').classList.add('hidden');
         document.getElementById('main_app').classList.remove('hidden');
-        isElite = localStorage.getItem('isElite') === 'true';
         updateUI();
     }
 
-    function startQuiz() {
-        document.getElementById('quiz_btn').classList.add('hidden');
-        renderQuestion(0);
+    function applyTranslations() {
+        const t = translations[currentLang] || translations['en'];
+        document.getElementById('txt_welcome').innerText = t.welcome;
+        document.getElementById('txt_training').innerText = t.training;
+        document.getElementById('txt_achievements').innerText = t.achievements;
+        document.getElementById('txt_map').innerText = t.map;
+        document.getElementById('txt_days').innerText = t.days;
+        document.getElementById('txt_prem_desc').innerText = t.prem_desc;
+        document.getElementById('quiz_btn').innerText = t.start;
     }
 
-    function renderQuestion(idx) {
-        const q = questions[idx];
-        document.getElementById('quiz_text').innerHTML = `<b>${idx + 1}/${questions.length}:</b> ${q.q}`;
+    async function startQuiz() {
+        document.getElementById('quiz_btn').classList.add('hidden');
+        const file = isElite ? `questions_premium_${currentLang}.json` : `questions_${currentLang}.json`;
+        
+        try {
+            const res = await fetch(file);
+            const data = await res.json();
+            // Shuffle and pick 5
+            dailyQuestions = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+            currentQIdx = 0;
+            renderQuestion();
+        } catch (e) {
+            document.getElementById('quiz_text').innerText = "Error loading questions. Check JSON files.";
+        }
+    }
+
+    function renderQuestion() {
+        const q = dailyQuestions[currentQIdx];
+        document.getElementById('quiz_text').innerHTML = `<b>${currentQIdx + 1}/5:</b> ${q.q}`;
         let html = "";
         q.a.forEach((opt, i) => {
-            html += `<button class="main-cta" style="background:#1e293b; color:white;" onclick="checkAnswer(${idx}, ${i})">${opt}</button>`;
+            html += `<button class="main-cta quiz-opt" onclick="checkAnswer(${i}, this)">${opt}</button>`;
         });
         document.getElementById('quiz_options').innerHTML = html;
     }
 
-    function checkAnswer(qIdx, selected) {
-        if(selected === questions[qIdx].c) {
-            xp += 50;
-            confetti({ particleCount: 50, spread: 30 });
-        }
-        if(qIdx < questions.length - 1) {
-            renderQuestion(qIdx + 1);
+    function checkAnswer(selected, btn) {
+        const correct = dailyQuestions[currentQIdx].c;
+        const options = document.querySelectorAll('.quiz-opt');
+        options.forEach(o => o.disabled = true);
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            xp += 20;
+            confetti({ particleCount: 40, spread: 30, origin: { y: 0.8 } });
+            currentQIdx++;
+            setTimeout(() => {
+                if(currentQIdx < 5) renderQuestion();
+                else endQuiz();
+            }, 1500);
         } else {
-            document.getElementById('quiz_options').innerHTML = "";
-            document.getElementById('quiz_text').innerText = "Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.";
-            document.getElementById('quiz_btn').classList.remove('hidden');
-            document.getElementById('quiz_btn').innerText = "ΕΠΑΝΑΛΗΨΗ ΑΥΡΙΟ";
-            updateUI();
+            btn.classList.add('wrong');
+            options[correct].classList.add('correct');
+            // Αν κάνει λάθος, ΔΕΝ προχωράει index, ξαναδείχνει την ίδια μετά από λίγο
+            setTimeout(() => renderQuestion(), 2000);
         }
+        localStorage.setItem('xp', xp);
+        updateUI();
+    }
+
+    function endQuiz() {
+        document.getElementById('quiz_options').innerHTML = "";
+        document.getElementById('quiz_text').innerText = "Συγχαρητήρια! Κέρδισες 100 XP.";
+        document.getElementById('quiz_btn').classList.remove('hidden');
+        document.getElementById('quiz_btn').innerText = "ΟΛΟΚΛΗΡΩΘΗΚΕ";
     }
 
     function updateUI() {
         let lvl = Math.floor(xp / 100) + 1;
         document.getElementById('level_val').innerText = lvl;
         document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-        
-        // Map Progress
         if(lvl >= 5) document.getElementById('step2').classList.add('active');
         if(lvl >= 10) document.getElementById('step3').classList.add('active');
-
-        // Badges
         if(lvl >= 2) document.getElementById('badge1').classList.add('unlocked');
         if(lvl >= 5) document.getElementById('badge2').classList.add('unlocked');
-        if(isElite) document.getElementById('badge3').classList.add('unlocked');
-
         if(isElite) {
+            document.getElementById('badge3').classList.add('unlocked');
             document.getElementById('prem_locked').classList.add('hidden');
             document.getElementById('prem_unlocked').classList.remove('hidden');
             document.getElementById('ad_box').classList.add('hidden');
+            document.getElementById('float_prem').classList.add('hidden');
         }
     }
 
     function buyPremium() {
         isElite = true;
         localStorage.setItem('isElite', 'true');
-        confetti({ particleCount: 200, spread: 100 });
+        confetti({ particleCount: 150, spread: 70 });
         updateUI();
     }
 
