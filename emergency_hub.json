@@ -51,4 +51,4 @@ async function openSOS() {
     } catch (e) { 
         alert("JSON Error: Check your emergency_hub.json file."); 
     }
-}
+
