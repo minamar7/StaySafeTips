@@ -1,63 +1,53 @@
-[
-  { "q": "Qual é o número de emergência europeu?", "o": ["100", "112", "911"], "a": 1 },
-  { "q": "O que fazer se sentir cheiro de gás em casa?", "o": ["Acender a luz", "Abrir as janelas", "Chamar a polícia"], "a": 1 },
-  { "q": "É seguro deixar a chave debaixo do tapete?", "o": ["Sim", "Não", "Apenas por pouco tempo"], "a": 1 },
-  { "q": "Como apagar um fogo de óleo numa frigideira?", "o": ["Com água", "Com uma tampa ou manta de fogo", "Soprando"], "a": 1 },
-  { "q": "Onde devem ser guardados os produtos de limpeza?", "o": ["No chão", "Num armário alto e trancado", "Debbaixo da cama"], "a": 1 },
-  { "q": "O que fazer se um cabo estiver a deitar faíscas?", "o": ["Tocar nele", "Desligar o quadro geral", "Deitar água"], "a": 1 },
-  { "q": "Com que frequência deve testar o detetor de fumo?", "o": ["Todos os meses", "Nunca", "A cada 10 anos"], "a": 0 },
-  { "q": "Onde deve deixar as chaves de casa à noite?", "o": ["Na porta", "Num local fixo longe da porta", "Na varanda"], "a": 1 },
-  { "q": "O que fazer se ficar preso num elevador?", "o": ["Forçar a porta", "Premir o botão de emergência", "Gritar"], "a": 1 },
-  { "q": "Qual o número para incêndios na Grécia?", "o": ["100", "199", "166"], "a": 1 },
-  { "q": "O que fazer se sair fumo de uma tomada?", "o": ["Desligar o aparelho", "Deitar água", "Desligar o quadro geral"], "a": 2 },
-  { "q": "É seguro carregar o telemóvel debaixo da almofada?", "o": ["Sim", "Não, risco de sobreaquecimento", "Apenas à noite"], "a": 1 },
-  { "q": "O que fazer durante um terramoto?", "o": ["Correr para as escadas", "Proteger-se debaixo de uma mesa sólida", "Usar o elevador"], "a": 1 },
-  { "q": "É seguro partilhar palavras-passe por e-mail?", "o": ["Sim", "Não", "Apenas com a família"], "a": 1 },
-  { "q": "O que significa 2FA?", "o": ["Dupla velocidade", "Autenticação de dois fatores", "App de chat"], "a": 1 },
-  { "q": "Encontra uma pen USB na rua. O que faz?", "o": ["Ligo ao meu PC", "Deito fora", "Ofereço"], "a": 1 },
-  { "q": "Qual destas passwords é a mais forte?", "o": ["123456", "Pa$$w0rd!2024", "meu_nome"], "a": 1 },
-  { "q": "O que significa o cadeado no navegador?", "o": ["PC bloqueado", "Ligação segura (HTTPS)", "Internet lenta"], "a": 1 },
-  { "q": "O que faz se receber um link de um estranho?", "o": ["Clicar", "Apagar", "Enviar a amigos"], "a": 1 },
-  { "q": "O Wi-Fi público é seguro para o banco?", "o": ["Sim", "Não", "Apenas com password"], "a": 1 },
-  { "q": "O que é Phishing?", "o": ["Uma atualização", "Fraude para roubar dados", "Um jogo"], "a": 1 },
-  { "q": "Como protege a sua conta de Facebook?", "o": ["Password fácil", "Ativar 2FA", "Com muitos likes"], "a": 1 },
-  { "q": "O que fazer se o PC for bloqueado por Ransomware?", "o": ["Pagar", "Chamar técnico/polícia", "Partir o PC"], "a": 1 },
-  { "q": "Com que frequência deve mudar as passwords?", "o": ["Nunca", "A cada poucos meses", "Todos os dias"], "a": 1 },
-  { "q": "É seguro guardar passwords no navegador?", "o": ["Sim, sempre", "Não em PCs públicos", "Apenas no telemóvel"], "a": 1 },
-  { "q": "SMS: 'Encomenda pendente, clique aqui'. O que faz?", "o": ["Clicar no link", "Apagar", "Enviar os meus dados"], "a": 1 },
-  { "q": "Risco de partilha excessiva nas redes sociais?", "o": ["Ganhar seguidores", "Dar info a ladrões", "Nenhum"], "a": 1 },
-  { "q": "O que oferece um Antivírus?", "o": ["Internet rápida", "Proteção contra vírus", "Filmes grátis"], "a": 1 },
-  { "q": "Alguém do 'Banco' pede o seu PIN. O que faz?", "o": ["Dar o PIN", "Desligar", "Perguntar quem é"], "a": 1 },
-  { "q": "SMS diz que ganhou um iPhone. O que faz?", "o": ["Enviar a morada", "Ignorar/Apagar", "Clicar no link"], "a": 1 },
-  { "q": "Email da 'Netflix': 'Erro de pagamento, dê o cartão'. O que verifica?", "o": ["A imagem", "O email do remetente", "A data"], "a": 1 },
-  { "q": "Um amigo do Facebook pede dinheiro por 'emergência'. O que faz?", "o": ["Enviar", "Ligar ao amigo para verificar", "Ignorar"], "a": 1 },
-  { "q": "O que fazer perante um movimento estranho no cartão?", "o": ["Esperar", "Ligar ao banco imediatamente", "Nada"], "a": 1 },
-  { "q": "Mentira comum em burlas:", "o": ["'Tem tempo'", "'É urgente'", "'Não faz mal'"], "a": 1 },
-  { "q": "Dados num site sem cadeado?", "o": ["Sim", "No", "Apenas o meu email"], "a": 1 },
-  { "q": "O que é 'Spoofing'?", "o": ["Um jogo", "Falsificar um número de telefone", "Upgrade de memória"], "a": 1 },
-  { "q": "Porque é que os burlões pedem cartões presente?", "o": ["São fáceis", "Difíceis de rastrear", "São bonitos"], "a": 1 },
-  { "q": "Dá um código OTP se lhe pedirem?", "o": ["Sim", "NUNCA a ninguém", "Apenas a amigos"], "a": 1 },
-  { "q": "Onde procurar o número do banco em caso de dúvida?", "o": ["No SMS recebido", "No site oficial do banco", "Num fórum"], "a": 1 },
-  { "q": "Um site pede para baixar um 'Player' para ver filmes. O que faz?", "o": ["Baixar", "Sair do site", "Premir OK"], "a": 1 },
-  { "q": "Mesma password para tudo?", "o": ["Sim", "Não, é perigoso", "Apenas em 2 sites"], "a": 1 },
-  { "q": "O que faz se vir fumo na floresta?", "o": ["Sair", "Ligar para o 112", "Tirar foto"], "a": 1 },
-  { "q": "Como protege o Wi-Fi de casa?", "o": ["Password forte", "Deixar aberto", "Sem password"], "a": 0 },
-  { "q": "Um estranho pede para levantar dinheiro para ele no multibanco. O que faz?", "o": ["Ajudar", "Recusar educadamente", "Gritar"], "a": 1 },
-  { "q": "O que é 'Malware'?", "o": ["Software bom", "Software malicioso", "Hardware"], "a": 1 },
-  { "q": "Seguro publicar a morada na Internet?", "o": ["Sim", "Não", "Apenas no meu perfil"], "a": 1 },
-  { "q": "Na Grécia, qual o número da ambulância?", "o": ["100", "166", "199"], "a": 1 },
-  { "q": "Na Grécia, qual o número da polícia?", "o": ["199", "100", "166"], "a": 1 },
-  { "q": "Na Grécia, qual o número dos bombeiros?", "o": ["100", "199", "166"], "a": 1 },
-  { "q": "Na Grécia, qual o número da guarda costeira?", "o": ["100", "108", "199"], "a": 1 }
-  { "q": "O que é 'SIM Swapping'?", "o": ["Trocar a capa do telemóvel/celular", "Roubo do número para contornar o 2FA", "Uma forma de ganhar mais dados"], "a": 1 },
-  { "q": "O que se entende por 'Juice Jacking'?", "o": ["Roubo de dados via portas de carregamento USB públicas", "Uma fraude com bebidas grátis", "Um truque para poupar bateria"], "a": 0 },
-  { "q": "O que fazer se o telemóvel perder o sinal subitamente por horas?", "o": ["Esperar até amanhã", "Ligar ao operador imediatamente (possível SIM swap)", "Reiniciar o aparelho"], "a": 1 },
-  { "q": "O que é 'Typosquatting'?", "o": ["Sites falsos com nomes parecidos aos reais", "Digitar muito rápido", "Um novo exercício de ginásio"], "a": 0 },
-  { "q": "É seguro publicar uma foto desfocada do seu bilhete de avião?", "o": ["Sim", "Não, os códigos de barras ainda podem ser lidos", "Apenas no Instagram"], "a": 1 },
-  { "q": "Qual é a forma mais segura de guardar códigos 2FA?", "o": ["Via SMS", "App de autenticação ou chave física (Hardware Key)", "Num bloco de notas"], "a": 1 },
-  { "q": "O que pode um 'Deepfake' fazer numa videochamada?", "o": ["Aumentar a velocidade da internet", "Imitar o rosto e a voz de alguém em tempo real", "Aplicar um filtro engraçado"], "a": 1 },
-  { "q": "O que é a fraude 'Breadcrumb' nas redes sociais?", "o": ["Dicas de culinária", "Recolher pequenos dados pessoais para ganhar confiança", "Ganhar comida grátis"], "a": 1 },
-  { "q": "Por que os 'Metadados' nas suas fotos são perigosos?", "o": ["Tornam as fotos pesadas", "Podem revelar a sua localização GPS exata", "Estragam a qualidade da imagem"], "a": 1 },
-  { "q": "Qual a forma mais segura de usar Wi-Fi público se necessário?", "o": ["Usar uma VPN", "Modo incógnito", "Apenas ser muito rápido"], "a": 0 }
+{
+  "pt": {
+    "levels": {
+      "1": [
+        { "q": "Qual é o número de emergência europeu?", "o": ["100", "112", "911"], "a": 1 },
+        { "q": "O que fazer se sentir cheiro de gás em casa?", "o": ["Acender a luz", "Abrir as janelas", "Chamar a polícia"], "a": 1 },
+        { "q": "É seguro deixar a chave debaixo do tapete?", "o": ["Sim", "Não", "Apenas por pouco tempo"], "a": 1 },
+        { "q": "Como apagar um fogo de óleo numa frigideira?", "o": ["Com água", "Com uma tampa ou manta de fogo", "Soprando"], "a": 1 },
+        { "q": "Onde devem ser guardados os produtos de limpeza?", "o": ["No chão", "Num armário alto e trancado", "Debbaixo da cama"], "a": 1 }
+      ],
 
-]
+      "2": [
+        { "q": "O que fazer se um cabo estiver a deitar faíscas?", "o": ["Tocar nele", "Desligar o quadro geral", "Deitar água"], "a": 1 },
+        { "q": "Com que frequência deve testar o detetor de fumo?", "o": ["Todos os meses", "Nunca", "A cada 10 anos"], "a": 0 },
+        { "q": "Onde deve deixar as chaves de casa à noite?", "o": ["Na porta", "Num local fixo longe da porta", "Na varanda"], "a": 1 },
+        { "q": "O que fazer se ficar preso num elevador?", "o": ["Forçar a porta", "Premir o botão de emergência", "Gritar"], "a": 1 },
+        { "q": "Qual o número para incêndios na Grécia?", "o": ["100", "199", "166"], "a": 1 }
+      ],
+
+      "3": [
+        { "q": "O que fazer se sair fumo de uma tomada?", "o": ["Desligar o aparelho", "Deitar água", "Desligar o quadro geral"], "a": 2 },
+        { "q": "É seguro carregar o telemóvel debaixo da almofada?", "o": ["Sim", "Não, risco de sobreaquecimento", "Apenas à noite"], "a": 1 },
+        { "q": "O que fazer durante um terramoto?", "o": ["Correr para as escadas", "Proteger-se debaixo de uma mesa sólida", "Usar o elevador"], "a": 1 },
+        { "q": "É seguro partilhar palavras-passe por e-mail?", "o": ["Sim", "Não", "Apenas com a família"], "a": 1 },
+        { "q": "O que significa 2FA?", "o": ["Dupla velocidade", "Autenticação de dois fatores", "App de chat"], "a": 1 }
+      ],
+
+      "4": [
+        { "q": "Encontra uma pen USB na rua. O que faz?", "o": ["Ligo ao meu PC", "Deito fora", "Ofereço"], "a": 1 },
+        { "q": "Qual destas passwords é a mais forte?", "o": ["123456", "Pa$$w0rd!2024", "meu_nome"], "a": 1 },
+        { "q": "O que significa o cadeado no navegador?", "o": ["PC bloqueado", "Ligação segura (HTTPS)", "Internet lenta"], "a": 1 },
+        { "q": "O que faz se receber um link de um estranho?", "o": ["Clicar", "Apagar", "Enviar a amigos"], "a": 1 },
+        { "q": "O Wi-Fi público é seguro para o banco?", "o": ["Sim", "Não", "Apenas com password"], "a": 1 }
+      ],
+
+      "5": [
+        { "q": "O que é Phishing?", "o": ["Uma atualização", "Fraude para roubar dados", "Um jogo"], "a": 1 },
+        { "q": "Como protege a sua conta de Facebook?", "o": ["Password fácil", "Ativar 2FA", "Com muitos likes"], "a": 1 },
+        { "q": "O que fazer se o PC for bloqueado por Ransomware?", "o": ["Pagar", "Chamar técnico/polícia", "Partir o PC"], "a": 1 },
+        { "q": "Com que frequência deve mudar as passwords?", "o": ["Nunca", "A cada poucos meses", "Todos os dias"], "a": 1 },
+        { "q": "É seguro guardar passwords no navegador?", "o": ["Sim, sempre", "Não em PCs públicos", "Apenas no telemóvel"], "a": 1 }
+      ],
+
+      "6": [
+        { "q": "SMS: 'Encomenda pendente, clique aqui'. O que faz?", "o": ["Clicar no link", "Apagar", "Enviar os meus dados"], "a": 1 },
+        { "q": "Risco de partilha excessiva nas redes sociais?", "o": ["Ganhar seguidores", "Dar info a ladrões", "Nenhum"], "a": 1 },
+        { "q": "O que oferece um Antivírus?", "o": ["Internet rápida", "Proteção contra vírus", "Filmes grátis"], "a": 1 },
+        { "q": "Alguém do 'Banco' pede o seu PIN. O que faz?", "o": ["Dar o PIN", "Desligar", "Perguntar quem é"], "a": 1 },
+        { "q": "SMS diz que ganhou um iPhone. O que faz?", "o": ["Enviar a morada", "Ignorar/Apagar", "Clicar no link"], "a": 1 }
+      ]
+    }
+  }
+}
