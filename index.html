@@ -12,7 +12,7 @@
         body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
         .hidden { display: none !important; }
 
-        /* ANIMATION ΑΣΠΙΔΑΣ */
+        /* ANIMATIONS */
         @keyframes float {
             0% { transform: translateY(0px); filter: drop-shadow(0 5px 15px rgba(56, 189, 248, 0.4)); }
             50% { transform: translateY(-10px); filter: drop-shadow(0 15px 25px rgba(56, 189, 248, 0.2)); }
@@ -36,13 +36,20 @@
 
         /* PREMIUM TOOLS GRID */
         .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .tool-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.3s; }
+        .tool-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
         .tool-card i { font-size: 30px; display: block; margin-bottom: 10px; }
+
+        /* XP MAP STYLES */
+        .map-container { display: flex; flex-direction: column; gap: 15px; margin: 25px 0; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 30px; border: 1px inset rgba(255,255,255,0.05); }
+        .map-step { display: flex; align-items: center; gap: 15px; position: relative; opacity: 0.3; transition: 0.5s; }
+        .map-step.active { opacity: 1; }
+        .step-dot { width: 35px; height: 35px; border-radius: 50%; background: #1e293b; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid var(--muted); }
+        .active .step-dot { background: var(--accent); border-color: #fff; box-shadow: 0 0 10px var(--accent); }
 
         /* SOCIAL ICONS */
         .social-row { display: flex; justify-content: center; gap: 30px; margin-top: 30px; }
         .social-row a { font-size: 28px; text-decoration: none; filter: grayscale(0.5); transition: 0.3s; }
-        .social-row a:hover { filter: grayscale(0); transform: scale(1.1); }
 
         /* BADGES */
         .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
@@ -102,25 +109,40 @@
                 <a href="https://www.tiktok.com/@securitydefense?_r=1&_t=ZN-93Yj5Qk0CdK" target="_blank">📱</a>
                 <a href="https://www.instagram.com/stay_safe_tips?igsh=c2FyYWtyb3c4MzB5" target="_blank">📸</a>
             </div>
-            <div style="text-align:center; opacity:0.3; font-size:10px; margin-top:20px;">ADVERTISEMENT</div>
         </section>
 
         <section id="screen_premium" class="hidden">
             <div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
                 <h2 style="color:var(--gold);">Elite Membership</h2>
+                <p style="font-size:14px; margin-bottom:20px;">Ξεκλειδώστε τα Advanced Quizzes και τα Εργαλεία Σάρωσης.</p>
                 <button class="main-cta" style="background:var(--gold); color:black;" onclick="buyPremium()">ΞΕΚΛΕΙΔΩΣΕ ΤΟ (4.90€)</button>
             </div>
+
             <div id="prem_tools" class="hidden">
+                <h3 style="text-align:center; color:var(--gold);">🛡️ Elite Hub</h3>
                 <div class="tools-grid">
-                    <div class="tool-card" style="border-color:var(--danger);" onclick="alert('SOS Alert Sent!')">
+                    <div class="tool-card" onclick="location.href='checkup.html'">
+                        <i style="color:var(--accent);">🔍</i><small>SCAN HUB</small>
+                        <div style="font-size:9px; color:var(--success); margin-top:5px;">● ΕΝΕΡΓΟ</div>
+                    </div>
+                    <div class="tool-card" style="border-color:var(--danger);" onclick="alert('SOS Hub: Checklists Loading...')">
                         <i style="color:var(--danger);">🚨</i><small>SOS HUB</small>
                     </div>
-                    <div class="tool-card" onclick="alert('Scanning Network...')">
-                        <i style="color:var(--accent);">🔍</i><small>SCAN HUB</small>
-                    </div>
-                    <div class="tool-card" style="grid-column: span 2;" onclick="alert('Entering Security Dojo...')">
+                    <div class="tool-card" style="grid-column: span 2;" onclick="alert('Dojo: Training Coming Soon')">
                         <i style="color:var(--gold);">🥋</i><small>SECURITY DOJO</small>
                     </div>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <h4 style="margin: 0; font-size: 14px; color: var(--accent);">ΔΙΑΔΡΟΜΗ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
+                <div class="map-step" id="step_lvl1">
+                    <div class="step-dot">1</div>
+                    <div><small>Rookie</small><br><b>Βασική Ασφάλεια</b></div>
+                </div>
+                <div class="map-step" id="step_lvl7">
+                    <div class="step-dot">7</div>
+                    <div><small>Elite</small><br><b>Advanced Security</b></div>
                 </div>
             </div>
         </section>
@@ -150,8 +172,15 @@ function updateUI() {
     level = Math.floor(xp / 100) + 1;
     document.getElementById('level_val').innerText = level;
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+    
+    // Badges
     if(level >= 2) document.getElementById('badge_1').classList.add('unlocked');
     if(level >= 5) document.getElementById('badge_2').classList.add('unlocked');
+    
+    // XP Map
+    if(level >= 1) document.getElementById('step_lvl1').classList.add('active');
+    if(level >= 7 || isPremium) document.getElementById('step_lvl7').classList.add('active');
+
     if(isPremium) {
         document.getElementById('badge_3').classList.add('unlocked');
         document.getElementById('prem_locked').classList.add('hidden');
@@ -188,7 +217,7 @@ function renderQuestion(idx) {
     const q = quizData[idx];
     document.getElementById('screen_quiz').innerHTML = `
         <div class="glass-card">
-            <h3 style="margin-bottom:20px;">${q.q}</h3>
+            <h3>${q.q}</h3>
             ${q.o.map((opt, i) => `<button class="main-cta" style="background:#1e293b; color:white; margin-bottom:10px;" onclick="checkAns(${i},${q.a},${idx}, this)">${opt}</button>`).join('')}
         </div>`;
 }
@@ -198,11 +227,7 @@ function checkAns(sel, cor, idx, btn) {
     if(sel === cor) xp += 20;
     setTimeout(() => {
         if(idx < 4) renderQuestion(idx + 1);
-        else { 
-            updateUI(); 
-            if(!isPremium) alert("ADVERTISEMENT: Check out our premium tools!");
-            nav('home'); 
-        }
+        else { updateUI(); nav('home'); }
     }, 800);
 }
 
