@@ -83,7 +83,7 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
     <section id="screen_home">
       <div class="glass-card">
         <h2 style="margin-top:0;">🛡️ Ασφάλεια Σπιτιού</h2>
-        <button class="main-cta" style="width:100%" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
+        <button class="main-cta" style="width:100%" onclick="startQuiz('badge-home')">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
       </div>
 
       <div class="glass-card" style="text-align:center;">
@@ -136,39 +136,56 @@ body::before { content: ""; position: fixed; inset: 0; background: radial-gradie
 <script>
 let currentLang = 'el', xp = 0, level = 1, isPremium = false, quizData = [], errors = 0;
 
+// Φόρτωση προόδου και status
 if(localStorage.getItem('isElite') === 'true') isPremium = true;
+if(localStorage.getItem('ss_xp')) {
+    xp = parseInt(localStorage.getItem('ss_xp'));
+    level = Math.floor(xp / 100) + 1;
+}
 
 function initApp(lang) {
     currentLang = lang;
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
-    updateXP();
+    updateXP(0); // Αρχικοποίηση μπάρας
 }
 
 function nav(id, btn) {
     document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-    document.getElementById('screen_'+id).classList.remove('hidden');
+    const target = document.getElementById('screen_'+id);
+    if(target) target.classList.remove('hidden');
     if(btn) {
         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
     }
 }
 
-async function startQuiz() {
+async function startQuiz(badgeId = 'quiz') {
     if(level >= 7 && !isPremium) { nav('premium'); return; }
     errors = 0;
     const mode = isPremium ? "premium" : "free";
-    const jsonPath = `./questions_${mode}_${currentLang}.json`;
+    // Προσθήκη timestamp για αποφυγή cache στο GitHub
+    const jsonPath = `./questions_${mode}_${currentLang}.json?v=${Date.now()}`;
     
     try {
         const res = await fetch(jsonPath);
         if(!res.ok) throw new Error();
         const data = await res.json();
-        quizData = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+        
+        // Λογική εύρεσης ερωτήσεων: 1. Βάσει Level 2. Βάσει BadgeId 3. Γενικό Quiz
+        const levelKey = String(level);
+        const questionsPool = data.levels?.[levelKey] || data[badgeId] || data['quiz'] || [];
+        
+        if(questionsPool.length === 0) {
+            alert("Δεν βρέθηκαν ερωτήσεις για αυτό το επίπεδο.");
+            return;
+        }
+
+        quizData = questionsPool.sort(() => 0.5 - Math.random()).slice(0, 5);
         renderQuestion(0);
         nav('quiz');
     } catch(e) { 
-        alert("Λείπει το αρχείο: questions_" + mode + "_" + currentLang + ".json"); 
+        alert("Σφάλμα σύνδεσης. Βεβαιωθείτε ότι το αρχείο " + jsonPath + " υπάρχει στο GitHub."); 
     }
 }
 
@@ -178,52 +195,74 @@ function renderQuestion(idx) {
     s.innerHTML = `
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-bottom:15px;">
-                <span>Ερώτηση ${idx+1}/5</span>
+                <span>Ερώτηση ${idx+1}/${quizData.length}</span>
                 <span style="color:var(--danger)">Λάθη: ${errors}/3</span>
             </div>
-            <h3>${q.q}</h3>
+            <h3 style="text-align:center; margin-bottom:25px;">${q.q}</h3>
             <div id="quiz_options">
-                ${q.o.map((opt, i) => `
-                    <button class="main-cta" style="background:#1e293b; margin-bottom:12px; width:100%; color:white;" onclick="check(${i},${q.a},${idx}, this)">${opt}</button>
+                ${q.options.map((opt, i) => `
+                    <button class="main-cta" style="background:#1e293b; margin-bottom:12px; width:100%; color:white; border: 1px solid rgba(255,255,255,0.1);" 
+                    onclick="check(${i},${q.correct},${idx}, this)">${opt}</button>
                 `).join('')}
             </div>
+            <div id="explain_box" style="margin-top:15px; display:none;"></div>
         </div>`;
 }
 
 window.check = (sel, cor, idx, btn) => {
     const btns = document.querySelectorAll('#quiz_options button');
+    const q = quizData[idx];
+    const explainBox = document.getElementById('explain_box');
+    
     btns.forEach(b => b.disabled = true);
+
     if(sel === cor) {
         btn.style.background = "var(--success)";
-        xp += 20;
+        btn.style.borderColor = "var(--success)";
+        updateXP(20);
     } else {
         btn.style.background = "var(--danger)";
+        btn.style.borderColor = "var(--danger)";
         btns[cor].style.background = "var(--success)";
+        btns[cor].style.borderColor = "var(--success)";
         errors++;
     }
+
+    if(q.explain) {
+        explainBox.style.display = "block";
+        explainBox.innerHTML = `<p style="color:var(--gold); font-size:13px; text-align:center; background:rgba(250,204,21,0.05); padding:10px; border-radius:12px;">💡 ${q.explain}</p>`;
+    }
+
     setTimeout(() => {
+        // Διαφημίσεις Google (Interstitial logic) - Μόνο για Free
+        if(!isPremium && (idx === quizData.length - 1 || errors >= 3)) {
+            if(window.adsbygoogle) (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+
         if(errors >= 3) {
             alert("❌ 3 Λάθη! Πρέπει να ξαναπροσπαθήσεις το Level.");
-            xp = (level - 1) * 100;
-            updateXP();
             nav('home');
-        } else if(idx < 4) {
+        } else if(idx < quizData.length - 1) {
             renderQuestion(idx + 1);
         } else {
-            updateXP();
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             setTimeout(() => { nav('home'); }, 2000);
         }
-    }, 1200);
+    }, 1500);
 }
 
-function updateXP() {
+function updateXP(amount) {
+    xp += amount;
     level = Math.floor(xp / 100) + 1;
     document.getElementById('level_val').innerText = level;
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+    
+    // Ξεκλείδωμα Badges
     if(level >= 2) document.getElementById('badge_1').classList.add('unlocked');
     if(level >= 5) document.getElementById('badge_2').classList.add('unlocked');
     if(isPremium) document.getElementById('badge_3').classList.add('unlocked');
+    
+    localStorage.setItem('ss_xp', xp);
 }
 
 async function openSOS() {
@@ -268,6 +307,7 @@ async function openDojo() {
 function buyPremium() {
     isPremium = true;
     localStorage.setItem('isElite', 'true');
+    alert("Συγχαρητήρια! Ξεκλειδώσατε το Elite περιεχόμενο.");
     location.reload();
 }
 </script>
