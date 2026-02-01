@@ -1,5 +1,4 @@
 window.QuizEngine = {
-  // Πηγές αρχείων
   sources: {
     free: "quiz.json",
     premium: "questions_premium.json"
@@ -46,27 +45,31 @@ window.QuizEngine = {
       return;
     }
 
-    // 2. Επιλογή Πηγής (Αν είναι level 7+ τραβάει από το premium αρχείο)
-    let questionsPool = this.content[lang][badgeId] || this.content[lang]["quiz"];
-    
-    if (userLvl >= 7) {
-      try {
-        const resp = await fetch(this.sources.premium);
-        const premData = await resp.json();
-        questionsPool = premData[lang][badgeId] || premData[lang]["quiz"];
-      } catch(e) { console.error("Premium file missing, using local content."); }
+    // 2. Φόρτωση ερωτήσεων από το κατάλληλο αρχείο
+    let questionsPool = [];
+    const sourceFile = userLvl >= 7 ? this.sources.premium : this.sources.free;
+
+    try {
+      const resp = await fetch(sourceFile);
+      const data = await resp.json();
+      questionsPool = data[lang]?.[badgeId] || data[lang]?.["quiz"] || this.content[lang][badgeId] || this.content[lang]["quiz"];
+    } catch(e) { 
+      console.warn("Could not fetch JSON, using fallback content.");
+      questionsPool = this.content[lang][badgeId] || this.content[lang]["quiz"];
     }
 
-    // 3. Σύστημα Μνήμης (No Repeats)
-    const mastered = JSON.parse(localStorage.getItem(`mastered_${badgeId}`) || "[]");
+    // 3. Σύστημα Μνήμης (No Repeats) - Ανά γλώσσα και badge
+    const masteredKey = `mastered_${lang}_${badgeId}`;
+    const mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
+    
     let available = questionsPool.filter(q => !mastered.includes(q.q));
 
     if (available.length === 0) {
-      available = questionsPool; // Αν τις έπαιξε όλες, ξαναρχίζει ο κύκλος
-      localStorage.setItem(`mastered_${badgeId}`, "[]");
+      available = questionsPool; 
+      localStorage.setItem(masteredKey, "[]");
     }
 
-    // 4. Επιλογή 3 τυχαίων
+    // 4. Επιλογή 3 τυχαίων από τις ΔΙΑΘΕΣΙΜΕΣ
     this.activeQuestions = available.sort(() => Math.random() - 0.5).slice(0, 3);
     this.currentIndex = 0;
     this.score = 0;
@@ -85,10 +88,10 @@ window.QuizEngine = {
     if (res) {
       res.classList.remove("hidden");
       res.style.display = "flex";
-      scoreText.innerHTML = `<span style="color:var(--gold)">Level 7+ Required</span><br>Ξεκλείδωσε την Premium έκδοση για να συνεχίσεις.`;
+      scoreText.innerHTML = `<span style="color:var(--gold); font-size: 1.4rem; font-weight: bold;">Level 7+ Required 🔒</span><br><p style="margin-top:10px;">Ξεκλείδωσε την Premium έκδοση για να συνεχίσεις την εκπαίδευση.</p>`;
       btn.textContent = "Unlock Premium";
       btn.onclick = () => {
-        // Εδώ θα μπει το logic του App Store / Google Play
+        // Εδώ συνδέεται το Store API
         alert("Redirecting to Purchase...");
         // Για δοκιμή: localStorage.setItem("isPremiumUser", "true"); location.reload();
       };
@@ -136,11 +139,12 @@ window.QuizEngine = {
       this.score++;
       this.streak++;
       
-      // Αποθήκευση στη μνήμη για να μην ξαναεμφανιστεί
-      let mastered = JSON.parse(localStorage.getItem(`mastered_${this.badge}`) || "[]");
+      // Αποθήκευση στη μνήμη No-Repeat (ανά γλώσσα/badge)
+      const masteredKey = `mastered_${this.currentLang}_${this.badge}`;
+      let mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
       if (!mastered.includes(qData.q)) {
         mastered.push(qData.q);
-        localStorage.setItem(`mastered_${this.badge}`, JSON.stringify(mastered));
+        localStorage.setItem(masteredKey, JSON.stringify(mastered));
       }
 
       if (this.streak >= 3) this.updateXP(20);
@@ -150,13 +154,13 @@ window.QuizEngine = {
 
     if (qData.explain) {
       const qBox = document.getElementById("quiz-question");
-      qBox.innerHTML += `<p class="explain">${qData.explain}</p>`;
+      qBox.innerHTML += `<p class="explain" style="margin-top:10px; color: var(--gold);">💡 ${qData.explain}</p>`;
     }
 
     setTimeout(() => {
       this.currentIndex++;
       this.currentIndex < this.activeQuestions.length ? this.render() : this.showResult();
-    }, 700);
+    }, 1200);
   },
 
   showResult() {
