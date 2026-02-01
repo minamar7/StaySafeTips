@@ -2,88 +2,78 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>Global Scam Alerts – Elite</title>
+    <title>Elite Scam Alerts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <style>
         :root { --danger: #ef4444; --bg: #020617; --card: #1e293b; --accent: #38bdf8; --gold: #facc15; }
         body { margin: 0; background: var(--bg); font-family: system-ui, sans-serif; color: #f8fafc; padding: 20px; }
         
         .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { color: var(--gold); font-size: 1.5rem; margin: 0; }
-        .live-indicator { font-size: 0.7rem; color: var(--danger); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; animation: blink 1.5s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .live-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; display: inline-block; margin-right: 5px; animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
-        .back-btn { color: #64748b; text-decoration: none; font-size: 0.9rem; display: block; margin-bottom: 15px; }
-        
-        #alerts-container { display: grid; gap: 15px; }
+        .back-link { color: var(--muted); text-decoration: none; font-size: 0.9rem; margin-bottom: 20px; display: block; }
         
         .alert-card { 
             background: var(--card); border-radius: 20px; padding: 18px; 
-            border-left: 4px solid var(--danger); transition: 0.3s;
-            animation: fadeIn 0.5s ease-out;
+            margin-bottom: 15px; border-left: 4px solid var(--danger);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .alert-card h3 { margin: 0 0 8px; font-size: 1rem; color: var(--text); line-height: 1.3; }
-        .alert-card p { margin: 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .alert-date { font-size: 0.7rem; color: var(--accent); margin-bottom: 5px; display: block; }
-        .read-more { display: inline-block; margin-top: 10px; color: var(--gold); text-decoration: none; font-size: 0.8rem; font-weight: bold; }
-
-        .loader { text-align: center; padding: 50px; color: var(--accent); font-weight: bold; }
+        .alert-card span { color: var(--accent); font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .alert-card h3 { margin: 5px 0; font-size: 1rem; color: var(--gold); }
+        .alert-card p { margin: 0; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+        
+        .loader { text-align: center; padding: 50px; color: var(--accent); }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn">← Επιστροφή</a>
+    <a href="index.html" class="back-link">← Πίσω στο Dashboard</a>
+
     <header class="header">
-        <div class="live-indicator">● LIVE SCAM FEED</div>
-        <h1>Global Scam Alerts</h1>
-        <p style="font-size: 0.8rem; color: #94a3b8;">Διεθνής ενημέρωση για νέες απάτες</p>
+        <div><span class="live-dot"></span> <span style="font-size: 0.8rem; font-weight: bold; color: var(--danger);">LIVE SCAM TRACKER</span></div>
+        <h1>Scam Alerts</h1>
+        <p style="color: #94a3b8; font-size: 0.8rem;">Παγκόσμια ενημέρωση για νέες απειλές</p>
     </header>
 
-    <div id="loader" class="loader">ΦΟΡΤΩΣΗ ΠΡΟΣΦΑΤΩΝ ΑΠΕΙΛΩΝ...</div>
-    <div id="alerts-container"></div>
+    <div id="feed-container">
+        <div class="loader">Αναζήτηση για πρόσφατες απάτες...</div>
+    </div>
 
 <script>
-    // Έλεγχος Premium
+    // Έλεγχος αν ο χρήστης είναι Elite
     if(localStorage.getItem('isElite') !== 'true') {
-        alert("Απαιτείται Elite Membership!");
         window.location.href = 'index.html';
     }
 
-    async function fetchScams() {
-        // Χρησιμοποιούμε το RSS feed της FTC (Consumer Alerts)
+    async function loadScams() {
+        // Χρησιμοποιούμε το feed της FTC (Federal Trade Commission)
         const rssUrl = 'https://www.consumer.ftc.gov/blog/feed';
         const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
         try {
             const response = await fetch(apiUrl);
             const data = await response.json();
-            
-            document.getElementById('loader').style.display = 'none';
-            const container = document.getElementById('alerts-container');
+            const container = document.getElementById('feed-container');
+            container.innerHTML = '';
 
-            data.items.forEach(item => {
+            data.items.slice(0, 8).forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'alert-card';
-                
-                // Format ημερομηνίας
-                const date = new Date(item.pubDate).toLocaleDateString('el-GR');
-
                 card.innerHTML = `
-                    <span class="alert-date">${date}</span>
+                    <span>ΝΕΑ ΑΠΕΙΛΗ • ${new Date(item.pubDate).toLocaleDateString('el-GR')}</span>
                     <h3>${item.title}</h3>
-                    <p>${item.description.replace(/<[^>]*>?/gm, '')}</p>
-                    <a href="${item.link}" target="_blank" class="read-more">ΔΙΑΒΑΣΕ ΠΕΡΙΣΣΟΤΕΡΑ →</a>
+                    <p>${item.description.substring(0, 120).replace(/<[^>]*>?/gm, '')}...</p>
+                    <a href="${item.link}" target="_blank" style="color:var(--accent); font-size:0.75rem; text-decoration:none; display:block; margin-top:10px; font-weight:bold;">ΠΩΣ ΝΑ ΠΡΟΣΤΑΤΕΥΤΕΙΤΕ →</a>
                 `;
                 container.appendChild(card);
             });
-        } catch (error) {
-            document.getElementById('loader').innerText = "Σφάλμα κατά τη φόρτωση. Δοκιμάστε ξανά.";
+        } catch (e) {
+            document.getElementById('feed-container').innerHTML = "Αποτυχία σύνδεσης στο Live Feed.";
         }
     }
 
-    fetchScams();
+    loadScams();
 </script>
 
 </body>
