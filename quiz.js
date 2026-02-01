@@ -2,7 +2,6 @@ window.QuizEngine = {
   content: {
     el: {
       "badge-home": [
-        /* LEVEL 1 (Εμφανίζονται στο Level 1 του χρήστη) */
         {
           q: "Είναι ασφαλές να αφήνεις το κλειδί κάτω από το χαλάκι;",
           options: ["Ναι", "Όχι", "Μόνο αν λείπω λίγο"],
@@ -20,25 +19,6 @@ window.QuizEngine = {
           options: ["Κάθε χρόνο", "Ποτέ", "Κάθε μήνα"],
           correct: 2,
           explain: "Ο μηνιαίος έλεγχος σώζει ζωές."
-        },
-        /* LEVEL 2 (Ξεκλειδώνουν αυτόματα όταν ο χρήστης πάει Level 2) */
-        {
-          q: "Τι κάνουμε αν πιάσει φωτιά το τηγάνι με λάδι;",
-          options: ["Ρίχνουμε νερό", "Σκεπάζουμε με καπάκι", "Φυσάμε τη φωτιά"],
-          correct: 1,
-          explain: "Το νερό προκαλεί έκρηξη στο καυτό λάδι. Κλείστε το οξυγόνο με καπάκι."
-        },
-        {
-          q: "Ποια είναι η καλύτερη θέση για ένα χρηματοκιβώτιο;",
-          options: ["Πίσω από πίνακα", "Βιδωμένο στο πάτωμα", "Μέσα στην ντουλάπα"],
-          correct: 1,
-          explain: "Πρέπει να είναι σταθερά στερεωμένο για να μην κλαπεί ολόκληρο."
-        },
-        {
-          q: "Πώς προστατεύουμε το σπίτι όταν λείπουμε μέρες;",
-          options: ["Κλείνουμε όλα τα φώτα", "Χρονοδιακόπτης φώτων", "Κλειδί στη γλάστρα"],
-          correct: 1,
-          explain: "Ένα σπίτι που φαίνεται κατοικημένο αποτρέπει τους διαρρήκτες."
         }
       ],
       "badge-digital": [
@@ -46,13 +26,13 @@ window.QuizEngine = {
           q: "Είναι ασφαλές να δίνεις κωδικούς μέσω email;",
           options: ["Ναι", "Όχι", "Μόνο στην τράπεζα"],
           correct: 1,
-          explain: "Καμία υπηρεσία δεν ζητά κωδικούς μέσω email."
+          explain: "Καμία σοβαρή υπηρεσία δεν ζητά κωδικούς."
         },
         {
           q: "Τι είναι το 2FA;",
           options: ["Διπλός κωδικός", "Δεύτερο βήμα ασφαλείας", "Εφαρμογή chat"],
           correct: 1,
-          explain: "Προσθέτει ένα επιπλέον επίπεδο προστασίας."
+          explain: "Προσθέτει επιπλέον επίπεδο προστασίας."
         }
       ],
       "quiz": [
@@ -95,28 +75,8 @@ window.QuizEngine = {
   start(lang = "el", badgeId = "quiz") {
     this.currentLang = lang;
     this.badge = badgeId;
-
-    // 1. Λήψη επιπέδου χρήστη και ερωτήσεων που έχουν ήδη απαντηθεί (Mastered)
-    const userLvl = parseInt(document.getElementById("user-level")?.textContent) || 1;
-    const mastered = JSON.parse(localStorage.getItem(`mastered_${badgeId}`) || "[]");
-    const allPool = this.content[lang][badgeId] || this.content[lang]["quiz"];
-
-    // 2. Έξυπνο φιλτράρισμα: Leveling (ανά 3άδα) + Μνήμη
-    let available = allPool.filter((qData, index) => {
-      const isNew = !mastered.includes(qData.q);
-      const qLevel = Math.floor(index / 3) + 1;
-      return isNew && qLevel <= userLvl;
-    });
-
-    // Αν δεν υπάρχουν νέες ερωτήσεις για το επίπεδο, δείξε όλο το pool μέχρι το επίπεδο του χρήστη
-    if (available.length === 0) {
-      available = allPool.filter((_, index) => (Math.floor(index / 3) + 1) <= userLvl);
-    }
-
-    // 3. Τυχαία επιλογή 3 ερωτήσεων
-    this.activeQuestions = [...available]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3);
+    this.activeQuestions =
+      this.content[lang][badgeId] || this.content[lang]["quiz"];
 
     this.currentIndex = 0;
     this.score = 0;
@@ -176,14 +136,6 @@ window.QuizEngine = {
     if (idx === qData.correct) {
       this.score++;
       this.streak++;
-      
-      // Προσθήκη στη λίστα Mastered
-      let mastered = JSON.parse(localStorage.getItem(`mastered_${this.badge}`) || "[]");
-      if (!mastered.includes(qData.q)) {
-        mastered.push(qData.q);
-        localStorage.setItem(`mastered_${this.badge}`, JSON.stringify(mastered));
-      }
-
       if (this.streak >= 3) this.updateXP(20);
     } else {
       this.streak = 0;
@@ -191,7 +143,7 @@ window.QuizEngine = {
 
     if (qData.explain) {
       const qBox = document.getElementById("quiz-question");
-      qBox.innerHTML += `<p class="explain" style="color:var(--gold); font-size:0.95rem; margin-top:10px;">💡 ${qData.explain}</p>`;
+      qBox.innerHTML += `<p class="explain">${qData.explain}</p>`;
     }
 
     setTimeout(() => {
@@ -199,7 +151,7 @@ window.QuizEngine = {
       this.currentIndex < this.activeQuestions.length
         ? this.render()
         : this.showResult();
-    }, 1200);
+    }, 700);
   },
 
   showResult() {
@@ -219,8 +171,14 @@ window.QuizEngine = {
         (this.currentLang === "el" ? "Σκορ" : "Score") + `: ${percent}%`;
     }
 
+    localStorage.setItem(
+      `quiz_${this.badge}`,
+      JSON.stringify({ percent, date: Date.now() })
+    );
+
     if (percent >= 60) {
-      const xp = 50 * (this.difficulty[this.badge] || 1);
+      const xp =
+        50 * (this.difficulty[this.badge] || 1);
       this.updateXP(Math.round(xp));
       if (this.badge.startsWith("badge-")) this.unlockBadge(this.badge);
     }
@@ -231,23 +189,22 @@ window.QuizEngine = {
 
   updateXP(amount) {
     const xpFill = document.getElementById("xp-fill");
-    const lv = document.getElementById("user-level");
-    if (!xpFill || !lv) return;
+    if (!xpFill) return;
 
-    let currentWidth = parseFloat(xpFill.style.width) || 0;
-    let newWidth = currentWidth + (amount / 5);
+    let current = parseInt(xpFill.style.width) || 10;
+    let next = Math.min(current + amount / 5, 100);
+    xpFill.style.width = next + "%";
 
-    if (newWidth >= 100) {
-      lv.textContent = parseInt(lv.textContent) + 1;
-      xpFill.style.width = (newWidth - 100) + "%"; // Μεταφορά υπολοίπου
-    } else {
-      xpFill.style.width = newWidth + "%";
+    if (next >= 100) {
+      const lv = document.getElementById("user-level");
+      if (lv) lv.textContent = parseInt(lv.textContent) + 1;
+      xpFill.style.width = "10%";
     }
   },
 
   unlockBadge(id) {
     const el = document.getElementById(id);
-    if (!el || !el.classList.contains("locked")) return;
+    if (!el) return;
 
     el.classList.remove("locked");
     el.classList.add("unlocked");
