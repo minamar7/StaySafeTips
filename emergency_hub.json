@@ -1,57 +1,54 @@
 async function openSOS() {
-    if(!isPremium) { nav('premium'); return; }
+    if (!isPremium) { 
+        nav('premium'); 
+        return; 
+    }
     try {
         const res = await fetch('./emergency_hub.json');
         const data = await res.json();
         
-        // Κεντρικό Container με scrollbar
         let html = `
-        <div class="glass-card" style="text-align:left; max-height:85vh; overflow-y:auto; padding:20px; border: 2px solid var(--danger); box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);">
-            <h1 style="color:var(--danger); font-size:32px; margin:0 0 15px 0; text-align:center; letter-spacing:1px;">🌍 GLOBAL SOS</h1>
+        <div class="glass-card" style="text-align:left; max-height:80vh; overflow-y:auto; padding:15px; border: 1px solid rgba(239, 68, 68, 0.3);">
+            <h2 style="color:var(--danger); font-size:22px; margin:0 0 15px 0; text-align:center;">🌍 Global SOS Hub</h2>
             
-            <div style="background:rgba(239,68,68,0.1); padding:20px; border-radius:24px; text-align:center; border:1px solid var(--danger); margin-bottom:20px;">
-                <h2 style="margin:0; font-size:16px; color:var(--muted); text-transform:uppercase;">${data.global_standard.title}</h2>
-                <div style="font-size:60px; font-weight:900; color:var(--text); line-height:1;">${data.global_standard.number}</div>
-                <p style="margin:10px 0 0 0; font-size:12px; color:var(--muted); font-style:italic;">${data.global_standard.note}</p>
-            </div>
+            <div style="background:rgba(239,68,68,0.08); padding:15px; border-radius:18px; text-align:center; border:1px solid rgba(239,68,68,0.2); margin-bottom:20px;">
+                <span style="font-size:12px; color:var(--muted); text-transform:uppercase;">${data.global_standard.title}</span>
+                <div style="font-size:32px; font-weight:800; color:var(--text); margin:5px 0;">${data.global_standard.number}</div>
+                <small style="display:block; font-size:11px; color:var(--muted); opacity:0.8;">${data.global_standard.note}</small>
+            </div>`;
 
-            <div style="height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); margin:20px 0;"></div>`;
-
-        // Δυναμική δημιουργία περιοχών
         data.regions.forEach(r => {
-            html += `<h3 style="color:var(--accent); font-size:22px; margin:25px 0 15px 0; padding-left:10px; border-left:4px solid var(--accent);">${r.area}</h3>`;
+            html += `<h3 style="color:var(--accent); font-size:16px; margin:20px 0 10px 5px; text-transform:uppercase; letter-spacing:1px;">${r.area}</h3>`;
             
             r.countries.forEach(c => {
                 html += `
-                <div style="background:rgba(15, 23, 42, 0.6); padding:18px; border-radius:20px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.05); position:relative;">
-                    <div style="font-size:18px; font-weight:800; color:var(--gold); margin-bottom:10px;">${c.name}</div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
-                            <span style="font-size:20px;">🚓</span>
-                            <span style="font-size:18px; font-weight:900; color:var(--text);">${c.police}</span>
+                <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:16px; margin-bottom:8px; border:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:space-between;">
+                    <div style="flex:1; font-size:14px; font-weight:600; color:var(--gold);">${c.name}</div>
+                    <div style="display:flex; gap:12px;">
+                        <div style="text-align:center;">
+                            <span style="font-size:10px; color:var(--muted); display:block;">POLICE</span>
+                            <span style="font-size:14px; font-weight:800;">${c.police}</span>
                         </div>
-                        <div style="display:flex; flex-direction:column; align-items:center; flex:1; border-left:1px solid rgba(255,255,255,0.1); border-right:1px solid rgba(255,255,255,0.1);">
-                            <span style="font-size:20px;">🚑</span>
-                            <span style="font-size:18px; font-weight:900; color:var(--text);">${c.medical}</span>
+                        <div style="text-align:center; border-left:1px solid rgba(255,255,255,0.1); padding-left:10px;">
+                            <span style="font-size:10px; color:var(--muted); display:block;">MED</span>
+                            <span style="font-size:14px; font-weight:800;">${c.medical}</span>
                         </div>
-                        <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
-                            <span style="font-size:20px;">🚒</span>
-                            <span style="font-size:18px; font-weight:900; color:var(--text);">${c.fire}</span>
+                        <div style="text-align:center; border-left:1px solid rgba(255,255,255,0.1); padding-left:10px;">
+                            <span style="font-size:10px; color:var(--muted); display:block;">FIRE</span>
+                            <span style="font-size:14px; font-weight:800;">${c.fire}</span>
                         </div>
                     </div>
-                    ${c.universal ? `<div style="text-align:right; font-size:10px; color:var(--muted); margin-top:10px; opacity:0.6;">Global: ${c.universal}</div>` : ''}
                 </div>`;
             });
         });
 
         html += `
-            <button class="main-cta" style="margin-top:20px; background:var(--danger); color:white; font-size:18px; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button>
+            <button class="main-cta" style="margin-top:20px; height:55px; font-size:15px;" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button>
         </div>`;
 
         document.getElementById('screen_quiz').innerHTML = html;
         nav('quiz');
-    } catch(e) { 
-        alert("Σφάλμα: Βεβαιωθείτε ότι το αρχείο emergency_hub.json είναι σωστά γραμμένο (JSON format)."); 
-        console.error(e);
+    } catch (e) { 
+        alert("JSON Error: Check your emergency_hub.json file."); 
     }
 }
