@@ -1,61 +1,45 @@
-async function openSOS() {
-    if (!isPremium) { nav('premium'); return; }
-    try {
-        const res = await fetch('./emergency_hub.json');
-        const data = await res.json();
-        let html = `
-        <div class="glass-card" style="text-align:left; max-height:80vh; overflow-y:auto; padding:15px; border:1px solid var(--danger);">
-            <h2 style="color:var(--danger); font-size:24px; margin:0 0 15px 0; text-align:center;">🌍 Global SOS Hub</h2>
-            <div style="background:rgba(239,68,68,0.1); padding:15px; border-radius:18px; text-align:center; border:1px solid rgba(239,68,68,0.2); margin-bottom:20px;">
-                <span style="font-size:12px; color:var(--muted);">${data.global_standard.title}</span>
-                <div style="font-size:36px; font-weight:800; color:var(--text); margin:5px 0;">${data.global_standard.number}</div>
-                <small style="color:var(--muted); font-size:11px;">${data.global_standard.note}</small>
-            </div>`;
-
-        data.regions.forEach(r => {
-            html += `<h3 style="color:var(--accent); font-size:18px; margin:20px 0 10px 5px;">${r.area}</h3>`;
-            r.countries.forEach(c => {
-                html += `
-                <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:16px; margin-bottom:8px; border:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
-                    <div style="font-size:14px; font-weight:600; color:var(--gold);">${c.name}</div>
-                    <div style="display:flex; gap:10px; font-size:13px; font-weight:700;">
-                        <span>🚓 ${c.police}</span>
-                        <span style="border-left:1px solid rgba(255,255,255,0.1); padding-left:8px;">🚑 ${c.medical}</span>
-                        <span style="border-left:1px solid rgba(255,255,255,0.1); padding-left:8px;">🚒 ${c.fire}</span>
-                    </div>
-                </div>`;
-            });
-        });
-        html += `<button class="main-cta" style="margin-top:15px;" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button></div>`;
-        document.getElementById('screen_quiz').innerHTML = html;
-        nav('quiz');
-    } catch(e) { alert("SOS Load Error"); }
-}
-
-async function openDojo() {
-    if (!isPremium) { nav('premium'); return; }
-    try {
-        const res = await fetch('./dojo.json');
-        const data = await res.json();
-        let html = `
-        <div class="glass-card" style="text-align:left; max-height:80vh; overflow-y:auto; padding:15px; border-color:var(--accent);">
-            <h2 style="color:var(--accent); margin:0; font-size:26px; text-align:center;">${data.title}</h2>
-            <hr style="opacity:0.1; margin:15px 0;">`;
-
-        data.techniques.forEach(t => {
-            html += `
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px; background:rgba(255,255,255,0.02); padding:10px; border-radius:20px; border:1px solid rgba(255,255,255,0.05); min-height:120px;">
-                <div style="flex:0 0 100px; height:100px; background:#1e293b; border-radius:12px; overflow:hidden; border:1px solid rgba(56,189,248,0.2);">
-                    <img src="${t.image}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/100x100?text=🥋'">
-                </div>
-                <div style="flex:1;">
-                    <h4 style="margin:0; color:var(--accent); font-size:16px;">${t.emoji} ${t.name}</h4>
-                    <p style="font-size:12px; line-height:1.4; color:var(--text); margin-top:4px; opacity:0.9;">${t.description}</p>
-                </div>
-            </div>`;
-        });
-        html += `<button class="main-cta" onclick="nav('home')">ΕΠΙΣΤΡΟΦΗ</button></div>`;
-        document.getElementById('screen_quiz').innerHTML = html;
-        nav('quiz');
-    } catch(e) { alert("Dojo Load Error"); }
+{
+  "global_standard": {
+    "title": "Universal Emergency",
+    "number": "112",
+    "note": "Works in most countries worldwide (EU, USA, AU, etc.)"
+  },
+  "regions": [
+    {
+      "area": "Europe (EU)",
+      "countries": [
+        {"name": "Greece", "police": "100", "medical": "166", "fire": "199", "universal": "112"},
+        {"name": "Cyprus", "police": "112", "medical": "112", "fire": "112"},
+        {"name": "Germany", "police": "110", "medical": "112", "fire": "112"},
+        {"name": "France", "police": "17", "medical": "15", "fire": "18", "universal": "112"},
+        {"name": "Italy", "police": "113", "medical": "118", "fire": "115", "universal": "112"},
+        {"name": "United Kingdom", "police": "999", "medical": "999", "fire": "999", "universal": "112"}
+      ]
+    },
+    {
+      "area": "Americas",
+      "countries": [
+        {"name": "USA & Canada", "police": "911", "medical": "911", "fire": "911"},
+        {"name": "Brazil", "police": "190", "medical": "192", "fire": "193"},
+        {"name": "Mexico", "police": "911", "medical": "911", "fire": "911"}
+      ]
+    },
+    {
+      "area": "Asia & Oceania",
+      "countries": [
+        {"name": "Australia", "police": "000", "medical": "000", "fire": "000"},
+        {"name": "China", "police": "110", "medical": "120", "fire": "119"},
+        {"name": "Japan", "police": "110", "medical": "119", "fire": "119"},
+        {"name": "India", "police": "100", "medical": "102", "fire": "101", "universal": "112"}
+      ]
+    },
+    {
+      "area": "Africa & Middle East",
+      "countries": [
+        {"name": "South Africa", "police": "10111", "medical": "10177", "fire": "10177"},
+        {"name": "UAE", "police": "999", "medical": "998", "fire": "997"},
+        {"name": "Israel", "police": "100", "medical": "101", "fire": "102"}
+      ]
+    }
+  ]
 }
