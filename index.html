@@ -27,19 +27,28 @@
         .step-dot { width: 30px; height: 30px; border-radius: 50%; background: #1e293b; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
         .active .step-dot { background: var(--accent); border-color: #fff; box-shadow: 0 0 10px var(--accent); }
 
-        /* Badges */
-        .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .badge { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; text-align: center; font-size: 24px; filter: grayscale(1); opacity: 0.3; transition: 0.5s; }
+        /* Badges & Premium Button */
+        .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; align-items: center; }
+        .badge { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 18px; text-align: center; font-size: 20px; filter: grayscale(1); opacity: 0.3; transition: 0.5s; border: 1px solid transparent; }
         .badge.unlocked { filter: grayscale(0); opacity: 1; border: 1px solid var(--gold); }
+        
+        .premium-btn-inline { background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); border-radius: 18px; padding: 8px; text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 55px; }
+        .premium-btn-inline span { font-size: 10px; font-weight: bold; color: var(--accent); display: block; }
 
-        /* Tools Grid */
+        /* Tools Grid - ΔΙΟΡΘΩΣΗ ΓΙΑ ΝΑ ΠΑΤΙΟΥΝΤΑΙ */
         .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
-        .tool-card i { font-size: 30px; display: block; margin-bottom: 8px; }
+        .tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
+        .tool-card:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.1); }
+        .tool-card i { font-size: 30px; display: block; margin-bottom: 8px; font-style: normal; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 20000; padding: 20px; }
+        .modal-content { background: #0f172a; border: 1px solid var(--accent); border-radius: 30px; padding: 30px; max-width: 400px; margin: 50px auto; position: relative; text-align: center; }
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 24px; color: var(--muted); cursor: pointer; }
 
         /* Nav */
-        .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); }
-        .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; }
+        .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
+        .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
         .nav-tab.active { color: var(--accent); }
 
         .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; text-align: center; }
@@ -93,6 +102,10 @@
                 <div id="badge1" class="badge">🎖️</div>
                 <div id="badge2" class="badge">🛡️</div>
                 <div id="badge3" class="badge">💎</div>
+                <div class="premium-btn-inline" onclick="openModal()">
+                    <div style="font-size: 16px;">🔒</div>
+                    <span>4,90€</span>
+                </div>
             </div>
 
             <div class="map-container">
@@ -106,8 +119,8 @@
         <section id="screen_premium" class="hidden">
             <div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
                 <h2 style="color:var(--gold);">Elite Access</h2>
-                <p style="font-size:0.9rem;">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας και αφαιρέστε τις διαφημίσεις.</p>
-                <button class="main-cta" style="background:var(--gold); color:black;" onclick="buyPremium()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
+                <p style="font-size:0.9rem;">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.</p>
+                <button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
             </div>
 
             <div id="prem_unlocked" class="hidden">
@@ -122,26 +135,77 @@
     </main>
 
     <nav class="nav-tabs">
-        <button class="nav-tab active" onclick="nav('home', this)">🏠</button>
-        <button class="nav-tab" onclick="nav('premium', this)">💎</button>
+        <button class="nav-tab active" id="nav_home" onclick="nav('home', this)">🏠</button>
+        <button class="nav-tab" id="nav_premium" onclick="nav('premium', this)">💎</button>
     </nav>
 </div>
 
+<div id="premiumModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div style="font-size:50px;">💎</div>
+        <h2 style="color:var(--accent); margin-top:10px;">Elite Membership</h2>
+        <div class="modal-body" style="text-align:left; font-size:0.9rem; margin:20px 0;">
+            <p>✅ Ξεκλείδωμα όλων των εργαλείων</p>
+            <p>✅ Αφαίρεση Διαφημίσεων</p>
+            <p>✅ Πρόσβαση στο Scam Alerts</p>
+        </div>
+        <div style="font-size:1.4rem; color:var(--gold); font-weight:bold; margin-bottom:20px;">4,90€ / μήνα</div>
+        <button class="main-cta" onclick="buyPremium()">ΑΓΟΡΑ ΤΩΡΑ</button>
+    </div>
+</div>
+
 <script>
-    let xp = 0;
-    let isElite = false;
+    let xp = parseInt(localStorage.getItem('xp')) || 0;
+    let isElite = localStorage.getItem('isElite') === 'true';
+
+    function initApp() {
+        document.getElementById('onboarding').classList.add('hidden');
+        document.getElementById('main_app').classList.remove('hidden');
+        updateUI();
+    }
+
+    function openModal() { document.getElementById('premiumModal').style.display = 'block'; }
+    function closeModal() { document.getElementById('premiumModal').style.display = 'none'; }
+
+    function buyPremium() {
+        isElite = true;
+        localStorage.setItem('isElite', 'true');
+        closeModal();
+        confetti({ particleCount: 200, spread: 100 });
+        updateUI();
+    }
+
+    function nav(screen, btn) {
+        document.getElementById('screen_home').classList.add('hidden');
+        document.getElementById('screen_premium').classList.add('hidden');
+        document.getElementById('screen_' + screen).classList.remove('hidden');
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function updateUI() {
+        let lvl = Math.floor(xp / 100) + 1;
+        document.getElementById('level_val').innerText = lvl;
+        document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+        
+        if(lvl >= 5) document.getElementById('step2').classList.add('active');
+        if(lvl >= 10) document.getElementById('step3').classList.add('active');
+        if(lvl >= 2) document.getElementById('badge1').classList.add('unlocked');
+        if(lvl >= 5) document.getElementById('badge2').classList.add('unlocked');
+
+        if(isElite) {
+            document.getElementById('badge3').classList.add('unlocked');
+            document.getElementById('prem_locked').classList.add('hidden');
+            document.getElementById('prem_unlocked').classList.remove('hidden');
+            document.getElementById('ad_box').classList.add('hidden');
+        }
+    }
 
     const questions = [
         { q: "Τι είναι το Phishing;", a: ["Τρόπος ψαρέματος", "Απάτη μέσω email", "Είδος ιού"], c: 1 },
         { q: "Πόσο συχνά αλλάζουμε κωδικούς;", a: ["Κάθε χρόνο", "Ποτέ", "Κάθε 3-6 μήνες"], c: 2 }
     ];
-
-    function initApp() {
-        document.getElementById('onboarding').classList.add('hidden');
-        document.getElementById('main_app').classList.remove('hidden');
-        isElite = localStorage.getItem('isElite') === 'true';
-        updateUI();
-    }
 
     function startQuiz() {
         document.getElementById('quiz_btn').classList.add('hidden');
@@ -153,7 +217,7 @@
         document.getElementById('quiz_text').innerHTML = `<b>${idx + 1}/${questions.length}:</b> ${q.q}`;
         let html = "";
         q.a.forEach((opt, i) => {
-            html += `<button class="main-cta" style="background:#1e293b; color:white;" onclick="checkAnswer(${idx}, ${i})">${opt}</button>`;
+            html += `<button class="main-cta" style="background:#1e293b; color:white; margin-bottom:10px;" onclick="checkAnswer(${idx}, ${i})">${opt}</button>`;
         });
         document.getElementById('quiz_options').innerHTML = html;
     }
@@ -161,6 +225,7 @@
     function checkAnswer(qIdx, selected) {
         if(selected === questions[qIdx].c) {
             xp += 50;
+            localStorage.setItem('xp', xp);
             confetti({ particleCount: 50, spread: 30 });
         }
         if(qIdx < questions.length - 1) {
@@ -174,61 +239,9 @@
         }
     }
 
-    function updateUI() {
-        let lvl = Math.floor(xp / 100) + 1;
-        document.getElementById('level_val').innerText = lvl;
-        document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-        
-        // Map Progress
-        if(lvl >= 5) document.getElementById('step2').classList.add('active');
-        if(lvl >= 10) document.getElementById('step3').classList.add('active');
-
-        // Badges
-        if(lvl >= 2) document.getElementById('badge1').classList.add('unlocked');
-        if(lvl >= 5) document.getElementById('badge2').classList.add('unlocked');
-        if(isElite) document.getElementById('badge3').classList.add('unlocked');
-
-        if(isElite) {
-            document.getElementById('prem_locked').classList.add('hidden');
-            document.getElementById('prem_unlocked').classList.remove('hidden');
-            document.getElementById('ad_box').classList.add('hidden');
-        }
-    }
-
-    function buyPremium() {
-        isElite = true;
-        localStorage.setItem('isElite', 'true');
-        confetti({ particleCount: 200, spread: 100 });
-        updateUI();
-    }
-
-    function nav(screen, btn) {
-        document.getElementById('screen_home').classList.add('hidden');
-        document.getElementById('screen_premium').classList.add('hidden');
-        document.getElementById('screen_' + screen).classList.remove('hidden');
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('premiumModal')) closeModal();
     }
 </script>
-<div id="premiumModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <div class="modal-header">
-            <div class="diamond-icon">💎</div>
-            <h2>Γίνε Premium Μέλος</h2>
-        </div>
-        <div class="modal-body">
-            <ul>
-                <li>✅ <strong>Advanced Scam Detection:</strong> Μάθε πρώτος τις νέες απάτες.</li>
-                <li>✅ <strong>AI Security Advisor:</strong> Προσωπικός βοηθός 24/7.</li>
-                <li>✅ <strong>No Ads:</strong> Καθαρή εμπειρία χωρίς διαφημίσεις.</li>
-                <li>✅ <strong>Exclusive Badges:</strong> Ξεκλείδωσε το Diamond Profile.</li>
-            </ul>
-            <p class="price">Μόνο <strong>4,90€</strong> / μήνα</p>
-            <button id="confirm-purchase-btn" class="buy-now-btn">ΕΝΕΡΓΟΠΟΙΗΣΗ ΤΩΡΑ</button>
-        </div>
-    </div>
-</div>
-
 </body>
 </html>
