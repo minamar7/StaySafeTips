@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Elite Premium • Real AI Protection</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+--bg:#020617;
+--card:#1e293b;
+--accent:#38bdf8;
+--danger:#ef4444;
+--gold:#facc15;
+--purple:#7c3aed;
+}
+
+body{
+margin:0;
+background:var(--bg);
+color:#f8fafc;
+font-family:-apple-system,system-ui,sans-serif;
+padding:20px;
+}
+
+.header{
+text-align:center;
+margin-bottom:30px;
+}
+
+.header h1{
+margin:10px 0 5px;
+color:var(--gold);
+}
+
+.header p{
+margin:0;
+font-size:.85rem;
+color:#94a3b8;
+}
+
+.premium-card{
+background:var(--card);
+border-radius:26px;
+padding:24px;
+box-shadow:0 20px 40px rgba(0,0,0,.5);
+border:1px solid #334155;
+}
+
+.ml-btn{
+width:100%;
+background:linear-gradient(135deg,var(--purple),#2563eb);
+border:none;
+border-radius:20px;
+padding:18px;
+font-size:1rem;
+font-weight:900;
+color:#fff;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 15px 35px rgba(124,58,237,.6);
+cursor:pointer;
+}
+
+.ml-btn span{
+background:rgba(0,0,0,.35);
+padding:6px 12px;
+border-radius:12px;
+font-size:.7rem;
+}
+
+.features{
+margin-top:25px;
+font-size:.9rem;
+color:#cbd5f5;
+}
+
+.features li{
+margin-bottom:10px;
+}
+
+.upgrade{
+margin-top:25px;
+width:100%;
+background:var(--danger);
+border:none;
+border-radius:16px;
+padding:16px;
+font-size:.95rem;
+font-weight:900;
+color:#fff;
+cursor:pointer;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+
+.modal-box{
+background:var(--bg);
+border-radius:26px;
+padding:26px;
+width:90%;
+max-width:420px;
+box-shadow:0 30px 70px rgba(0,0,0,.7);
+}
+
+.modal-box h2{
+margin-top:0;
+color:var(--gold);
+}
+
+.modal-box p{
+font-size:.9rem;
+color:#94a3b8;
+line-height:1.5;
+}
+
+.badges{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin:15px 0;
+}
+
+.badge{
+background:#1e293b;
+padding:6px 12px;
+border-radius:12px;
+font-size:.7rem;
+font-weight:800;
+}
+
+.confirm{
+width:100%;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+border:none;
+border-radius:14px;
+padding:14px;
+font-weight:900;
+color:#022c22;
+margin-top:10px;
+}
+
+.close{
+width:100%;
+background:#1e293b;
+border:none;
+border-radius:14px;
+padding:12px;
+color:#94a3b8;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>🧬 Real AI Protection</h1>
+<p>Premium Predictive Scam Intelligence</p>
+</div>
+
+<div class="premium-card">
+<button class="ml-btn" onclick="openML()">
+<span>🧬 REAL ML ENGINE</span>
+<span>PREMIUM</span>
+</button>
+
+<ul class="features">
+<li>⚠️ Πρόβλεψη απάτης πριν εξαπλωθεί</li>
+<li>🧠 Ανάλυση συμπεριφοράς & patterns</li>
+<li>📊 Δυναμικό AI Risk Score</li>
+<li>🇬🇷 Εκμάθηση από ελληνικές απάτες</li>
+<li>🔔 AI-based ειδοποιήσεις υψηλού κινδύνου</li>
+</ul>
+
+<button class="upgrade" onclick="openML()">
+Ξεκλείδωσε AI Προστασία
+</button>
+</div>
+
+<!-- MODAL -->
+<div id="mlModal" class="modal">
+<div class="modal-box">
+<h2>🧬 Elite AI Engine</h2>
+<p>
+Ενεργοποιεί πραγματικό Machine Learning που
+<b>μαθαίνει, προσαρμόζεται και προβλέπει</b> ψηφιακές απειλές.
+</p>
+
+<div class="badges">
+<div class="badge">CRITICAL THREAT DETECTION</div>
+<div class="badge">PREDICTIVE AI</div>
+<div class="badge">ELITE SECURITY</div>
+</div>
+
+<button class="confirm" onclick="goPremium()">
+Ενεργοποίηση Premium
+</button>
+
+<button class="close" onclick="closeML()">
+Ακύρωση
+</button>
+</div>
+</div>
+
+<script>
+function openML(){
+document.getElementById('mlModal').style.display='flex';
+}
+
+function closeML(){
+document.getElementById('mlModal').style.display='none';
+}
+
+function goPremium(){
+/*
+Εδώ βάζεις:
+- Paywall
+- In-App Purchase
+- AppsGeyser Premium link
+*/
+alert('Premium ενεργοποιήθηκε (demo)');
+}
+</script>
+
+</body>
+</html>
