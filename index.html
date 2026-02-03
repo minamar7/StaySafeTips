@@ -208,3 +208,40 @@ else{
 document.getElementById('quiz_options').innerHTML="";
 document.getElementById('quiz_text').innerText=translations[currentLang]?.finish||"Finished!";
 document.getElementBy
+Id('quiz_btn').classList.remove('hidden');
+document.getElementById('quiz_btn').innerText = "OK";
+updateUI();
+}
+}
+
+function nav(screen, btn) {
+    document.getElementById('screen_home').classList.add('hidden');
+    document.getElementById('screen_premium').classList.add('hidden');
+    document.getElementById('screen_' + screen).classList.remove('hidden');
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+function openModal() {
+    document.getElementById('premiumModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('premiumModal').style.display = 'none';
+}
+
+function buyPremium() {
+    isElite = true;
+    localStorage.setItem('isElite', 'true');
+    closeModal();
+    confetti({ particleCount: 200, spread: 100 });
+    updateUI();
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('premiumModal')) closeModal();
+}
+</script>
+
+</body>
+</html>
