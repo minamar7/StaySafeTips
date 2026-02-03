@@ -1,159 +1,239 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <title>Stay Safe Elite</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
-        * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
-        .hidden { display: none !important; }
-        
-        /* Header */
-        .app-header { padding: 45px 20px 15px; background: rgba(15,23,42,0.8); backdrop-filter: blur(15px); border-bottom:1px solid rgba(56,189,248,0.2); position:sticky; top:0; z-index:100; }
-        .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height:10px; overflow:hidden; margin-top:8px; }
-        .xp-fill { background: linear-gradient(90deg,var(--gold),#fbbf24); height:100%; width:0%; transition:0.8s; }
-        
-        /* Cards */
-        .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius:28px; padding:25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.08);}
-        .main-cta { background: linear-gradient(135deg,var(--accent),#0ea5e9); border:none; color:#020617; padding:18px; border-radius:20px; font-size:16px; font-weight:800; width:100%; cursor:pointer; margin-top:15px; }
-        
-        /* Badges & Map */
-        .badge-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:15px; }
-        .badge { background: rgba(255,255,255,0.05); padding:12px; border-radius:18px; text-align:center; font-size:20px; filter:grayscale(1); opacity:0.3; border:1px solid transparent;}
-        .badge.unlocked { filter:grayscale(0); opacity:1; border:1px solid var(--gold);}
-        .map-container { display:flex; flex-direction:column; gap:15px; margin:20px 0; padding:15px; background: rgba(255,255,255,0.03); border-radius:20px; }
-        .map-step { display:flex; align-items:center; gap:12px; opacity:0.3; }
-        .map-step.active { opacity:1; }
-        .step-dot { width:30px; height:30px; border-radius:50%; background:#1e293b; border:2px solid var(--muted); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; }
-        .active .step-dot { background: var(--accent); border-color:#fff; box-shadow:0 0 10px var(--accent);}
-
-        /* Premium Tools */
-        .tools-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px;}
-        .tool-card { background: rgba(255,255,255,0.05); padding:20px; border-radius:22px; text-align:center; border:1px solid rgba(255,255,255,0.1); cursor:pointer; }
-        .tool-card i { font-size:30px; display:block; margin-bottom:8px; font-style:normal; }
-
-        /* Navigation */
-        .nav-tabs { position:fixed; bottom:0; left:0; right:0; height:80px; background: rgba(2,6,23,0.98); display:flex; border-top:1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index:1000; }
-        .nav-tab { flex:1; background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer; }
-        .nav-tab.active { color: var(--accent);}
-
-        /* Modal */
-        .modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index:20000; padding:20px;}
-        .modal-content { background:#0f172a; border:1px solid var(--accent); border-radius:30px; padding:30px; max-width:400px; margin:50px auto; position:relative; text-align:center; }
-        
-        .overlay { position:fixed; inset:0; background: var(--bg); z-index:10000; display:flex; align-items:center; justify-content:center; text-align:center; }
-        .lang-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:20px; }
-        .lang-btn { background:#1e293b; padding:15px; border-radius:15px; color:white; cursor:pointer; border:1px solid #334155;}
-    </style>
+<meta charset="UTF-8">
+<title>Stay Safe Elite</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
+* { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+.hidden { display: none !important; }
+.app-header { padding: 45px 20px 15px; background: rgba(15,23,42,0.8); backdrop-filter: blur(15px); border-bottom:1px solid rgba(56,189,248,0.2); position:sticky; top:0; z-index:100; }
+.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height:10px; overflow:hidden; margin-top:8px; }
+.xp-fill { background: linear-gradient(90deg,var(--gold),#fbbf24); height:100%; width:0%; transition:0.8s; }
+.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius:28px; padding:25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.08);}
+.main-cta { background: linear-gradient(135deg,var(--accent),#0ea5e9); border:none; color:#020617; padding:18px; border-radius:20px; font-size:16px; font-weight:800; width:100%; cursor:pointer; margin-top:15px; }
+.map-container { display:flex; flex-direction:column; gap:15px; margin:20px 0; padding:15px; background: rgba(255,255,255,0.03); border-radius:20px; }
+.map-step { display:flex; align-items:center; gap:12px; opacity:0.3; transition:0.5s; }
+.map-step.active { opacity:1; }
+.step-dot { width:30px; height:30px; border-radius:50%; background:#1e293b; border:2px solid var(--muted); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; }
+.active .step-dot { background: var(--accent); border-color:#fff; box-shadow:0 0 10px var(--accent);}
+.badge-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:15px; align-items:center;}
+.badge { background: rgba(255,255,255,0.05); padding:12px; border-radius:18px; text-align:center; font-size:20px; filter:grayscale(1); opacity:0.3; transition:0.5s; border:1px solid transparent;}
+.badge.unlocked { filter:grayscale(0); opacity:1; border:1px solid var(--gold);}
+.premium-btn-inline { background: rgba(56,189,248,0.1); border:1px solid var(--accent); border-radius:18px; padding:8px; text-align:center; cursor:pointer; transition:0.3s; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:55px;}
+.premium-btn-inline span { font-size:10px; font-weight:bold; color:var(--accent); display:block;}
+.tools-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px;}
+.tool-card { background: rgba(255,255,255,0.05); padding:20px; border-radius:22px; text-align:center; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:0.2s; }
+.tool-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+.tool-card i { font-size:30px; display:block; margin-bottom:8px; font-style:normal; }
+.modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index:20000; padding:20px;}
+.modal-content { background:#0f172a; border:1px solid var(--accent); border-radius:30px; padding:30px; max-width:400px; margin:50px auto; position:relative; text-align:center; }
+.close-modal { position:absolute; right:20px; top:15px; font-size:24px; color:var(--muted); cursor:pointer; }
+.nav-tabs { position:fixed; bottom:0; left:0; right:0; height:80px; background: rgba(2,6,23,0.98); display:flex; border-top:1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index:1000; }
+.nav-tab { flex:1; background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer; }
+.nav-tab.active { color: var(--accent);}
+.overlay { position:fixed; inset:0; background: var(--bg); z-index:10000; display:flex; align-items:center; justify-content:center; text-align:center; }
+.lang-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:20px; }
+.lang-btn { background:#1e293b; padding:15px; border-radius:15px; color:white; cursor:pointer; border:1px solid #334155;}
+</style>
 </head>
 <body>
 
 <section id="onboarding" class="overlay">
-    <div>
-        <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
-        <h1>Stay Safe Elite</h1>
-        <div class="lang-grid">
-            <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
-            <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
-        </div>
-    </div>
+<div>
+<div style="font-size:60px; margin-bottom:20px;">🛡️</div>
+<h1>Stay Safe Elite</h1>
+<div class="lang-grid">
+<div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
+<div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
+<div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
+<div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
+<div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
+<div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
+<div class="lang-btn" onclick="initApp('pt')">🇵🇹 Portuguese</div>
+<div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
+<div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
+<div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
+</div>
+</div>
 </section>
 
 <div id="main_app" class="hidden">
-    <header class="app-header">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
-            <div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
-        </div>
-        <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
-    </header>
+<header class="app-header">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
+<div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
+</div>
+<div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
+</header>
 
-    <main style="padding:20px 20px 110px;">
-        <div id="ad_box" style="background:#1e293b; padding:10px; border-radius:10px; text-align:center; font-size:10px; color:var(--muted); margin-bottom:15px;">ADVERTISEMENT - ELITE TO REMOVE</div>
+<main style="padding:20px 20px 110px;">
+<div id="ad_box" style="background:#1e293b; padding:10px; border-radius:10px; text-align:center; font-size:10px; color:var(--muted); margin-bottom:15px;">ADVERTISEMENT - ELITE TO REMOVE</div>
 
-        <section id="screen_home">
-            <div class="glass-card" id="quiz_container">
-                <h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
-                <p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος;</p>
-                <div id="quiz_options"></div>
-                <button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
-            </div>
-
-            <div class="badge-grid">
-                <div id="badge1" class="badge">🎖️</div>
-                <div id="badge2" class="badge">🛡️</div>
-                <div id="badge3" class="badge">💎</div>
-                <div class="badge" style="opacity:1; filter:none; cursor:pointer;" onclick="openModal()">🔒</div>
-            </div>
-
-            <div class="map-container">
-                <div class="map-step active" id="step1"><div class="step-dot">1</div><small>Rookie</small></div>
-                <div class="map-step" id="step2"><div class="step-dot">5</div><small>Expert</small></div>
-                <div class="map-step" id="step3"><div class="step-dot">10</div><small>Elite</small></div>
-            </div>
-        </section>
-
-        <section id="screen_premium" class="hidden">
-            <div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
-                <h2 style="color:var(--gold);">Elite Access</h2>
-                <p id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία.</p>
-                <button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">ΑΝΑΒΑΘΜΙΣΗ 4.90€</button>
-            </div>
-
-            <div id="prem_unlocked" class="hidden">
-                <div class="tools-grid">
-                    <div class="tool-card" onclick="window.location.href='checkup.html'"><i>🔍</i><small>CHECKUP</small></div>
-                    <div class="tool-card" onclick="window.location.href='sos_hub.html'"><i>🚨</i><small>SOS HUB</small></div>
-                    <div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small>ALERTS</small></div>
-                    <div class="tool-card" onclick="window.location.href='dojo.html'"><i>⚡</i><small>DOJO</small></div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <nav class="nav-tabs">
-        <button class="nav-tab active" onclick="nav('home', this)">🏠</button>
-        <button class="nav-tab" onclick="nav('premium', this)">💎</button>
-    </nav>
+<section id="screen_home">
+<div class="glass-card" id="quiz_container">
+<h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
+<p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος για τις σημερινές προκλήσεις;</p>
+<div id="quiz_options"></div>
+<button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
 </div>
 
-<div id="premiumModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <h2 style="color:var(--gold)">Γίνε Elite</h2>
-        <p>Αφαίρεση διαφημίσεων & Πρόσβαση σε όλα τα εργαλεία.</p>
-        <button class="main-cta" onclick="buyPremium()">ΑΓΟΡΑ ΤΩΡΑ</button>
-    </div>
+<h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Επιτεύγματα</h3>
+<div class="badge-grid">
+<div id="badge1" class="badge">🎖️</div>
+<div id="badge2" class="badge">🛡️</div>
+<div id="badge3" class="badge">💎</div>
+<div class="premium-btn-inline" onclick="openModal()">
+<div style="font-size:16px;">🔒</div>
+<span>4,90€</span>
+</div>
 </div>
 
+<div class="map-container">
+<h4 style="margin:0 0 10px; color:var(--accent); font-size:0.8rem;" id="txt_map">ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
+<div class="map-step active" id="step1"><div class="step-dot">1</div><small>Rookie</small></div>
+<div class="map-step" id="step2"><div class="step-dot">5</div><small>Expert</small></div>
+<div class="map-step" id="step3"><div class="step-dot">10</div><small>Elite</small></div>
+</div>
+</section>
+
+<section id="screen_premium" class="hidden">
+<div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
+<h2 style="color:var(--gold);">Elite Access</h2>
+<p style="font-size:0.9rem;" id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.</p>
+<button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
+</div>
+
+<div id="prem_unlocked" class="hidden">
+<div class="tools-grid">
+<div class="tool-card" onclick="window.location.href='checkup.html'"><i>🔍</i><small>CHECKUP</small></div>
+<div class="tool-card" onclick="window.location.href='sos_hub.html'"><i>🚨</i><small>SOS HUB</small></div>
+<div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small>ALERTS</small></div>
+<div class="tool-card" onclick="window.location.href='dojo.html'"><i>⚡</i><small>DOJO</small></div>
+</div>
+</div>
+</section>
 <script>
 let xp = parseInt(localStorage.getItem('xp')) || 0;
 let isElite = localStorage.getItem('isElite') === 'true';
-let dailyCount = 0;
+let currentLang = 'el';
+let currentQuizData = {};
+let today = new Date().toISOString().split('T')[0];
+let lastPlayed = localStorage.getItem('lastPlayed') || '';
+let dailyCount = parseInt(localStorage.getItem('dailyCount')) || 0;
 
-function initApp(lang) {
-    document.getElementById('onboarding').classList.add('hidden');
-    document.getElementById('main_app').classList.remove('hidden');
-    updateUI();
+// Reset daily quiz if a new day
+if (today !== lastPlayed) {
+    dailyCount = 0;
+    localStorage.setItem('dailyCount', '0');
+    localStorage.setItem('lastPlayed', today);
+}
+
+const translations = {
+    el: {
+        daily: "🛡️ Καθημερινή Εκπαίδευση",
+        start: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",
+        days: "ΗΜΕΡΕΣ",
+        finish: "Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.",
+        correct: "Σωστό!",
+        wrong: "Λάθος!"
+    }
+};
+
+async function initApp(lang) {
+    currentLang = lang;
+    document.getElementById('quiz_text').innerText = "Loading...";
+    try {
+        const freeRes = await fetch(`questions_free_${lang}.json`);
+        const premRes = await fetch(`questions_premium_${lang}.json`);
+        const freeData = await freeRes.json();
+        const premData = await premRes.json();
+        currentQuizData = { ...freeData[lang].levels, ...premData[lang].levels };
+        document.getElementById('txt_daily').innerText = translations[lang]?.daily || "Daily Training";
+        document.getElementById('quiz_btn').innerText = translations[lang]?.start || "Start Quiz";
+        document.getElementById('quiz_text').innerText = "Ready?";
+        document.getElementById('onboarding').classList.add('hidden');
+        document.getElementById('main_app').classList.remove('hidden');
+        updateUI();
+    } catch (e) {
+        console.error(e);
+        alert("Error loading content for " + lang);
+    }
 }
 
 function updateUI() {
     let lvl = Math.floor(xp / 100) + 1;
     document.getElementById('level_val').innerText = lvl;
     document.getElementById('xp_fill').style.width = (xp % 100) + "%";
-    
     if (lvl >= 2) document.getElementById('badge1').classList.add('unlocked');
     if (lvl >= 5) document.getElementById('badge2').classList.add('unlocked');
-    
+    if (lvl >= 7) document.getElementById('step2').classList.add('active');
+    if (lvl >= 10) document.getElementById('step3').classList.add('active');
     if (isElite) {
         document.getElementById('badge3').classList.add('unlocked');
         document.getElementById('prem_locked').classList.add('hidden');
         document.getElementById('prem_unlocked').classList.remove('hidden');
         document.getElementById('ad_box').classList.add('hidden');
     }
+}
+
+function startQuiz() {
+    if (dailyCount >= 5) {
+        alert("Έχετε ολοκληρώσει το ημερήσιο quiz. Ξαναέρχεται αύριο!");
+        return;
+    }
+    document.getElementById('quiz_btn').classList.add('hidden');
+    renderQuestion(0, dailyCount);
+}
+
+function renderQuestion(idx, count) {
+    let lvl = Math.floor(xp / 100) + 1;
+    const levelQuestions = currentQuizData[lvl] || currentQuizData["1"];
+    const q = levelQuestions[idx % levelQuestions.length];
+    document.getElementById('quiz_text').innerHTML = `<b>Q:</b> ${q.q}`;
+    let html = "";
+    q.o.forEach((opt, i) => {
+        html += `<button class="main-cta" style="background:#1e293b;color:white;margin-bottom:10px;" onclick="checkAnswer(${idx},${i},${count})">${opt}</button>`;
+    });
+    document.getElementById('quiz_options').innerHTML = html;
+}
+
+function checkAnswer(qIdx, selected, count) {
+    let lvl = Math.floor(xp / 100) + 1;
+    const levelQuestions = currentQuizData[lvl] || currentQuizData["1"];
+    const q = levelQuestions[qIdx % levelQuestions.length];
+    const buttons = document.querySelectorAll('#quiz_options button');
+
+    buttons.forEach((btn, i) => {
+        if (i === q.a) btn.style.background = 'var(--success)';
+        else if (i === selected) btn.style.background = 'var(--danger)';
+        btn.disabled = true;
+    });
+
+    if (selected === q.a) {
+        xp += 50;
+        localStorage.setItem('xp', xp);
+        confetti({ particleCount: 50, spread: 30 });
+    }
+
+    count++;
+    dailyCount = count;
+    localStorage.setItem('dailyCount', dailyCount);
+    localStorage.setItem('lastPlayed', today);
+
+    setTimeout(() => {
+        if (count < 5) renderQuestion(qIdx + 1, count);
+        else {
+            document.getElementById('quiz_options').innerHTML = "";
+            document.getElementById('quiz_text').innerText = translations[currentLang]?.finish || "Finished!";
+            document.getElementById('quiz_btn').classList.remove('hidden');
+            document.getElementById('quiz_btn').innerText = "OK";
+            updateUI();
+        }
+    }, 800);
 }
 
 function nav(screen, btn) {
@@ -164,26 +244,25 @@ function nav(screen, btn) {
     btn.classList.add('active');
 }
 
-function openModal() { document.getElementById('premiumModal').style.display = 'block'; }
-function closeModal() { document.getElementById('premiumModal').style.display = 'none'; }
+function openModal() {
+    document.getElementById('premiumModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('premiumModal').style.display = 'none';
+}
 
 function buyPremium() {
     isElite = true;
     localStorage.setItem('isElite', 'true');
     closeModal();
-    confetti({ particleCount: 150, spread: 70 });
+    confetti({ particleCount: 200, spread: 100 });
     updateUI();
 }
 
-// Απλοποιημένο Quiz για το παράδειγμα
-function startQuiz() {
-    xp += 20;
-    localStorage.setItem('xp', xp);
-    confetti({ particleCount: 30, spread: 50 });
-    updateUI();
-    alert("Κέρδισες 20 XP!");
+window.onclick = function(event) {
+    if (event.target == document.getElementById('premiumModal')) closeModal();
 }
 </script>
-
 </body>
 </html>
