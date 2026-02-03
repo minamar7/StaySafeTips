@@ -31,7 +31,7 @@
         
         .read-btn { display: inline-block; margin-top: 15px; color: white; background: var(--danger); padding: 8px 16px; border-radius: 12px; text-decoration: none; font-size: 0.8rem; font-weight: bold; }
 
-        .shimmer { text-align: center; padding: 40px; color: var(--muted); font-style: italic; }
+        .shimmer { text-align: center; padding: 40px; color: #94a3b8; font-style: italic; }
     </style>
 </head>
 <body>
@@ -52,8 +52,16 @@
     </div>
 
 <script>
-    // Προστασία Elite
-    if(localStorage.getItem('isElite') !== 'true') { window.location.href = 'index.html'; }
+    // ΔΙΟΡΘΩΣΗ: Έλεγχος Elite με μικρή καθυστέρηση για κινητά
+    function checkAccess() {
+        const isElite = localStorage.getItem('isElite');
+        if(isElite !== 'true') {
+            alert("Απαιτείται Elite Membership για πρόσβαση!");
+            window.location.href = 'index.html';
+        } else {
+            getLiveScams();
+        }
+    }
 
     async function getLiveScams() {
         const rssUrl = 'https://www.consumer.ftc.gov/blog/feed';
@@ -68,6 +76,7 @@
             data.items.slice(0, 8).forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'alert-card';
+                // Καθαρισμός κειμένου από HTML tags
                 const cleanDesc = item.description.replace(/<[^>]*>?/gm, '').substring(0, 130);
                 
                 div.innerHTML = `
@@ -83,7 +92,8 @@
         }
     }
 
-    getLiveScams();
+    // Εκτέλεση ελέγχου
+    checkAccess();
 </script>
 
 </body>
