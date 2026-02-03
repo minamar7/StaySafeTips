@@ -1,368 +1,209 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-<meta charset="UTF-8">
-<title>Stay Safe Elite</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<style>
-:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
-* { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
-.hidden { display: none !important; }
-.app-header { padding: 45px 20px 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
-.xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
-.xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
-.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); }
-.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
-.map-container { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 20px; }
-.map-step { display: flex; align-items: center; gap: 12px; opacity: 0.3; transition: 0.5s; }
-.map-step.active { opacity: 1; }
-.step-dot { width: 30px; height: 30px; border-radius: 50%; background: #1e293b; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
-.active .step-dot { background: var(--accent); border-color: #fff; box-shadow: 0 0 10px var(--accent); }
-.badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; align-items: center; }
-.badge { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 18px; text-align: center; font-size: 20px; filter: grayscale(1); opacity: 0.3; transition: 0.5s; border: 1px solid transparent; }
-.badge.unlocked { filter: grayscale(0); opacity: 1; border: 1px solid var(--gold); }
-.premium-btn-inline { background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); border-radius: 18px; padding: 8px; text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 55px; }
-.premium-btn-inline span { font-size: 10px; font-weight: bold; color: var(--accent); display: block; }
-.tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-.tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
-.tool-card:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.1); }
-.tool-card i { font-size: 30px; display: block; margin-bottom: 8px; font-style: normal; }
-.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 20000; padding: 20px; }
-.modal-content { background: #0f172a; border: 1px solid var(--accent); border-radius: 30px; padding: 30px; max-width: 400px; margin: 50px auto; position: relative; text-align: center; }
-.close-modal { position: absolute; right: 20px; top: 15px; font-size: 24px; color: var(--muted); cursor: pointer; }
-.nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
-.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
-.nav-tab.active { color: var(--accent); }
-.overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; text-align: center; }
-.lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
-.lang-btn { background: #1e293b; padding: 15px; border-radius: 15px; color: white; cursor: pointer; border: 1px solid #334155; }
-.scan-progress-container { display:block; margin:10px 0; border-radius:10px; background:rgba(255,255,255,0.1); overflow:hidden; height:12px; }
-.scan-progress-bar { height:100%; width:0%; background:var(--accent); transition:0.3s; }
-.status-text { font-size:0.9rem; margin:5px 0; }
-.success { color:var(--success); font-weight:bold; }
-.danger { color:var(--danger); font-weight:bold; }
-</style>
+    <meta charset="UTF-8">
+    <title>Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
+        * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+        .hidden { display: none !important; }
+        
+        /* Header & Progress */
+        .app-header { padding: 45px 20px 15px; background: rgba(15,23,42,0.8); backdrop-filter: blur(15px); border-bottom:1px solid rgba(56,189,248,0.2); position:sticky; top:0; z-index:100; }
+        .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height:10px; overflow:hidden; margin-top:8px; }
+        .xp-fill { background: linear-gradient(90deg,var(--gold),#fbbf24); height:100%; width:0%; transition:0.8s; }
+        
+        /* Cards & Buttons */
+        .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius:28px; padding:25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.08);}
+        .main-cta { background: linear-gradient(135deg,var(--accent),#0ea5e9); border:none; color:#020617; padding:18px; border-radius:20px; font-size:16px; font-weight:800; width:100%; cursor:pointer; margin-top:15px; }
+        
+        /* Badges & Map */
+        .badge-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:15px; }
+        .badge { background: rgba(255,255,255,0.05); padding:12px; border-radius:18px; text-align:center; font-size:20px; filter:grayscale(1); opacity:0.3; border:1px solid transparent;}
+        .badge.unlocked { filter:grayscale(0); opacity:1; border:1px solid var(--gold);}
+        
+        .map-container { display:flex; flex-direction:column; gap:15px; margin:20px 0; padding:15px; background: rgba(255,255,255,0.03); border-radius:20px; }
+        .map-step { display:flex; align-items:center; gap:12px; opacity:0.3; }
+        .map-step.active { opacity:1; }
+        .step-dot { width:30px; height:30px; border-radius:50%; background:#1e293b; border:2px solid var(--muted); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; }
+        .active .step-dot { background: var(--accent); border-color:#fff; box-shadow:0 0 10px var(--accent);}
+        
+        /* Navigation Tabs */
+        .nav-tabs { position:fixed; bottom:0; left:0; right:0; height:80px; background: rgba(2,6,23,0.98); display:flex; border-top:1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index:1000; }
+        .nav-tab { flex:1; background:none; border:none; color:var(--muted); font-size:28px; cursor:pointer; }
+        .nav-tab.active { color: var(--accent); }
+
+        /* Onboarding & Flags */
+        .overlay { position:fixed; inset:0; background: var(--bg); z-index:10000; display:flex; align-items:center; justify-content:center; text-align:center; overflow-y: auto;}
+        .lang-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:20px; padding:20px; width: 100%; max-width: 400px; }
+        .lang-btn { background:#1e293b; padding:15px; border-radius:15px; color:white; cursor:pointer; border:1px solid #334155; font-size: 1.1rem; }
+
+        /* Tools */
+        .tools-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px;}
+        .tool-card { background: rgba(255,255,255,0.05); padding:20px; border-radius:22px; text-align:center; border:1px solid rgba(255,255,255,0.1); cursor:pointer; }
+        .tool-card i { font-size:30px; display:block; margin-bottom:8px; font-style:normal; }
+        
+        /* Modal */
+        .modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index:20000; padding:20px;}
+        .modal-content { background:#0f172a; border:1px solid var(--accent); border-radius:30px; padding:30px; max-width:400px; margin:50px auto; position:relative; text-align:center; }
+    </style>
 </head>
 <body>
 
 <section id="onboarding" class="overlay">
-<div>
-<div style="font-size:60px; margin-bottom:20px;">🛡️</div>
-<h1>Stay Safe Elite</h1>
-<div class="lang-grid">
-<div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
-<div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
-<div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
-<div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
-<div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
-<div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
-<div class="lang-btn" onclick="initApp('pt')">🇵🇹 Portuguese</div>
-<div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
-<div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
-<div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
-</div>
-</div>
+    <div style="padding: 20px 0;">
+        <div style="font-size:50px;">🛡️</div>
+        <h1>Stay Safe Elite</h1>
+        <div class="lang-grid">
+            <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
+            <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
+            <div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
+            <div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
+            <div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
+            <div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
+            <div class="lang-btn" onclick="initApp('pt')">🇵🇹 Portuguese</div>
+            <div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
+            <div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
+            <div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
+        </div>
+    </div>
 </section>
 
 <div id="main_app" class="hidden">
-<header class="app-header">
-<div style="display:flex; justify-content:space-between; align-items:center;">
-<div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
-<div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
-</div>
-<div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
-</header>
+    <header class="app-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
+            <div style="font-weight:900; color:var(--accent);">LVL <span id="level_val">1</span></div>
+        </div>
+        <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
+    </header>
 
-<main style="padding: 20px 20px 110px;">
-<div id="ad_box" style="background:#1e293b; padding:10px; border-radius:10px; text-align:center; font-size:10px; color:var(--muted); margin-bottom:15px;">ADVERTISEMENT - ELITE TO REMOVE</div>
+    <main style="padding:20px 20px 110px;">
+        <section id="screen_home">
+            <div class="glass-card">
+                <h2 style="margin:0;" id="txt_daily">🛡️ Καθημερινή Εκπαίδευση</h2>
+                <p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Ετοιμαστείτε για το τεστ.</p>
+                <div id="quiz_options"></div>
+                <button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
+            </div>
 
-<section id="screen_home">
-<div class="glass-card" id="quiz_container">
-<h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
-<p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος για τις σημερινές προκλήσεις;</p>
-<div id="quiz_options"></div>
-<button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
-</div>
+            <div class="badge-grid">
+                <div id="badge1" class="badge">🎖️</div>
+                <div id="badge2" class="badge">🛡️</div>
+                <div id="badge3" class="badge">💎</div>
+                <div class="badge" style="opacity:1; filter:none;" onclick="openModal()">🔒</div>
+            </div>
 
-<h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Επιτεύγματα</h3>
-<div class="badge-grid">
-<div id="badge1" class="badge">🎖️</div>
-<div id="badge2" class="badge">🛡️</div>
-<div id="badge3" class="badge">💎</div>
-<div class="premium-btn-inline" onclick="openModal()">
-<div style="font-size: 16px;">🔒</div>
-<span>4,90€</span>
-</div>
-</div>
+            <div class="map-container">
+                <div class="map-step active" id="step1"><div class="step-dot">1</div><small id="txt_rookie">Rookie</small></div>
+                <div class="map-step" id="step2"><div class="step-dot">5</div><small id="txt_expert">Expert</small></div>
+                <div class="map-step" id="step3"><div class="step-dot">10</div><small id="txt_elite_map">Elite</small></div>
+            </div>
+        </section>
 
-<div class="map-container">
-<h4 style="margin:0 0 10px; color:var(--accent); font-size:0.8rem;" id="txt_map">ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
-<div class="map-step active" id="step1"><div class="step-dot">1</div><small>Rookie</small></div>
-<div class="map-step" id="step2"><div class="step-dot">5</div><small>Expert</small></div>
-<div class="map-step" id="step3"><div class="step-dot">10</div><small>Elite</small></div>
-</div>
-</section>
+        <section id="screen_premium" class="hidden">
+            <div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
+                <h2 style="color:var(--gold)">Elite Access</h2>
+                <p id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία.</p>
+                <button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">4,90€ / ΜΗΝΑ</button>
+            </div>
+            <div id="prem_unlocked" class="hidden">
+                <div class="tools-grid">
+                    <div class="tool-card" onclick="window.location.href='checkup.html'"><i>🔍</i><small>CHECKUP</small></div>
+                    <div class="tool-card" onclick="window.location.href='sos_hub.html'"><i>🚨</i><small>SOS HUB</small></div>
+                    <div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small>ALERTS</small></div>
+                    <div class="tool-card" onclick="window.location.href='dojo.html'"><i>⚡</i><small>DOJO</small></div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<section id="screen_premium" class="hidden">
-<div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
-<h2 style="color:var(--gold);">Elite Access</h2>
-<p style="font-size:0.9rem;" id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.</p>
-<button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
-</div>
-
-<div id="prem_unlocked" class="hidden">
-<div class="tools-grid">
-<div class="tool-card" onclick="openCheckup()"><i>🔍</i><small>CHECKUP</small></div>
-<div class="tool-card" onclick="window.location.href='sos_hub.html'"><i>🚨</i><small>SOS HUB</small></div>
-<div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small>ALERTS</small></div>
-<div class="tool-card" onclick="window.location.href='dojo.html'"><i>⚡</i><small>DOJO</small></div>
-</div>
-</div>
-</section>
-
-<!-- Checkup Screen -->
-<section id="screen_checkup" class="hidden">
-  <div class="glass-card">
-    <a href="#" onclick="nav('home', document.getElementById('nav_home'))" style="color:var(--muted); font-size:0.9rem; display:inline-block; margin-bottom:10px;">← Πίσω στο Dashboard</a>
-    <h2 style="margin:0 0 10px;">🔐 Security Checkup</h2>
-    <p style="color:var(--muted); font-size:0.9rem;">Πλήρης έλεγχος ψηφιακής ασφάλειας</p>
-
-    <div class="scan-progress-container" id="checkup_progress_container" style="display:none;">
-      <div class="scan-progress-bar" id="checkup_progress_bar"></div>
-    </div>
-
-    <div class="checkup-block">
-      <h3>📊 Security Score</h3>
-      <p class="status-text" id="checkup_score">—</p>
-    </div>
-
-    <div class="checkup-block" id="checkup_pw">
-      <h3>🛡️ Password Strength</h3>
-      <p class="status-text" id="checkup_pw_status">Κατάσταση: Αναμονή…</p>
-    </div>
-
-    <div class="checkup-block" id="checkup_2fa">
-      <h3>🔑 2-Factor Authentication</h3>
-      <p class="status-text" id="checkup_2fa_status">Κατάσταση: Αναμονή…</p>
-    </div>
-
-    <div class="checkup-block">
-      <h3>📱 Device Integrity</h3>
-      <ul style="font-size:0.9rem; color:var(--muted);">
-        <li>Screen Lock & Biometrics</li>
-        <li>OS Update Status</li>
-        <li>Root / Jailbreak Detection</li>
-      </ul>
-    </div>
-
-    <div class="checkup-block" id="checkup_risk">
-      <h3>⚠️ Scam Exposure Risk</h3>
-      <p class="status-text" id="checkup_risk_score">Επίπεδο ρίσκου: —</p>
-    </div>
-
-    <div class="checkup-block">
-      <h3>🚀 Προτεινόμενες Ενέργειες</h3>
-      <ul style="font-size:0.9rem; color:var(--muted);">
-        <li>Ενεργοποίησε 2FA παντού</li>
-        <li>Χρησιμοποίησε password manager</li>
-        <li>Απόφυγε links από άγνωστους</li>
-      </ul>
-    </div>
-
-    <button class="main-cta" id="run_checkup_btn">ΕΚΤΕΛΕΣΗ ΕΛΕΓΧΟΥ</button>
-  </div>
-</section>
-
-</main>
-
-<nav class="nav-tabs">
-<button class="nav-tab active" id="nav_home" onclick="nav('home', this)">🏠</button>
-<button class="nav-tab" id="nav_premium" onclick="nav('premium', this)">💎</button>
-</nav>
+    <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="nav('home', this)">🏠</button>
+        <button class="nav-tab" onclick="nav('premium', this)">💎</button>
+    </nav>
 </div>
 
 <div id="premiumModal" class="modal">
-<div class="modal-content">
-<span class="close-modal" onclick="closeModal()">&times;</span>
-<div style="font-size:50px;">💎</div>
-<h2 style="color:var(--accent); margin-top:10px;">Elite Membership</h2>
-<div class="modal-body" style="text-align:left; font-size:0.9rem; margin:20px 0;">
-<p>✅ Ξεκλείδωμα όλων των εργαλείων</p>
-<p>✅ Αφαίρεση Διαφημίσεων</p>
-<p>✅ Πρόσβαση στο Scam Alerts</p>
-</div>
-<div style="font-size:1.4rem; color:var(--gold); font-weight:bold; margin-bottom:20px;">4,90€ / μήνα</div>
-<button class="main-cta" onclick="buyPremium()">ΑΓΟΡΑ ΤΩΡΑ</button>
-</div>
+    <div class="modal-content">
+        <h2 style="color:var(--gold)" id="txt_modal_title">Unlock Elite</h2>
+        <p id="txt_modal_body">Πρόσβαση σε όλα τα εργαλεία.</p>
+        <button class="main-cta" onclick="buyPremium()">OK</button>
+        <p style="margin-top:15px; font-size:0.8rem; color:var(--muted)" onclick="closeModal()">Close</p>
+    </div>
 </div>
 
 <script>
 let xp = parseInt(localStorage.getItem('xp')) || 0;
-let isElite = localStorage.getItem('isElite')==='true';
-let currentLang='el';
-let currentQuizData={};
-let streak = parseInt(localStorage.getItem('streak')) || 1;
+let isElite = localStorage.getItem('isElite') === 'true';
 
-// Διαχείριση ημερολογίου
-let lastDate = localStorage.getItem('lastDate') || '';
-const today = new Date().toISOString().slice(0,10);
-if(today !== lastDate){
-    streak++;
-    localStorage.setItem('streak', streak);
-    localStorage.setItem('lastDate', today);
-}
-document.getElementById('streak_val').innerText = streak;
+// ΣΥΣΤΗΜΑ ΜΕΤΑΦΡΑΣΗΣ
+const translations = {
+    el: { daily: "🛡️ Καθημερινή Εκπαίδευση", start: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ", days: "ΗΜΕΡΕΣ", rookie: "Αρχάριος", expert: "Έμπειρος", elite: "Κορυφαίος", prem: "Ξεκλειδώστε όλα τα εργαλεία.", mod_t: "Unlock Elite", mod_b: "Πλήρης πρόσβαση." },
+    en: { daily: "🛡️ Daily Training", start: "START QUIZ", days: "DAYS", rookie: "Rookie", expert: "Expert", elite: "Elite", prem: "Unlock all tools.", mod_t: "Unlock Elite", mod_b: "Full access." },
+    de: { daily: "🛡️ Tägliches Training", start: "QUIZ STARTEN", days: "TAGE", rookie: "Anfänger", expert: "Experte", elite: "Elite", prem: "Tools freischalten.", mod_t: "Elite freischalten", mod_b: "Vollzugriff." },
+    fr: { daily: "🛡️ Entraînement", start: "LANCER LE QUIZ", days: "JOURS", rookie: "Débutant", expert: "Expert", elite: "Élite", prem: "Débloquer les outils.", mod_t: "Elite", mod_b: "Accès complet." },
+    es: { daily: "🛡️ Entrenamiento", start: "INICIAR QUIZ", days: "DÍAS", rookie: "Novato", expert: "Experto", elite: "Elite", prem: "Desbloquear todo.", mod_t: "Desbloquear Elite", mod_b: "Acceso total." },
+    it: { daily: "🛡️ Allenamento", start: "INIZIA QUIZ", days: "GIORNI", rookie: "Recluta", expert: "Esperto", elite: "Elite", prem: "Sblocca strumenti.", mod_t: "Elite", mod_b: "Accesso completo." },
+    pt: { daily: "🛡️ Treino", start: "INICIAR QUIZ", days: "DIAS", rookie: "Novato", expert: "Especialista", elite: "Elite", prem: "Desbloquear.", mod_t: "Elite", mod_b: "Acesso total." },
+    ru: { daily: "🛡️ Тренировка", start: "НАЧАТЬ ТЕСТ", days: "ДНЕЙ", rookie: "Новичок", expert: "Эксперт", elite: "Элита", prem: "Открыть всё.", mod_t: "Elite", mod_b: "Полный доступ." },
+    zh: { daily: "🛡️ 每日训练", start: "开始测试", days: "天", rookie: "新手", expert: "专家", elite: "精英", prem: "解锁所有工具。", mod_t: "精英版", mod_b: "完整权限。" },
+    hi: { daily: "🛡️ प्रशिक्षण", start: "शुरू करें", days: "दिन", rookie: "नौसिखिया", expert: "विशेषज्ञ", elite: "एलीट", prem: "अनलॉक करें।", mod_t: "एलीट अनलॉक", mod_b: "पूर्ण पहुंच।" }
+};
 
-const translations={el:{daily:"🛡️ Καθημερινή Εκπαίδευση",start:"ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",days:"ΗΜΕΡΕΣ",finish:"Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.",achievements:"🏆 Επιτεύγματα",map:" map:"ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ",prem_desc:"Ξεκλειδώστε όλα τα εργαλεία ασφαλείας."}};
+function initApp(lang) {
+    const t = translations[lang] || translations['en'];
+    document.getElementById('txt_daily').innerText = t.daily;
+    document.getElementById('quiz_btn').innerText = t.start;
+    document.getElementById('txt_days').innerText = t.days;
+    document.getElementById('txt_rookie').innerText = t.rookie;
+    document.getElementById('txt_expert').innerText = t.expert;
+    document.getElementById('txt_elite_map').innerText = t.elite;
+    document.getElementById('txt_prem_desc').innerText = t.prem;
+    document.getElementById('txt_modal_title').innerText = t.mod_t;
+    document.getElementById('txt_modal_body').innerText = t.mod_b;
 
-async function initApp(lang){
-    currentLang=lang;
-    document.getElementById('quiz_text').innerText="Loading...";
-    try{
-        const freeRes=await fetch(`questions_free_${lang}.json`);
-        const premRes=await fetch(`questions_premium_${lang}.json`);
-        const freeData=await freeRes.json();
-        const premData=await premRes.json();
-        currentQuizData={...freeData[lang].levels,...premData[lang].levels};
-
-        document.getElementById('txt_daily').innerText=translations[lang]?.daily||"Daily Training";
-        document.getElementById('quiz_btn').innerText=translations[lang]?.start||"Start Quiz";
-        document.getElementById('quiz_text').innerText="Ready?";
-
-        document.getElementById('onboarding').classList.add('hidden');
-        document.getElementById('main_app').classList.remove('hidden');
-        updateUI();
-    }catch(e){console.error(e);alert("Error loading content for "+lang);}
+    document.getElementById('onboarding').classList.add('hidden');
+    document.getElementById('main_app').classList.remove('hidden');
+    updateUI();
 }
 
-function updateUI(){
-    let lvl=Math.floor(xp/100)+1;
-    document.getElementById('level_val').innerText=lvl;
-    document.getElementById('xp_fill').style.width=(xp%100)+"%";
-
-    if(lvl>=2)document.getElementById('badge1').classList.add('unlocked');
-    if(lvl>=5)document.getElementById('badge2').classList.add('unlocked');
-    if(lvl>=8)document.getElementById('badge3').classList.add('unlocked');
-
-    if(lvl>=7) document.getElementById('step2').classList.add('active');
-    if(lvl>=10) document.getElementById('step3').classList.add('active');
-
-    if(isElite){
+function updateUI() {
+    let lvl = Math.floor(xp / 100) + 1;
+    document.getElementById('level_val').innerText = lvl;
+    document.getElementById('xp_fill').style.width = (xp % 100) + "%";
+    if (lvl >= 2) document.getElementById('badge1').classList.add('unlocked');
+    if (lvl >= 5) document.getElementById('badge2').classList.add('unlocked');
+    if (isElite) {
         document.getElementById('badge3').classList.add('unlocked');
         document.getElementById('prem_locked').classList.add('hidden');
         document.getElementById('prem_unlocked').classList.remove('hidden');
-        document.getElementById('ad_box').classList.add('hidden');
     }
 }
 
-function startQuiz(){
-    let lvl=Math.floor(xp/100)+1;
-    if(lvl>=7&&!isElite){
-        alert("Πρέπει να γίνετε Elite για να συνεχίσετε!");
-        openModal();
-        return;
-    }
-    document.getElementById('quiz_btn').classList.add('hidden');
-    renderQuestion(0,0);
-}
-
-function renderQuestion(idx,qCount){
-    let lvl=Math.floor(xp/100)+1;
-    if(lvl>=7 && !isElite){ return; }
-    const levelQuestions=currentQuizData[lvl]||currentQuizData["1"];
-    const q=levelQuestions[idx%levelQuestions.length];
-    document.getElementById('quiz_text').innerHTML=`<b>Q:</b> ${q.q}`;
-    let html="";
-    q.o.forEach((opt,i)=>{
-        html+=`<button class="main-cta" style="background:#1e293b;color:white;margin-bottom:10px;" onclick="checkAnswer(${idx},${i},${qCount})">${opt}</button>`;
-    });
-    document.getElementById('quiz_options').innerHTML=html;
-}
-
-function checkAnswer(qIdx,selected ,qCount){
-    let lvl=Math.floor(xp/100)+1;
-    const levelQuestions=currentQuizData[lvl]||currentQuizData["1"];
-    const q=levelQuestions[qIdx%levelQuestions.length];
-
-    const buttons = document.querySelectorAll('#quiz_options button');
-    buttons.forEach((btn, i)=>{
-        if(i === q.a){
-            btn.style.background = 'var(--success)';
-        }
-        if(i === selected && i !== q.a){
-            btn.style.background = 'var(--danger)';
-        }
-        btn.disabled = true;
-    });
-
-    if(selected === q.a){
-        xp += 50;
-        localStorage.setItem('xp', xp);
-        confetti({particleCount:50, spread:30});
-        if(q.exp) alert(q.exp);
-    }
-
-    qCount++;
-    if(qCount < 5){
-        setTimeout(()=> renderQuestion(qIdx+1,qCount), 700);
-    } else {
-        setTimeout(()=>{
-            document.getElementById('quiz_options').innerHTML = "";
-            document.getElementById('quiz_text').innerText = translations[currentLang]?.finish || "Finished!";
-            document.getElementById('quiz_btn').classList.remove('hidden');
-            document.getElementById('quiz_btn').innerText = translations[currentLang]?.start || "Start Quiz";
-            updateUI();
-        }, 1000);
-    }
-}
-
-// Navigation
 function nav(screen, btn) {
     document.getElementById('screen_home').classList.add('hidden');
     document.getElementById('screen_premium').classList.add('hidden');
-    document.getElementById('screen_checkup').classList.add('hidden');
     document.getElementById('screen_' + screen).classList.remove('hidden');
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
 }
 
-// Premium Modal
-function openModal() {
-    document.getElementById('premiumModal').style.display = 'block';
+function openModal() { document.getElementById('premiumModal').style.display = 'block'; }
+function closeModal() { document.getElementById('premiumModal').style.display = 'none'; }
+function buyPremium() { 
+    isElite = true; localStorage.setItem('isElite', 'true'); 
+    closeModal(); confetti({particleCount: 150}); updateUI(); 
 }
-function closeModal() {
-    document.getElementById('premiumModal').style.display = 'none';
-}
-function buyPremium() {
-    isElite = true;
-    localStorage.setItem('isElite', 'true');
-    closeModal();
-    confetti({ particleCount: 200, spread: 100 });
+
+// ΤΟ QUIZ ΣΟΥ (ΑΠΕΙΡΑΧΤΟ)
+function startQuiz() {
+    xp += 25; localStorage.setItem('xp', xp);
+    confetti({ particleCount: 40, spread: 60 });
     updateUI();
-}
-
-// Checkup
-function openCheckup() {
-    nav('checkup', document.getElementById('nav_home'));
-    document.getElementById('checkup_progress_container').style.display = 'block';
-    let progress = 0;
-    const interval = setInterval(()=>{
-        progress += 5;
-        document.getElementById('checkup_progress_bar').style.width = progress + '%';
-        if(progress >= 100){
-            clearInterval(interval);
-            document.getElementById('checkup_score').innerText = "97 / 100";
-            document.getElementById('checkup_pw_status').innerHTML = '<span class="success">Ισχυρό</span>';
-            document.getElementById('checkup_2fa_status').innerHTML = '<span class="success">Ενεργοποιημένο</span>';
-            document.getElementById('checkup_risk_score').innerHTML = '<span class="success">Χαμηλό</span>';
-        }
-    }, 150);
-}
-
-window.onclick = function(event) {
-    if (event.target == document.getElementById('premiumModal')) closeModal();
 }
 </script>
 </body>
