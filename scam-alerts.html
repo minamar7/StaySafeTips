@@ -1,188 +1,206 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <title>Elite Live Alerts</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <style>
-        :root { 
-            --danger: #ef4444; 
-            --bg: #020617; 
-            --card: #1e293b; 
-            --accent: #38bdf8; 
-            --gold: #facc15; 
-        }
+<meta charset="UTF-8">
+<title>Elite Scam Intelligence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        body { 
-            margin: 0; 
-            background: var(--bg); 
-            font-family: -apple-system, system-ui, sans-serif; 
-            color: #f8fafc; 
-            padding: 20px; 
-            padding-bottom: 100px;
-        }
-        
-        .header { text-align: center; margin-bottom: 30px; padding-top: 10px; }
-        
-        .live-status { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px; 
-            background: rgba(239, 68, 68, 0.1); 
-            padding: 5px 15px; 
-            border-radius: 20px; 
-            border: 1px solid var(--danger); 
-            margin-bottom: 10px; 
-        }
+<style>
+:root{
+--bg:#020617;--card:#1e293b;--accent:#38bdf8;
+--danger:#ef4444;--warn:#facc15;--safe:#22c55e;
+}
 
-        .dot { 
-            width: 8px; 
-            height: 8px; 
-            background: var(--danger); 
-            border-radius: 50%; 
-            animation: pulse 1.5s infinite; 
-        }
+body{
+margin:0;background:var(--bg);color:#f8fafc;
+font-family:-apple-system,system-ui,sans-serif;
+padding:20px 20px 110px;
+}
 
-        @keyframes pulse { 
-            0% { opacity: 1; transform: scale(1); } 
-            50% { opacity: 0.4; transform: scale(1.2); } 
-            100% { opacity: 1; transform: scale(1); } 
-        }
-        
-        .back-btn { 
-            color: var(--accent); 
-            text-decoration: none; 
-            font-weight: bold; 
-            font-size: 0.9rem; 
-            display: inline-block;
-            margin-bottom: 20px;
-        }
+h1{margin:.2em 0}
+a{text-decoration:none}
 
-        #feed { display: grid; gap: 15px; }
+.back-btn{color:var(--accent);font-weight:800;font-size:.9rem}
 
-        .alert-card { 
-            background: var(--card); 
-            border-radius: 22px; 
-            padding: 20px; 
-            border-left: 5px solid var(--danger); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            animation: slideIn 0.4s ease-out;
-        }
+.header{text-align:center;margin-bottom:20px}
 
-        @keyframes slideIn { 
-            from { opacity: 0; transform: translateY(10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
+.live{display:inline-flex;gap:8px;align-items:center;
+border:1px solid var(--danger);padding:6px 14px;
+border-radius:20px;background:rgba(239,68,68,.1)}
 
-        .alert-card .meta { 
-            font-size: 0.7rem; 
-            color: var(--accent); 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            margin-bottom: 8px; 
-            display: block; 
-        }
+.dot{width:8px;height:8px;background:var(--danger);
+border-radius:50%;animation:pulse 1.4s infinite}
 
-        .alert-card h3 { 
-            margin: 0 0 10px; 
-            font-size: 1.1rem; 
-            color: var(--gold); 
-            line-height: 1.3;
-        }
+@keyframes pulse{50%{opacity:.3;transform:scale(1.4)}}
 
-        .alert-card p { 
-            margin: 0; 
-            font-size: 0.9rem; 
-            color: #94a3b8; 
-            line-height: 1.5; 
-        }
-        
-        .read-btn { 
-            display: inline-block; 
-            margin-top: 15px; 
-            color: white; 
-            background: var(--danger); 
-            padding: 10px 20px; 
-            border-radius: 14px; 
-            text-decoration: none; 
-            font-size: 0.85rem; 
-            font-weight: bold; 
-        }
+.controls{
+display:flex;gap:10px;margin:20px 0;flex-wrap:wrap
+}
 
-        .loading-text { text-align: center; padding: 40px; color: #94a3b8; }
-    </style>
+select,input{
+background:#020617;border:1px solid #334155;
+color:#fff;border-radius:12px;padding:10px;font-size:.85rem
+}
+
+#feed{display:grid;gap:16px}
+
+.card{
+background:var(--card);padding:20px;border-radius:22px;
+box-shadow:0 10px 30px rgba(0,0,0,.4);
+border-left:6px solid var(--accent)
+}
+
+.meta{font-size:.7rem;font-weight:900;text-transform:uppercase;display:flex;gap:8px}
+
+.badge{
+padding:3px 7px;border-radius:8px;font-size:.6rem;font-weight:900
+}
+
+.NEW{background:var(--warn);color:#000}
+.CACHED{background:#334155}
+.CRITICAL{background:var(--danger)}
+.HIGH{background:#fb7185}
+.MEDIUM{background:var(--warn);color:#000}
+.LOW{background:var(--safe)}
+
+h3{color:#facc15;font-size:1.05rem;margin:10px 0}
+
+p{color:#94a3b8;font-size:.9rem}
+
+.score{
+margin-top:10px;font-size:.8rem;font-weight:800
+}
+
+.btn{
+margin-top:14px;display:inline-block;
+background:var(--danger);color:#fff;
+padding:10px 20px;border-radius:14px;font-size:.85rem
+}
+</style>
 </head>
+
 <body>
 
-    <a href="index.html" class="back-btn">← DASHBOARD</a>
+<a href="index.html" class="back-btn">← DASHBOARD</a>
 
-    <header class="header">
-        <div class="live-status">
-            <span class="dot"></span>
-            <span style="color:var(--danger); font-size:0.75rem; font-weight:900; letter-spacing:1px;">LIVE UPDATES</span>
-        </div>
-        <h1>Scam Alerts</h1>
-        <p style="color:var(--accent); font-weight:bold; font-size:0.8rem; margin:0; text-transform:uppercase;">Global Security Feed</p>
-    </header>
+<div class="header">
+<div class="live"><span class="dot"></span><span>LIVE INTELLIGENCE</span></div>
+<h1>Scam Alerts</h1>
+<p style="color:var(--accent);font-weight:800;font-size:.8rem">
+AI Threat Monitoring • Global + EU
+</p>
+</div>
 
-    <div id="feed">
-        <div class="loading-text">Συγχρονισμός με διεθνή κέντρα ασφαλείας...</div>
-    </div>
+<div class="controls">
+<select id="riskFilter">
+<option value="ALL">All Risks</option>
+<option value="CRITICAL">Critical</option>
+<option value="HIGH">High</option>
+<option value="MEDIUM">Medium</option>
+<option value="LOW">Low</option>
+</select>
+
+<input id="search" placeholder="Search threat...">
+</div>
+
+<div id="feed"><p>Loading intelligence…</p></div>
 
 <script>
-    function checkAccess() {
-        if(localStorage.getItem('isElite') !== 'true') {
-            window.location.href = 'index.html';
-        } else {
-            getLiveScams();
-        }
-    }
+const CACHE='eliteScamCache';
 
-    async function getLiveScams() {
-        // Χρήση Proxy (allorigins) για να παρακάμψουμε το CORS block του browser
-        const rssUrl = 'https://www.consumer.ftc.gov/blog/feed';
-        const api = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
+function riskScore(text){
+text=text.toLowerCase();
+let score=0;
+['bank','crypto','urgent','password','verify','login','payment','wallet','tax']
+.forEach(w=>{if(text.includes(w))score+=15});
+return Math.min(score,100);
+}
 
-        try {
-            const res = await fetch(api);
-            const data = await res.json();
-            
-            // Μετατροπή του XML string σε αντικείμενα που διαβάζει η JS
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(data.contents, "text/xml");
-            const items = xmlDoc.querySelectorAll("item");
-            
-            const container = document.getElementById('feed');
-            container.innerHTML = '';
+function riskLevel(score){
+if(score>=80) return 'CRITICAL';
+if(score>=60) return 'HIGH';
+if(score>=35) return 'MEDIUM';
+return 'LOW';
+}
 
-            items.forEach((item, index) => {
-                if(index < 10) {
-                    const title = item.querySelector("title").textContent;
-                    const link = item.querySelector("link").textContent;
-                    const pubDate = item.querySelector("pubDate").textContent;
-                    let desc = item.querySelector("description").textContent;
-                    
-                    // Καθαρισμός κειμένου
-                    desc = desc.replace(/<[^>]*>?/gm, '').substring(0, 140);
-                    const formattedDate = new Date(pubDate).toLocaleDateString('el-GR');
+async function loadFeed(){
+const feeds=[
+'https://www.consumer.ftc.gov/blog/feed',
+'https://www.europol.europa.eu/rss.xml'
+];
 
-                    const div = document.createElement('div');
-                    div.className = 'alert-card';
-                    div.innerHTML = `
-                        <span class="meta">🔴 NEW THREAT • ${formattedDate}</span>
-                        <h3>${title}</h3>
-                        <p>${desc}...</p>
-                        <a href="${link}" target="_blank" class="read-btn">ΟΔΗΓΙΕΣ ΠΡΟΣΤΑΣΙΑΣ</a>
-                    `;
-                    container.appendChild(div);
-                }
-            });
-        } catch (e) {
-            document.getElementById('feed').innerHTML = "<p style='text-align:center;'>Σφάλμα σύνδεσης με το Feed. Δοκιμάστε ξανά.</p>";
-        }
-    }
+let items=[];
+try{
+for(const f of feeds){
+const api=`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(f)}`;
+const r=await fetch(api);const d=await r.json();
+if(d.items) items.push(...d.items);
+}
 
-    checkAccess();
+items=items.map(i=>{
+const score=riskScore(i.title+i.description);
+return {...i,score,level:riskLevel(score)};
+}).sort((a,b)=>b.score-a.score);
+
+localStorage.setItem(CACHE,JSON.stringify(items));
+render(items,false);
+notify(items[0]);
+
+}catch{
+const cache=localStorage.getItem(CACHE);
+if(cache) render(JSON.parse(cache),true);
+}
+}
+
+function render(items,cached){
+const f=document.getElementById('feed');
+f.innerHTML='';
+const rf=document.getElementById('riskFilter').value;
+const q=document.getElementById('search').value.toLowerCase();
+
+items.filter(i=>
+(rf==='ALL'||i.level===rf)&&
+(i.title.toLowerCase().includes(q))
+).forEach(i=>{
+const d=new Date(i.pubDate).toLocaleDateString('el-GR');
+const card=document.createElement('div');
+card.className='card';
+card.style.borderLeftColor=
+i.level==='CRITICAL'?'#ef4444':
+i.level==='HIGH'?'#fb7185':
+i.level==='MEDIUM'?'#facc15':'#22c55e';
+
+card.innerHTML=`
+<div class="meta">
+<span class="badge ${i.level}">${i.level}</span>
+${cached?'<span class="badge CACHED">CACHED</span>':''}
+<span>${d}</span>
+</div>
+<h3>${i.title}</h3>
+<p>${i.description.replace(/<[^>]*>/g,'').substring(0,140)}...</p>
+<div class="score">AI Risk Score: ${i.score}/100</div>
+<a class="btn" href="${i.link}" target="_blank">Protection Guide</a>
+`;
+f.appendChild(card);
+});
+}
+
+function notify(item){
+if(!("Notification" in window)) return;
+if(Notification.permission==='granted'){
+new Notification('⚠️ Critical Scam Alert',{
+body:item.title
+});
+}else if(Notification.permission!=='denied'){
+Notification.requestPermission();
+}
+}
+
+document.getElementById('riskFilter').onchange=()=>render(JSON.parse(localStorage.getItem(CACHE)||'[]'),false);
+document.getElementById('search').oninput=()=>render(JSON.parse(localStorage.getItem(CACHE)||'[]'),false);
+
+loadFeed();
+setInterval(loadFeed,300000);
 </script>
 
 </body>
