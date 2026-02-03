@@ -42,103 +42,100 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </head>
 <body>
 
-<!-- Language Selection Overlay -->
 <section id="onboarding" class="overlay">
-  <div>
-    <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
-    <h1>Stay Safe Elite</h1>
-    <div class="lang-grid">
-      <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
-      <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
-      <div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
-      <div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
-      <div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
-      <div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
-      <div class="lang-btn" onclick="initApp('pt')">🇵🇹 Portuguese</div>
-      <div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
-      <div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
-      <div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
-    </div>
-  </div>
+<div>
+<div style="font-size:60px; margin-bottom:20px;">🛡️</div>
+<h1>Stay Safe Elite</h1>
+<div class="lang-grid">
+<div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
+<div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
+<div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
+<div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
+<div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
+<div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
+<div class="lang-btn" onclick="initApp('pt')">🇵🇹 Portuguese</div>
+<div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
+<div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
+<div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
+</div>
+</div>
 </section>
 
-<div id="main_app" class="hidden"><header class="app-header">
-  <div style="display:flex; justify-content:space-between; align-items:center;">
-    <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
-    <div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
-  </div>
-  <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
+<div id="main_app" class="hidden">
+<header class="app-header">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
+<div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
+</div>
+<div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
 </header>
 
 <main style="padding: 20px 20px 110px;">
-  <div id="ad_box" style="background:#1e293b; padding:10px; border-radius:10px; text-align:center; font-size:10px; color:var(--muted); margin-bottom:15px;">ADVERTISEMENT - ELITE TO REMOVE</div>
+<div id="ad_box" style="background:#1e293b; padding:10px; border-radius:10px; text-align:center; font-size:10px; color:var(--muted); margin-bottom:15px;">ADVERTISEMENT - ELITE TO REMOVE</div>
 
-  <!-- Home Screen -->
-  <section id="screen_home">
-    <div class="glass-card" id="quiz_container">
-      <h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
-      <p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος για τις σημερινές προκλήσεις;</p>
-      <div id="quiz_options"></div>
-      <button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
-    </div>
+<section id="screen_home">
+<div class="glass-card" id="quiz_container">
+<h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
+<p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος για τις σημερινές προκλήσεις;</p>
+<div id="quiz_options"></div>
+<button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
+</div>
 
-    <h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Επιτεύγματα</h3>
-    <div class="badge-grid">
-      <div id="badge1" class="badge">🎖️</div>
-      <div id="badge2" class="badge">🛡️</div>
-      <div id="badge3" class="badge">💎</div>
-      <div class="premium-btn-inline" onclick="openModal()">
-        <div style="font-size: 16px;">🔒</div>
-        <span>4,90€</span>
-      </div>
-    </div>
+<h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Επιτεύγματα</h3>
+<div class="badge-grid">
+<div id="badge1" class="badge">🎖️</div>
+<div id="badge2" class="badge">🛡️</div>
+<div id="badge3" class="badge">💎</div>
+<div class="premium-btn-inline" onclick="openModal()">
+<div style="font-size: 16px;">🔒</div>
+<span>4,90€</span>
+</div>
+</div>
 
-    <div class="map-container">
-      <h4 style="margin:0 0 10px; color:var(--accent); font-size:0.8rem;" id="txt_map">ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
-      <div class="map-step active" id="step1"><div class="step-dot">1</div><small>Rookie</small></div>
-      <div class="map-step" id="step2"><div class="step-dot">5</div><small>Expert</small></div>
-      <div class="map-step" id="step3"><div class="step-dot">10</div><small>Elite</small></div>
-    </div>
-  </section>
+<div class="map-container">
+<h4 style="margin:0 0 10px; color:var(--accent); font-size:0.8rem;" id="txt_map">ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
+<div class="map-step active" id="step1"><div class="step-dot">1</div><small>Rookie</small></div>
+<div class="map-step" id="step2"><div class="step-dot">5</div><small>Expert</small></div>
+<div class="map-step" id="step3"><div class="step-dot">10</div><small>Elite</small></div>
+</div>
+</section>
+<section id="screen_premium" class="hidden">
+<div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
+<h2 style="color:var(--gold);">Elite Access</h2>
+<p style="font-size:0.9rem;" id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.</p>
+<button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
+</div>
 
-  <!-- Premium Screen -->
-  <section id="screen_premium" class="hidden">
-    <div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
-      <h2 style="color:var(--gold);">Elite Access</h2>
-      <p style="font-size:0.9rem;" id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.</p>
-      <button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
-    </div>
-
-    <div id="prem_unlocked" class="hidden">
-      <div class="tools-grid">
-        <div class="tool-card" onclick="window.location.href='checkup.html'"><i>🔍</i><small>CHECKUP</small></div>
-        <div class="tool-card" onclick="window.location.href='sos_hub.html'"><i>🚨</i><small>SOS HUB</small></div>
-        <div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small>ALERTS</small></div>
-        <div class="tool-card" onclick="window.location.href='dojo.html'"><i>⚡</i><small>DOJO</small></div>
-      </div>
-    </div>
-  </section>
+<div id="prem_unlocked" class="hidden">
+<div class="tools-grid">
+<div class="tool-card" onclick="window.location.href='checkup.html'"><i>🔍</i><small>CHECKUP</small></div>
+<div class="tool-card" onclick="window.location.href='sos_hub.html'"><i>🚨</i><small>SOS HUB</small></div>
+<div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small>ALERTS</small></div>
+<div class="tool-card" onclick="window.location.href='dojo.html'"><i>⚡</i><small>DOJO</small></div>
+</div>
+</div>
+</section>
 </main>
 
 <nav class="nav-tabs">
-  <button class="nav-tab active" id="nav_home" onclick="nav('home', this)">🏠</button>
-  <button class="nav-tab" id="nav_premium" onclick="nav('premium', this)">💎</button>
+<button class="nav-tab active" id="nav_home" onclick="nav('home', this)">🏠</button>
+<button class="nav-tab" id="nav_premium" onclick="nav('premium', this)">💎</button>
 </nav>
+</div>
 
-<!-- Premium Modal -->
 <div id="premiumModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeModal()">&times;</span>
-    <div style="font-size:50px;">💎</div>
-    <h2 style="color:var(--accent); margin-top:10px;">Elite Membership</h2>
-    <div class="modal-body" style="text-align:left; font-size:0.9rem; margin:20px 0;">
-      <p>✅ Ξεκλείδωμα όλων των εργαλείων</p>
-      <p>✅ Αφαίρεση Διαφημίσεων</p>
-      <p>✅ Πρόσβαση στο Scam Alerts</p>
-    </div>
-    <div style="font-size:1.4rem; color:var(--gold); font-weight:bold; margin-bottom:20px;">4,90€ / μήνα</div>
-    <button class="main-cta" onclick="buyPremium()">ΑΓΟΡΑ ΤΩΡΑ</button>
-  </div>
+<div class="modal-content">
+<span class="close-modal" onclick="closeModal()">&times;</span>
+<div style="font-size:50px;">💎</div>
+<h2 style="color:var(--accent); margin-top:10px;">Elite Membership</h2>
+<div class="modal-body" style="text-align:left; font-size:0.9rem; margin:20px 0;">
+<p>✅ Ξεκλείδωμα όλων των εργαλείων</p>
+<p>✅ Αφαίρεση Διαφημίσεων</p>
+<p>✅ Πρόσβαση στο Scam Alerts</p>
+</div>
+<div style="font-size:1.4rem; color:var(--gold); font-weight:bold; margin-bottom:20px;">4,90€ / μήνα</div>
+<button class="main-cta" onclick="buyPremium()">ΑΓΟΡΑ ΤΩΡΑ</button>
+</div>
 </div>
 
 <script>
@@ -148,7 +145,6 @@ let currentLang='el';
 let currentQuizData={};
 let streak = parseInt(localStorage.getItem('streak')) || 1;
 
-// Διαχείριση ημερολογίου
 let lastDate = localStorage.getItem('lastDate') || '';
 const today = new Date().toISOString().slice(0,10);
 if(today !== lastDate){
@@ -158,43 +154,163 @@ if(today !== lastDate){
 }
 document.getElementById('streak_val').innerText = streak;
 
-// Translations
 const translations={
-  el:{daily:"🛡️ Καθημερινή Εκπαίδευση",start:"ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",days:"ΗΜΕΡΕΣ",finish:"Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.",achievements:"🏆 Επιτεύγματα",map:"ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ",prem_desc:"Ξεκλειδώστε όλα τα εργαλεία ασφαλείας."},
-  en:{daily:"🛡️ Daily Training",start:"START QUIZ",days:"DAYS",finish:"Congratulations! You finished training.",achievements:"🏆 Achievements",map:"TRAINING MAP",prem_desc:"Unlock all security tools."},
-  de:{daily:"🛡️ Tägliches Training",start:"QUIZ STARTEN",days:"TAGE",finish:"Glückwunsch! Training abgeschlossen.",achievements:"🏆 Erfolge",map:"TRAININGSKARTE",prem_desc:"Alle Sicherheits-Tools freischalten."},
-  fr:{daily:"🛡️ Entraînement Quotidien",start:"COMMENCER LE QUIZ",days:"JOURS",finish:"Félicitations ! Formation terminée.",achievements:"🏆 Succès",map:"CARTE D'ENTRAÎNEMENT",prem_desc:"Débloquez tous les outils de sécurité."},
-  es:{daily:"🛡️ Entrenamiento Diario",start:"INICIAR TEST",days:"DÍAS",finish:"¡Felicidades! Has completado el entrenamiento.",achievements:"🏆 Logros",map:"MAPA DE ENTRENAMIENTO",prem_desc:"Desbloquea todas las herramientas de seguridad."},
-  it:{daily:"🛡️ Allenamento Giornaliero",start:"INIZIA QUIZ",days:"GIORNI",finish:"Congratulazioni! Allenamento completato.",achievements:"🏆 Obiettivi",map:"MAPPA ALLENAMENTO",prem_desc:"Sblocca tutti gli strumenti di sicurezza."},
-  pt:{daily:"🛡️ Treino Diário",start:"INICIAR QUIZ",days:"DIAS",finish:"Parabéns! Treino concluído.",achievements:"🏆 Conquistas",map:"MAPA DE TREINO",prem_desc:"Desbloqueie todas as ferramentas de segurança."},
-  ru:{daily:"🛡️ Ежедневная Тренировка",start:"НАЧАТЬ ТЕСТ",days:"ДНИ",finish:"Поздравляем! Тренировка завершена.",achievements:"🏆 Достижения",map:"КАРТА ТРЕНИРОВОК",prem_desc:"Откройте все инструменты безопасности."},
-  zh:{daily:"🛡️ 每日训练",start:"开始测试",days:"天数",finish:"恭喜！训练完成。",achievements:"🏆 成就",map:"训练地图",prem_desc:"解锁所有安全工具。"},
-  hi:{daily:"🛡️ दैनिक प्रशिक्षण",start:"क्विज़ शुरू करें",days:"दिन",finish:"बधाई! प्रशिक्षण पूरा हुआ।",achievements:"🏆 उपलब्धियां",map:"प्रशिक्षण मानचित्र",prem_desc:"सभी सुरक्षा उपकरण अनलॉक करें।"}
+el:{daily:"🛡️ Καθημερινή Εκπαίδευση",start:"ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",days:"ΗΜΕΡΕΣ",finish:"Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.",achievements:"🏆 Επιτεύγματα",map:"ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ",prem_desc:"Ξεκλειδώστε όλα τα εργαλεία ασφαλείας."},
+en:{daily:"🛡️ Daily Training",start:"START QUIZ",days:"DAYS",finish:"Congratulations! You finished training.",achievements:"🏆 Achievements",map:"TRAINING MAP",prem_desc:"Unlock all security tools."},
+de:{daily:"🛡️ Tägliches Training",start:"QUIZ STARTEN",days:"TAGE",finish:"Glückwunsch! Training abgeschlossen.",achievements:"🏆 Errungenschaften",map:"TRAININGSKARTE",prem_desc:"Alle Sicherheitstools freischalten."},
+fr:{daily:"🛡️ Entraînement Quotidien",start:"COMMENCER",days:"JOURS",finish:"Félicitations! Vous avez terminé l'entraînement.",achievements:"🏆 Succès",map:"CARTE D'ENTRAÎNEMENT",prem_desc:"Débloquez tous les outils de sécurité."},
+es:{daily:"🛡️ Entrenamiento Diario",start:"INICIAR PRUEBA",days:"DÍAS",finish:"¡Felicidades! Has completado el entrenamiento.",achievements:"🏆 Logros",map:"MAPA DE ENTRENAMIENTO",prem_desc:"Desbloquea todas las herramientas de seguridad."},
+it:{daily:"🛡️ Allenamento Giornaliero",start:"INIZIA QUIZ",days:"GIORNI",finish:"Complimenti! Hai completato l'allenamento.",achievements:"🏆 Obiettivi",map:"MAPPA DI ALLENAMENTO",prem_desc:"Sblocca tutti gli strumenti di sicurezza."},
+pt:{daily:"🛡️ Treino Diário",start:"INICIAR QUIZ",days:"DIAS",finish:"Parabéns! Você concluiu o treino.",achievements:"🏆 Conquistas",map:"MAPA DE TREINO",prem_desc:"Desbloqueie todas as ferramentas de segurança."},
+ru:{daily:"🛡️ Ежедневная тренировка",start:"НАЧАТЬ ТЕСТ",days:"ДНИ",finish:"Поздравляем! Тренировка завершена.",achievements:"🏆 Достижения",map:"КАРТА ТРЕНИРОВОК",prem_desc:"Разблокируйте все инструменты безопасности."},
+zh:{daily:"🛡️ 每日训练",start:"开始测验",days:"天数",finish:"恭喜！完成训练。",achievements:"🏆 成就",map:"训练地图",prem_desc:"解锁所有安全工具。"},
+hi:{daily:"🛡️ दैनिक प्रशिक्षण",start:"क्विज़ शुरू करें",days:"दिन",finish:"बधाई! आपने प्रशिक्षण पूरा किया।",achievements:"🏆 उपलब्धियाँ",map:"प्रशिक्षण मानचित्र",prem_desc:"सभी सुरक्षा उपकरण अनलॉक करें।"}
 };
 
-async function initApp(lang){
-    currentLang=lang;
-    document.getElementById('quiz_text').innerText="Loading...";
-    try{
-        const freeRes=await fetch(`questions_free_${lang}.json`);
-        const premRes=await fetch(`questions_premium_${lang}.json`);
-        const freeData=await freeRes.json();
-        const premData=await premRes.json();
-        currentQuizData={...freeData[lang].levels,...premData[lang].levels};
-
-        document.getElementById('txt_daily').innerText=translations[lang]?.daily||"Daily Training";
-        document.getElementById('quiz_btn').innerText=translations[lang]?.start||"Start Quiz";
-        document.getElementById('quiz_text').innerText="Ready?";
-
-        document.getElementById('onboarding').classList.add('hidden');
-        document.getElementById('main_app').classList.remove('hidden');
-        updateUI();
-    }catch(e){console.error(e);alert("Error loading content for "+lang);}
+// helper για μεταφράσεις
+function updateTranslations() {
+    const t = translations[currentLang];
+    if(!t) return;
+    document.getElementById('txt_daily').innerText = t.daily;
+    document.getElementById('quiz_btn').innerText = t.start;
+    document.getElementById('txt_days').innerText = t.days;
+    document.getElementById('txt_achievements').innerText = t.achievements;
+    document.getElementById('txt_map').innerText = t.map;
+    document.getElementById('txt_prem_desc').innerText = t.prem_desc;
 }
 
-// ---- Υπόλοιπες λειτουργίες Quiz, UI update, Navigation, Modal ----
-// (όπως στο προηγούμενο μέρος που σου έδωσα)
-</script>
+// init app async function initApp(lang){
+    currentLang = lang;
+    updateTranslations();
 
+    document.getElementById('quiz_text').innerText = "Loading...";
+
+    try{
+        const freeRes = await fetch(`questions_free_${lang}.json`);
+        const premRes = await fetch(`questions_premium_${lang}.json`);
+        const freeData = await freeRes.json();
+        const premData = await premRes.json();
+
+        currentQuizData = {...freeData[lang].levels, ...premData[lang].levels};
+
+        document.getElementById('quiz_text').innerText = "Ready?";
+        document.getElementById('onboarding').classList.add('hidden');
+        document.getElementById('main_app').classList.remove('hidden');
+
+        updateUI();
+    } catch(e) {
+        console.error(e);
+        alert("Error loading content for "+lang);
+    }
+}
+
+function updateUI(){
+    let lvl = Math.floor(xp/100)+1;
+    document.getElementById('level_val').innerText = lvl;
+    document.getElementById('xp_fill').style.width = (xp%100) + "%";
+
+    if(lvl >= 2) document.getElementById('badge1').classList.add('unlocked');
+    if(lvl >= 5) document.getElementById('badge2').classList.add('unlocked');
+    if(lvl >= 8) document.getElementById('badge3').classList.add('unlocked');
+
+    if(lvl >= 7) document.getElementById('step2').classList.add('active');
+    if(lvl >= 10) document.getElementById('step3').classList.add('active');
+
+    if(isElite){
+        document.getElementById('badge3').classList.add('unlocked');
+        document.getElementById('prem_locked').classList.add('hidden');
+        document.getElementById('prem_unlocked').classList.remove('hidden');
+        document.getElementById('ad_box').classList.add('hidden');
+    }
+
+    updateTranslations();
+}
+
+function startQuiz(){
+    let lvl = Math.floor(xp/100)+1;
+    if(lvl >= 7 && !isElite){
+        alert("Πρέπει να γίνετε Elite για να συνεχίσετε!");
+        openModal();
+        return;
+    }
+    document.getElementById('quiz_btn').classList.add('hidden');
+    renderQuestion(0, 0);
+}
+
+function renderQuestion(idx, qCount){
+    let lvl = Math.floor(xp/100)+1;
+    if(lvl >= 7 && !isElite) return;
+    const levelQuestions = currentQuizData[lvl] || currentQuizData["1"];
+    const q = levelQuestions[idx % levelQuestions.length];
+
+    document.getElementById('quiz_text').innerHTML = `<b>Q:</b> ${q.q}`;
+    let html = "";
+    q.o.forEach((opt, i) => {
+        html += `<button class="main-cta" style="background:#1e293b;color:white;margin-bottom:10px;" onclick="checkAnswer(${idx},${i},${qCount})">${opt}</button>`;
+    });
+    document.getElementById('quiz_options').innerHTML = html;
+}
+
+function checkAnswer(qIdx, selected, qCount){
+    let lvl = Math.floor(xp/100)+1;
+    const levelQuestions = currentQuizData[lvl] || currentQuizData["1"];
+    const q = levelQuestions[qIdx % levelQuestions.length];
+
+    const buttons = document.querySelectorAll('#quiz_options button');
+    buttons.forEach((btn, i) => {
+        if(i === q.a) btn.style.background = 'var(--success)';
+        if(i === selected && i !== q.a) btn.style.background = 'var(--danger)';
+        btn.disabled = true;
+    });
+
+    if(selected === q.a){
+        xp += 50;
+        localStorage.setItem('xp', xp);
+        confetti({particleCount:50, spread:30});
+        if(q.exp) alert(q.exp);
+    }
+
+    qCount++;
+    if(qCount < 5){
+        setTimeout(()=> renderQuestion(qIdx+1, qCount), 700);
+    } else {
+        setTimeout(()=>{
+            document.getElementById('quiz_options').innerHTML = "";
+            document.getElementById('quiz_text').innerText = translations[currentLang]?.finish || "Finished!";
+            document.getElementById('quiz_btn').classList.remove('hidden');
+            document.getElementById('quiz_btn').innerText = translations[currentLang]?.start || "Start Quiz";
+            updateUI();
+        }, 1000);
+    }
+}
+
+// Navigation
+function nav(screen, btn) {
+    document.getElementById('screen_home').classList.add('hidden');
+    document.getElementById('screen_premium').classList.add('hidden');
+    document.getElementById('screen_' + screen).classList.remove('hidden');
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+// Premium Modal
+function openModal() {
+    document.getElementById('premiumModal').style.display = 'block';
+}
+function closeModal() {
+    document.getElementById('premiumModal').style.display = 'none';
+}
+function buyPremium() {
+    isElite = true;
+    localStorage.setItem('isElite', 'true');
+    closeModal();
+    confetti({ particleCount: 200, spread: 100 });
+    updateUI();
+}
+
+window.onclick = function(event) {
+    if(event.target == document.getElementById('premiumModal')) closeModal();
+}
+</script>
 </body>
 </html>
