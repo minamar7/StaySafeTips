@@ -1,323 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Emergency Button – Stay Safe Elite</title>
-
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-
-  <meta name="theme-color" content="#7f1d1d" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
+  <meta charset="UTF-8">
+  <title>Emergency Hub – Stay Safe Elite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <style>
     :root {
-      --emergency-red: #dc2626;
-      --emergency-dark: #7f1d1d;
-      --emergency-glow: rgba(220, 38, 38, 0.45);
-      --bg-dark: #000;
-      --panel-dark: #020617;
-      --gold: #facc15;
+      --bg: #020617;
+      --danger: #ef4444;
+      --accent: #38bdf8;
+      --card: rgba(30, 41, 59, 0.7);
     }
+    body { margin: 0; background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; }
+    .container { max-width: 480px; margin: 0 auto; padding: 40px 20px; }
+    
+    .back-link { color: var(--accent); text-decoration: none; font-weight: bold; display: block; margin-bottom: 20px; }
+    
+    h1 { font-size: 2rem; margin-bottom: 10px; color: var(--danger); }
+    .sub { color: #94a3b8; margin-bottom: 30px; }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg-dark);
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #fff;
-    }
-
-    .app-shell {
-      max-width: 480px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding-bottom: 40px;
-    }
-
-    header.app-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 45px 16px 16px; 
-      border-bottom: 1px solid #1e293b;
-    }
-
-    .sub {
-      color: #94a3b8;
-      font-size: 0.85rem;
-      margin: 4px 0 0;
-    }
-
-    h1 { font-size: 1.4rem; margin: 0; }
-
-    main {
-      padding: 16px;
+    .emergency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    
+    .action-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 25px;
       text-align: center;
-    }
-
-    .warning {
-      color: #f87171;
-      font-weight: 900;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-    }
-
-    /* BUTTON CORE */
-    .btn-wrapper {
-      position: relative;
-      width: 240px;
-      height: 240px;
-      margin: 32px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #emergency-hold-btn {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      border: 8px solid #450a0a;
-      background: radial-gradient(circle, #ef4444, var(--emergency-dark));
-      color: #fff;
-      font-weight: 900;
-      font-size: 1.3rem;
       cursor: pointer;
-      box-shadow: 0 0 35px var(--emergency-glow);
-      user-select: none;
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      line-height: 1.2;
+      transition: 0.3s;
     }
+    .action-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
+    .action-card i { font-size: 35px; display: block; margin-bottom: 10px; font-style: normal; }
+    .action-card span { font-weight: 800; font-size: 0.9rem; }
 
-    #emergency-hold-btn:active {
-      transform: scale(0.92);
-      box-shadow: 0 0 50px var(--emergency-glow);
-    }
-
-    .hold-progress {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 8px solid transparent;
-      border-top-color: #fecaca;
-      display: none;
-      z-index: 1;
-    }
-
-    .sos-active {
-      animation: sosBlink 0.5s infinite alternate;
-    }
-
-    @keyframes sosBlink {
-      from { background: #ef4444; box-shadow: 0 0 60px #ef4444; }
-      to { background: #7f1d1d; box-shadow: 0 0 15px #7f1d1d; }
-    }
-
-    .quick-call-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .call-card {
-      background: var(--panel-dark);
-      padding: 16px;
-      border-radius: 16px;
-      text-decoration: none;
+    .panic-big-btn {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--danger), #b91c1c);
+      border: none;
+      padding: 30px;
+      border-radius: 28px;
       color: white;
-      font-weight: bold;
-      border: 1px solid #1e293b;
-      transition: 0.2s;
-      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-top: 10px;
+      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
     }
 
-    .call-card:active { background: #1e293b; }
-
-    .call-card span {
-      display: block;
-      font-size: 1.4rem;
-      margin-bottom: 4px;
-    }
-
-    .snapshot {
-      margin-top: 28px;
-      text-align: left;
-      background: #020617;
-      padding: 16px;
-      border-radius: 14px;
-      border: 1px solid #1e293b;
-    }
-
-    .snapshot h3 {
-      color: #38bdf8;
-      margin-top: 0;
-      font-size: 1rem;
-    }
-
-    .snapshot ul { padding-left: 20px; margin: 10px 0 0; }
-    .snapshot li {
-      margin-bottom: 8px;
-      color: #cbd5e1;
-      font-size: 0.85rem;
+    /* Fake Call Screen */
+    #fake-call-ui {
+      position: fixed; inset: 0; background: #000; z-index: 9999;
+      display: none; flex-direction: column; align-items: center; justify-content: space-around;
+      padding: 50px 0;
     }
   </style>
 </head>
-
 <body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div>
-        <h1>🚨 Emergency Hub</h1>
-        <p class="sub">Immediate response protocol</p>
-      </div>
-      <a href="index.html"
-         style="color:#94a3b8;text-decoration:none;font-size:0.85rem; font-weight: bold;">
-        CLOSE
-      </a>
-    </header>
 
-    <main>
-      <div class="warning">HOLD FOR 3 SECONDS / ΚΡΑΤΗΣΤΕ ΠΑΤΗΜΕΝΟ</div>
+<div class="container">
+  <a href="index.html" class="back-link">← Back</a>
+  
+  <h1>SOS Hub</h1>
+  <p class="sub">Immediate help & emergency tools</p>
 
-      <div class="btn-wrapper">
-        <div id="progress-ring" class="hold-progress"></div>
-        <button id="emergency-hold-btn">
-          SOS<br>HOLD
-        </button>
-      </div>
+  <div class="emergency-grid">
+    <button class="panic-big-btn" onclick="triggerMainSOS()">🚨 BROADCAST SOS</button>
+    
+    <div class="action-card" onclick="window.location.href='tel:112'">
+      <i>📞</i><span>112 (EU)</span>
+    </div>
+    
+    <div class="action-card" onclick="window.location.href='tel:100'">
+      <i>🚓</i><span>POLICE</span>
+    </div>
 
-      <div class="quick-call-grid">
-        <a href="tel:112" class="call-card">
-          <span style="color: #ef4444;">📞 112</span>
-          Call Emergency
-        </a>
-        <div onclick="sendLiveLocation()" class="call-card" style="border-color: var(--gold);">
-          <span style="color: var(--gold);">📍 SHARE</span>
-          Live Location
-        </div>
-      </div>
+    <div class="action-card" onclick="shareLocation()">
+      <i>📍</i><span>SHARE LOCATION</span>
+    </div>
 
-      <div class="snapshot">
-        <h3>📍 Safety Protocol (Elite)</h3>
-        <ul>
-          <li>Move to a bright area with people nearby.</li>
-          <li>Share your location with a trusted contact.</li>
-          <li>Avoid confrontation – find the nearest exit.</li>
-          <hr style="opacity: 0.1; margin: 10px 0;">
-          <li>Μετακινηθείτε σε φωτεινό σημείο με κόσμο.</li>
-          <li>Στείλτε την τοποθεσία σας σε έμπιστη επαφή.</li>
-        </ul>
-      </div>
-    </main>
+    <div class="action-card" onclick="startFakeCall()">
+      <i>📱</i><span>FAKE CALL</span>
+    </div>
   </div>
+</div>
 
-  <script>
-    /* =========================
-       ELITE GATE 
-    ========================= */
-    (() => {
-      if (localStorage.getItem("isElite") !== "true") {
-        location.replace("index.html");
-      }
-    })();
+<div id="fake-call-ui">
+  <div style="text-align:center;">
+    <div style="width:100px; height:100px; background:#333; border-radius:50%; margin:0 auto 20px;"></div>
+    <h2>Unknown Caller</h2>
+    <p>Incoming call...</p>
+  </div>
+  <div style="display:flex; gap:50px;">
+    <div onclick="stopFakeCall()" style="background:var(--danger); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px;">📞</div>
+    <div style="background:#22c55e; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px;">📞</div>
+  </div>
+</div>
 
-    /* =========================
-       SOS CORE LOGIC
-    ========================= */
-    const btn = document.getElementById("emergency-hold-btn");
-    const ring = document.getElementById("progress-ring");
+<script>
+function triggerMainSOS() {
+  if(confirm("Confirm: Send SOS message to your contacts?")) {
+    shareLocation("EMERGENCY! I need help!");
+  }
+}
 
-    const HOLD_DURATION = 3000;
-    let holdInterval = null;
-    let holdStart = 0;
-    let activated = false;
+function shareLocation(customMsg = "My current location:") {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+      window.location.href = `sms:?&body=${customMsg} ${link}`;
+    });
+  } else {
+    alert("Location not supported on this device.");
+  }
+}
 
-    const vibrate = (pattern) => {
-      if (navigator.vibrate) navigator.vibrate(pattern);
-    };
+function startFakeCall() {
+  document.getElementById('fake-call-ui').style.display = 'flex';
+  // Προαιρετικά παίζει ήχος κουδουνίσματος εδώ
+}
 
-    const startHold = (e) => {
-      if (activated) return;
-      e.preventDefault();
+function stopFakeCall() {
+  document.getElementById('fake-call-ui').style.display = 'none';
+}
+</script>
 
-      holdStart = Date.now();
-      ring.style.display = "block";
-      btn.innerHTML = "HOLDING...";
-      vibrate(50);
-
-      holdInterval = setInterval(() => {
-        const elapsed = Date.now() - holdStart;
-        const progress = Math.min(elapsed / HOLD_DURATION, 1);
-        ring.style.transform = `rotate(${progress * 360}deg)`;
-
-        if (elapsed >= HOLD_DURATION) activateSOS();
-      }, 50);
-    };
-
-    const cancelHold = () => {
-      if (activated) return;
-      clearInterval(holdInterval);
-      ring.style.display = "none";
-      ring.style.transform = "rotate(0deg)";
-      btn.innerHTML = "SOS<br>HOLD";
-    };
-
-    const activateSOS = () => {
-      activated = true;
-      clearInterval(holdInterval);
-
-      ring.style.display = "none";
-      btn.classList.add("sos-active");
-      btn.innerHTML = "SOS<br>ACTIVE";
-      vibrate([500, 200, 500, 200, 500]);
-
-      setTimeout(() => {
-          if(confirm("EMERGENCY MODE ACTIVE.\nWould you like to call 112 now?")) {
-              window.location.href = "tel:112";
-          }
-      }, 500);
-    };
-
-    /* =========================
-       LOCATION SHARING
-    ========================= */
-    function sendLiveLocation() {
-      if (navigator.geolocation) {
-        vibrate(100);
-        navigator.geolocation.getCurrentPosition((position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-          const message = encodeURIComponent(`I am in danger! My live location is: ${mapLink}`);
-          
-          // Ανοίγει το SMS interface του κινητού
-          window.location.href = `sms:?&body=${message}`;
-        }, () => {
-          alert("Please enable GPS/Location services to use this feature.");
-        });
-      } else {
-        alert("Geolocation is not supported by your device.");
-      }
-    }
-
-    btn.addEventListener("mousedown", startHold);
-    btn.addEventListener("touchstart", startHold, { passive: false });
-    window.addEventListener("mouseup", cancelHold);
-    window.addEventListener("touchend", cancelHold);
-  </script>
 </body>
 </html>
