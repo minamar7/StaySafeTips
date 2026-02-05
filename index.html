@@ -136,15 +136,29 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </div>
 
 <script>
+// Load XP and Language state
 let xp = parseInt(localStorage.getItem('xp')) || 0;
+let isAppInitialized = localStorage.getItem('app_init') === 'true';
 
 const quizData = [
     {q: "Someone follows you at night. What do you do?", o: ["Run to a dark alley", "Head to a lit area", "Stop and wait"], a: 1},
     {q: "A stranger asks for help in a secluded spot.", o: ["Help them immediately", "Keep distance", "Offer money"], a: 1}
 ];
 
+// CHECK IF ALREADY INITIALIZED ON LOAD
+window.onload = () => {
+    if(isAppInitialized) {
+        showMainApp();
+    }
+};
+
 function initApp(lang){
-    // Force English as requested
+    localStorage.setItem('app_init', 'true');
+    localStorage.setItem('ss_premium', 'true'); // Ξεκλειδώνει το Checkup
+    showMainApp();
+}
+
+function showMainApp() {
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
     document.getElementById('panic_button').classList.remove('hidden');
