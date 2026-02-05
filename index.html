@@ -3,41 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <title>Stay Safe Elite</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#020617">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
 :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 .hidden { display: none !important; }
+
+/* Header & XP Bar */
 .app-header { padding: 45px 20px 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
+
+/* Cards & Buttons */
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); }
-.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
-.map-container { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.03); border-radius: 20px; }
-.map-step { display: flex; align-items: center; gap: 12px; opacity: 0.3; transition: 0.5s; }
-.map-step.active { opacity: 1; }
-.step-dot { width: 30px; height: 30px; border-radius: 50%; background: #1e293b; border: 2px solid var(--muted); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
-.active .step-dot { background: var(--accent); border-color: #fff; box-shadow: 0 0 10px var(--accent); }
-.badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; align-items: center; }
+.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+.main-cta:active { transform: scale(0.98); opacity: 0.9; }
+
+/* Premium Pulse Animation */
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(56, 189, 248, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+}
+
+.premium-btn-inline { 
+    background: rgba(56, 189, 248, 0.1); 
+    border: 1px solid var(--accent); 
+    border-radius: 18px; 
+    padding: 8px; 
+    text-align: center; 
+    cursor: pointer; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100%; 
+    min-height: 55px;
+    animation: pulse 2s infinite; 
+}
+.premium-btn-inline span { font-size: 10px; font-weight: bold; color: var(--accent); display: block; }
+
+/* Grids */
+.badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
 .badge { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 18px; text-align: center; font-size: 20px; filter: grayscale(1); opacity: 0.3; transition: 0.5s; border: 1px solid transparent; }
 .badge.unlocked { filter: grayscale(0); opacity: 1; border: 1px solid var(--gold); }
-.premium-btn-inline { background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); border-radius: 18px; padding: 8px; text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 55px; }
-.premium-btn-inline span { font-size: 10px; font-weight: bold; color: var(--accent); display: block; }
+
 .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
 .tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: 0.2s; }
-.tool-card:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.1); }
 .tool-card i { font-size: 30px; display: block; margin-bottom: 8px; font-style: normal; }
-.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 20000; padding: 20px; }
-.modal-content { background: #0f172a; border: 1px solid var(--accent); border-radius: 30px; padding: 30px; max-width: 400px; margin: 50px auto; position: relative; text-align: center; }
-.close-modal { position: absolute; right: 20px; top: 15px; font-size: 24px; color: var(--muted); cursor: pointer; }
+
+/* Navigation */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
 .nav-tab.active { color: var(--accent); }
-.overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; text-align: center; }
-.lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
-.lang-btn { background: #1e293b; padding: 15px; border-radius: 15px; color: white; cursor: pointer; border: 1px solid #334155; }
+
+/* Overlays & Modals */
+.overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+.lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; width: 100%; max-width: 400px; }
+.lang-btn { background: #1e293b; padding: 15px; border-radius: 15px; color: white; cursor: pointer; border: 1px solid #334155; font-weight: bold; }
+
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 20000; padding: 20px; }
+.modal-content { background: #0f172a; border: 1px solid var(--accent); border-radius: 30px; padding: 30px; max-width: 400px; margin: 50px auto; position: relative; text-align: center; }
+.close-modal { position: absolute; right: 20px; top: 15px; font-size: 24px; color: var(--muted); cursor: pointer; }
 </style>
 </head>
 <body>
@@ -45,7 +83,8 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <section id="onboarding" class="overlay">
 <div>
 <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
-<h1>Stay Safe Elite</h1>
+<h1 style="margin-bottom:10px;">Stay Safe Elite</h1>
+<p style="color:var(--muted); margin-bottom:25px;">Select your language to start</p>
 <div class="lang-grid">
 <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
 <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
@@ -71,17 +110,17 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </header>
 
 <main style="padding: 20px 20px 110px;">
-<div id="ad_box" style="background:#1e293b; padding:10px; border-radius:10px; text-align:center; font-size:10px; color:var(--muted); margin-bottom:15px;">ADVERTISEMENT - ELITE TO REMOVE</div>
+<div id="ad_box" style="background:#1e293b; padding:10px; border-radius:10px; text-align:center; font-size:10px; color:var(--muted); margin-bottom:15px;">ADVERTISEMENT - UPGRADE TO REMOVE</div>
 
 <section id="screen_home">
 <div class="glass-card" id="quiz_container">
 <h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
-<p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Είσαι έτοιμος για τις σημερινές προκλήσεις;</p>
+<p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Ready for today's safety challenge?</p>
 <div id="quiz_options"></div>
 <button class="main-cta" id="quiz_btn" onclick="startQuiz()">ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ</button>
 </div>
 
-<h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Επιτεύγματα</h3>
+<h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Achievements</h3>
 <div class="badge-grid">
 <div id="badge1" class="badge">🎖️</div>
 <div id="badge2" class="badge">🛡️</div>
@@ -91,19 +130,12 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <span>4,90€</span>
 </div>
 </div>
-
-<div class="map-container">
-<h4 style="margin:0 0 10px; color:var(--accent); font-size:0.8rem;" id="txt_map">ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ</h4>
-<div class="map-step active" id="step1"><div class="step-dot">1</div><small>Rookie</small></div>
-<div class="map-step" id="step2"><div class="step-dot">5</div><small>Expert</small></div>
-<div class="map-step" id="step3"><div class="step-dot">10</div><small>Elite</small></div>
-</div>
 </section>
 
 <section id="screen_premium" class="hidden">
 <div id="prem_locked" class="glass-card" style="border:2px solid var(--gold); text-align:center;">
 <h2 style="color:var(--gold);">Elite Access</h2>
-<p style="font-size:0.9rem;" id="txt_prem_desc">Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.</p>
+<p style="font-size:0.9rem;" id="txt_prem_desc">Unlock all advanced security tools.</p>
 <button class="main-cta" style="background:var(--gold); color:black;" onclick="openModal()">ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)</button>
 </div>
 
@@ -123,18 +155,19 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <button class="nav-tab" id="nav_premium" onclick="nav('premium', this)">💎</button>
 </nav>
 </div>
+
 <div id="premiumModal" class="modal">
 <div class="modal-content">
 <span class="close-modal" onclick="closeModal()">&times;</span>
 <div style="font-size:50px;">💎</div>
 <h2 style="color:var(--accent); margin-top:10px;">Elite Membership</h2>
 <div class="modal-body" style="text-align:left; font-size:0.9rem; margin:20px 0;">
-<p>✅ Ξεκλείδωμα όλων των εργαλείων</p>
-<p>✅ Αφαίρεση Διαφημίσεων</p>
-<p>✅ Πρόσβαση στο Scam Alerts</p>
+<p>✅ Full Tool Access</p>
+<p>✅ Ad-Free Experience</p>
+<p>✅ Real-time Scam Alerts</p>
 </div>
-<div style="font-size:1.4rem; color:var(--gold); font-weight:bold; margin-bottom:20px;">4,90€ / μήνα</div>
-<button class="main-cta" onclick="buyPremium()">ΑΓΟΡΑ ΤΩΡΑ</button>
+<div style="font-size:1.4rem; color:var(--gold); font-weight:bold; margin-bottom:20px;">4,90€ / mo</div>
+<button class="main-cta" onclick="buyPremium()">UPGRADE NOW</button>
 </div>
 </div>
 
@@ -145,48 +178,50 @@ let currentLang='el';
 let currentQuizData={};
 let streak = parseInt(localStorage.getItem('streak')) || 1;
 
-// Διαχείριση ημερολογίου
+// Date Logic
 let lastDate = localStorage.getItem('lastDate') || '';
 const today = new Date().toISOString().slice(0,10);
-if(today !== lastDate){
+if(today !== lastDate && lastDate !== ''){
     streak++;
     localStorage.setItem('streak', streak);
+    localStorage.setItem('lastDate', today);
+} else if (lastDate === '') {
     localStorage.setItem('lastDate', today);
 }
 document.getElementById('streak_val').innerText = streak;
 
-// Μεταφράσεις
+// Translations Database
 const translations={
-  el:{daily:"🛡️ Καθημερινή Εκπαίδευση",start:"ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",days:"ΗΜΕΡΕΣ",finish:"Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.",achievements:"🏆 Επιτεύγματα",map:"ΧΑΡΤΗΣ ΕΚΠΑΙΔΕΥΣΗΣ",prem_desc:"Ξεκλειδώστε όλα τα εργαλεία ασφαλείας."},
-  en:{daily:"🛡️ Daily Training",start:"START QUIZ",days:"DAYS",finish:"Congrats! You completed the training.",achievements:"🏆 Achievements",map:"TRAINING MAP",prem_desc:"Unlock all security tools."},
-  de:{daily:"🛡️ Tägliches Training",start:"QUIZ STARTEN",days:"TAGE",finish:"Glückwunsch! Training abgeschlossen.",achievements:"🏆 Erfolge",map:"TRAININGSKARTE",prem_desc:"Alle Sicherheitswerkzeuge freischalten."},
-  fr:{daily:"🛡️ Entraînement quotidien",start:"DÉMARRER QUIZ",days:"JOURS",finish:"Félicitations ! Formation terminée.",achievements:"🏆 Succès",map:"CARTE D'ENTRAÎNEMENT",prem_desc:"Débloquez tous les outils de sécurité."},
-  es:{daily:"🛡️ Entrenamiento diario",start:"INICIAR TEST",days:"DÍAS",finish:"¡Felicidades! Entrenamiento completado.",achievements:"🏆 Logros",map:"MAPA DE ENTRENAMIENTO",prem_desc:"Desbloquea todas las herramientas de seguridad."},
-  it:{daily:"🛡️ Allenamento giornaliero",start:"INIZIA QUIZ",days:"GIORNI",finish:"Complimenti! Allenamento completato.",achievements:"🏆 Obiettivi",map:"MAPPA DI ALLENAMENTO",prem_desc:"Sblocca tutti gli strumenti di sicurezza."},
-  pt:{daily:"🛡️ Treino diário",start:"INICIAR QUIZ",days:"DIAS",finish:"Parabéns! Treino concluído.",achievements:"🏆 Conquistas",map:"MAPA DE TREINAMENTO",prem_desc:"Desbloqueie todas as ferramentas de segurança."},
-  ru:{daily:"🛡️ Ежедневная тренировка",start:"НАЧАТЬ ТЕСТ",days:"ДНИ",finish:"Поздравляем! Тренировка завершена.",achievements:"🏆 Достижения",map:"КАРТА ТРЕНИРОВОК",prem_desc:"Откройте все инструменты безопасности."},
-  zh:{daily:"🛡️ 每日训练",start:"开始测验",days:"天数",finish:"恭喜！训练完成。",achievements:"🏆 成就",map:"训练地图",prem_desc:"解锁所有安全工具。"},
-  hi:{daily:"🛡️ दैनिक प्रशिक्षण",start:"क्विज़ शुरू करें",days:"दिन",finish:"बधाई! प्रशिक्षण पूरा हुआ।",achievements:"🏆 उपलब्धियां",map:"प्रशिक्षण मानचित्र",prem_desc:"सभी सुरक्षा उपकरण अनलॉक करें."}
+  el:{daily:"🛡️ Καθημερινή Εκπαίδευση",start:"ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",days:"ΗΜΕΡΕΣ",finish:"Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.",achievements:"🏆 Επιτεύγματα",prem_desc:"Ξεκλειδώστε όλα τα εργαλεία ασφαλείας."},
+  en:{daily:"🛡️ Daily Training",start:"START QUIZ",days:"DAYS",finish:"Congrats! Training completed.",achievements:"🏆 Achievements",prem_desc:"Unlock all security tools."},
+  de:{daily:"🛡️ Tägliches Training",start:"QUIZ STARTEN",days:"TAGE",finish:"Glückwunsch! Abgeschlossen.",achievements:"🏆 Erfolge",prem_desc:"Alle Werkzeuge freischalten."},
+  fr:{daily:"🛡️ Entraînement quotidien",start:"DÉMARRER",days:"JOURS",finish:"Félicitations ! Terminé.",achievements:"🏆 Succès",prem_desc:"Débloquez tous les outils."},
+  es:{daily:"🛡️ Entrenamiento diario",start:"INICIAR",days:"DÍAS",finish:"¡Felicidades! Completado.",achievements:"🏆 Logros",prem_desc:"Desbloquea todas las herramientas."},
+  it:{daily:"🛡️ Allenamento giornaliero",start:"INIZIA",days:"GIORNI",finish:"Complimenti! Completato.",achievements:"🏆 Obiettivi",prem_desc:"Sblocca tutti gli strumenti."},
+  pt:{daily:"🛡️ Treino diário",start:"INICIAR",days:"DIAS",finish:"Parabéns! Concluído.",achievements:"🏆 Conquistas",prem_desc:"Desbloqueie todas as ferramentas."},
+  ru:{daily:"🛡️ Тренировка",start:"НАЧАТЬ",days:"ДНИ",finish:"Поздравляем! Завершено.",achievements:"🏆 Достижения",prem_desc:"Открыть все инструменты."},
+  zh:{daily:"🛡️ 每日训练",start:"开始",days:"天数",finish:"恭喜！完成。",achievements:"🏆 成就",prem_desc:"解锁所有工具。"},
+  hi:{daily:"🛡️ दैनिक प्रशिक्षण",start:"शुरू करें",days:"दिन",finish:"बधाई! पूरा हुआ।",achievements:"🏆 उपलब्धियां",prem_desc:"सभी उपकरण अनलॉक करें."}
 };
 
 function initApp(lang){
   currentLang=lang;
-  // Update static text
   document.getElementById('txt_daily').innerText = translations[lang].daily;
   document.getElementById('quiz_btn').innerText = translations[lang].start;
   document.getElementById('txt_days').innerText = translations[lang].days;
   document.getElementById('txt_achievements').innerText = translations[lang].achievements;
-  document.getElementById('txt_map').innerText = translations[lang].map;
   document.getElementById('txt_prem_desc').innerText = translations[lang].prem_desc;
 
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('main_app').classList.remove('hidden');
 
-  // Load quizzes
   fetch(`questions_free_${lang}.json`).then(res=>res.json()).then(freeData=>{
-    fetch(`questions_premium_${lang}.json`).then(res2=>res2.json()).then(premData=>{
-      currentQuizData={...freeData[lang].levels,...premData[lang].levels};
+    fetch(`questions_premium_${lang}.json`).then(res2=>res2.json()).catch(()=>({[lang]:{levels:{}}})).then(premData=>{
+      currentQuizData={...freeData[lang].levels,...(premData?.[lang]?.levels || {})};
     });
+  }).catch(() => {
+      console.warn("JSON files not found. Ensure they are in the same folder.");
+      currentQuizData = {"1": [{q:"Sample Question?", o:["Option 1", "Option 2"], a:0}]};
   });
 
   updateUI();
@@ -199,13 +234,9 @@ function updateUI(){
 
   if(lvl>=2) document.getElementById('badge1').classList.add('unlocked');
   if(lvl>=5) document.getElementById('badge2').classList.add('unlocked');
-  if(lvl>=8) document.getElementById('badge3').classList.add('unlocked');
-
-  if(lvl>=7) document.getElementById('step2').classList.add('active');
-  if(lvl>=10) document.getElementById('step3').classList.add('active');
+  if(lvl>=8 || isElite) document.getElementById('badge3').classList.add('unlocked');
 
   if(isElite){
-    document.getElementById('badge3').classList.add('unlocked');
     document.getElementById('prem_locked').classList.add('hidden');
     document.getElementById('prem_unlocked').classList.remove('hidden');
     document.getElementById('ad_box').classList.add('hidden');
@@ -214,15 +245,15 @@ function updateUI(){
 
 function startQuiz(){
   let lvl=Math.floor(xp/100)+1;
-  if(lvl>=7 && !isElite){ alert("Πρέπει να γίνετε Elite για να συνεχίσετε!"); openModal(); return; }
+  if(lvl>=7 && !isElite){ openModal(); return; }
   document.getElementById('quiz_btn').classList.add('hidden');
   renderQuestion(0,0);
 }
 
 function renderQuestion(idx,qCount){
   let lvl=Math.floor(xp/100)+1;
-  if(lvl>=7 && !isElite) return;
   const levelQuestions = currentQuizData[lvl] || currentQuizData["1"];
+  if(!levelQuestions) return;
   const q = levelQuestions[idx % levelQuestions.length];
   document.getElementById('quiz_text').innerHTML = `<b>Q:</b> ${q.q}`;
   let html = "";
@@ -243,23 +274,21 @@ function checkAnswer(qIdx,selected,qCount){
   });
 
   if(selected===q.a){
-    xp+=50;
+    xp+=20;
     localStorage.setItem('xp', xp);
-    confetti({particleCount:50, spread:30});
+    confetti({particleCount:40, spread:50, origin:{y:0.8}});
   }
 
   qCount++;
-  if(qCount<5) setTimeout(()=> renderQuestion(qIdx+1,qCount),700);
+  if(qCount<3) setTimeout(()=> renderQuestion(qIdx+1,qCount),800);
   else setTimeout(()=>{
     document.getElementById('quiz_options').innerHTML="";
     document.getElementById('quiz_text').innerText=translations[currentLang].finish;
     document.getElementById('quiz_btn').classList.remove('hidden');
-    document.getElementById('quiz_btn').innerText=translations[currentLang].start;
     updateUI();
   },1000);
 }
 
-// Navigation
 function nav(screen,btn){
   document.getElementById('screen_home').classList.add('hidden');
   document.getElementById('screen_premium').classList.add('hidden');
@@ -268,12 +297,27 @@ function nav(screen,btn){
   btn.classList.add('active');
 }
 
-// Premium Modal
 function openModal(){ document.getElementById('premiumModal').style.display='block'; }
 function closeModal(){ document.getElementById('premiumModal').style.display='none'; }
-function buyPremium(){ isElite=true; localStorage.setItem('isElite','true'); closeModal(); confetti({particleCount:200, spread:100}); updateUI(); }
+function buyPremium(){ 
+    isElite=true; 
+    localStorage.setItem('isElite','true'); 
+    closeModal(); 
+    confetti({particleCount:150, spread:70}); 
+    updateUI(); 
+    nav('premium', document.getElementById('nav_premium'));
+}
 
-window.onclick = function(event){ if(event.target==document.getElementById('premiumModal')) closeModal(); }
+window.onclick = (e) => { if(e.target==document.getElementById('premiumModal')) closeModal(); }
+
+// Register Service Worker for Offline & Google Play
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      console.log('SW Registered!', reg);
+    }).catch(err => console.log('SW Failed', err));
+  });
+}
 </script>
 </body>
 </html>
