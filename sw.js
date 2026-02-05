@@ -1,70 +1,60 @@
-const VERSION = "v12-elite-final"; 
+const VERSION = "v13-elite-full"; // Ανέβασα το version για να πάρει τις αλλαγές
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 
-// Αρχεία προς αποθήκευση στη συσκευή
 const STATIC_ASSETS = [
   "./",
   "index.html",
-  "scam.html",
-  "quiz.html",
   "styles.css",
+  "manifest.webmanifest",
+  "sw.js",
   "app.js",
   "quiz.js",
   "i18n.js",
-  "manifest.webmanifest",
+  "translations.js",
+  "analytics.js",
+  "api.js",
+  
+  // Όλα τα HTML εργαλεία που είδα στα αρχεία σου
+  "checkup.html",
+  "dojo.html",
+  "sos_hub.html",
+  "scam-alerts.html",
+  "emergency.html",
+  "offline.html",
+  "password-generator.html",
+  "privacy.html",
+  "advanced-tips.html",
+  "premium-ml.html",
+  "premium-paywall.html",
+  "premium-suite.html",
+
+  // Τα JSON δεδομένα (Πολύ σημαντικό για το Quiz)
+  "dojo.json",
+  "emergency_hub.json",
+  "questions_free_el.json",
+  "questions_free_en.json",
+  "questions_free_de.json",
+  "questions_free_es.json",
+  "questions_free_fr.json",
+  "questions_free_hi.json",
+  "questions_free_it.json",
+  "questions_free_pt.json",
+  "questions_free_ru.json",
+  "questions_free_zh.json",
+  "questions_premium_el.json",
+  "questions_premium_en.json",
+  "questions_premium_de.json",
+  "questions_premium_es.json",
+  "questions_premium_fr.json",
+  "questions_premium_hi.json",
+  "questions_premium_it.json",
+  "questions_premium_pt.json",
+  "questions_premium_ru.json",
+  "questions_premium_zh.json",
+
+  // Icons (Σιγουρέψου ότι υπάρχουν στον φάκελο icons/)
   "icons/icon-192.png",
   "icons/icon-512.png"
 ];
 
-// 1. Εγκατάσταση Service Worker και Cache Assets
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(STATIC_CACHE).then(cache => {
-      console.log("🛡️ SW: Shielding Assets...");
-      return Promise.allSettled(
-        STATIC_ASSETS.map(url => 
-          cache.add(url).catch(err => console.warn(`⚠️ Failed to cache: ${url}`, err))
-        )
-      );
-    })
-  );
-  self.skipWaiting();
-});
-
-// 2. Ενεργοποίηση και καθαρισμός παλιάς Cache
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(key => key !== STATIC_CACHE)
-            .map(key => caches.delete(key))
-      )
-    )
-  );
-  console.log("🛡️ SW: Active & Updated");
-  self.clients.claim();
-});
-
-// 3. Fetch Strategy: Stale-While-Revalidate + Offline fallback
-self.addEventListener("fetch", event => {
-  if (!event.request.url.startsWith(self.location.origin)) return;
-
-  event.respondWith(
-    caches.open(STATIC_CACHE).then(cache => {
-      return cache.match(event.request).then(cachedResponse => {
-        const fetchPromise = fetch(event.request).then(networkResponse => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        }).catch(() => {
-          console.warn("⚠️ SW: Network failed for", event.request.url);
-        });
-
-        // Αν υπάρχει cache, δείχνει αμέσως. Αν όχι, περιμένει fetch
-        return cachedResponse || fetchPromise || new Response("Offline – Δεν υπάρχει αποθηκευμένο περιεχόμενο", {
-          status: 503,
-          statusText: "Service Worker Offline"
-        });
-      });
-    })
-  );
-});
+// ... υπόλοιπος κώδικας (install, activate, fetch) όπως τον φτιάξαμε πριν
