@@ -25,6 +25,32 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
 
+/* Panic Button Floating */
+.panic-btn { 
+    position: fixed; 
+    right: 20px; 
+    bottom: 100px; 
+    width: 65px; 
+    height: 65px; 
+    background: var(--danger); 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); 
+    z-index: 999; 
+    border: 3px solid rgba(255,255,255,0.2);
+    cursor: pointer;
+    animation: panic-pulse 1.5s infinite;
+}
+.panic-btn span { font-size: 30px; }
+
+@keyframes panic-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
 /* Cards & Buttons */
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); }
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
@@ -79,6 +105,10 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </style>
 </head>
 <body>
+
+<div id="panic_button" class="panic-btn hidden" onclick="triggerPanic()">
+    <span>🆘</span>
+</div>
 
 <section id="onboarding" class="overlay">
 <div>
@@ -214,6 +244,7 @@ function initApp(lang){
 
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('main_app').classList.remove('hidden');
+  document.getElementById('panic_button').classList.remove('hidden');
 
   fetch(`questions_free_${lang}.json`).then(res=>res.json()).then(freeData=>{
     fetch(`questions_premium_${lang}.json`).then(res2=>res2.json()).catch(()=>({[lang]:{levels:{}}})).then(premData=>{
@@ -241,6 +272,11 @@ function updateUI(){
     document.getElementById('prem_unlocked').classList.remove('hidden');
     document.getElementById('ad_box').classList.add('hidden');
   }
+}
+
+function triggerPanic() {
+    if(navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
+    window.location.href = 'emergency.html';
 }
 
 function startQuiz(){
