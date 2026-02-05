@@ -115,14 +115,14 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
                     <div class="tool-card" onclick="window.location.href='timer.html'">
                         <i>⏳</i><small id="txt_timer">SAFE TIMER</small>
                     </div>
-                    <div class="tool-card">
+                    <div class="tool-card" onclick="window.location.href='checkup.html'">
                         <i>🔍</i><small id="txt_checkup">CHECKUP</small>
                     </div>
-                    <div class="tool-card">
+                    <div class="tool-card" onclick="window.location.href='emergency.html'">
                         <i>🚨</i><small id="txt_hub">SOS HUB</small>
                     </div>
-                    <div class="tool-card">
-                        <i>⚡</i><small id="txt_dojo">DOJO</small>
+                    <div class="tool-card" onclick="window.location.href='scam-alerts.html'">
+                        <i>⚠️</i><small id="txt_alerts">ALERTS</small>
                     </div>
                 </div>
             </div>
@@ -143,7 +143,7 @@ const langPack = {
     el: {
         days: "ΗΜΕΡΕΣ", daily: "🛡️ Καθημερινή Εκπαίδευση", start: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",
         achievements: "🏆 Επιτεύγματα", elite: "Elite Εργαλεία 🔓", timer: "ΧΡΟΝΟΜΕΤΡΟ",
-        checkup: "ΕΛΕΓΧΟΣ", hub: "ΚΕΝΤΡΟ SOS", dojo: "ΕΚΠΑΙΔΕΥΣΗ", finish: "Ολοκληρώθηκε! +30 XP",
+        checkup: "ΕΛΕΓΧΟΣ", hub: "ΚΕΝΤΡΟ SOS", alerts: "ΕΙΔΟΠΟΙΗΣΕΙΣ", finish: "Ολοκληρώθηκε! +30 XP",
         quiz: [
             {q: "Κάποιος σε ακολουθεί το βράδυ. Τι κάνεις;", o: ["Τρέχω σε σκοτεινό στενό", "Πηγαίνω σε φωτισμένο μέρος", "Σταματάω και περιμένω"], a: 1},
             {q: "Ένας άγνωστος ζητά βοήθεια σε ερημιά.", o: ["Βοηθάω αμέσως", "Κρατάω απόσταση", "Δίνω χρήματα"], a: 1}
@@ -152,7 +152,7 @@ const langPack = {
     en: {
         days: "DAYS", daily: "🛡️ Daily Training", start: "START QUIZ",
         achievements: "🏆 Achievements", elite: "Elite Tools 🔓", timer: "SAFE TIMER",
-        checkup: "CHECKUP", hub: "SOS HUB", dojo: "DOJO", finish: "Completed! +30 XP",
+        checkup: "CHECKUP", hub: "SOS HUB", alerts: "ALERTS", finish: "Completed! +30 XP",
         quiz: [
             {q: "Someone follows you at night. What do you do?", o: ["Run away", "Lit area", "Wait"], a: 1},
             {q: "Stranger asks for help in the dark.", o: ["Help", "Keep distance", "Give money"], a: 1}
@@ -171,7 +171,7 @@ function initApp(lang){
     document.getElementById('txt_timer').innerText = p.timer;
     document.getElementById('txt_checkup').innerText = p.checkup;
     document.getElementById('txt_hub').innerText = p.hub;
-    document.getElementById('txt_dojo').innerText = p.dojo;
+    document.getElementById('txt_alerts').innerText = p.alerts || "ALERTS";
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
     document.getElementById('panic_button').classList.remove('hidden');
