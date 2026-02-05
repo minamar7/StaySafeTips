@@ -36,7 +36,6 @@
     h1 { font-size: 1.6rem; margin-bottom: 5px; color: var(--accent); }
     p { color: #94a3b8; font-size: 0.9rem; }
 
-    /* TIMER CIRCLE */
     .timer-container {
       position: relative;
       width: 280px;
@@ -64,7 +63,7 @@
       stroke: var(--accent);
       stroke-width: 8;
       stroke-linecap: round;
-      stroke-dasharray: 816; /* 2 * PI * 130 */
+      stroke-dasharray: 816; 
       stroke-dashoffset: 0;
       transition: stroke-dashoffset 1s linear, stroke 0.3s;
     }
@@ -76,7 +75,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* CONTROLS */
     .controls {
       margin-top: auto;
       display: grid;
@@ -98,7 +96,6 @@
     
     .btn:active { transform: scale(0.96); }
 
-    /* ALERT STATE */
     .alert-active .timer-circle-prog { stroke: var(--danger); animation: blink 0.5s infinite; }
     @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
   </style>
@@ -126,7 +123,7 @@
   </div>
 
   <script>
-    let totalSeconds = 15 * 60; // 15 λεπτά default
+    let totalSeconds = 15 * 60; 
     let remaining = totalSeconds;
     let timerInterval = null;
     const progressCircle = document.getElementById('progress');
@@ -134,11 +131,12 @@
     const CIRCUMFERENCE = 2 * Math.PI * 130;
 
     function startTimer() {
+      if (timerInterval) return; // Προστασία από διπλό πάτημα
       timerInterval = setInterval(() => {
         remaining--;
         updateUI();
 
-        if (remaining <= 60) {
+        if (remaining <= 60 && remaining > 0) {
           document.body.classList.add('alert-active');
           if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
         }
@@ -162,12 +160,16 @@
     function triggerAlert() {
       document.getElementById('status-title').innerText = "⚠️ TIME EXPIRED";
       document.getElementById('status-title').style.color = "var(--danger)";
-      document.getElementById('status-desc').innerText = "Sending location to emergency contacts...";
+      document.getElementById('status-desc').innerText = "Emergency SMS prepared...";
       
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
-          const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          const link = `https://www.google.com/maps?q=${lat},${lon}`;
           window.location.href = `sms:?&body=I have not checked in! My last location: ${link}`;
+        }, () => {
+          window.location.href = `sms:?&body=I have not checked in! (Location unavailable)`;
         });
       }
     }
@@ -175,7 +177,6 @@
     function safeArrival() {
       clearInterval(timerInterval);
       alert("Glad you're safe! +50 XP");
-      // Εδώ μπορείς να προσθέσεις XP στο localStorage
       let xp = parseInt(localStorage.getItem('xp')) || 0;
       localStorage.setItem('xp', xp + 50);
       window.location.href = 'index.html';
@@ -183,13 +184,16 @@
 
     function cancelTimer() {
       if(confirm("Are you sure? This will disable your arrival check.")) {
+        clearInterval(timerInterval);
         window.location.href = 'index.html';
       }
     }
 
-    // Έναρξη μόλις φορτώσει
-    startQuiz = startTimer();
-    updateUI();
+    // Αυτόματη εκκίνηση
+    window.onload = () => {
+        updateUI();
+        startTimer();
+    };
   </script>
 </body>
 </html>
