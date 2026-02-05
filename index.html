@@ -65,18 +65,18 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <div>
     <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
     <h1>Stay Safe Elite</h1>
-    <p style="color:var(--muted);">Select Language / Επιλέξτε Γλώσσα</p>
+    <p style="color:var(--muted);">Select Your Language</p>
     <div class="lang-grid">
-        <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
+        <div class="lang-btn" onclick="initApp('en')">🇬🇷 Greek</div>
         <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
-        <div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
-        <div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
-        <div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
-        <div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
-        <div class="lang-btn" onclick="initApp('pt')">🇵🇹 Portuguese</div>
-        <div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
-        <div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
-        <div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
+        <div class="lang-btn" onclick="initApp('en')">🇩🇪 German</div>
+        <div class="lang-btn" onclick="initApp('en')">🇫🇷 French</div>
+        <div class="lang-btn" onclick="initApp('en')">🇪🇸 Spanish</div>
+        <div class="lang-btn" onclick="initApp('en')">🇮🇹 Italian</div>
+        <div class="lang-btn" onclick="initApp('en')">🇵🇹 Portuguese</div>
+        <div class="lang-btn" onclick="initApp('en')">🇷🇺 Russian</div>
+        <div class="lang-btn" onclick="initApp('en')">🇨🇳 Chinese</div>
+        <div class="lang-btn" onclick="initApp('en')">🇮🇳 Hindi</div>
     </div>
 </div>
 </section>
@@ -84,7 +84,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <div id="main_app" class="hidden">
     <header class="app-header">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> <span id="txt_days">DAYS</span></div>
+            <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> DAYS</div>
             <div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
         </div>
         <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
@@ -93,13 +93,13 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     <main style="padding: 20px 20px 110px;">
         <section id="screen_home">
             <div class="glass-card">
-                <h2 id="txt_daily">🛡️ Daily Training</h2>
+                <h2>🛡️ Daily Training</h2>
                 <p id="quiz_text" style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Ready for today's safety challenge?</p>
                 <div id="quiz_options" style="margin-top:15px;"></div>
                 <button class="main-cta" id="quiz_btn" onclick="startQuiz()">START QUIZ</button>
             </div>
 
-            <h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Achievements</h3>
+            <h3 style="font-size:1rem; margin-bottom:10px;">🏆 Achievements</h3>
             <div class="badge-grid">
                 <div id="badge1" class="badge">🎖️</div>
                 <div id="badge2" class="badge">🛡️</div>
@@ -110,19 +110,19 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 
         <section id="screen_premium" class="hidden">
             <div class="glass-card" style="border:1px solid var(--gold);">
-                <h2 style="color:var(--gold); margin:0;" id="txt_elite_tools">Elite Tools 🔓</h2>
+                <h2 style="color:var(--gold); margin:0;">Elite Tools 🔓</h2>
                 <div class="tools-grid">
                     <div class="tool-card" onclick="window.location.href='timer.html'">
-                        <i>⏳</i><small id="txt_timer">SAFE TIMER</small>
+                        <i>⏳</i><small>SAFE TIMER</small>
                     </div>
                     <div class="tool-card" onclick="window.location.href='checkup.html'">
-                        <i>🔍</i><small id="txt_checkup">CHECKUP</small>
+                        <i>🔍</i><small>CHECKUP</small>
                     </div>
                     <div class="tool-card" onclick="window.location.href='emergency.html'">
-                        <i>🚨</i><small id="txt_hub">SOS HUB</small>
+                        <i>🚨</i><small>SOS HUB</small>
                     </div>
                     <div class="tool-card" onclick="window.location.href='scam-alerts.html'">
-                        <i>⚠️</i><small id="txt_alerts">ALERTS</small>
+                        <i>⚠️</i><small>ALERTS</small>
                     </div>
                 </div>
             </div>
@@ -137,41 +137,14 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 
 <script>
 let xp = parseInt(localStorage.getItem('xp')) || 0;
-let currentLang = 'en';
 
-const langPack = {
-    el: {
-        days: "ΗΜΕΡΕΣ", daily: "🛡️ Καθημερινή Εκπαίδευση", start: "ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",
-        achievements: "🏆 Επιτεύγματα", elite: "Elite Εργαλεία 🔓", timer: "ΧΡΟΝΟΜΕΤΡΟ",
-        checkup: "ΕΛΕΓΧΟΣ", hub: "ΚΕΝΤΡΟ SOS", alerts: "ΕΙΔΟΠΟΙΗΣΕΙΣ", finish: "Ολοκληρώθηκε! +30 XP",
-        quiz: [
-            {q: "Κάποιος σε ακολουθεί το βράδυ. Τι κάνεις;", o: ["Τρέχω σε σκοτεινό στενό", "Πηγαίνω σε φωτισμένο μέρος", "Σταματάω και περιμένω"], a: 1},
-            {q: "Ένας άγνωστος ζητά βοήθεια σε ερημιά.", o: ["Βοηθάω αμέσως", "Κρατάω απόσταση", "Δίνω χρήματα"], a: 1}
-        ]
-    },
-    en: {
-        days: "DAYS", daily: "🛡️ Daily Training", start: "START QUIZ",
-        achievements: "🏆 Achievements", elite: "Elite Tools 🔓", timer: "SAFE TIMER",
-        checkup: "CHECKUP", hub: "SOS HUB", alerts: "ALERTS", finish: "Completed! +30 XP",
-        quiz: [
-            {q: "Someone follows you at night. What do you do?", o: ["Run away", "Lit area", "Wait"], a: 1},
-            {q: "Stranger asks for help in the dark.", o: ["Help", "Keep distance", "Give money"], a: 1}
-        ]
-    }
-};
+const quizData = [
+    {q: "Someone follows you at night. What do you do?", o: ["Run to a dark alley", "Head to a lit area", "Stop and wait"], a: 1},
+    {q: "A stranger asks for help in a secluded spot.", o: ["Help them immediately", "Keep distance", "Offer money"], a: 1}
+];
 
 function initApp(lang){
-    currentLang = lang;
-    const p = langPack[lang] || langPack['en'];
-    document.getElementById('txt_days').innerText = p.days;
-    document.getElementById('txt_daily').innerText = p.daily;
-    document.getElementById('quiz_btn').innerText = p.start;
-    document.getElementById('txt_achievements').innerText = p.achievements;
-    document.getElementById('txt_elite_tools').innerText = p.elite;
-    document.getElementById('txt_timer').innerText = p.timer;
-    document.getElementById('txt_checkup').innerText = p.checkup;
-    document.getElementById('txt_hub').innerText = p.hub;
-    document.getElementById('txt_alerts').innerText = p.alerts || "ALERTS";
+    // Force English as requested
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
     document.getElementById('panic_button').classList.remove('hidden');
@@ -192,16 +165,15 @@ function startQuiz() {
 }
 
 function renderQuestion(idx) {
-    const p = langPack[currentLang] || langPack['en'];
-    if(idx >= p.quiz.length) {
-        document.getElementById('quiz_text').innerText = p.finish;
+    if(idx >= quizData.length) {
+        document.getElementById('quiz_text').innerText = "Training Complete! +30 XP";
         document.getElementById('quiz_options').innerHTML = "";
         xp += 30; localStorage.setItem('xp', xp);
         updateUI();
         confetti({particleCount: 100, spread: 70});
         return;
     }
-    let q = p.quiz[idx];
+    let q = quizData[idx];
     document.getElementById('quiz_text').innerText = q.q;
     let html = "";
     q.o.forEach((opt, i) => {
@@ -211,8 +183,7 @@ function renderQuestion(idx) {
 }
 
 function checkAnswer(qIdx, selected) {
-    const p = langPack[currentLang] || langPack['en'];
-    let q = p.quiz[qIdx];
+    let q = quizData[qIdx];
     const btns = document.querySelectorAll('#quiz_options button');
     if(selected === q.a) {
         btns[selected].style.background = "var(--success)";
