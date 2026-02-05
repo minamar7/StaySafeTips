@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Emergency Button – Stay Safe Premium</title>
+  <title>Emergency Button – Stay Safe Elite</title>
 
   <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
 
   <meta name="theme-color" content="#7f1d1d" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -28,7 +28,7 @@
     body {
       margin: 0;
       background: var(--bg-dark);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
       color: #fff;
     }
 
@@ -36,20 +36,24 @@
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
+      padding-bottom: 40px;
     }
 
     header.app-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px;
+      padding: 45px 16px 16px; /* Added padding for notch */
       border-bottom: 1px solid #1e293b;
     }
 
     .sub {
       color: #94a3b8;
       font-size: 0.85rem;
+      margin: 4px 0 0;
     }
+
+    h1 { font-size: 1.4rem; margin: 0; }
 
     main {
       padding: 16px;
@@ -61,6 +65,8 @@
       font-weight: 900;
       letter-spacing: 0.5px;
       margin-bottom: 12px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
     }
 
     /* BUTTON CORE */
@@ -88,6 +94,11 @@
       user-select: none;
       transition: transform 0.1s ease, box-shadow 0.1s ease;
       z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.2;
     }
 
     #emergency-hold-btn:active {
@@ -124,18 +135,22 @@
 
     .call-card {
       background: var(--panel-dark);
-      padding: 14px;
+      padding: 16px;
       border-radius: 16px;
       text-decoration: none;
       color: white;
       font-weight: bold;
       border: 1px solid #1e293b;
+      transition: 0.2s;
     }
+
+    .call-card:active { background: #1e293b; }
 
     .call-card span {
       color: #ef4444;
       display: block;
       font-size: 1.4rem;
+      margin-bottom: 4px;
     }
 
     .snapshot {
@@ -148,14 +163,16 @@
     }
 
     .snapshot h3 {
-      color: #facc15;
+      color: var(--accent, #38bdf8);
       margin-top: 0;
+      font-size: 1rem;
     }
 
+    .snapshot ul { padding-left: 20px; margin: 10px 0 0; }
     .snapshot li {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       color: #cbd5e1;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
   </style>
 </head>
@@ -168,18 +185,17 @@
         <p class="sub">Immediate response protocol</p>
       </div>
       <a href="index.html"
-         style="color:#94a3b8;text-decoration:none;font-size:0.75rem;">
+         style="color:#94a3b8;text-decoration:none;font-size:0.85rem; font-weight: bold;">
         CLOSE
       </a>
     </header>
 
     <main>
-      <div class="warning">ΚΡΑΤΗΣΤΕ ΠΑΤΗΜΕΝΟ ΓΙΑ 3 ΔΕΥΤΕΡΟΛΕΠΤΑ</div>
+      <div class="warning">HOLD FOR 3 SECONDS / ΚΡΑΤΗΣΤΕ ΠΑΤΗΜΕΝΟ</div>
 
       <div class="btn-wrapper">
         <div id="progress-ring" class="hold-progress"></div>
-        <button id="emergency-hold-btn"
-                aria-label="Emergency SOS Button">
+        <button id="emergency-hold-btn">
           SOS<br>HOLD
         </button>
       </div>
@@ -196,11 +212,14 @@
       </div>
 
       <div class="snapshot">
-        <h3>📍 Current Safety Protocol</h3>
+        <h3>📍 Safety Protocol (Elite)</h3>
         <ul>
+          <li>Move to a bright area with people nearby.</li>
+          <li>Prepare your Live Location for sharing.</li>
+          <li>Avoid confrontation – find the nearest exit.</li>
+          <hr style="opacity: 0.1; margin: 10px 0;">
           <li>Μετακινηθείτε σε φωτεινό σημείο με κόσμο.</li>
           <li>Ετοιμάστε Live Location.</li>
-          <li>Αποφύγετε αντιπαράθεση – βρείτε διέξοδο.</li>
         </ul>
       </div>
     </main>
@@ -208,10 +227,11 @@
 
   <script>
     /* =========================
-       PREMIUM GATE
+       ELITE GATE (Sync with isElite)
     ========================= */
     (() => {
-      if (localStorage.getItem("ss_premium") !== "true") {
+      // Διόρθωση: Πλέον ελέγχει το isElite για συμβατότητα με το index.html
+      if (localStorage.getItem("isElite") !== "true") {
         location.replace("index.html");
       }
     })();
@@ -228,7 +248,7 @@
     let activated = false;
 
     const vibrate = (pattern) => {
-      navigator.vibrate && navigator.vibrate(pattern);
+      if (navigator.vibrate) navigator.vibrate(pattern);
     };
 
     const startHold = (e) => {
@@ -237,7 +257,7 @@
 
       holdStart = Date.now();
       ring.style.display = "block";
-      btn.textContent = "HOLDING...";
+      btn.innerHTML = "HOLDING...";
       vibrate(50);
 
       holdInterval = setInterval(() => {
@@ -254,7 +274,7 @@
       clearInterval(holdInterval);
       ring.style.display = "none";
       ring.style.transform = "rotate(0deg)";
-      btn.textContent = "SOS\nHOLD";
+      btn.innerHTML = "SOS<br>HOLD";
     };
 
     const activateSOS = () => {
@@ -263,16 +283,15 @@
 
       ring.style.display = "none";
       btn.classList.add("sos-active");
-      btn.textContent = "SOS ACTIVE";
+      btn.innerHTML = "SOS<br>ACTIVE";
       vibrate([500, 200, 500, 200, 500]);
 
-      // 👉 Hook για backend / analytics / SMS
-      console.log("🚨 SOS ACTIVATED");
-
-      alert(
-        "EMERGENCY MODE ACTIVE.\n" +
-        "Αν βρίσκεστε σε άμεσο κίνδυνο, καλέστε το 112."
-      );
+      // Άμεση κλήση στο 112 μετά το hold (προαιρετικό, αλλιώς μένει στο alert)
+      setTimeout(() => {
+          if(confirm("EMERGENCY MODE ACTIVE.\nDo you want to call 112 now?")) {
+              window.location.href = "tel:112";
+          }
+      }, 500);
     };
 
     btn.addEventListener("mousedown", startHold);
