@@ -25,36 +25,32 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
 
-/* Panic Button Floating */
-.panic-btn { 
-    position: fixed; 
-    right: 20px; 
-    bottom: 100px; 
-    width: 65px; 
-    height: 65px; 
-    background: var(--danger); 
-    border-radius: 50%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); 
-    z-index: 999; 
-    border: 3px solid rgba(255,255,255,0.2);
+/* Cards & Buttons */
+.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
+.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+.main-cta:active { transform: scale(0.98); opacity: 0.9; }
+
+/* SOS Badge in Card */
+.sos-card-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: var(--danger);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 900;
     cursor: pointer;
-    animation: panic-pulse 1.5s infinite;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    animation: panic-pulse 2s infinite;
 }
-.panic-btn span { font-size: 30px; }
 
 @keyframes panic-pulse {
     0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
-
-/* Cards & Buttons */
-.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); }
-.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
-.main-cta:active { transform: scale(0.98); opacity: 0.9; }
 
 /* Premium Pulse Animation */
 @keyframes pulse {
@@ -108,10 +104,6 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </head>
 <body>
 
-<div id="panic_button" class="panic-btn hidden" onclick="triggerPanic()">
-    <span>🆘</span>
-</div>
-
 <section id="onboarding" class="overlay">
 <div>
 <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
@@ -146,10 +138,11 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 
 <section id="screen_home">
 <div class="glass-card" id="quiz_container">
-<h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
-<p id="quiz_text" style="color:var(--muted); font-size:0.9rem;">Ready for today's safety challenge?</p>
-<div id="quiz_options"></div>
-<button class="main-cta" id="quiz_btn" onclick="startQuiz()">START QUIZ</button>
+    <div class="sos-card-btn" onclick="window.location.href='emergency.html'">🆘 SOS</div>
+    <h2 style="margin:0;" id="txt_daily">🛡️ Daily Training</h2>
+    <p id="quiz_text" style="color:var(--muted); font-size:0.9rem; margin-top:10px; padding-right: 50px;">Ready for today's safety challenge?</p>
+    <div id="quiz_options"></div>
+    <button class="main-cta" id="quiz_btn" onclick="startQuiz()">START QUIZ</button>
 </div>
 
 <h3 style="font-size:1rem; margin-bottom:10px;" id="txt_achievements">🏆 Achievements</h3>
@@ -157,7 +150,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <div id="badge1" class="badge">🎖️</div>
 <div id="badge2" class="badge">🛡️</div>
 <div id="badge3" class="badge">💎</div>
-<div class="premium-btn-inline" onclick="openModal()">
+<div class="premium-btn-inline" id="prem_btn_inline" onclick="openModal()">
 <div style="font-size: 16px;">🔒</div>
 <span>4.90€</span>
 </div>
@@ -204,7 +197,6 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </div>
 
 <script>
-// Σωστά κλειδιά και English Default
 let xp = parseInt(localStorage.getItem('xp')) || 0;
 let isElite = localStorage.getItem('isElite') === 'true'; 
 let currentLang = 'en'; 
@@ -223,16 +215,13 @@ if(today !== lastDate && lastDate !== ''){
 }
 document.getElementById('streak_val').innerText = streak;
 
-// Translations Database
 const translations = {
   el:{daily:"🛡️ Καθημερινή Εκπαίδευση",start:"ΞΕΚΙΝΑ ΤΟ ΤΕΣΤ",days:"ΗΜΕΡΕΣ",finish:"Συγχαρητήρια! Ολοκλήρωσες την εκπαίδευση.",achievements:"🏆 Επιτεύγματα",prem_desc:"Ξεκλειδώστε όλα τα εργαλεία ασφαλείας.", buy:"ΞΕΚΛΕΙΔΩΣΕ ΤΩΡΑ (4.90€)"},
   en:{daily:"🛡️ Daily Training",start:"START QUIZ",days:"DAYS",finish:"Congrats! Training completed.",achievements:"🏆 Achievements",prem_desc:"Unlock all security tools.", buy:"UNLOCK NOW (4.90€)"}
-  // Πρόσθεσε και τα άλλα lang αν χρειαστεί
 };
 
 function initApp(lang){
   currentLang = lang;
-  // Dynamic Update UI
   if(translations[lang]) {
     document.getElementById('txt_daily').innerText = translations[lang].daily;
     document.getElementById('quiz_btn').innerText = translations[lang].start;
@@ -241,19 +230,8 @@ function initApp(lang){
     document.getElementById('txt_prem_desc').innerText = translations[lang].prem_desc;
     document.getElementById('prem_buy_btn').innerText = translations[lang].buy;
   }
-
   document.getElementById('onboarding').classList.add('hidden');
   document.getElementById('main_app').classList.remove('hidden');
-  document.getElementById('panic_button').classList.remove('hidden');
-
-  fetch(`questions_free_${lang}.json`).then(res=>res.json()).then(freeData=>{
-    fetch(`questions_premium_${lang}.json`).then(res2=>res2.json()).catch(()=>({[lang]:{levels:{}}})).then(premData=>{
-      currentQuizData={...freeData[lang].levels,...(premData?.[lang]?.levels || {})};
-    });
-  }).catch(() => {
-      currentQuizData = {"1": [{q:"Sample Question?", o:["Yes", "No"], a:0}]};
-  });
-
   updateUI();
 }
 
@@ -270,12 +248,8 @@ function updateUI(){
     document.getElementById('prem_locked').classList.add('hidden');
     document.getElementById('prem_unlocked').classList.remove('hidden');
     document.getElementById('ad_box').classList.add('hidden');
+    document.getElementById('prem_btn_inline').classList.add('hidden');
   }
-}
-
-function triggerPanic() {
-    if(navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
-    window.location.href = 'emergency.html';
 }
 
 function startQuiz(){
@@ -288,7 +262,7 @@ function startQuiz(){
 function renderQuestion(idx,qCount){
   let lvl=Math.floor(xp/100)+1;
   const levelQuestions = currentQuizData[lvl] || currentQuizData["1"];
-  const q = levelQuestions[idx % levelQuestions.length];
+  const q = levelQuestions[idx % levelQuestions.length] || {q:"Loading...", o:["...","..."], a:0};
   document.getElementById('quiz_text').innerHTML = `<b>Q:</b> ${q.q}`;
   let html = "";
   q.o.forEach((opt,i)=> html+=`<button class="main-cta" style="background:#1e293b;color:white;margin-bottom:10px;" onclick="checkAnswer(${idx},${i},${qCount})">${opt}</button>`);
@@ -299,20 +273,16 @@ function checkAnswer(qIdx,selected,qCount){
   let lvl=Math.floor(xp/100)+1;
   const levelQuestions = currentQuizData[lvl] || currentQuizData["1"];
   const q = levelQuestions[qIdx % levelQuestions.length];
-
   const buttons = document.querySelectorAll('#quiz_options button');
   buttons.forEach((btn,i)=>{
     if(i===q.a) btn.style.background='var(--success)';
     if(i===selected && i!==q.a) btn.style.background='var(--danger)';
     btn.disabled=true;
   });
-
   if(selected===q.a){
-    xp+=20;
-    localStorage.setItem('xp', xp);
+    xp+=20; localStorage.setItem('xp', xp);
     confetti({particleCount:40, spread:50, origin:{y:0.8}});
   }
-
   qCount++;
   if(qCount<3) setTimeout(()=> renderQuestion(qIdx+1,qCount), 800);
   else setTimeout(()=>{
@@ -334,22 +304,15 @@ function nav(screen,btn){
 function openModal(){ document.getElementById('premiumModal').style.display='block'; }
 function closeModal(){ document.getElementById('premiumModal').style.display='none'; }
 function buyPremium(){ 
-    isElite=true; 
-    localStorage.setItem('isElite','true'); 
-    closeModal(); 
-    confetti({particleCount:150, spread:70}); 
-    updateUI(); 
-    nav('premium', document.getElementById('nav_premium'));
+    isElite=true; localStorage.setItem('isElite','true'); 
+    closeModal(); confetti({particleCount:150, spread:70}); 
+    updateUI(); nav('premium', document.getElementById('nav_premium'));
 }
-
 window.onclick = (e) => { if(e.target==document.getElementById('premiumModal')) closeModal(); }
 
-// Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then(reg => {
-      console.log('SW Registered!');
-    }).catch(err => console.log('SW Failed', err));
+    navigator.serviceWorker.register('sw.js').then(reg => console.log('SW OK')).catch(err => console.log('SW ERR'));
   });
 }
 </script>
