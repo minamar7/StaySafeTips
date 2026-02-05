@@ -13,55 +13,59 @@
       --elite-yellow: #facc15;
       --danger: #ef4444;
       --bg-main: #020617;
-      --card-bg: rgba(15, 23, 42, 0.85);
-      --card-border: rgba(255, 255, 255, 0.06);
-      --text-main: #e2e8f0;
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --accent: #38bdf8;
     }
 
     body {
       margin: 0;
       background: var(--bg-main);
       color: var(--text-main);
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: -apple-system, system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 40px;
+      padding-bottom: 100px; /* Χώρος για το navigation */
     }
 
     .app-shell {
       max-width: 520px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 45px 20px 20px;
     }
 
     .offline-indicator {
       display: inline-block;
       padding: 4px 12px;
-      background: rgba(34, 197, 94, 0.12);
+      background: rgba(34, 197, 94, 0.15);
       color: var(--safe-green);
       border-radius: 999px;
       font-size: 0.75rem;
-      font-weight: 700;
-      margin-bottom: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      border: 1px solid rgba(34, 197, 94, 0.3);
     }
 
     .offline-block {
       background: var(--card-bg);
+      backdrop-filter: blur(10px);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.35s ease-out both;
+      border-radius: 24px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.4s ease-out both;
     }
 
     .offline-block h3 {
-      margin: 0 0 12px;
-      font-size: 1.05rem;
+      margin: 0 0 15px;
+      font-size: 1.1rem;
       color: var(--elite-yellow);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .offline-block ul {
@@ -72,65 +76,100 @@
 
     .offline-block li {
       display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 10px;
+      margin-bottom: 12px;
       font-size: 0.95rem;
+      line-height: 1.4;
       color: var(--text-muted);
     }
 
     .offline-block li::before {
       content: "•";
       color: var(--safe-green);
+      font-weight: bold;
     }
 
+    /* SOS Button in Block */
     .sos-btn {
       width: 100%;
-      background: var(--danger);
+      background: linear-gradient(135deg, var(--danger), #b91c1c);
       color: white;
       border: none;
       padding: 18px;
-      border-radius: 15px;
+      border-radius: 20px;
       font-weight: 800;
       font-size: 1rem;
       cursor: pointer;
       margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    /* Floating Panic Button (Same as index) */
+    .panic-btn { 
+      position: fixed; 
+      right: 20px; 
+      bottom: 30px; 
+      width: 65px; 
+      height: 65px; 
+      background: var(--danger); 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); 
+      z-index: 999; 
+      border: 3px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      animation: panic-pulse 1.5s infinite;
+    }
+    .panic-btn span { font-size: 30px; }
+
+    @keyframes panic-pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
 
     #refresh-offline-btn {
       width: 100%;
-      background: transparent;
+      background: rgba(255, 255, 255, 0.05);
       color: var(--elite-yellow);
       border: 1px solid var(--elite-yellow);
-      padding: 14px;
-      border-radius: 15px;
-      font-weight: 700;
+      padding: 16px;
+      border-radius: 20px;
+      font-weight: 800;
       cursor: pointer;
-      margin-top: 20px;
+      transition: 0.3s;
+    }
+
+    #refresh-offline-btn:active {
+      background: var(--elite-yellow);
+      color: black;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
+  <div class="panic-btn" onclick="window.location.href='emergency.html'">
+    <span>🆘</span>
+  </div>
+
   <div class="app-shell">
-    <header style="margin-bottom: 25px;">
+    <header style="margin-bottom: 30px;">
       <span class="offline-indicator">✓ OFFLINE READY</span>
-      <h1 style="margin: 5px 0;">📱 Offline Mode</h1>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Πρωτόκολλα ασφαλείας Stay Safe Elite</p>
+      <h1 style="margin: 5px 0; font-size: 1.8rem;">📱 Offline Mode</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Πρωτόκολλα ασφαλείας Stay Safe Elite</p>
     </header>
 
-    <div class="offline-block" style="border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.05);">
+    <div class="offline-block" style="border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.08);">
         <h3 style="color: var(--danger);">🚨 ΕΠΕΙΓΟΥΣΑ ΑΝΑΓΚΗ</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-            Εάν βρίσκεστε σε άμεσο κίνδυνο, καλέστε τον ευρωπαϊκό αριθμό έκτακτης ανάγκης.
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
+            Άμεσος κίνδυνος; Καλέστε το 112 τώρα.
         </p>
         <button class="sos-btn" onclick="window.location.href='tel:112'">
             ΚΛΗΣΗ 112
@@ -143,6 +182,7 @@
         <ul>
           <li>Μείνετε σε σημεία με κίνηση και ορατότητα.</li>
           <li>Ενημερώστε κάποιον για την τοποθεσία σας.</li>
+          <li>Πλησιάστε πληρώματα ασφαλείας ή αστυνομία.</li>
         </ul>
       </div>
 
@@ -162,7 +202,7 @@
     (() => {
       "use strict";
 
-      // Συγχρονισμός με το index.html status
+      // Έλεγχος Elite Status - Συμβατό με index.html
       if (localStorage.getItem("isElite") !== "true") {
         window.location.href = "index.html";
         return;
@@ -174,16 +214,16 @@
       const extraTips = [
         {
           title: "⚠️ Τι να ΑΠΟΦΥΓΕΤΕ",
-          items: ["Μην περιπλανιέστε χωρίς πλάνο.", "Μην εμπιστεύεστε αγνώστους."]
+          items: ["Μην περιπλανιέστε χωρίς πλάνο.", "Μην εμπιστεύεστε αγνώστους.", "Αποφύγετε σκοτεινά σοκάκια."]
         },
         {
           title: "📍 Προσανατολισμός",
-          items: ["Κινηθείτε σε φωτισμένους δρόμους.", "Μπείτε σε ανοιχτό κατάστημα."]
+          items: ["Κινηθείτε σε φωτισμένους δρόμους.", "Μπείτε σε ανοιχτό κατάστημα.", "Προσποιηθείτε τηλεφωνική κλήση."]
         }
       ];
 
       refreshBtn.addEventListener("click", () => {
-        if(navigator.vibrate) navigator.vibrate(15);
+        if(navigator.vibrate) navigator.vibrate(20);
         
         container.querySelectorAll(".extra").forEach(e => e.remove());
         const data = extraTips[Math.floor(Math.random() * extraTips.length)];
