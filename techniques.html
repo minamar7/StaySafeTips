@@ -10,6 +10,7 @@
             --neon: #38bdf8; 
             --bg: #020617; 
             --card-bg: rgba(15, 23, 42, 0.8);
+            --shadow-gold: rgba(250, 204, 21, 0.4);
         }
         
         body { 
@@ -20,6 +21,7 @@
             padding: env(safe-area-inset-top) 20px 40px 20px;
         }
 
+        /* Premium Header */
         .header { 
             display: flex; 
             align-items: center; 
@@ -72,6 +74,7 @@
             opacity: 0.4;
         }
 
+        /* Lesson Cards */
         .lesson-card {
             background: var(--card-bg);
             border: 1px solid rgba(56, 189, 248, 0.2);
@@ -89,7 +92,7 @@
         .lesson-card:active { transform: scale(0.97); background: rgba(56, 189, 248, 0.1); }
 
         .lesson-img {
-            width: 70px; /* Λίγο μεγαλύτερη για να φαίνεται η δράση */
+            width: 70px;
             height: 70px;
             border-radius: 15px;
             border: 2px solid var(--gold);
@@ -130,7 +133,7 @@
     <div class="belt-section">
         <div class="belt-header">White Belt (10th Gup) <div class="belt-line"></div></div>
         
-        <div class="lesson-card" onclick="alert('Playing: Palm Strike Masterclass')">
+        <div class="lesson-card" onclick="playKiai(); alert('Playing: Palm Strike Masterclass')">
             <img src="https://img.freepik.com/free-photo/man-doing-karate-indoors_23-2148398944.jpg" class="lesson-img" alt="Master Action">
             <div class="lesson-info">
                 <h4>Palm Strike (Sudo)</h4>
@@ -139,7 +142,7 @@
             <div class="belt-indicator" style="background: white; color: white;"></div>
         </div>
 
-        <div class="lesson-card" onclick="alert('Playing: Front Snap Kick')">
+        <div class="lesson-card" onclick="playKiai(); alert('Playing: Front Snap Kick')">
             <img src="https://img.freepik.com/free-photo/man-doing-karate-indoors_23-2148398944.jpg" class="lesson-img" alt="Master Action">
             <div class="lesson-info">
                 <h4>Front Snap Kick</h4>
@@ -182,6 +185,13 @@
             <div class="belt-indicator" style="background: green; color: green;"></div>
         </div>
     </div>
+
+    <script>
+        function playKiai() {
+            var audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
+            audio.play();
+        }
+    </script>
 
 </body>
 </html>
