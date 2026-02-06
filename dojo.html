@@ -5,63 +5,164 @@
     <title>Elite Defense Dojo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <style>
-        :root { --gold: #facc15; --neon: #38bdf8; --bg: #020617; }
-        body { margin: 0; background: var(--bg); color: white; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        :root { 
+            --gold: #facc15; 
+            --neon: #38bdf8; 
+            --bg: #020617; 
+            --shadow-gold: rgba(250, 204, 21, 0.4);
+            --shadow-neon: rgba(56, 189, 248, 0.3);
+        }
         
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: -apple-system, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Το εξωτερικό μπλε πλαίσιο με το σωστό glow */
         .dojo-frame {
             border: 2px solid var(--neon);
             border-radius: 45px;
-            padding: 40px 20px;
-            width: 85%;
-            max-width: 360px;
+            padding: 45px 25px;
+            width: 88%;
+            max-width: 380px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(56,189,248,0.1) 0%, transparent 100%);
-            box-shadow: 0 0 25px rgba(56,189,248,0.2);
+            background: linear-gradient(180deg, rgba(56,189,248,0.12) 0%, transparent 100%);
+            box-shadow: 0 0 35px var(--shadow-neon), inset 0 0 15px rgba(56,189,248,0.1);
+            position: relative;
         }
 
-        h1 { font-size: 1.5rem; letter-spacing: 1px; margin: 0; color: var(--neon); font-weight: 900; }
-        .motto { font-size: 0.6rem; letter-spacing: 2px; margin-bottom: 20px; opacity: 0.8; font-weight: bold; }
-        .kanji { font-size: 3.5rem; color: var(--gold); display: block; margin: 10px 0; filter: drop-shadow(0 0 10px var(--gold)); }
+        h1 { 
+            font-size: 1.6rem; 
+            letter-spacing: 1.5px; 
+            margin: 0; 
+            color: var(--neon); 
+            font-weight: 900; 
+            text-shadow: 0 0 10px var(--shadow-neon);
+        }
 
+        .motto { 
+            font-size: 0.65rem; 
+            letter-spacing: 2px; 
+            margin-bottom: 25px; 
+            color: #94a3b8;
+            font-weight: bold; 
+            text-transform: uppercase;
+        }
+
+        /* Το Kanji με το σωστό drop shadow */
+        .kanji { 
+            font-size: 4rem; 
+            color: var(--gold); 
+            display: block; 
+            margin: 15px 0; 
+            filter: drop-shadow(0 0 15px var(--gold));
+            font-weight: bold;
+        }
+
+        /* Το Master Visual πλαίσιο */
         .master-display {
             border: 2px solid var(--gold);
-            border-radius: 30px;
-            margin: 20px 0;
+            border-radius: 35px;
+            margin: 25px 0;
             overflow: hidden;
             background: #0f172a;
-            aspect-ratio: 1.2 / 1;
+            aspect-ratio: 1.25 / 1;
+            box-shadow: 0 0 20px var(--shadow-gold);
+            position: relative;
         }
-        .master-display img { width: 100%; height: 100%; object-fit: cover; }
 
-        .label { font-size: 0.7rem; color: var(--gold); font-weight: bold; margin-bottom: 15px; display: block; text-transform: uppercase; }
+        .master-display img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+        }
 
-        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        .label { 
+            font-size: 0.75rem; 
+            color: var(--gold); 
+            font-weight: 800; 
+            margin-bottom: 20px; 
+            display: block; 
+            letter-spacing: 1px;
+        }
+
+        /* Το 3-item Grid */
+        .menu-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 12px; 
+            margin-bottom: 35px; 
+        }
+
         .menu-item {
             border: 1px solid var(--neon);
-            border-radius: 15px;
-            padding: 15px 5px;
-            background: rgba(56,189,248,0.05);
+            border-radius: 18px;
+            padding: 18px 5px;
+            background: rgba(56, 189, 248, 0.08);
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .menu-item:active { transform: scale(0.92); background: rgba(56, 189, 248, 0.2); }
+
+        .menu-item img { 
+            width: 32px; 
+            margin-bottom: 10px; 
+            filter: drop-shadow(0 0 5px var(--neon));
+        }
+
+        .menu-item span { 
+            font-size: 0.55rem; 
+            display: block; 
+            font-weight: 900; 
+            color: var(--gold); 
+            line-height: 1.2;
+        }
+
+        /* Το χρυσό κουμπί Enter */
+        .btn-enter {
+            background: linear-gradient(180deg, var(--gold) 0%, #ca8a04 100%);
+            color: #020617; 
+            border: none; 
+            width: 100%; 
+            padding: 18px;
+            border-radius: 18px; 
+            font-weight: 900; 
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px var(--shadow-gold);
+            cursor: pointer;
+            letter-spacing: 1px;
             transition: 0.3s;
         }
-        .menu-item:active { transform: scale(0.95); }
-        .menu-item img { width: 30px; margin-bottom: 8px; filter: brightness(1.5); }
-        .menu-item span { font-size: 0.5rem; display: block; font-weight: 900; color: var(--gold); text-transform: uppercase; }
 
-        .btn-enter {
-            background: linear-gradient(to bottom, var(--gold), #eab308);
-            color: black; border: none; width: 100%; padding: 18px;
-            border-radius: 18px; font-weight: 900; text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
-            cursor: pointer;
+        .btn-enter:active { transform: translateY(2px); box-shadow: 0 4px 10px var(--shadow-gold); }
+
+        .back-nav { 
+            margin-top: 25px; 
+            font-size: 0.75rem; 
+            color: #64748b; 
+            text-decoration: none; 
+            display: block; 
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
-        .back-nav { margin-top: 20px; font-size: 0.7rem; color: #64748b; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
     <div class="dojo-frame">
         <h1>ELITE DEFENSE DOJO</h1>
         <div class="motto">POWERED BY INSTINCT</div>
+        
         <div class="kanji">道場</div>
         
         <div class="master-display">
