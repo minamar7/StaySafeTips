@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nature Alerts – 3D Global Guard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <style>
+        :root { --bg: #020617; --accent: #38bdf8; --card: rgba(30, 41, 59, 0.7); --warning: #fbbf24; --danger: #ef4444; }
+        body { margin: 0; background: var(--bg); color: white; font-family: -apple-system, sans-serif; padding: 20px 20px 50px; overflow-x: hidden; }
+        .back-btn { color: var(--accent); text-decoration: none; font-weight: bold; display: block; margin-bottom: 10px; }
+
+        /* 3D GLOBE CONTAINER */
+        .globe-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 180px;
+            perspective: 1000px;
+            margin-bottom: 20px;
+        }
+
+        .globe {
+            width: 120px;
+            height: 120px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Earthmap1000x500.jpg/1024px-Earthmap1000x500.jpg');
+            background-size: cover;
+            border-radius: 50%;
+            box-shadow: inset -20px -20px 50px #000, 0 0 30px rgba(56, 189, 248, 0.4);
+            animation: rotate 15s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { background-position: 0 0; }
+            to { background-position: 200% 0; }
+        }
+
+        h1 { font-size: 1.8rem; margin: 0; text-align: center; }
+        .subtitle { color: #94a3b8; text-align: center; margin-bottom: 25px; font-size: 0.9rem; }
+
+        /* TOOL CARDS */
+        .tool-card {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 22px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: white;
+        }
+        .tool-info { display: flex; align-items: center; gap: 15px; }
+        .tool-info i { font-style: normal; font-size: 28px; }
+        .tool-info h4 { margin: 0; font-size: 1rem; }
+        .tool-info p { margin: 2px 0 0; font-size: 0.8rem; color: #94a3b8; }
+
+        .badge-live {
+            background: var(--danger);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← DASHBOARD</a>
+
+    <div class="globe-wrapper">
+        <div class="globe"></div>
+    </div>
+
+    <h1>Nature Alerts</h1>
+    <p class="subtitle">Global Guard System Active</p>
+
+    <div class="section-title" style="color:var(--accent); font-size:0.8rem; font-weight:800; margin-bottom:15px; letter-spacing:1px;">LIVE MONITORS</div>
+
+    <a href="https://www.windy.com" target="_blank" class="tool-card">
+        <div class="tool-info">
+            <i>⛈️</i>
+            <div>
+                <h4>Weather Radar <span class="badge-live">LIVE</span></h4>
+                <p>Storms & Wind maps</p>
+            </div>
+        </div>
+        <span style="color:var(--accent)">→</span>
+    </a>
+
+    <a href="https://firms.modaps.eosdis.nasa.gov/map/" target="_blank" class="tool-card">
+        <div class="tool-info">
+            <i>🔥</i>
+            <div>
+                <h4>NASA Wildfires <span class="badge-live">LIVE</span></h4>
+                <p>Satellite thermal detect</p>
+            </div>
+        </div>
+        <span style="color:var(--accent)">→</span>
+    </a>
+
+    <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank" class="tool-card">
+        <div class="tool-info">
+            <i>🌍</i>
+            <div>
+                <h4>Seismic Activity</h4>
+                <p>Global Earthquake Data</p>
+            </div>
+        </div>
+        <span style="color:var(--accent)">→</span>
+    </a>
+
+</body>
+</html>
