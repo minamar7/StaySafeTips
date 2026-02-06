@@ -2,77 +2,187 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Technique Library</title>
+    <title>Elite Techniques - Library</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <style>
-        :root { --gold: #facc15; --neon: #38bdf8; --bg: #020617; }
-        body { margin: 0; background: var(--bg); color: white; font-family: -apple-system, sans-serif; padding: 20px; }
-        
-        .header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
-        .back-btn { background: none; border: 1px solid var(--neon); color: var(--neon); padding: 8px 15px; border-radius: 10px; cursor: pointer; }
-        
-        .belt-section { margin-bottom: 25px; }
-        .belt-header { 
-            display: flex; align-items: center; gap: 10px; 
-            text-transform: uppercase; font-weight: 900; font-size: 0.9rem;
-            margin-bottom: 15px; color: var(--gold);
+        :root { 
+            --gold: #facc15; 
+            --neon: #38bdf8; 
+            --bg: #020617; 
+            --card-bg: rgba(15, 23, 42, 0.8);
         }
-        .belt-line { flex-grow: 1; height: 2px; background: rgba(250, 204, 21, 0.3); }
+        
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: -apple-system, sans-serif; 
+            padding: env(safe-area-inset-top) 20px 40px 20px;
+        }
 
-        .lesson-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 12px;
+        /* Premium Header εμπνευσμένο από το Mockup */
+        .header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-top: 20px;
+        }
+        
+        .header h2 { 
+            margin: 0; 
+            font-size: 1.4rem; 
+            color: var(--neon); 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .back-btn { 
+            background: rgba(56, 189, 248, 0.1); 
+            border: 1px solid var(--neon); 
+            color: var(--neon); 
+            width: 40px;
+            height: 40px;
+            border-radius: 12px; 
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
+            justify-content: center;
+            font-weight: bold;
         }
-        .lesson-card.locked { opacity: 0.5; filter: grayscale(1); }
-        .lesson-info h4 { margin: 0; font-size: 1rem; }
-        .lesson-info p { margin: 5px 0 0; font-size: 0.7rem; color: var(--neon); font-weight: bold; }
+
+        /* Belt Sections */
+        .belt-section { margin-bottom: 35px; }
         
-        .belt-indicator { width: 10px; height: 40px; border-radius: 5px; }
+        .belt-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            text-transform: uppercase; 
+            font-weight: 900; 
+            font-size: 0.85rem;
+            margin-bottom: 18px; 
+            color: var(--gold);
+            letter-spacing: 1px;
+        }
+        
+        .belt-line { 
+            flex-grow: 1; 
+            height: 1px; 
+            background: linear-gradient(90deg, var(--gold), transparent); 
+            opacity: 0.4;
+        }
+
+        /* Lesson Cards με το στυλ του Mockup */
+        .lesson-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .lesson-card:active { transform: scale(0.97); background: rgba(56, 189, 248, 0.1); }
+
+        .lesson-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            border: 1px solid var(--gold);
+            object-fit: cover;
+            background: #000;
+        }
+
+        .lesson-info { flex-grow: 1; }
+        .lesson-info h4 { margin: 0; font-size: 1rem; letter-spacing: 0.5px; }
+        .lesson-info p { 
+            margin: 4px 0 0; 
+            font-size: 0.65rem; 
+            color: var(--neon); 
+            font-weight: 800; 
+            text-transform: uppercase;
+        }
+
+        /* Locked State */
+        .lesson-card.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+        .lock-icon { font-size: 1.2rem; opacity: 0.6; }
+
+        /* Badge Indicator */
+        .belt-indicator { 
+            width: 6px; 
+            height: 35px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px currentColor;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <button class="back-btn" onclick="location.href='dojo.html'">←</button>
-        <h2>TECHNIQUES</h2>
+        <button class="back-btn" onclick="location.href='dojo.html'">✕</button>
+        <h2>LIBRARY</h2>
+        <div style="width:40px"></div> </div>
+
+    <div class="belt-section">
+        <div class="belt-header">White Belt (10th Gup) <div class="belt-line"></div></div>
+        
+        <div class="lesson-card" onclick="alert('Playing: Palm Strike Masterclass')">
+            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" class="lesson-img" alt="Master">
+            <div class="lesson-info">
+                <h4>Palm Strike (Sudo)</h4>
+                <p>FOUNDATION • STRIKE</p>
+            </div>
+            <div class="belt-indicator" style="background: white; color: white;"></div>
+        </div>
+
+        <div class="lesson-card" onclick="alert('Playing: Front Snap Kick')">
+            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" class="lesson-img" alt="Master">
+            <div class="lesson-info">
+                <h4>Front Snap Kick</h4>
+                <p>FOUNDATION • KICK</p>
+            </div>
+            <div class="belt-indicator" style="background: white; color: white;"></div>
+        </div>
     </div>
 
     <div class="belt-section">
-        <div class="belt-header">White Belt <div class="belt-line"></div></div>
-        <div class="lesson-card" onclick="alert('Opening: Palm Strike Video')">
-            <div class="lesson-info"><h4>Palm Strike (Sudo)</h4><p>FOUNDATION • STRIKE</p></div>
-            <div class="belt-indicator" style="background: white; border: 1px solid #ddd;"></div>
+        <div class="belt-header">Orange Belt (8th Gup) <div class="belt-line"></div></div>
+        
+        <div class="lesson-card locked">
+            <div class="lesson-info">
+                <h4>Wrist Grab Escape</h4>
+                <p>DEFENSE • ESCAPE</p>
+            </div>
+            <span class="lock-icon">🔒</span>
+            <div class="belt-indicator" style="background: orange; color: orange;"></div>
         </div>
-        <div class="lesson-card" onclick="alert('Opening: Front Snap Kick Video')">
-            <div class="lesson-info"><h4>Front Snap Kick</h4><p>FOUNDATION • KICK</p></div>
-            <div class="belt-indicator" style="background: white; border: 1px solid #ddd;"></div>
+
+        <div class="lesson-card locked">
+            <div class="lesson-info">
+                <h4>Knee Strike</h4>
+                <p>CLOSE QUARTERS</p>
+            </div>
+            <span class="lock-icon">🔒</span>
+            <div class="belt-indicator" style="background: orange; color: orange;"></div>
         </div>
     </div>
 
     <div class="belt-section">
-        <div class="belt-header">Orange Belt <div class="belt-line"></div></div>
+        <div class="belt-header">Green Belt (6th Gup) <div class="belt-line"></div></div>
         <div class="lesson-card locked">
-            <div class="lesson-info"><h4>Wrist Grab Escape</h4><p>DEFENSE • ESCAPE</p></div>
-            <div class="belt-indicator" style="background: orange;"></div>
-        </div>
-        <div class="lesson-card locked">
-            <div class="lesson-info"><h4>Knee Strike</h4><p>CLOSE QUARTERS</p></div>
-            <div class="belt-indicator" style="background: orange;"></div>
-        </div>
-    </div>
-
-    <div class="belt-section">
-        <div class="belt-header">Green Belt <div class="belt-line"></div></div>
-        <div class="lesson-card locked">
-            <div class="lesson-info"><h4>Elbow Strike (Palkup)</h4><p>POWER • STRIKE</p></div>
-            <div class="belt-indicator" style="background: green;"></div>
+            <div class="lesson-info">
+                <h4>Elbow Strike (Palkup)</h4>
+                <p>POWER • STRIKE</p>
+            </div>
+            <span class="lock-icon">🔒</span>
+            <div class="belt-indicator" style="background: green; color: green;"></div>
         </div>
     </div>
 
