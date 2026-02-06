@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Elite Defense Dojo - Tang Soo Do</title>
+    <title>Elite Defense Dojo - Premium</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root { 
             --gold: #facc15; 
             --neon-blue: #38bdf8;
             --bg: #020617; 
             --card-light: #e2e8f0;
+            --muted: #94a3b8;
         }
         body { 
             margin: 0; background: var(--bg); color: white; 
@@ -41,71 +43,50 @@
             overflow: hidden;
             margin-bottom: 25px;
             background: #0f172a;
-            position: relative;
         }
-        .main-visual img { width: 100%; display: block; transition: 0.5s; }
+        .main-visual img { width: 100%; display: block; }
         
-        /* Progress Bar */
-        .progress-box {
-            padding: 0 10px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .progress-label { font-size: 0.65rem; color: var(--gold); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        /* Rank Progress */
+        .progress-box { padding: 0 10px; margin-bottom: 20px; text-align: left; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .progress-label { font-size: 0.65rem; color: var(--gold); font-weight: 800; text-transform: uppercase; }
         .bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px; overflow: hidden; }
-        .bar-fill { width: 35%; height: 100%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+        .bar-fill { width: 35%; height: 100%; background: var(--gold); box-shadow: 0 0 10px var(--gold); transition: 1s; }
 
-        /* Action Grid Icons */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 25px;
+        /* Premium Lesson List */
+        .lesson-list { text-align: left; margin-top: 20px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+        .lesson-item {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 15px; padding: 12px; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer;
         }
-        .action-item {
-            border: 1px solid var(--neon-blue);
-            border-radius: 15px;
-            padding: 12px 5px;
-            font-size: 0.6rem;
-            color: #94a3b8;
-            font-weight: 800;
-            background: rgba(56, 189, 248, 0.03);
-        }
+        .lesson-item.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+        .lesson-info h4 { margin: 0; font-size: 0.85rem; }
+        .lesson-info span { font-size: 0.6rem; color: var(--neon-blue); font-weight: bold; }
+        .belt-marker { width: 8px; height: 30px; border-radius: 4px; }
 
         .enter-btn {
             background: linear-gradient(180deg, var(--gold), #eab308);
             color: black; width: 100%; padding: 18px;
             border-radius: 18px; border: none; font-weight: 900;
             text-transform: uppercase; font-size: 1.1rem; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(250, 204, 21, 0.4);
+            box-shadow: 0 5px 15px rgba(250, 204, 21, 0.4); margin-top: 20px;
         }
 
-        /* Technique Steps Overlay */
+        /* Steps Overlay */
         .steps-overlay {
             display: none; position: fixed; inset: 0;
             background: var(--bg); padding: 25px; z-index: 1000;
             overflow-y: auto;
         }
-        .steps-header { color: var(--gold); text-align: center; font-size: 1.2rem; margin-bottom: 20px; font-weight: 900; }
-        
-        .steps-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        .step-card {
-            background: var(--card-light); border-radius: 20px;
-            padding: 15px; border: 2px solid var(--gold); text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .step-tag {
-            background: #1e293b; color: white; font-size: 0.6rem;
-            padding: 3px 8px; border-radius: 6px; display: inline-block;
-            margin-bottom: 10px; font-weight: bold;
-        }
-        .step-img { width: 60px; height: 60px; margin-bottom: 12px; }
-        .step-name { color: #0f172a; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; }
+        .steps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .step-card { background: var(--card-light); border-radius: 20px; padding: 15px; border: 2px solid var(--gold); text-align: center; }
+        .step-tag { background: #1e293b; color: white; font-size: 0.6rem; padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 10px; }
+        .step-name { color: #0f172a; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; }
 
-        .lock-overlay { font-size: 0.7rem; color: #64748b; margin-top: 20px; display: block; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -120,54 +101,97 @@
         </div>
 
         <div class="progress-box">
-            <span class="progress-label">White Belt Progress: 35%</span>
-            <div class="bar-bg">
-                <div class="bar-fill"></div>
+            <div class="progress-header">
+                <span class="progress-label" id="rank-name">WHITE BELT RANK</span>
+                <span style="font-size:0.7rem; font-weight:bold;" id="rank-percent">35%</span>
+            </div>
+            <div class="bar-bg"><div id="bar-fill" class="bar-fill"></div></div>
+        </div>
+
+        <div class="lesson-list">
+            <div class="lesson-item" onclick="openLesson('Palm Strike (Sudo)', 'WHITE')">
+                <div class="lesson-info"><span>WHITE BELT</span><h4>Palm Strike</h4></div>
+                <div class="belt-marker" style="background: white;"></div>
+            </div>
+            <div class="lesson-item" onclick="openLesson('Front Snap Kick', 'WHITE')">
+                <div class="lesson-info"><span>WHITE BELT</span><h4>Front Snap Kick</h4></div>
+                <div class="belt-marker" style="background: white;"></div>
+            </div>
+            
+            <div id="orange-lesson" class="lesson-item locked" onclick="checkLock('ORANGE')">
+                <div class="lesson-info"><span>ORANGE BELT</span><h4>Wrist Grab Escape</h4></div>
+                <div class="belt-marker" style="background: orange;"></div>
+            </div>
+
+            <div id="green-lesson" class="lesson-item locked" onclick="checkLock('GREEN')">
+                <div class="lesson-info"><span>GREEN BELT</span><h4>Elbow Strike</h4></div>
+                <div class="belt-marker" style="background: green;"></div>
             </div>
         </div>
 
-        <div class="action-grid">
-            <div class="action-item">🥋<br>TECHNIQUE</div>
-            <div class="action-item">🎯<br>DRILLS</div>
-            <div class="action-item">📊<br>PROGRESS</div>
-        </div>
-
-        <button class="enter-btn" onclick="openDojo()">Enter the Dojo</button>
-        <span class="lock-overlay">🔒 Black Belt Level Locked</span>
+        <button class="enter-btn" onclick="startChallenge()">Master Challenge</button>
+        <p style="font-size: 0.6rem; color: var(--muted); margin-top: 15px;" onclick="window.location.href='index.html'">BACK TO DASHBOARD</p>
     </div>
 
     <div id="stepsView" class="steps-overlay">
-        <div class="steps-header">PALM STRIKE (SUDO)</div>
-        
+        <h2 id="view-title" style="color:var(--gold); text-align:center;">TECHNIQUE</h2>
         <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-tag">STEP 1</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/3565/3565910.png" class="step-img">
-                <div class="step-name">Chamber Pos</div>
-            </div>
-            <div class="step-card">
-                <div class="step-tag">STEP 2</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" class="step-img">
-                <div class="step-name">Hip Twist</div>
-            </div>
-            <div class="step-card">
-                <div class="step-tag">STEP 3</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png" class="step-img">
-                <div class="step-name">Impact Point</div>
-            </div>
-            <div class="step-card">
-                <div class="step-tag">STEP 4</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/5555/5555133.png" class="step-img">
-                <div class="step-name">Reset/Kihap</div>
-            </div>
+            <div class="step-card"><div class="step-tag">STEP 1</div><div class="step-name">Stance</div></div>
+            <div class="step-card"><div class="step-tag">STEP 2</div><div class="step-name">Chamber</div></div>
+            <div class="step-card"><div class="step-tag">STEP 3</div><div class="step-name">Impact</div></div>
+            <div class="step-card"><div class="step-tag">STEP 4</div><div class="step-name">Kihap</div></div>
         </div>
-
-        <button class="enter-btn" style="margin-top: 40px;" onclick="closeDojo()">Return to Selection</button>
+        <button class="enter-btn" onclick="closeLesson()">Mark as Mastered</button>
     </div>
 
     <script>
-        function openDojo() { document.getElementById('stepsView').style.display = 'block'; }
-        function closeDojo() { document.getElementById('stepsView').style.display = 'none'; }
+        let lessonsMastered = 0;
+        let currentRank = "WHITE";
+
+        function openLesson(name, belt) {
+            if (belt !== currentRank && lessonsMastered < 2) return; 
+            document.getElementById('view-title').innerText = name;
+            document.getElementById('stepsView').style.display = 'block';
+        }
+
+        function closeLesson() {
+            document.getElementById('stepsView').style.display = 'none';
+            lessonsMastered++;
+            document.getElementById('bar-fill').style.width = "100%";
+            document.getElementById('rank-percent').innerText = "100%";
+        }
+
+        function startChallenge() {
+            if (lessonsMastered < 2) {
+                alert("Complete all White Belt lessons first!");
+                return;
+            }
+            
+            let q = "Master Challenge: What is the primary goal of self-defense?\nA) To win\nB) To escape safely\nC) To attack first";
+            let ans = prompt(q);
+            
+            if (ans && ans.toLowerCase().includes('b')) {
+                confetti({ particleCount: 150, spread: 70 });
+                promoteUser();
+            } else {
+                alert("Study the philosophy of Tang Soo Do and try again.");
+            }
+        }
+
+        function promoteUser() {
+            currentRank = "ORANGE";
+            document.getElementById('rank-name').innerText = "ORANGE BELT RANK";
+            document.getElementById('bar-fill').style.width = "10%";
+            document.getElementById('rank-percent').innerText = "10%";
+            document.getElementById('orange-lesson').classList.remove('locked');
+            alert("Congratulations! You have earned your ORANGE BELT! 🟠");
+        }
+
+        function checkLock(belt) {
+            if(document.getElementById(belt.toLowerCase()+'-lesson').classList.contains('locked')) {
+                alert("This rank is locked. Pass the Master Challenge to unlock.");
+            }
+        }
     </script>
 </body>
 </html>
