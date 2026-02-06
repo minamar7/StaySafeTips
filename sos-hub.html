@@ -1,159 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>SOS HUB – Stay Safe Elite</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <style>
-        :root { 
-            --bg: #020617; 
-            --card: rgba(30, 41, 59, 0.7); 
-            --accent: #38bdf8; 
-            --success: #22c55e;
-            --danger: #ef4444;
+    const aidData = {
+        'CPR': {
+            title: 'FIRST AID CPR',
+            steps: [
+                { icon: 'https://cdn-icons-png.flaticon.com/512/1022/1022313.png', text: 'Call Emergency Number' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063171.png', text: 'Check Vital Signs' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/3774/3774219.png', text: 'Lift Chin Check Breathing' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/11411/11411361.png', text: 'Give Rescue Breaths' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/2864/2864309.png', text: 'Perform CPR' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/1014/1014569.png', text: 'Wait for Ambulance' }
+            ]
+        },
+        'BLEEDING': {
+            title: 'BLEEDING CONTROL',
+            steps: [
+                { icon: 'https://cdn-icons-png.flaticon.com/512/809/809957.png', text: 'Apply Direct Pressure' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/2371/2371424.png', text: 'Elevate the Limb' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/1040/1040238.png', text: 'Apply Bandage' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/2966/2966486.png', text: 'Keep Victim Calm' }
+            ]
+        },
+        'CHOKING': {
+            title: 'CHOKING (HEIMLICH)',
+            steps: [
+                { icon: 'https://cdn-icons-png.flaticon.com/512/3774/3774233.png', text: 'Stand Behind Victim' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/2864/2864283.png', text: 'Perform Upward Thrusts' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/11411/11411411.png', text: 'Clear the Airway' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/1022/1022313.png', text: 'Call 112 if Unconscious' }
+            ]
         }
-        body { 
-            margin: 0; 
-            background: var(--bg); 
-            color: white; 
-            font-family: -apple-system, sans-serif; 
-            padding: 20px 20px 80px; 
-        }
-        .back-btn { color: var(--accent); text-decoration: none; font-weight: bold; display: block; margin-bottom: 20px; }
+    };
+
+    function openAid(type) {
+        const data = aidData[type];
+        const container = document.getElementById('stepsContainer');
+        document.getElementById('modalTitle').innerText = data.title;
         
-        h1 { font-size: 2rem; margin: 0; }
-        .subtitle { color: #94a3b8; margin-bottom: 30px; font-size: 0.9rem; }
+        let html = `
+            <a href="tel:112" class="emergency-banner">
+                📞 CALL EMERGENCY (112)
+            </a>
+            <div class="steps-grid">
+        `;
 
-        .section-title { font-size: 0.9rem; font-weight: 800; margin: 25px 0 15px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        data.steps.forEach((step, index) => {
+            html += `
+                <div class="step-card">
+                    <div class="step-label">STEP ${index + 1}</div>
+                    <img src="${step.icon}" class="step-icon-img" alt="step-icon">
+                    <div class="step-desc">${step.text}</div>
+                </div>
+            `;
+        });
         
-        .card { 
-            background: var(--card); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 24px; 
-            padding: 20px; 
-            margin-bottom: 15px; 
-        }
+        html += `</div>`;
+        container.innerHTML = html;
+        document.getElementById('aidModal').style.display = 'flex';
+    }
 
-        /* Hospital Button */
-        .hospital-btn {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white; padding: 18px; border-radius: 20px;
-            text-decoration: none; font-weight: bold; border: none;
-            width: 100%; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            cursor: pointer; font-size: 1rem;
-        }
-
-        /* Contacts */
-        .phone-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .phone-row:last-child { border-bottom: none; }
-        .call-btn { background: var(--success); color: white; padding: 8px 18px; border-radius: 12px; text-decoration: none; font-weight: bold; }
-        .call-red { background: var(--danger); }
-
-        /* First Aid List */
-        .aid-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .aid-item {
-            background: rgba(255,255,255,0.03); border-radius: 18px; padding: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 15px; cursor: pointer;
-            transition: 0.2s;
-        }
-        .aid-item:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
-        .aid-item i { font-size: 24px; font-style: normal; }
-
-        /* Modal Style */
-        .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.92); 
-            display: none; align-items: center; justify-content: center; padding: 20px; z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            background: #1e293b; padding: 30px; border-radius: 28px; border: 1px solid var(--accent);
-            width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .close-btn { background: var(--accent); color: #000; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; margin-top: 25px; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-    <a href="index.html" class="back-btn">← DASHBOARD</a>
-
-    <h1>SOS Hub</h1>
-    <p class="subtitle">Emergency Locator & First Aid</p>
-
-    <div class="section-title">Nearby Medical Help</div>
-    <div class="card">
-        <button class="hospital-btn" onclick="findHospitals()">
-            🏥 FIND HOSPITALS NEAR ME
-        </button>
-        <p style="text-align:center; font-size:0.75rem; color:#94a3b8; margin-top:12px;">Opens maps for emergency rooms & open clinics</p>
-    </div>
-
-    <div class="section-title">First Aid Guide</div>
-    <div class="aid-grid">
-        <div class="aid-item" onclick="openAid('🫀 CPR Instructions', '1. Place the heel of your hand on the center of the chest.\n2. Push hard and fast (100-120 compressions per minute).\n3. Allow chest to recoil completely between pushes.\n4. Don\'t stop until professional help arrives.')">
-            <i>🫀</i> <strong>CPR Technique</strong>
-        </div>
-        <div class="aid-item" onclick="openAid('🩸 Severe Bleeding', '1. Apply direct pressure to the wound with a clean cloth.\n2. Do not remove the cloth if it gets soaked; add another on top.\n3. Keep the injured limb elevated if possible.')">
-            <i>🩸</i> <strong>Bleeding Control</strong>
-        </div>
-        <div class="aid-item" onclick="openAid('🥨 Choking (Heimlich)', '1. Stand behind the person.\n2. Wrap your arms around their waist.\n3. Make a fist and perform quick, upward thrusts above the navel.\n4. Repeat until the object is forced out.')">
-            <i>🥨</i> <strong>Choking Rescue</strong>
-        </div>
-        <div class="aid-item" onclick="openAid('☀️ Heatstroke', '1. Move the person to a cool, shaded area.\n2. Remove unnecessary clothing.\n3. Cool the body with wet cloths or water.\n4. Give water only if they are fully conscious.')">
-            <i>☀️</i> <strong>Heatstroke / Heat</strong>
-        </div>
-        <div class="aid-item" onclick="openAid('⚡ Electric Shock', '1. DO NOT touch the victim if they are still in contact with power.\n2. Turn off the main power source immediately.\n3. Call emergency services even if they seem fine.')">
-            <i>⚡</i> <strong>Electric Shock</strong>
-        </div>
-    </div>
-
-    <div class="section-title">Emergency Contacts</div>
-    <div class="card">
-        <div class="phone-row">
-            <div><strong>Universal Emergency</strong></div>
-            <a href="tel:112" class="call-btn call-red">112</a>
-        </div>
-        <div class="phone-row">
-            <div><strong>Ambulance</strong></div>
-            <a href="tel:166" class="call-btn">166</a>
-        </div>
-        <div class="phone-row">
-            <div><strong>Police</strong></div>
-            <a href="tel:100" class="call-btn">100</a>
-        </div>
-    </div>
-
-    <div id="aidModal" class="modal">
-        <div class="modal-content">
-            <h2 id="modalTitle" style="color:var(--accent); margin-top:0; font-size:1.3rem;"></h2>
-            <p id="modalBody" style="line-height:1.6; white-space: pre-line; color: #e2e8f0; font-size:0.95rem;"></p>
-            <button class="close-btn" onclick="closeModal()">GOT IT</button>
-        </div>
-    </div>
-
-    <script>
-        function findHospitals() {
-            // Updated deep link for global hospital search
-            const url = "https://www.google.com/maps/search/hospitals+near+me/";
-            window.open(url, '_blank');
-        }
-
-        function openAid(title, text) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalBody').innerText = text;
-            document.getElementById('aidModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('aidModal').style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('aidModal')) {
-                closeModal();
-            }
-        }
-    </script>
-</body>
-</html>
+    function closeModal() {
+        document.getElementById('aidModal').style.display = 'none';
+    }
