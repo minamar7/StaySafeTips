@@ -2,166 +2,141 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Elite Defense Dojo - Tang Soo Do</title>
+    <title>Elite Defense Dojo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <style>
         :root { 
             --gold: #facc15; 
             --neon-blue: #38bdf8;
             --bg: #020617; 
-            --card-light: #e2e8f0;
+            --card-white: #e2e8f0;
         }
         body { 
             margin: 0; background: var(--bg); color: white; 
             font-family: -apple-system, sans-serif; padding: 20px;
         }
 
-        /* Mockup Outer Frame */
+        /* Το μπλε πλαίσιο από το Mockup */
         .dojo-container {
-            border: 2.5px solid var(--neon-blue);
-            border-radius: 45px;
-            padding: 35px 20px;
-            background: linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, transparent 100%);
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
+            border: 2px solid var(--neon-blue);
+            border-radius: 40px;
+            padding: 30px 15px;
+            background: linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, transparent 100%);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
             text-align: center;
             max-width: 400px;
             margin: auto;
         }
 
-        .kanji { font-size: 3.5rem; color: var(--gold); display: block; margin-bottom: 5px; filter: drop-shadow(0 0 12px var(--gold)); }
-        h1 { font-size: 1.5rem; letter-spacing: 2px; margin: 0; text-transform: uppercase; font-weight: 900; }
-        .motto { font-size: 0.75rem; color: var(--neon-blue); letter-spacing: 1.5px; margin-bottom: 25px; font-weight: bold; }
+        .kanji { font-size: 3.5rem; color: var(--gold); display: block; margin-bottom: 10px; filter: drop-shadow(0 0 10px var(--gold)); }
+        h1 { font-size: 1.4rem; letter-spacing: 2px; margin: 0; text-transform: uppercase; }
+        .motto { font-size: 0.7rem; color: var(--neon-blue); letter-spacing: 1px; margin-bottom: 25px; font-weight: bold; }
 
-        /* Master Visual Box */
+        /* Η κεντρική εικόνα */
         .main-visual {
-            border: 3px solid var(--gold);
-            border-radius: 28px;
+            border: 2px solid var(--gold);
+            border-radius: 25px;
             overflow: hidden;
-            margin-bottom: 25px;
-            background: #0f172a;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            background: #111827;
         }
-        .main-visual img { width: 100%; display: block; transform: scale(1.05); }
+        .main-visual img { width: 100%; display: block; }
 
-        /* Action Grid Icons */
+        /* Τα εικονίδια επιλογής */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 30px;
         }
         .action-item {
-            border: 1.5px solid var(--neon-blue);
-            border-radius: 15px;
-            padding: 12px 5px;
+            border: 1px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 10px 5px;
             font-size: 0.6rem;
             color: #94a3b8;
-            font-weight: 800;
-            line-height: 1.2;
-            background: rgba(56, 189, 248, 0.03);
+            background: rgba(56, 189, 248, 0.05);
         }
 
-        /* Enter Button */
+        /* Το χρυσό κουμπί */
         .enter-btn {
-            background: linear-gradient(180deg, var(--gold) 0%, #eab308 100%);
-            color: black;
-            width: 100%;
-            padding: 18px;
-            border-radius: 18px;
-            border: none;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(250, 204, 21, 0.3);
+            background: linear-gradient(180deg, var(--gold), #eab308);
+            color: black; width: 100%; padding: 15px;
+            border-radius: 15px; border: none; font-weight: 900;
+            text-transform: uppercase; font-size: 1rem; cursor: pointer;
         }
 
-        /* Steps Overlay */
+        /* Η ανάλυση σε 2 στήλες */
         .steps-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            padding: 25px;
-            z-index: 1000;
-            overflow-y: auto;
+            display: none; position: fixed; inset: 0;
+            background: var(--bg); padding: 20px; z-index: 100;
         }
         .steps-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 25px;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; margin-top: 20px;
         }
         .step-card {
-            background: var(--card-light);
-            border-radius: 20px;
-            padding: 15px;
-            border: 2px solid var(--gold);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: var(--card-white); border-radius: 18px;
+            padding: 12px; border: 2px solid var(--gold); text-align: center;
         }
-        .step-tag {
-            background: #1e293b; color: white; font-size: 0.65rem;
-            padding: 3px 8px; border-radius: 6px; align-self: flex-start;
+        .step-label {
+            background: #1e293b; color: white; font-size: 0.6rem;
+            padding: 3px 8px; border-radius: 5px; display: inline-block;
             margin-bottom: 10px; font-weight: bold;
         }
-        .step-icon { width: 55px; height: 55px; margin-bottom: 12px; }
-        .step-text { color: #0f172a; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; text-align: center; }
+        .step-desc { color: #0f172a; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="dojo-container">
+    <div class="dojo-container" id="mainDojo">
         <span class="kanji">道場</span>
         <h1>Elite Defense Dojo</h1>
         <p class="motto">POWERED BY INSTINCT</p>
 
         <div class="main-visual">
-            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" alt="Tang Soo Do Master">
+            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" alt="Master">
         </div>
 
-        <p style="font-size: 0.75rem; color: var(--gold); font-weight: 800; margin-bottom: 15px; letter-spacing: 1px;">SELECT YOUR TRAINING</p>
-        
         <div class="action-grid">
-            <div class="action-item">🥋<br>TECHNIQUE<br>LIBRARY</div>
-            <div class="action-item">🎯<br>FOCUS<br>DRILLS</div>
-            <div class="action-item">📊<br>PROGRESS<br>TRACKER</div>
+            <div class="action-item">🥋<br>TECHNIQUE</div>
+            <div class="action-item">🎯<br>DRILLS</div>
+            <div class="action-item">📊<br>PROGRESS</div>
         </div>
 
         <button class="enter-btn" onclick="showSteps()">Enter the Dojo</button>
     </div>
 
     <div id="stepsView" class="steps-overlay">
-        <h2 style="color: var(--gold); text-align: center; margin-top: 0; font-size: 1.2rem;">PALM HEEL STRIKE (SUDO)</h2>
+        <h2 style="color: var(--gold); text-align: center; margin: 0;">PALM STRIKE ANALYSIS</h2>
         <div class="steps-grid">
             <div class="step-card">
-                <div class="step-tag">STEP 1</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/3565/3565910.png" class="step-icon">
-                <div class="step-text">Chamber Position</div>
+                <div class="step-label">STEP 1</div>
+                <img src="https://cdn-icons-png.flaticon.com/512/3565/3565910.png" style="width:50px; margin-bottom:10px;">
+                <div class="step-desc">Chamber Pos</div>
             </div>
             <div class="step-card">
-                <div class="step-tag">STEP 2</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/1533/1533900.png" class="step-icon">
-                <div class="step-text">Hip Rotation</div>
+                <div class="step-label">STEP 2</div>
+                <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" style="width:50px; margin-bottom:10px;">
+                <div class="step-desc">Hip Twist</div>
             </div>
             <div class="step-card">
-                <div class="step-tag">STEP 3</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" class="step-icon">
-                <div class="step-text">Palm Impact</div>
+                <div class="step-label">STEP 3</div>
+                <img src="https://cdn-icons-png.flaticon.com/512/3663/3663335.png" style="width:50px; margin-bottom:10px;">
+                <div class="step-desc">Impact</div>
             </div>
             <div class="step-card">
-                <div class="step-tag">STEP 4</div>
-                <img src="https://cdn-icons-png.flaticon.com/512/5555/5555133.png" class="step-icon">
-                <div class="step-text">Ki-Hap & Reset</div>
+                <div class="step-label">STEP 4</div>
+                <img src="https://cdn-icons-png.flaticon.com/512/5555/5555133.png" style="width:50px; margin-bottom:10px;">
+                <div class="step-desc">Reset</div>
             </div>
         </div>
-        <button class="enter-btn" style="margin-top: 30px;" onclick="closeSteps()">Back to Selection</button>
+        <button class="enter-btn" style="margin-top: 30px;" onclick="hideSteps()">Return</button>
     </div>
 
     <script>
         function showSteps() { document.getElementById('stepsView').style.display = 'block'; }
-        function closeSteps() { document.getElementById('stepsView').style.display = 'none'; }
+        function hideSteps() { document.getElementById('stepsView').style.display = 'none'; }
     </script>
 </body>
 </html>
