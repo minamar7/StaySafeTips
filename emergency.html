@@ -1,128 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Emergency Hub – Stay Safe Elite</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <style>
-    :root {
-      --bg: #020617;
-      --danger: #ef4444;
-      --accent: #38bdf8;
-      --card: rgba(30, 41, 59, 0.7);
-    }
-    body { margin: 0; background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; }
-    .container { max-width: 480px; margin: 0 auto; padding: 40px 20px; }
-    
-    .back-link { color: var(--accent); text-decoration: none; font-weight: bold; display: block; margin-bottom: 20px; }
-    
-    h1 { font-size: 2rem; margin-bottom: 10px; color: var(--danger); }
-    .sub { color: #94a3b8; margin-bottom: 30px; }
+    <meta charset="UTF-8">
+    <title>PANIC BUTTON – Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <style>
+        :root {
+            --bg: #020617;
+            --danger: #ef4444;
+            --accent: #38bdf8;
+        }
+        
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: -apple-system, system-ui, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .sos-circle {
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, var(--danger) 0%, #991b1b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 0 50px rgba(239, 68, 68, 0.6);
+            border: 8px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            animation: pulse-ring 1.5s infinite;
+            margin-bottom: 40px;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .emergency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    
-    .action-card {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 24px;
-      padding: 25px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .action-card:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
-    .action-card i { font-size: 35px; display: block; margin-bottom: 10px; font-style: normal; }
-    .action-card span { font-weight: 800; font-size: 0.9rem; }
+        @keyframes pulse-ring {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+            50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(239, 68, 68, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+        }
 
-    .panic-big-btn {
-      grid-column: span 2;
-      background: linear-gradient(135deg, var(--danger), #b91c1c);
-      border: none;
-      padding: 30px;
-      border-radius: 28px;
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 900;
-      margin-top: 10px;
-      box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
-    }
+        .back-btn {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
 
-    /* Fake Call Screen */
-    #fake-call-ui {
-      position: fixed; inset: 0; background: #000; z-index: 9999;
-      display: none; flex-direction: column; align-items: center; justify-content: space-around;
-      padding: 50px 0;
-    }
-  </style>
+        .helper-text {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 280px;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .call-112 {
+            margin-top: 35px;
+            background: rgba(255,255,255,0.05);
+            padding: 18px 45px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <a href="index.html" class="back-link">← Back</a>
-  
-  <h1>SOS Hub</h1>
-  <p class="sub">Immediate help & emergency tools</p>
+    <a href="index.html" class="back-btn">← EXIT</a>
 
-  <div class="emergency-grid">
-    <button class="panic-big-btn" onclick="triggerMainSOS()">🚨 BROADCAST SOS</button>
-    
-    <div class="action-card" onclick="window.location.href='tel:112'">
-      <i>📞</i><span>112 (EU)</span>
-    </div>
-    
-    <div class="action-card" onclick="window.location.href='tel:100'">
-      <i>🚓</i><span>POLICE</span>
+    <div class="sos-circle" onclick="sendEmergencySMS()">
+        SOS
     </div>
 
-    <div class="action-card" onclick="shareLocation()">
-      <i>📍</i><span>SHARE LOCATION</span>
-    </div>
+    <p class="helper-text">Tap to broadcast your live location & pin</p>
 
-    <div class="action-card" onclick="startFakeCall()">
-      <i>📱</i><span>FAKE CALL</span>
-    </div>
-  </div>
-</div>
+    <a href="tel:112" class="call-112">📞 CALL 112</a>
 
-<div id="fake-call-ui">
-  <div style="text-align:center;">
-    <div style="width:100px; height:100px; background:#333; border-radius:50%; margin:0 auto 20px;"></div>
-    <h2>Unknown Caller</h2>
-    <p>Incoming call...</p>
-  </div>
-  <div style="display:flex; gap:50px;">
-    <div onclick="stopFakeCall()" style="background:var(--danger); width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px;">📞</div>
-    <div style="background:#22c55e; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:30px;">📞</div>
-  </div>
-</div>
+    <script>
+        function sendEmergencySMS() {
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
-<script>
-function triggerMainSOS() {
-  if(confirm("Confirm: Send SOS message to your contacts?")) {
-    shareLocation("EMERGENCY! I need help!");
-  }
-}
-
-function shareLocation(customMsg = "My current location:") {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-      window.location.href = `sms:?&body=${customMsg} ${link}`;
-    });
-  } else {
-    alert("Location not supported on this device.");
-  }
-}
-
-function startFakeCall() {
-  document.getElementById('fake-call-ui').style.display = 'flex';
-  // Προαιρετικά παίζει ήχος κουδουνίσματος εδώ
-}
-
-function stopFakeCall() {
-  document.getElementById('fake-call-ui').style.display = 'none';
-}
-</script>
-
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    
+                    // Το απόλυτο link για Google Maps με πινέζα (q=latitude,longitude)
+                    const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                    
+                    const message = encodeURIComponent(`EMERGENCY! I need help. My exact location: ${mapLink}`);
+                    
+                    // Καθολικό σχήμα για SMS (δουλεύει σε iOS και Android)
+                    window.location.href = `sms:?&body=${message}`;
+                }, () => {
+                    alert("Location access denied. Opening SMS without coordinates.");
+                    window.location.href = `sms:?&body=EMERGENCY! I need help immediately!`;
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 8000
+                });
+            } else {
+                window.location.href = `sms:?&body=EMERGENCY! I need help!`;
+            }
+        }
+    </script>
 </body>
 </html>
