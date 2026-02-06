@@ -1,107 +1,92 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Elite Defense Dojo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <style>
-        :root { --gold: #facc15; --bg: #020617; --card: #1e293b; --accent: #38bdf8; --text: #f8fafc; }
-        body { margin: 0; background: var(--bg); font-family: system-ui, sans-serif; color: var(--text); padding: 20px; }
+        :root { --gold: #facc15; --neon: #38bdf8; --bg: #020617; }
+        body { margin: 0; background: var(--bg); color: white; font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        .header { text-align: center; margin-bottom: 30px; }
-        .header .icon-bolt { font-size: 40px; color: var(--gold); filter: drop-shadow(0 0 10px var(--gold)); }
-        .header h1 { margin: 10px 0 5px; font-size: 1.5rem; letter-spacing: 1px; }
-        .header p { margin: 0; font-size: 0.8rem; color: var(--accent); font-weight: 800; border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 2px; }
-
-        .main-card { background: var(--card); border-radius: 24px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { color: var(--accent); font-size: 1.2rem; margin-top: 0; }
-
-        /* GRID SYSTEM ΓΙΑ ΤΑ MOCKUPS */
-        .technique-step { display: grid; grid-template-columns: 80px 1fr; gap: 15px; margin-bottom: 25px; align-items: center; }
-        
-        /* ΤΟ MOCKUP SVG */
-        .mockup-box { 
-            width: 80px; height: 80px; background: rgba(255,255,255,0.05); 
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; justify-content: center;
+        .dojo-frame {
+            border: 2px solid var(--neon);
+            border-radius: 45px;
+            padding: 40px 20px;
+            width: 85%;
+            max-width: 360px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(56,189,248,0.1) 0%, transparent 100%);
+            box-shadow: 0 0 25px rgba(56,189,248,0.2);
         }
-        .mockup-svg { width: 50px; height: 50px; fill: none; stroke: var(--gold); stroke-width: 2; }
 
-        .step-info { font-size: 0.85rem; }
-        .step-info b { color: var(--gold); display: block; margin-bottom: 4px; font-size: 0.9rem; }
-        .step-info b span { background: var(--gold); color: #000; padding: 1px 6px; border-radius: 4px; margin-right: 5px; font-size: 0.8rem; }
-        .step-info p { margin: 0; color: #cbd5e1; line-height: 1.3; }
+        h1 { font-size: 1.5rem; letter-spacing: 1px; margin: 0; color: var(--neon); font-weight: 900; }
+        .motto { font-size: 0.6rem; letter-spacing: 2px; margin-bottom: 20px; opacity: 0.8; font-weight: bold; }
+        .kanji { font-size: 3.5rem; color: var(--gold); display: block; margin: 10px 0; filter: drop-shadow(0 0 10px var(--gold)); }
 
-        .warning-area { 
-            border: 2px dashed #ef4444; border-radius: 15px; padding: 15px; 
-            margin-top: 20px; position: relative; background: rgba(239, 68, 68, 0.05);
+        .master-display {
+            border: 2px solid var(--gold);
+            border-radius: 30px;
+            margin: 20px 0;
+            overflow: hidden;
+            background: #0f172a;
+            aspect-ratio: 1.2 / 1;
         }
-        .warning-area b { color: #ef4444; display: flex; align-items: center; gap: 5px; }
+        .master-display img { width: 100%; height: 100%; object-fit: cover; }
 
-        .footer-btn { 
-            width: 100%; padding: 18px; border-radius: 18px; border: none; 
-            background: var(--gold); color: #000; font-weight: 900; 
-            margin-top: 25px; cursor: pointer;
+        .label { font-size: 0.7rem; color: var(--gold); font-weight: bold; margin-bottom: 15px; display: block; text-transform: uppercase; }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        .menu-item {
+            border: 1px solid var(--neon);
+            border-radius: 15px;
+            padding: 15px 5px;
+            background: rgba(56,189,248,0.05);
+            cursor: pointer;
+            transition: 0.3s;
         }
+        .menu-item:active { transform: scale(0.95); }
+        .menu-item img { width: 30px; margin-bottom: 8px; filter: brightness(1.5); }
+        .menu-item span { font-size: 0.5rem; display: block; font-weight: 900; color: var(--gold); text-transform: uppercase; }
+
+        .btn-enter {
+            background: linear-gradient(to bottom, var(--gold), #eab308);
+            color: black; border: none; width: 100%; padding: 18px;
+            border-radius: 18px; font-weight: 900; text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
+            cursor: pointer;
+        }
+        .back-nav { margin-top: 20px; font-size: 0.7rem; color: #64748b; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
-
-    <header class="header">
-        <div class="icon-bolt">⚡</div>
+    <div class="dojo-frame">
         <h1>ELITE DEFENSE DOJO</h1>
-        <p>POWERED BY INSTINCT</p>
-    </header>
+        <div class="motto">POWERED BY INSTINCT</div>
+        <div class="kanji">道場</div>
+        
+        <div class="master-display">
+            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" alt="Master">
+        </div>
 
-    <div class="main-card">
-        <h2>Τεχνική 1: Απελευθέρωση Καρπού</h2>
-        <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 25px;">Όταν κάποιος σε γραπώσει από το χέρι.</p>
+        <span class="label">SELECT YOUR TRAINING</span>
 
-        <div class="technique-step">
-            <div class="mockup-box">
-                <svg class="mockup-svg" viewBox="0 0 24 24">
-                    <path d="M18 11V6a2 2 0 00-2-2v0a2 2 0 00-2 2v5m-4 0V4a2 2 0 00-2-2v0a2 2 0 00-2 2v7m-4 0V8a2 2 0 00-2-2v0a2 2 0 00-2 2v9a4 4 0 004 4h7a4 4 0 004-4v-6"/>
-                </svg>
+        <div class="menu-grid">
+            <div class="menu-item" onclick="location.href='techniques.html'">
+                <img src="https://cdn-icons-png.flaticon.com/512/2936/2936900.png" alt="Library">
+                <span>TECHNIQUE<br>LIBRARY</span>
             </div>
-            <div class="step-info">
-                <b><span>1</span> Εντοπισμός Αδυναμίας</b>
-                <p>Εντόπισε το κενό ανάμεσα στον αντίχειρα και τα δάχτυλα του αντιπάλου. Εκεί η λαβή είναι αδύναμη.</p>
+            <div class="menu-item" onclick="alert('Focus Drills: Coming Soon')">
+                <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" alt="Drills">
+                <span>FOCUS<br>DRILLS</span>
+            </div>
+            <div class="menu-item" onclick="alert('Current Rank: White Belt')">
+                <img src="https://cdn-icons-png.flaticon.com/512/3112/3112946.png" alt="Tracker">
+                <span>PROGRESS<br>TRACKER</span>
             </div>
         </div>
 
-        <div class="technique-step">
-            <div class="mockup-box" style="transform: rotate(45deg);">
-                <svg class="mockup-svg" viewBox="0 0 24 24">
-                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
-                </svg>
-            </div>
-            <div class="step-info">
-                <b><span>2</span> Περιστροφή Καρπού</b>
-                <p>Στρέψε τον καρπό σου προς το άνοιγμα. Χρησιμοποίησε όλο το σώμα σου για μοχλό, όχι μόνο το χέρι.</p>
-            </div>
-        </div>
-
-        <div class="technique-step">
-            <div class="mockup-box">
-                <svg class="mockup-svg" viewBox="0 0 24 24">
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-            </div>
-            <div class="step-info">
-                <b><span>3</span> Εκρηκτική Κίνηση</b>
-                <p>Τράβηξε το χέρι σου "προς τα έξω" και δημιούργησε απόσταση αμέσως. Μην μείνεις να παλέψεις.</p>
-            </div>
-        </div>
-
-        <div class="warning-area">
-            <b>⚠️ WARNING</b>
-            <p style="font-size: 0.75rem; margin: 5px 0 0; color: #cbd5e1;">
-                Η τεχνική αυτή είναι για διαφυγή. Μόλις ελευθερωθείς, τρέξε προς φωτεινό σημείο και κάλεσε σε βοήθεια.
-            </p>
-        </div>
+        <button class="btn-enter" onclick="location.href='techniques.html'">ENTER THE DOJO</button>
+        <a href="index.html" class="back-nav">← RETURN TO DASHBOARD</a>
     </div>
-
-    <button class="footer-btn" onclick="location.href='index.html'">ΟΛΟΚΛΗΡΩΣΗ ΜΑΘΗΜΑΤΟΣ</button>
-
 </body>
 </html>
