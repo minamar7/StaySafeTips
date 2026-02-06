@@ -20,7 +20,6 @@
             padding: env(safe-area-inset-top) 20px 40px 20px;
         }
 
-        /* Premium Header εμπνευσμένο από το Mockup */
         .header { 
             display: flex; 
             align-items: center; 
@@ -52,7 +51,6 @@
             font-weight: bold;
         }
 
-        /* Belt Sections */
         .belt-section { margin-bottom: 35px; }
         
         .belt-header { 
@@ -74,7 +72,6 @@
             opacity: 0.4;
         }
 
-        /* Lesson Cards με το στυλ του Mockup */
         .lesson-card {
             background: var(--card-bg);
             border: 1px solid rgba(56, 189, 248, 0.2);
@@ -92,12 +89,13 @@
         .lesson-card:active { transform: scale(0.97); background: rgba(56, 189, 248, 0.1); }
 
         .lesson-img {
-            width: 60px;
-            height: 60px;
+            width: 70px; /* Λίγο μεγαλύτερη για να φαίνεται η δράση */
+            height: 70px;
             border-radius: 15px;
-            border: 1px solid var(--gold);
+            border: 2px solid var(--gold);
             object-fit: cover;
             background: #000;
+            box-shadow: 0 0 10px var(--shadow-gold);
         }
 
         .lesson-info { flex-grow: 1; }
@@ -110,11 +108,9 @@
             text-transform: uppercase;
         }
 
-        /* Locked State */
         .lesson-card.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
         .lock-icon { font-size: 1.2rem; opacity: 0.6; }
 
-        /* Badge Indicator */
         .belt-indicator { 
             width: 6px; 
             height: 35px; 
@@ -128,13 +124,14 @@
     <div class="header">
         <button class="back-btn" onclick="location.href='dojo.html'">✕</button>
         <h2>LIBRARY</h2>
-        <div style="width:40px"></div> </div>
+        <div style="width:40px"></div> 
+    </div>
 
     <div class="belt-section">
         <div class="belt-header">White Belt (10th Gup) <div class="belt-line"></div></div>
         
         <div class="lesson-card" onclick="alert('Playing: Palm Strike Masterclass')">
-            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" class="lesson-img" alt="Master">
+            <img src="https://img.freepik.com/free-photo/man-doing-karate-indoors_23-2148398944.jpg" class="lesson-img" alt="Master Action">
             <div class="lesson-info">
                 <h4>Palm Strike (Sudo)</h4>
                 <p>FOUNDATION • STRIKE</p>
@@ -143,7 +140,7 @@
         </div>
 
         <div class="lesson-card" onclick="alert('Playing: Front Snap Kick')">
-            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" class="lesson-img" alt="Master">
+            <img src="https://img.freepik.com/free-photo/man-doing-karate-indoors_23-2148398944.jpg" class="lesson-img" alt="Master Action">
             <div class="lesson-info">
                 <h4>Front Snap Kick</h4>
                 <p>FOUNDATION • KICK</p>
