@@ -115,14 +115,19 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
                     <div class="tool-card" onclick="window.location.href='timer.html'">
                         <i>⏳</i><small>SAFE TIMER</small>
                     </div>
-                    <div class="tool-card" onclick="window.location.href='checkup.html'">
-                        <i>🔍</i><small>CHECKUP</small>
-                    </div>
-                    <div class="tool-card" onclick="window.location.href='emergency.html'">
+                    <div class="tool-card" onclick="window.location.href='sos-hub.html'">
                         <i>🚨</i><small>SOS HUB</small>
                     </div>
+                    <div class="tool-card" onclick="window.location.href='weather-alerts.html'">
+                        <i>🌍</i><small>NATURE</small>
+                    </div>
                     <div class="tool-card" onclick="window.location.href='scam-alerts.html'">
-                        <i>⚠️</i><small>ALERTS</small>
+                        <i>⚠️</i><small>SCAMS</small>
+                    </div>
+                </div>
+                <div class="tools-grid" style="margin-top: 15px;">
+                    <div class="tool-card" style="grid-column: span 2;" onclick="window.location.href='checkup.html'">
+                        <i>🔍</i><small>ELITE CHECKUP</small>
                     </div>
                 </div>
             </div>
@@ -136,7 +141,6 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </div>
 
 <script>
-// Load XP and Language state
 let xp = parseInt(localStorage.getItem('xp')) || 0;
 let isAppInitialized = localStorage.getItem('app_init') === 'true';
 
@@ -145,7 +149,6 @@ const quizData = [
     {q: "A stranger asks for help in a secluded spot.", o: ["Help them immediately", "Keep distance", "Offer money"], a: 1}
 ];
 
-// CHECK IF ALREADY INITIALIZED ON LOAD
 window.onload = () => {
     if(isAppInitialized) {
         showMainApp();
@@ -154,7 +157,7 @@ window.onload = () => {
 
 function initApp(lang){
     localStorage.setItem('app_init', 'true');
-    localStorage.setItem('ss_premium', 'true'); // Ξεκλειδώνει το Checkup
+    localStorage.setItem('ss_premium', 'true');
     showMainApp();
 }
 
