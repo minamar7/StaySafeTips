@@ -56,7 +56,6 @@
             text-transform: uppercase;
         }
 
-        /* Progress Tracker Section */
         .progress-box {
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid rgba(56, 189, 248, 0.2);
@@ -102,7 +101,6 @@
             font-weight: bold;
         }
 
-        /* Master Visual Frame */
         .master-display {
             border: 3px solid var(--gold); 
             border-radius: 30px;
@@ -204,7 +202,7 @@
         <span class="label">SELECT YOUR TRAINING</span>
 
         <div class="menu-grid">
-            <div class="menu-item" onclick="location.href='techniques.html'">
+            <div class="menu-item" onclick="playSound(); location.href='techniques.html'">
                 <img src="https://cdn-icons-png.flaticon.com/512/2936/2936900.png" alt="Library">
                 <span>TECHNIQUE<br>LIBRARY</span>
             </div>
@@ -218,8 +216,15 @@
             </div>
         </div>
 
-        <button class="btn-enter" onclick="location.href='techniques.html'">ENTER THE DOJO</button>
+        <button class="btn-enter" onclick="playSound(); setTimeout(() => location.href='techniques.html', 400)">ENTER THE DOJO</button>
         <a href="index.html" class="back-nav">← RETURN TO DASHBOARD</a>
     </div>
+
+    <script>
+        function playSound() {
+            var audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
+            audio.play();
+        }
+    </script>
 </body>
 </html>
