@@ -21,7 +21,6 @@
             padding: env(safe-area-inset-top) 20px 40px 20px;
         }
 
-        /* Premium Header */
         .header { 
             display: flex; 
             align-items: center; 
@@ -74,7 +73,6 @@
             opacity: 0.4;
         }
 
-        /* Lesson Cards */
         .lesson-card {
             background: var(--card-bg);
             border: 1px solid rgba(56, 189, 248, 0.2);
@@ -134,7 +132,7 @@
         <div class="belt-header">White Belt (10th Gup) <div class="belt-line"></div></div>
         
         <div class="lesson-card" onclick="playKiai(); alert('Playing: Palm Strike Masterclass')">
-            <img src="https://img.freepik.com/free-photo/man-doing-karate-indoors_23-2148398944.jpg" class="lesson-img" alt="Master Action">
+            <img src="https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?q=80&w=200&auto=format&fit=crop" class="lesson-img" alt="Palm Strike">
             <div class="lesson-info">
                 <h4>Palm Strike (Sudo)</h4>
                 <p>FOUNDATION • STRIKE</p>
@@ -143,7 +141,7 @@
         </div>
 
         <div class="lesson-card" onclick="playKiai(); alert('Playing: Front Snap Kick')">
-            <img src="https://img.freepik.com/free-photo/man-doing-karate-indoors_23-2148398944.jpg" class="lesson-img" alt="Master Action">
+            <img src="https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=200&auto=format&fit=crop" class="lesson-img" alt="Front Kick">
             <div class="lesson-info">
                 <h4>Front Snap Kick</h4>
                 <p>FOUNDATION • KICK</p>
@@ -155,7 +153,8 @@
     <div class="belt-section">
         <div class="belt-header">Orange Belt (8th Gup) <div class="belt-line"></div></div>
         
-        <div class="lesson-card locked">
+        <div class="lesson-card locked" onclick="alert('Unlock Premium to access Orange Belt techniques!')">
+            <img src="https://images.unsplash.com/photo-1511883040705-6011fad9ed39?q=80&w=200&auto=format&fit=crop" class="lesson-img" alt="Wrist Grab">
             <div class="lesson-info">
                 <h4>Wrist Grab Escape</h4>
                 <p>DEFENSE • ESCAPE</p>
@@ -164,25 +163,14 @@
             <div class="belt-indicator" style="background: orange; color: orange;"></div>
         </div>
 
-        <div class="lesson-card locked">
+        <div class="lesson-card locked" onclick="alert('Unlock Premium to access Orange Belt techniques!')">
+            <img src="https://images.unsplash.com/photo-1509564324749-47285521b470?q=80&w=200&auto=format&fit=crop" class="lesson-img" alt="Knee Strike">
             <div class="lesson-info">
                 <h4>Knee Strike</h4>
                 <p>CLOSE QUARTERS</p>
             </div>
             <span class="lock-icon">🔒</span>
             <div class="belt-indicator" style="background: orange; color: orange;"></div>
-        </div>
-    </div>
-
-    <div class="belt-section">
-        <div class="belt-header">Green Belt (6th Gup) <div class="belt-line"></div></div>
-        <div class="lesson-card locked">
-            <div class="lesson-info">
-                <h4>Elbow Strike (Palkup)</h4>
-                <p>POWER • STRIKE</p>
-            </div>
-            <span class="lock-icon">🔒</span>
-            <div class="belt-indicator" style="background: green; color: green;"></div>
         </div>
     </div>
 
