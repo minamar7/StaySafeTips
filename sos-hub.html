@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SOS HUB – Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <style>
+        :root { 
+            --bg: #020617; 
+            --card: rgba(30, 41, 59, 0.7); 
+            --accent: #38bdf8; 
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: -apple-system, sans-serif; 
+            padding: 20px 20px 50px; 
+        }
+        .back-btn { color: var(--accent); text-decoration: none; font-weight: bold; display: block; margin-bottom: 20px; }
+        
+        h1 { font-size: 2rem; margin-bottom: 5px; }
+        .subtitle { color: #94a3b8; margin-bottom: 30px; font-size: 0.9rem; }
+
+        .section-title { font-size: 1.1rem; font-weight: 800; margin: 25px 0 15px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .card { 
+            background: var(--card); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 24px; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+        }
+
+        .phone-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 12px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+        }
+        .phone-row:last-child { border-bottom: none; }
+        
+        .call-icon { 
+            background: var(--success); 
+            color: white; 
+            width: 35px; 
+            height: 35px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-decoration: none; 
+            font-size: 18px;
+        }
+
+        /* Hospital Button Style */
+        .hospital-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .guide-item { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 15px; 
+            margin-bottom: 15px; 
+        }
+        .guide-item i { font-style: normal; font-size: 24px; }
+        .guide-item p { margin: 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← DASHBOARD</a>
+
+    <h1>SOS Hub</h1>
+    <p class="subtitle">Critical information & Emergency contacts</p>
+
+    <div class="section-title">Nearby Medical Help</div>
+    <div class="card">
+        <p style="margin-top:0; font-size:0.9rem; color:#94a3b8;">Find hospitals and health centers near your current location:</p>
+        <button class="hospital-btn" onclick="findHospitals()">
+            🏥 FIND NEAREST HOSPITAL
+        </button>
+    </div>
+
+    <div class="section-title">Emergency Contacts</div>
+    <div class="card">
+        <div class="phone-row">
+            <div><strong>Universal Emergency</strong><br><small style="color:var(--accent);">Global / EU</small></div>
+            <a href="tel:112" style="background:var(--danger); color:white; padding:8px 15px; border-radius:10px; text-decoration:none; font-weight:bold;">112</a>
+        </div>
+        <div class="phone-row">
+            <div><strong>Police</strong></div>
+            <a href="tel:100" class="call-icon">📞</a>
+        </div>
+        <div class="phone-row">
+            <div><strong>Ambulance (EKAB)</strong></div>
+            <a href="tel:166" class="call-icon">📞</a>
+        </div>
+    </div>
+
+    <div class="section-title">Survival Basics</div>
+    <div class="card">
+        <div class="guide-item">
+            <i>🧘</i>
+            <div>
+                <strong>Panic Attack</strong>
+                <p>Breathe slowly. Inhale for 4s, hold for 4s, exhale for 4s.</p>
+            </div>
+        </div>
+        <div class="guide-item" style="border-top: 1px solid rgba(255,255,255,0.05); pt:15px; margin-top:15px;">
+            <i>🏙️</i>
+            <div>
+                <strong>Safe Path</strong>
+                <p>Stay in well-lit areas and keep your phone in hand.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function findHospitals() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    // Ανοίγει τους χάρτες με αναζήτηση για νοσοκομεία γύρω από το στίγμα του χρήστη
+                    const url = `https://www.google.com/maps?q=lat,lon`;
+                    window.open(url, '_blank');
+                }, () => {
+                    // Αν δεν δώσει στίγμα, κάνει γενική αναζήτηση για νοσοκομεία
+                    window.open('https://maps.google.com/?cid=2096844694322870287&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ', '_blank');
+                });
+            } else {
+                window.open('https://maps.google.com/?cid=17369355071452516293&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ', '_blank');
+            }
+        }
+    </script>
+
+</body>
+</html>
