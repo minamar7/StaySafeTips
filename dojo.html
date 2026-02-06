@@ -56,15 +56,6 @@
             text-transform: uppercase;
         }
 
-        .kanji { 
-            font-size: 3.8rem; 
-            color: var(--gold); 
-            display: block; 
-            margin: 10px 0; 
-            filter: drop-shadow(0 0 15px var(--gold));
-            font-weight: bold;
-        }
-
         /* Progress Tracker Section */
         .progress-box {
             background: rgba(15, 23, 42, 0.6);
@@ -98,12 +89,22 @@
         .bar-fill {
             background: var(--neon);
             height: 100%;
-            width: 35%; /* Mockup value */
+            width: 35%; 
             box-shadow: 0 0 10px var(--neon);
         }
 
+        .kanji { 
+            font-size: 3.8rem; 
+            color: var(--gold); 
+            display: block; 
+            margin: 10px 0; 
+            filter: drop-shadow(0 0 15px var(--gold));
+            font-weight: bold;
+        }
+
+        /* Master Visual Frame */
         .master-display {
-            border: 3px solid var(--gold); /* */
+            border: 3px solid var(--gold); 
             border-radius: 30px;
             margin: 15px 0 25px 0;
             overflow: hidden;
@@ -112,7 +113,12 @@
             box-shadow: 0 0 20px var(--shadow-gold);
         }
 
-        .master-display img { width: 100%; height: 100%; object-fit: cover; }
+        .master-display img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+        }
 
         .label { 
             font-size: 0.75rem; 
@@ -192,7 +198,7 @@
         <div class="kanji">道場</div>
         
         <div class="master-display">
-            <img src="https://img.freepik.com/premium-vector/karate-martial-arts-illustration_23-2148915155.jpg" alt="Master">
+            <img src="https://img.freepik.com/free-photo/man-doing-karate-indoors_23-2148398944.jpg" alt="Master Action">
         </div>
 
         <span class="label">SELECT YOUR TRAINING</span>
