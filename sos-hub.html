@@ -17,14 +17,14 @@
             background: var(--bg); 
             color: white; 
             font-family: -apple-system, sans-serif; 
-            padding: 20px 20px 50px; 
+            padding: 20px 20px 80px; 
         }
         .back-btn { color: var(--accent); text-decoration: none; font-weight: bold; display: block; margin-bottom: 20px; }
         
-        h1 { font-size: 2rem; margin-bottom: 5px; }
+        h1 { font-size: 2rem; margin: 0; }
         .subtitle { color: #94a3b8; margin-bottom: 30px; font-size: 0.9rem; }
 
-        .section-title { font-size: 1.1rem; font-weight: 800; margin: 25px 0 15px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { font-size: 0.9rem; font-weight: 800; margin: 25px 0 15px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
         
         .card { 
             background: var(--card); 
@@ -34,55 +34,44 @@
             margin-bottom: 15px; 
         }
 
-        .phone-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 12px 0; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-        }
-        .phone-row:last-child { border-bottom: none; }
-        
-        .call-icon { 
-            background: var(--success); 
-            color: white; 
-            width: 35px; 
-            height: 35px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            text-decoration: none; 
-            font-size: 18px;
-        }
-
-        /* Hospital Button Style */
+        /* Hospital Button */
         .hospital-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            color: white;
-            padding: 18px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            color: white; padding: 18px; border-radius: 20px;
+            text-decoration: none; font-weight: bold; border: none;
+            width: 100%; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            cursor: pointer; font-size: 1rem;
         }
 
-        .guide-item { 
-            display: flex; 
-            align-items: flex-start; 
-            gap: 15px; 
-            margin-bottom: 15px; 
+        /* Contacts */
+        .phone-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .phone-row:last-child { border-bottom: none; }
+        .call-btn { background: var(--success); color: white; padding: 8px 18px; border-radius: 12px; text-decoration: none; font-weight: bold; }
+        .call-red { background: var(--danger); }
+
+        /* First Aid List */
+        .aid-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .aid-item {
+            background: rgba(255,255,255,0.03); border-radius: 18px; padding: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 15px; cursor: pointer;
+            transition: 0.2s;
         }
-        .guide-item i { font-style: normal; font-size: 24px; }
-        .guide-item p { margin: 0; font-size: 0.9rem; color: #cbd5e1; line-height: 1.4; }
+        .aid-item:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
+        .aid-item i { font-size: 24px; font-style: normal; }
+
+        /* Modal Style */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.92); 
+            display: none; align-items: center; justify-content: center; padding: 20px; z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: #1e293b; padding: 30px; border-radius: 28px; border: 1px solid var(--accent);
+            width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .close-btn { background: var(--accent); color: #000; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: bold; margin-top: 25px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -90,68 +79,81 @@
     <a href="index.html" class="back-btn">← DASHBOARD</a>
 
     <h1>SOS Hub</h1>
-    <p class="subtitle">Critical information & Emergency contacts</p>
+    <p class="subtitle">Emergency Locator & First Aid</p>
 
     <div class="section-title">Nearby Medical Help</div>
     <div class="card">
-        <p style="margin-top:0; font-size:0.9rem; color:#94a3b8;">Find hospitals and health centers near your current location:</p>
         <button class="hospital-btn" onclick="findHospitals()">
-            🏥 FIND NEAREST HOSPITAL
+            🏥 FIND HOSPITALS NEAR ME
         </button>
+        <p style="text-align:center; font-size:0.75rem; color:#94a3b8; margin-top:12px;">Opens maps for emergency rooms & open clinics</p>
+    </div>
+
+    <div class="section-title">First Aid Guide</div>
+    <div class="aid-grid">
+        <div class="aid-item" onclick="openAid('🫀 CPR Instructions', '1. Place the heel of your hand on the center of the chest.\n2. Push hard and fast (100-120 compressions per minute).\n3. Allow chest to recoil completely between pushes.\n4. Don\'t stop until professional help arrives.')">
+            <i>🫀</i> <strong>CPR Technique</strong>
+        </div>
+        <div class="aid-item" onclick="openAid('🩸 Severe Bleeding', '1. Apply direct pressure to the wound with a clean cloth.\n2. Do not remove the cloth if it gets soaked; add another on top.\n3. Keep the injured limb elevated if possible.')">
+            <i>🩸</i> <strong>Bleeding Control</strong>
+        </div>
+        <div class="aid-item" onclick="openAid('🥨 Choking (Heimlich)', '1. Stand behind the person.\n2. Wrap your arms around their waist.\n3. Make a fist and perform quick, upward thrusts above the navel.\n4. Repeat until the object is forced out.')">
+            <i>🥨</i> <strong>Choking Rescue</strong>
+        </div>
+        <div class="aid-item" onclick="openAid('☀️ Heatstroke', '1. Move the person to a cool, shaded area.\n2. Remove unnecessary clothing.\n3. Cool the body with wet cloths or water.\n4. Give water only if they are fully conscious.')">
+            <i>☀️</i> <strong>Heatstroke / Heat</strong>
+        </div>
+        <div class="aid-item" onclick="openAid('⚡ Electric Shock', '1. DO NOT touch the victim if they are still in contact with power.\n2. Turn off the main power source immediately.\n3. Call emergency services even if they seem fine.')">
+            <i>⚡</i> <strong>Electric Shock</strong>
+        </div>
     </div>
 
     <div class="section-title">Emergency Contacts</div>
     <div class="card">
         <div class="phone-row">
-            <div><strong>Universal Emergency</strong><br><small style="color:var(--accent);">Global / EU</small></div>
-            <a href="tel:112" style="background:var(--danger); color:white; padding:8px 15px; border-radius:10px; text-decoration:none; font-weight:bold;">112</a>
+            <div><strong>Universal Emergency</strong></div>
+            <a href="tel:112" class="call-btn call-red">112</a>
+        </div>
+        <div class="phone-row">
+            <div><strong>Ambulance</strong></div>
+            <a href="tel:166" class="call-btn">166</a>
         </div>
         <div class="phone-row">
             <div><strong>Police</strong></div>
-            <a href="tel:100" class="call-icon">📞</a>
-        </div>
-        <div class="phone-row">
-            <div><strong>Ambulance (EKAB)</strong></div>
-            <a href="tel:166" class="call-icon">📞</a>
+            <a href="tel:100" class="call-btn">100</a>
         </div>
     </div>
 
-    <div class="section-title">Survival Basics</div>
-    <div class="card">
-        <div class="guide-item">
-            <i>🧘</i>
-            <div>
-                <strong>Panic Attack</strong>
-                <p>Breathe slowly. Inhale for 4s, hold for 4s, exhale for 4s.</p>
-            </div>
-        </div>
-        <div class="guide-item" style="border-top: 1px solid rgba(255,255,255,0.05); pt:15px; margin-top:15px;">
-            <i>🏙️</i>
-            <div>
-                <strong>Safe Path</strong>
-                <p>Stay in well-lit areas and keep your phone in hand.</p>
-            </div>
+    <div id="aidModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle" style="color:var(--accent); margin-top:0; font-size:1.3rem;"></h2>
+            <p id="modalBody" style="line-height:1.6; white-space: pre-line; color: #e2e8f0; font-size:0.95rem;"></p>
+            <button class="close-btn" onclick="closeModal()">GOT IT</button>
         </div>
     </div>
 
     <script>
         function findHospitals() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    // Ανοίγει τους χάρτες με αναζήτηση για νοσοκομεία γύρω από το στίγμα του χρήστη
-                    const url = `https://www.google.com/maps?q=lat,lon`;
-                    window.open(url, '_blank');
-                }, () => {
-                    // Αν δεν δώσει στίγμα, κάνει γενική αναζήτηση για νοσοκομεία
-                    window.open('https://maps.google.com/?cid=2096844694322870287&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ', '_blank');
-                });
-            } else {
-                window.open('https://maps.google.com/?cid=17369355071452516293&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ', '_blank');
+            // Updated deep link for global hospital search
+            const url = "https://www.google.com/maps/search/hospitals+near+me/";
+            window.open(url, '_blank');
+        }
+
+        function openAid(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerText = text;
+            document.getElementById('aidModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('aidModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('aidModal')) {
+                closeModal();
             }
         }
     </script>
-
 </body>
 </html>
