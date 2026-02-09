@@ -4,12 +4,6 @@ window.QuizEngine = {
     premium: lang => `questions_premium_${lang}.json`
   },
 
-  content: {
-    el: {
-      "quiz": [{ q: "Ερώτηση Ασφαλείας", options: ["Ναι", "Όχι"], correct: 1, explain: "..." }]
-    }
-  },
-
   difficulty: { "badge-home": 1, "badge-digital": 1.2, "badge-scam": 1.5, "badge-emergency": 1.3, "quiz": 1 },
   activeQuestions: [],
   currentIndex: 0,
@@ -26,62 +20,41 @@ window.QuizEngine = {
     const userLvl = userLvlEl ? parseInt(userLvlEl.textContent) : 1;
     const isPremium = localStorage.getItem("isPremiumUser") === "true";
 
-    // PAYWALL: Αν είναι level 7+ και δεν έχει πληρώσει
     if (userLvl >= 7 && !isPremium) {
       this.showPaywall();
       return;
     }
 
-    let questionsPool = [];
     const sourceFile = userLvl >= 7 ? this.sources.premium(lang) : this.sources.free(lang);
 
     try {
       const resp = await fetch(`${sourceFile}?v=${Date.now()}`);
       const data = await resp.json();
+      const langData = data[lang] || data; 
       const levelKey = String(userLvl);
       
-      // Φόρτωση βάσει Level ή Badge
-      questionsPool = data.levels?.[levelKey] || data[badgeId] || data.quiz || [];
+      let questionsPool = langData.levels?.[levelKey] || langData[badgeId] || [];
+
+      const masteredKey = `mastered_${lang}_lvl${userLvl}`;
+      const mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
+      let available = questionsPool.filter(q => !mastered.includes(q.q));
+
+      if (available.length === 0) {
+        available = questionsPool;
+        localStorage.setItem(masteredKey, "[]");
+      }
+
+      this.activeQuestions = available.sort(() => Math.random() - 0.5).slice(0, 5);
+      this.currentIndex = 0;
+      this.score = 0;
+      this.streak = 0;
+
+      const res = document.getElementById("quiz-result");
+      if (res) { res.classList.add("hidden"); res.style.display = "none"; }
+
+      this.render();
     } catch (e) {
-      questionsPool = this.content[lang]?.[badgeId] || this.content["el"]["quiz"];
-    }
-
-    // No-repeat system
-    const masteredKey = `mastered_${lang}_${badgeId}`;
-    const mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
-    let available = questionsPool.filter(q => !mastered.includes(q.q));
-
-    if (available.length === 0) {
-      available = questionsPool;
-      localStorage.setItem(masteredKey, "[]");
-    }
-
-    this.activeQuestions = available.sort(() => Math.random() - 0.5).slice(0, 3);
-    this.currentIndex = 0;
-    this.score = 0;
-    this.streak = 0;
-
-    const res = document.getElementById("quiz-result");
-    if (res) { res.classList.add("hidden"); res.style.display = "none"; }
-
-    this.render();
-  },
-
-  // 📢 ΣΥΣΤΗΜΑ ΔΙΑΦΗΜΙΣΕΩΝ (Μόνο για Free)
-  showGoogleAd() {
-    const isPremium = localStorage.getItem("isPremiumUser") === "true";
-    
-    // ΑΝ ΕΙΝΑΙ PREMIUM, ΔΕΝ ΔΕΙΧΝΕΙ ΠΟΤΕ ΔΙΑΦΗΜΙΣΗ
-    if (isPremium) {
-      console.log("Premium User: Ads Disabled.");
-      return;
-    }
-
-    console.log("Free User: Showing Google Ad...");
-    if (window.admob) {
-      window.admob.interstitial.show();
-    } else if (window.adsbygoogle) {
-      (adsbygoogle = window.adsbygoogle || []).push({});
+      console.error("Quiz Error:", e);
     }
   },
 
@@ -91,11 +64,13 @@ window.QuizEngine = {
     const qBox = document.getElementById("quiz-question");
     const oBox = document.getElementById("quiz-options");
     const pill = document.getElementById("quiz-pill");
+    
     if (pill) pill.textContent = (this.currentLang === "el" ? "Ερώτηση" : "Question") + ` ${this.currentIndex + 1} / ${this.activeQuestions.length}`;
-    if (qBox) qBox.innerHTML = `<p class="q-text" style="font-size:1.2rem;font-weight:bold;text-align:center;">${qData.q}</p>`;
+    if (qBox) qBox.innerHTML = `<p class="q-text" style="font-size:1.1rem; font-weight:bold; text-align:center;">${qData.q}</p>`;
+    
     if (oBox) {
       oBox.innerHTML = "";
-      qData.options.forEach((opt, idx) => {
+      qData.o.forEach((opt, idx) => {
         const btn = document.createElement("button");
         btn.className = "option-btn";
         btn.textContent = opt;
@@ -107,59 +82,98 @@ window.QuizEngine = {
 
   check(idx) {
     const qData = this.activeQuestions[this.currentIndex];
+    const userLvlEl = document.getElementById("user-level");
+    const userLvl = userLvlEl ? parseInt(userLvlEl.textContent) : 1;
     const buttons = document.querySelectorAll(".option-btn");
+    const isCorrect = (idx === qData.a);
+
     buttons.forEach((b, i) => {
       b.disabled = true;
-      if (i === qData.correct) b.classList.add("correct");
-      if (i === idx && idx !== qData.correct) b.classList.add("wrong");
+      if (i === qData.a) b.classList.add("correct");
+      if (i === idx && !isCorrect) b.classList.add("wrong");
     });
 
-    if (idx === qData.correct) {
+    const explanation = qData.exp || qData.explain;
+    if (explanation) {
+      const qBox = document.getElementById("quiz-question");
+      qBox.innerHTML += `<p class="explain" style="margin-top:12px; color: var(--gold); font-size:0.9rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">💡 ${explanation}</p>`;
+    }
+
+    if (isCorrect) {
       this.score++;
-      this.streak++;
-      const masteredKey = `mastered_${this.currentLang}_${this.badge}`;
+      const masteredKey = `mastered_${this.currentLang}_lvl${userLvl}`;
       let mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
       if (!mastered.includes(qData.q)) {
         mastered.push(qData.q);
         localStorage.setItem(masteredKey, JSON.stringify(mastered));
       }
-      if (this.streak >= 3) this.updateXP(20);
-    } else {
-      this.streak = 0;
-    }
-
-    if (qData.explain) {
-      const qBox = document.getElementById("quiz-question");
-      qBox.innerHTML += `<p class="explain" style="margin-top:10px; color: var(--gold); padding: 5px;">💡 ${qData.explain}</p>`;
     }
 
     setTimeout(() => {
       this.currentIndex++;
       this.currentIndex < this.activeQuestions.length ? this.render() : this.showResult();
-    }, 1200);
+    }, 2500);
   },
 
   showResult() {
     const res = document.getElementById("quiz-result");
     const scoreText = document.getElementById("quiz-result-score");
+    const btnBox = document.getElementById("quiz-options");
+    const isPremium = localStorage.getItem("isPremiumUser") === "true";
     const percent = Math.round((this.score / this.activeQuestions.length) * 100);
-
-    // Κλήση διαφήμισης - ο έλεγχος για premium γίνεται μέσα στη συνάρτηση
-    this.showGoogleAd();
 
     if (res) { res.classList.remove("hidden"); res.style.display = "flex"; }
     if (scoreText) scoreText.textContent = (this.currentLang === "el" ? "Σκορ" : "Score") + `: ${percent}%`;
-
-    localStorage.setItem(`quiz_${this.badge}`, JSON.stringify({ percent, date: Date.now() }));
+    if (btnBox) btnBox.innerHTML = "";
 
     if (percent >= 60) {
-      const xp = 50 * (this.difficulty[this.badge] || 1);
-      this.updateXP(Math.round(xp));
-      if (this.badge.startsWith("badge-")) this.unlockBadge(this.badge);
-    }
+      if (isPremium) {
+        this.createBtn(btnBox, this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ" : "CONTINUE", () => {
+          this.updateXP(50);
+          window.showScreen?.("home");
+        });
+      } else {
+        // Επιλογή Double XP
+        this.createBtn(btnBox, `💎 ${this.currentLang === "el" ? "ΔΙΠΛΟ XP (VIDEO)" : "DOUBLE XP (VIDEO)"}`, () => {
+          this.playRewardVideo(100);
+        }, "#ca8a04");
 
-    const btn = document.getElementById("quiz-result-continue");
-    if (btn) btn.onclick = () => window.showScreen?.("home");
+        // Επιλογή Απλή
+        this.createBtn(btnBox, `📺 ${this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ (VIDEO)" : "CONTINUE (VIDEO)"}`, () => {
+          this.playRewardVideo(50);
+        }, "#15803d");
+      }
+    } else {
+      this.createBtn(btnBox, this.currentLang === "el" ? "ΔΟΚΙΜΑΣΕ ΞΑΝΑ" : "RETRY", () => {
+        this.start(this.currentLang, this.badge);
+      }, "#dc2626");
+    }
+  },
+
+  createBtn(container, text, action, bgColor = "var(--gold)") {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerHTML = text;
+    btn.style.background = bgColor;
+    btn.style.marginTop = "10px";
+    btn.onclick = action;
+    container.appendChild(btn);
+  },
+
+  playRewardVideo(xpAmount) {
+    // Έλεγχος αν ο λογαριασμός AdMob είναι ενεργός
+    if (window.admob && window.admob.rewardVideo) {
+      window.admob.rewardVideo.show();
+      document.addEventListener("admob.rewardvideo.events.REWARD", () => {
+        this.updateXP(xpAmount);
+        window.showScreen?.("home");
+      }, { once: true });
+    } else {
+      // PRO MODE: Αν δεν έχεις AdMob ακόμα, σε αφήνει να περάσεις για να τεστάρεις
+      console.log("AdMob not active. Simulation mode.");
+      this.updateXP(xpAmount);
+      window.showScreen?.("home");
+    }
   },
 
   updateXP(amount) {
@@ -170,35 +184,19 @@ window.QuizEngine = {
     let nextW = currentW + (amount / 5);
     if (nextW >= 100) {
       lv.textContent = parseInt(lv.textContent) + 1;
-      xpFill.style.width = (nextW - 100) + "%";
+      xpFill.style.width = "0%";
     } else {
       xpFill.style.width = nextW + "%";
-    }
-  },
-
-  unlockBadge(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.remove("locked"); el.classList.add("unlocked");
-    const saved = JSON.parse(localStorage.getItem("ss_badges") || "[]");
-    if (!saved.includes(id)) {
-      saved.push(id);
-      localStorage.setItem("ss_badges", JSON.stringify(saved));
     }
   },
 
   showPaywall() {
     const res = document.getElementById("quiz-result");
     const scoreText = document.getElementById("quiz-result-score");
-    const btn = document.getElementById("quiz-result-continue");
     if (res) {
       res.classList.remove("hidden");
       res.style.display = "flex";
-      scoreText.innerHTML = `<span style="color:var(--gold); font-size: 1.4rem; font-weight: bold;">Level 7+ Required 🔒</span><br><p style="margin-top:10px; padding: 0 10px;">Ξεκλειδώστε την Premium έκδοση για να συνεχίσετε χωρίς διαφημίσεις και με νέες ερωτήσεις.</p>`;
-      if (btn) {
-        btn.textContent = "Unlock Premium";
-        btn.onclick = () => alert("Redirecting to Store...");
-      }
+      scoreText.innerHTML = `<span style="color:var(--gold); font-size: 1.2rem; font-weight:bold;">Level 7+ Required 🔒</span><br><p style="font-size:0.9rem; padding:10px;">Upgrade to Premium for AI & Deepfake training.</p>`;
     }
   }
 };
