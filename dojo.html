@@ -118,7 +118,8 @@
             height: 100%; 
             object-fit: cover; 
             display: block;
-            transform: scale(1.1); /* Zoom για περισσότερη ένταση */
+            /* To scale 1.1 δίνει βάθος, το scaleX(-1) αν θες να αλλάξεις κατεύθυνση στον Master */
+            transform: scale(1.05); 
         }
 
         .label { 
@@ -211,7 +212,7 @@
         <div class="kanji">道場</div>
         
         <div class="master-display">
-            <img src="https://minamar7/github.io/StaySafeTips/IMG_20260207_184705.jpg" alt="Master Action">
+            <img src="https://minamar7.github.io/StaySafeTips/IMG_20260207_184705.jpg" alt="Master Action">
         </div>
 
         <span class="label">MISSION SELECT</span>
@@ -238,7 +239,7 @@
     <script>
         function playSound() {
             var audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
-            audio.play();
+            audio.play().catch(e => console.log("Audio play deferred"));
         }
     </script>
 </body>
