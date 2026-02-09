@@ -10,6 +10,7 @@
 <meta name="theme-color" content="#020617">
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="quiz.js"></script>
 
 <style>
 :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
@@ -35,7 +36,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 /* UPGRADED DOJO GATEWAY BUTTON */
 .dojo-gateway {
     background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), #020617);
-    border: 3px solid var(--gold); /* Gold Medal Border */
+    border: 3px solid var(--gold);
     border-radius: 28px;
     padding: 15px;
     margin: 20px 0;
@@ -60,11 +61,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     flex-shrink: 0;
     box-shadow: 0 0 10px var(--gold);
 }
-.dojo-avatar-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+.dojo-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
 .gate-info h3 { margin: 0; font-size: 1.1rem; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
 .gate-info p { margin: 4px 0 0; font-size: 0.65rem; color: var(--gold); font-weight: bold; }
@@ -73,6 +70,14 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 /* Cards & Grid */
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+
+/* QUIZ SPECIFIC - Για τα κουμπιά των επιλογών */
+.option-btn {
+    background: #1e293b; color: white; border: none; padding: 15px; border-radius: 15px;
+    width: 100%; margin-bottom: 10px; font-weight: bold; cursor: pointer; transition: 0.2s;
+}
+.option-btn.correct { background: var(--success) !important; color: white; }
+.option-btn.wrong { background: var(--danger) !important; color: white; }
 
 /* Navigation */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
@@ -105,16 +110,16 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     <h1>Stay Safe Elite</h1>
     <p style="color:var(--muted);">Select Your Language</p>
     <div class="lang-grid">
-        <div class="lang-btn" onclick="initApp('en')">🇬🇷 Greek</div>
+        <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
         <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
-        <div class="lang-btn" onclick="initApp('en')">🇩🇪 German</div>
-        <div class="lang-btn" onclick="initApp('en')">🇫🇷 French</div>
-        <div class="lang-btn" onclick="initApp('en')">🇪🇸 Spanish</div>
-        <div class="lang-btn" onclick="initApp('en')">🇮🇹 Italian</div>
-        <div class="lang-btn" onclick="initApp('en')">🇵Τ Portuguese</div>
-        <div class="lang-btn" onclick="initApp('en')">🇷🇺 Russian</div>
-        <div class="lang-btn" onclick="initApp('en')">🇨🇳 Chinese</div>
-        <div class="lang-btn" onclick="initApp('en')">🇮🇳 Hindi</div>
+        <div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
+        <div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
+        <div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
+        <div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
+        <div class="lang-btn" onclick="initApp('pt')">🇵Τ Portuguese</div>
+        <div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
+        <div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
+        <div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
     </div>
 </div>
 </section>
@@ -123,32 +128,41 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     <header class="app-header">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> DAYS</div>
-            <div style="font-weight:900; color:var(--accent);">LEVEL <span id="level_val">1</span></div>
+            <div style="font-weight:900; color:var(--accent);">LEVEL <span id="user-level">1</span></div>
         </div>
-        <div class="xp-bar"><div id="xp_fill" class="xp-fill"></div></div>
+        <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
     </header>
 
     <main style="padding: 20px 20px 110px;">
         <section id="screen_home">
             <div class="glass-card">
-                <h2>🛡️ Daily Training</h2>
-                <p id="quiz_text" style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Ready for today's safety challenge?</p>
-                <div id="quiz_options" style="margin-top:15px;"></div>
-                <button class="main-cta" id="quiz_btn" onclick="startQuiz()">START QUIZ</button>
+                <div id="quiz-pill" style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 5px;">Daily Training</div>
+                <div id="quiz-question">
+                    <h2 id="quiz_title">🛡️ Stay Safe Elite</h2>
+                    <p id="quiz_text" style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Ready for today's safety challenge?</p>
+                </div>
+                
+                <div id="quiz-options" style="margin-top:15px;"></div>
+                
+                <div id="quiz-result" class="hidden" style="flex-direction: column; align-items: center;">
+                    <h3 id="quiz-result-score" style="color: var(--gold); margin-bottom: 10px;">Score: 0%</h3>
+                </div>
+
+                <button class="main-cta" id="quiz_btn" onclick="startEngine()">START QUIZ</button>
             </div>
 
             <h3 style="font-size:1rem; margin-bottom:10px;">🏆 Achievements</h3>
-            <div class="badge-grid">
-                <div id="badge1" class="badge">🎖️</div>
-                <div id="badge2" class="badge">🛡️</div>
-                <div id="badge3" class="badge">💎</div>
-                <div class="badge unlocked" style="background:var(--accent); color:#000;">🛠️</div>
+            <div class="badge-grid" id="ss_badges">
+                <div id="badge-home" class="badge">🎖️</div>
+                <div id="badge-digital" class="badge">🛡️</div>
+                <div id="badge-scam" class="badge">💎</div>
+                <div id="badge-emergency" class="badge">🛠️</div>
             </div>
 
             <div class="dojo-gateway" onclick="window.location.href='dojo.html'">
                 <div class="premium-tag">PREMIUM</div>
                 <div class="dojo-avatar-circle">
-                    <img src="https://images.unsplash.com/photo-1555597673-b21d5c935865?q=80&w=200&auto=format&fit=crop" alt="Karateka">
+                    <img src="https://minamar7.github.io/StaySafeTips/IMG_20260209_231913.jpg" alt="Master">
                 </div>
                 <div class="gate-info">
                     <h3>Elite Defense Dojo</h3>
@@ -184,19 +198,15 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     </main>
 
     <nav class="nav-tabs">
-        <button class="nav-tab active" id="nav_home" onclick="nav('home', this)">🏠</button>
-        <button class="nav-tab" id="nav_premium" onclick="nav('premium', this)">💎</button>
+        <button class="nav-tab active" id="nav_home" onclick="showScreen('home', this)">🏠</button>
+        <button class="nav-tab" id="nav_premium" onclick="showScreen('premium', this)">💎</button>
     </nav>
 </div>
 
 <script>
-let xp = parseInt(localStorage.getItem('xp')) || 0;
+// Αρχικοποίηση από το LocalStorage
+let currentLang = localStorage.getItem('user_lang') || 'en';
 let isAppInitialized = localStorage.getItem('app_init') === 'true';
-
-const quizData = [
-    {q: "Someone follows you at night. What do you do?", o: ["Run to a dark alley", "Head to a lit area", "Stop and wait"], a: 1},
-    {q: "A stranger asks for help in a secluded spot.", o: ["Help them immediately", "Keep distance", "Offer money"], a: 1}
-];
 
 window.onload = () => {
     if(isAppInitialized) {
@@ -205,8 +215,9 @@ window.onload = () => {
 };
 
 function initApp(lang){
+    localStorage.setItem('user_lang', lang);
     localStorage.setItem('app_init', 'true');
-    localStorage.setItem('ss_premium', 'true');
+    currentLang = lang;
     showMainApp();
 }
 
@@ -214,59 +225,35 @@ function showMainApp() {
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
     document.getElementById('panic_button').classList.remove('hidden');
-    updateUI();
-}
-
-function updateUI(){
-    let lvl = Math.floor(xp/100)+1;
-    document.getElementById('level_val').innerText = lvl;
-    document.getElementById('xp_fill').style.width = (xp%100) + "%";
-    if(lvl >= 2) document.getElementById('badge1').classList.add('unlocked');
-    if(lvl >= 3) document.getElementById('badge2').classList.add('unlocked');
-}
-
-function startQuiz() {
-    document.getElementById('quiz_btn').classList.add('hidden');
-    renderQuestion(0);
-}
-
-function renderQuestion(idx) {
-    if(idx >= quizData.length) {
-        document.getElementById('quiz_text').innerText = "Training Complete! +30 XP";
-        document.getElementById('quiz_options').innerHTML = "";
-        xp += 30; localStorage.setItem('xp', xp);
-        updateUI();
-        confetti({particleCount: 100, spread: 70});
-        return;
-    }
-    let q = quizData[idx];
-    document.getElementById('quiz_text').innerText = q.q;
-    let html = "";
-    q.o.forEach((opt, i) => {
-        html += `<button class="main-cta" style="background:#1e293b; color:white; margin-bottom:10px;" onclick="checkAnswer(${idx}, ${i})">${opt}</button>`;
+    
+    // Φόρτωση Badges αν υπάρχουν
+    const savedBadges = JSON.parse(localStorage.getItem('ss_badges') || '[]');
+    savedBadges.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.classList.add('unlocked');
     });
-    document.getElementById('quiz_options').innerHTML = html;
 }
 
-function checkAnswer(qIdx, selected) {
-    let q = quizData[qIdx];
-    const btns = document.querySelectorAll('#quiz_options button');
-    if(selected === q.a) {
-        btns[selected].style.background = "var(--success)";
-        setTimeout(() => renderQuestion(qIdx + 1), 1000);
-    } else {
-        btns[selected].style.background = "var(--danger)";
-        btns[q.a].style.background = "var(--success)";
-        setTimeout(() => renderQuestion(qIdx + 1), 1500);
+// Η νέα συνάρτηση που καλεί τη μηχανή του Quiz
+function startEngine() {
+    document.getElementById('quiz_btn').classList.add('hidden');
+    if(window.QuizEngine) {
+        window.QuizEngine.start(currentLang, 'quiz');
     }
 }
 
-function nav(screen, btn){
+// Σύνδεση με το QuizEngine για την αλλαγή οθονών
+window.showScreen = function(screen, btn) {
     document.getElementById('screen_home').classList.add('hidden');
     document.getElementById('screen_premium').classList.add('hidden');
     document.getElementById('screen_'+screen).classList.remove('hidden');
+    
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-    btn.classList.add('active');
+    if(btn) btn.classList.add('active');
+    else {
+        // Αν κληθεί από το quiz.js χωρίς κουμπί (π.χ. επιστροφή στο home)
+        document.getElementById('nav_home').classList.add('active');
+    }
 }
 </script>
 </body>
