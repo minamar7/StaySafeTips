@@ -11,6 +11,7 @@
             --bg: #020617; 
             --shadow-gold: rgba(250, 204, 21, 0.4);
             --shadow-neon: rgba(56, 189, 248, 0.3);
+            --safe-green: #22c55e;
         }
         
         body { 
@@ -105,7 +106,7 @@
         .master-display {
             border: 3px solid var(--gold); 
             border-radius: 35px;
-            margin: 15px 0 25px 0;
+            margin: 15px 0 10px 0;
             overflow: hidden;
             background: #000;
             aspect-ratio: 1.3 / 1;
@@ -118,8 +119,47 @@
             height: 100%; 
             object-fit: cover; 
             display: block;
-            /* To scale 1.1 δίνει βάθος, το scaleX(-1) αν θες να αλλάξεις κατεύθυνση στον Master */
-            transform: scale(1.05); 
+            object-position: center 20%;
+            animation: masterBreath 8s ease-in-out infinite;
+        }
+
+        @keyframes masterBreath {
+            0%, 100% { transform: scale(1.05); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Ready to Defend Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--safe-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--safe-green);
+            animation: blink 1.5s infinite;
+        }
+
+        .status-text {
+            font-size: 0.6rem;
+            font-weight: 900;
+            color: var(--safe-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         .label { 
@@ -212,7 +252,12 @@
         <div class="kanji">道場</div>
         
         <div class="master-display">
-            <img src="https://minamar7.github.io/StaySafeTips/IMG_20260207_184705.jpg" alt="Master Action">
+            <img src="https://minamar7.github.io/StaySafeTips/IMG_20260209_231913.jpg" alt="Master Action">
+        </div>
+
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            <span class="status-text">Ready to Defend</span>
         </div>
 
         <span class="label">MISSION SELECT</span>
