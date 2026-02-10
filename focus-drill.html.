@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Focus Drill | Stay Safe Elite</title>
+    <style>
+        :root { --bg: #020617; --accent: #38bdf8; --gold: #facc15; --danger: #ef4444; }
+        body { margin: 0; background: var(--bg); color: white; font-family: sans-serif; text-align: center; overflow: hidden; }
+        
+        .drill-container { position: relative; width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        #scenario-img {
+            width: 90%; max-width: 500px; height: 350px;
+            border-radius: 25px; border: 2px solid var(--accent);
+            background-size: cover; background-position: center;
+            position: relative; box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+        }
+
+        .target {
+            position: absolute; width: 60px; height: 60px;
+            border: 3px dashed var(--gold); border-radius: 50%;
+            display: none; /* Εμφανίζεται μόνο όταν ξεκινάει το drill */
+        }
+
+        .timer-bar { width: 90%; max-width: 500px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 20px 0; overflow: hidden; }
+        .timer-fill { height: 100%; background: var(--gold); width: 100%; transition: linear; }
+
+        .ui-overlay { padding: 20px; z-index: 10; }
+        .btn { background: var(--accent); border: none; padding: 15px 40px; border-radius: 15px; font-weight: bold; color: #020617; font-size: 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="drill-container">
+        <div class="ui-overlay">
+            <h2 id="instruction">SCAN THE AREA</h2>
+            <p id="sub-text">Identify the threat in 3 seconds!</p>
+        </div>
+
+        <div id="scenario-img" style="background-image: url('https://images.unsplash.com/photo-1485038101928-74c241029bb7?w=800');">
+            <div id="target-box" class="target" onclick="success()" style="top: 45%; left: 70%;"></div>
+        </div>
+
+        <div class="timer-bar"><div id="timer" class="timer-fill"></div></div>
+
+        <div id="controls">
+            <button class="btn" onclick="startDrill()">START SCAN</button>
+        </div>
+        
+        <button onclick="location.href='techniques.html'" style="background:none; border:none; color:var(--accent); margin-top:20px; cursor:pointer;">← Return to Library</button>
+    </div>
+
+    <script>
+        function startDrill() {
+            document.getElementById('instruction').innerText = "LOOK NOW!";
+            document.getElementById('target-box').style.display = 'block';
+            document.getElementById('controls').style.visibility = 'hidden';
+            
+            const timer = document.getElementById('timer');
+            timer.style.transition = "3s linear";
+            timer.style.width = "0%";
+
+            setTimeout(() => {
+                if(timer.style.width === "0%") {
+                    fail();
+                }
+            }, 3000);
+        }
+
+        function success() {
+            playKiai();
+            alert("🎯 THREAT DETECTED! Excellent reflexes, Master.");
+            location.reload();
+        }
+
+        function fail() {
+            alert("❌ TOO SLOW! In a real situation, speed is survival.");
+            location.reload();
+        }
+
+        function playKiai() {
+            new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3').play();
+        }
+    </script>
+</body>
+</html>
