@@ -71,7 +71,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
 
-/* QUIZ SPECIFIC - Για τα κουμπιά των επιλογών */
+/* QUIZ SPECIFIC */
 .option-btn {
     background: #1e293b; color: white; border: none; padding: 15px; border-radius: 15px;
     width: 100%; margin-bottom: 10px; font-weight: bold; cursor: pointer; transition: 0.2s;
@@ -79,10 +79,16 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .option-btn.correct { background: var(--success) !important; color: white; }
 .option-btn.wrong { background: var(--danger) !important; color: white; }
 
-/* Navigation */
+/* Navigation & Sonar Effect */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
-.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
+.nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .nav-tab.active { color: var(--accent); }
+
+.nav-radar-wrapper { position: relative; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
+.sonar-wave { position: absolute; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; opacity: 0; z-index: 0; animation: sonar-ping 2s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
+.sonar-wave-delayed { animation-delay: 1s; }
+@keyframes sonar-ping { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(3); opacity: 0; } }
+.radar-emoji { position: relative; z-index: 1; font-size: 24px; }
 
 /* Language Selection Grid */
 .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; overflow-y: auto; }
@@ -199,12 +205,20 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 
     <nav class="nav-tabs">
         <button class="nav-tab active" id="nav_home" onclick="showScreen('home', this)">🏠</button>
+        
+        <button class="nav-tab" id="nav_radar" onclick="window.location.href='scam-alerts2.html'">
+            <div class="nav-radar-wrapper">
+                <div class="sonar-wave"></div>
+                <div class="sonar-wave sonar-wave-delayed"></div>
+                <div class="radar-emoji">📡</div>
+            </div>
+        </button>
+
         <button class="nav-tab" id="nav_premium" onclick="showScreen('premium', this)">💎</button>
     </nav>
 </div>
 
 <script>
-// Αρχικοποίηση από το LocalStorage
 let currentLang = localStorage.getItem('user_lang') || 'en';
 let isAppInitialized = localStorage.getItem('app_init') === 'true';
 
@@ -226,7 +240,6 @@ function showMainApp() {
     document.getElementById('main_app').classList.remove('hidden');
     document.getElementById('panic_button').classList.remove('hidden');
     
-    // Φόρτωση Badges αν υπάρχουν
     const savedBadges = JSON.parse(localStorage.getItem('ss_badges') || '[]');
     savedBadges.forEach(id => {
         const el = document.getElementById(id);
@@ -234,7 +247,6 @@ function showMainApp() {
     });
 }
 
-// Η νέα συνάρτηση που καλεί τη μηχανή του Quiz
 function startEngine() {
     document.getElementById('quiz_btn').classList.add('hidden');
     if(window.QuizEngine) {
@@ -242,7 +254,6 @@ function startEngine() {
     }
 }
 
-// Σύνδεση με το QuizEngine για την αλλαγή οθονών
 window.showScreen = function(screen, btn) {
     document.getElementById('screen_home').classList.add('hidden');
     document.getElementById('screen_premium').classList.add('hidden');
@@ -251,7 +262,6 @@ window.showScreen = function(screen, btn) {
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
     if(btn) btn.classList.add('active');
     else {
-        // Αν κληθεί από το quiz.js χωρίς κουμπί (π.χ. επιστροφή στο home)
         document.getElementById('nav_home').classList.add('active');
     }
 }
