@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Threat Radar | Stay Safe Elite</title>
+    <style>
+        :root { 
+            --bg: #020617; 
+            --card: rgba(15, 23, 42, 0.9); 
+            --accent: #38bdf8; 
+            --gold: #facc15; 
+            --danger: #ef4444; 
+            --warning: #f59e0b; 
+            --text: #f8fafc;
+            --muted: #94a3b8;
+        }
+
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: -apple-system, system-ui, sans-serif; 
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Radar Section */
+        .radar-box {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 2px solid rgba(56, 189, 248, 0.2);
+            background: radial-gradient(circle, rgba(15, 23, 42, 1) 30%, rgba(2, 6, 23, 1) 100%);
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Radar Grid */
+        .radar-box::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        /* The Sweeping Line */
+        .sweep {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            top: 0;
+            right: 0;
+            background: linear-gradient(45deg, transparent 50%, rgba(56, 189, 248, 0.4) 100%);
+            transform-origin: bottom left;
+            border-radius: 100% 0 0 0;
+            animation: radar-sweep 4s linear infinite;
+        }
+
+        @keyframes radar-sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Threat Dots */
+        .threat-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            z-index: 10;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Content Area */
+        .alert-container { width: 100%; max-width: 400px; margin-top: 10px; }
+        
+        .alert-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 5px solid var(--accent);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .alert-card.critical { border-left-color: var(--danger); }
+        .alert-card.warning { border-left-color: var(--warning); }
+
+        .alert-card h4 { margin: 0; font-size: 1rem; color: #fff; }
+        .alert-card p { margin: 5px 0 0; font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            padding: 15px;
+            border-radius: 15px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align:center;">
+        <h1 style="color:var(--accent); font-size:1.5rem; margin-bottom:5px;">THREAT RADAR</h1>
+        <div style="background:var(--danger); color:#000; font-size:0.6rem; font-weight:900; padding:2px 8px; border-radius:5px; display:inline-block;">LIVE SCANNING</div>
+    </div>
+
+    <div class="radar-box">
+        <div class="sweep"></div>
+        <div class="threat-dot" style="top: 25%; left: 60%; background: var(--danger); box-shadow: 0 0 15px var(--danger);"></div>
+        <div class="threat-dot" style="top: 70%; left: 30%; background: var(--warning); box-shadow: 0 0 15px var(--warning);"></div>
+        <div class="threat-dot" style="top: 40%; left: 20%; background: var(--accent); box-shadow: 0 0 15px var(--accent);"></div>
+    </div>
+
+    <div class="alert-container">
+        <div class="alert-card critical">
+            <h4>🚨 AI Voice Cloning</h4>
+            <p>Scammers use 3 seconds of a loved one's voice to demand money. Always set a "Family Secret Word".</p>
+        </div>
+
+        <div class="alert-card warning">
+            <h4>⚠️ Browser Hijack</h4>
+            <p>New "Update Required" pop-ups on mobile. Never download updates from unofficial websites.</p>
+        </div>
+
+        <div class="alert-card">
+            <h4>📡 Public Wi-Fi Sniffing</h4>
+            <p>Active threats detected in airports/cafes. Use a VPN before accessing banking apps.</p>
+        </div>
+
+        <button class="back-btn" onclick="location.href='index.html'">BACK TO COMMAND</button>
+    </div>
+
+    <script>
+        // Wow factor: Randomly add more dots to make it look active
+        setInterval(() => {
+            const dots = document.querySelectorAll('.threat-dot');
+            dots.forEach(dot => {
+                dot.style.opacity = Math.random() > 0.5 ? "1" : "0.5";
+            });
+        }, 500);
+    </script>
+</body>
+</html>
