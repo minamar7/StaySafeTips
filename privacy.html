@@ -1,40 +1,71 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Privacy Policy | Stay Safe Elite</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; background: #f4f4f4; }
-        .container { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #020617; }
-        h2 { color: #1e293b; margin-top: 25px; }
+        :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --text: #f8fafc; --muted: #94a3b8; }
+        body { 
+            font-family: -apple-system, system-ui, sans-serif; 
+            line-height: 1.6; 
+            color: var(--text); 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 700px; 
+            margin: 40px auto; 
+            background: var(--card); 
+            padding: 30px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 10px; }
+        h2 { color: var(--accent); font-size: 1.2rem; margin-top: 25px; border-bottom: 1px solid rgba(56,189,248,0.2); padding-bottom: 5px; }
+        p, li { color: var(--muted); font-size: 0.95rem; }
+        ul { padding-left: 20px; }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Πολιτική Απορρήτου (Privacy Policy)</h1>
-        <p>Τελευταία ενημέρωση: 2024</p>
+        <a href="index.html" class="back-btn">← Back to App</a>
+        <h1>Privacy Policy</h1>
+        <p>Last Updated: February 2026</p>
 
-        <p>Στο <strong>Stay Safe Elite</strong>, η ιδιωτικότητά σας είναι προτεραιότητά μας. Αυτή η σελίδα εξηγεί πώς συλλέγουμε και χρησιμοποιούμε τα δεδομένα σας.</p>
+        <p>At <strong>Stay Safe Elite</strong>, accessible from our GitHub Pages and mobile application, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Stay Safe Elite and how we use it.</p>
 
-        <h2>1. Συλλογή Δεδομένων</h2>
-        <p>Η εφαρμογή μας δεν απαιτεί εγγραφή. Τα δεδομένα προόδου σας (XP, Levels) αποθηκεύονται τοπικά στη συσκευή σας.</p>
+        <h2>1. Local Data Storage</h2>
+        <p>Stay Safe Elite does not require user registration. Your progress data, including XP, Levels, and Badges, is stored <strong>locally on your device</strong> (using LocalStorage). We do not have access to this data on our servers.</p>
 
-        <h2>2. Διαφημίσεις Google AdSense</h2>
-        <p>Χρησιμοποιούμε την Google ως τρίτο προμηθευτή διαφημίσεων. Η Google χρησιμοποιεί cookies (όπως το cookie DART) για να προβάλλει διαφημίσεις βάσει των επισκέψεών σας στον ιστότοπό μας και σε άλλους ιστότοπους στο διαδίκτυο.</p>
+        <h2>2. Google AdSense & Cookies</h2>
+        <p>We use Google AdSense to serve advertisements. Google, as a third-party vendor, uses cookies to serve ads on our app. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to Stay Safe Elite or other websites on the Internet.</p>
         <ul>
-            <li>Οι χρήστες μπορούν να εξαιρεθούν από τη χρήση του cookie DART επισκεπτόμενοι την πολιτική απορρήτου του δικτύου διαφημίσεων και περιεχομένου της Google.</li>
+            <li>Users may opt-out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" style="color:var(--accent)">Google Ads Settings</a>.</li>
+            <li>We do not control these cookies used by third-party advertisers.</li>
         </ul>
 
-        <h2>3. Σύνδεσμοι Τρίτων</h2>
-        <p>Η εφαρμογή περιλαμβάνει συνδέσμους προς μέσα κοινωνικής δικτύωσης (Instagram, TikTok). Δεν φέρουμε ευθύνη για την πολιτική απορρήτου αυτών των εξωτερικών πλατφορμών.</p>
+        <h2>3. External Links</h2>
+        <p>Our application may contain links to external social media platforms (Instagram, TikTok). Please be aware that we are not responsible for the privacy practices of such other sites.</p>
 
-        <h2>4. Συγκατάθεση</h2>
-        <p>Χρησιμοποιώντας την εφαρμογή μας, συμφωνείτε με την Πολιτική Απορρήτου μας.</p>
+        <h2>4. Device Information (Audit Tool)</h2>
+        <p>The "Elite Checkup" tool accesses basic device information (battery level, network status) in real-time. This information is processed <strong>only within your browser/app</strong> and is never transmitted, stored, or shared.</p>
 
-        <footer style="margin-top:40px; font-size:12px; color:#777;">
-            <p>&copy; Stay Safe Elite - Προστασία Δεδομένων</p>
+        <h2>5. Consent</h2>
+        <p>By using our app, you hereby consent to our Privacy Policy and agree to its terms.</p>
+
+        <footer style="margin-top:40px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.05); font-size:12px; text-align:center;">
+            <p>&copy; 2026 Stay Safe Elite - Specialized Security Awareness Tool</p>
         </footer>
     </div>
 </body>
