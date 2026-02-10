@@ -27,7 +27,7 @@
             align-items: center;
         }
 
-        /* Radar Section */
+        /* Radar Visual Section */
         .radar-box {
             position: relative;
             width: 280px;
@@ -40,7 +40,6 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
         }
 
-        /* Radar Grid */
         .radar-box::after {
             content: "";
             position: absolute;
@@ -49,10 +48,8 @@
                 linear-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(56, 189, 248, 0.1) 1px, transparent 1px);
             background-size: 40px 40px;
-            pointer-events: none;
         }
 
-        /* The Sweeping Line */
         .sweep {
             position: absolute;
             width: 140px;
@@ -70,7 +67,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Threat Dots */
         .threat-dot {
             position: absolute;
             width: 10px;
@@ -81,13 +77,12 @@
         }
 
         @keyframes blink {
-            0% { opacity: 1; transform: scale(1); }
+            0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.3; transform: scale(1.3); }
-            100% { opacity: 1; transform: scale(1); }
         }
 
-        /* Content Area */
-        .alert-container { width: 100%; max-width: 400px; margin-top: 10px; }
+        /* Alert Cards Section */
+        .alert-container { width: 100%; max-width: 400px; }
         
         .alert-card {
             background: var(--card);
@@ -95,7 +90,6 @@
             padding: 15px;
             margin-bottom: 12px;
             border-left: 5px solid var(--accent);
-            backdrop-filter: blur(10px);
             animation: slideIn 0.5s ease-out;
         }
 
@@ -107,63 +101,78 @@
         .alert-card.critical { border-left-color: var(--danger); }
         .alert-card.warning { border-left-color: var(--warning); }
 
-        .alert-card h4 { margin: 0; font-size: 1rem; color: #fff; }
+        .alert-card h4 { margin: 0; font-size: 1rem; color: #fff; text-transform: uppercase; }
         .alert-card p { margin: 5px 0 0; font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            padding: 15px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, var(--accent), #0ea5e9);
+            border: none;
+            color: #020617;
+            padding: 18px;
+            border-radius: 20px;
             width: 100%;
-            font-weight: bold;
+            font-weight: 800;
             cursor: pointer;
             margin-top: 10px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
     <div style="text-align:center;">
-        <h1 style="color:var(--accent); font-size:1.5rem; margin-bottom:5px;">THREAT RADAR</h1>
-        <div style="background:var(--danger); color:#000; font-size:0.6rem; font-weight:900; padding:2px 8px; border-radius:5px; display:inline-block;">LIVE SCANNING</div>
+        <h1 style="color:var(--accent); font-size:1.5rem; margin-bottom:5px; letter-spacing: 2px;">THREAT RADAR</h1>
+        <div style="background:var(--danger); color:#fff; font-size:0.6rem; font-weight:900; padding:3px 10px; border-radius:5px; display:inline-block; letter-spacing: 1px;">LIVE SCANNING</div>
     </div>
 
     <div class="radar-box">
         <div class="sweep"></div>
-        <div class="threat-dot" style="top: 25%; left: 60%; background: var(--danger); box-shadow: 0 0 15px var(--danger);"></div>
-        <div class="threat-dot" style="top: 70%; left: 30%; background: var(--warning); box-shadow: 0 0 15px var(--warning);"></div>
-        <div class="threat-dot" style="top: 40%; left: 20%; background: var(--accent); box-shadow: 0 0 15px var(--accent);"></div>
+        <div id="dots-container"></div>
     </div>
 
-    <div class="alert-container">
-        <div class="alert-card critical">
-            <h4>🚨 AI Voice Cloning</h4>
-            <p>Scammers use 3 seconds of a loved one's voice to demand money. Always set a "Family Secret Word".</p>
+    <div class="alert-container" id="alert-list">
         </div>
-
-        <div class="alert-card warning">
-            <h4>⚠️ Browser Hijack</h4>
-            <p>New "Update Required" pop-ups on mobile. Never download updates from unofficial websites.</p>
-        </div>
-
-        <div class="alert-card">
-            <h4>📡 Public Wi-Fi Sniffing</h4>
-            <p>Active threats detected in airports/cafes. Use a VPN before accessing banking apps.</p>
-        </div>
-
-        <button class="back-btn" onclick="location.href='index.html'">BACK TO COMMAND</button>
-    </div>
+    
+    <button class="back-btn" onclick="location.href='index.html'">Return to Base</button>
 
     <script>
-        // Wow factor: Randomly add more dots to make it look active
-        setInterval(() => {
-            const dots = document.querySelectorAll('.threat-dot');
-            dots.forEach(dot => {
-                dot.style.opacity = Math.random() > 0.5 ? "1" : "0.5";
+        const allScams = [
+            { title: "🚨 AI Voice Cloning", text: "Scammers mimic loved ones' voices to demand money. Set a family secret password.", level: "critical" },
+            { title: "⚠️ Browser Hijack", text: "Malicious 'System Update' pop-ups detected. Never download apps from ads.", level: "warning" },
+            { title: "📡 Public Wi-Fi Sniffing", text: "Unsecured networks in airports detected. Use a VPN for banking apps.", level: "standard" },
+            { title: "📱 SMS Phishing", text: "Fake delivery texts with tracking links are surging. Do not click short-links.", level: "critical" },
+            { title: "💎 Crypto Drainer", text: "Malicious smart contracts targeting web3 wallets. Revoke unknown permissions.", level: "warning" },
+            { title: "📧 Tax Refund Scam", text: "Emails claiming official tax refunds to steal credit card info. Verify via gov portal.", level: "standard" },
+            { title: "🛂 Travel Visa Fraud", text: "Fake websites offering fast-track visas. Use only official government domains.", level: "warning" },
+            { title: "📦 Marketplace Scam", text: "Fake 'Payment Pending' screenshots on FB/eBay. Verify funds in your bank first.", level: "critical" }
+        ];
+
+        function initRadar() {
+            const list = document.getElementById('alert-list');
+            const dots = document.getElementById('dots-container');
+            
+            // 1. Pick 3 Random Scams
+            const selected = allScams.sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            selected.forEach(scam => {
+                const card = document.createElement('div');
+                card.className = `alert-card ${scam.level}`;
+                card.innerHTML = `<h4>${scam.title}</h4><p>${scam.text}</p>`;
+                list.appendChild(card);
+
+                // 2. Add a Dot for each scam on the radar
+                const dot = document.createElement('div');
+                dot.className = 'threat-dot';
+                const color = scam.level === 'critical' ? 'var(--danger)' : (scam.level === 'warning' ? 'var(--warning)' : 'var(--accent)');
+                dot.style.background = color;
+                dot.style.boxShadow = `0 0 15px ${color}`;
+                dot.style.top = Math.floor(Math.random() * 60 + 20) + "%";
+                dot.style.left = Math.floor(Math.random() * 60 + 20) + "%";
+                dots.appendChild(dot);
             });
-        }, 500);
+        }
+
+        window.onload = initRadar;
     </script>
 </body>
 </html>
