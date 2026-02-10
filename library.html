@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Elite Defense Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <style>
+        :root { 
+            --gold: #facc15; 
+            --neon: #38bdf8; 
+            --bg: #020617; 
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --danger: #ef4444;
+        }
+        
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: -apple-system, sans-serif; 
+            padding: env(safe-area-inset-top) 20px 100px 20px;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+        .header h2 { margin: 0; font-size: 1.2rem; color: var(--neon); letter-spacing: 3px; text-transform: uppercase; }
+        
+        .back-btn { 
+            background: none; border: 1px solid var(--neon); color: var(--neon); 
+            width: 35px; height: 35px; border-radius: 10px; cursor: pointer;
+        }
+
+        /* Belt Sections */
+        .belt-header { 
+            display: flex; align-items: center; gap: 10px; color: var(--gold); 
+            font-weight: 900; font-size: 0.8rem; margin: 25px 0 15px; text-transform: uppercase;
+        }
+        .belt-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0.3; }
+
+        /* Lesson Cards */
+        .lesson-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            border-radius: 22px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            transition: 0.3s;
+        }
+        .lesson-card:active { transform: scale(0.96); background: rgba(56, 189, 248, 0.1); }
+
+        .lesson-img-wrap { position: relative; width: 65px; height: 65px; flex-shrink: 0; }
+        .lesson-img { width: 100%; height: 100%; border-radius: 14px; object-fit: cover; border: 1.5px solid var(--gold); }
+        
+        .play-overlay { 
+            position: absolute; inset: 0; background: rgba(0,0,0,0.4); 
+            display: flex; align-items: center; justify-content: center; border-radius: 14px;
+        }
+
+        .lesson-info h4 { margin: 0; font-size: 0.95rem; }
+        .lesson-info p { margin: 4px 0 0; font-size: 0.6rem; color: var(--neon); font-weight: 700; text-transform: uppercase; }
+
+        /* Locked State */
+        .locked { opacity: 0.5; filter: grayscale(1); }
+        .lock-badge { position: absolute; top: 10px; right: 10px; font-size: 0.8rem; }
+
+        /* Video Modal */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 2000; padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .video-container { width: 100%; max-width: 500px; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--neon); }
+        .modal-close { margin-top: 20px; padding: 12px 30px; border-radius: 15px; border: none; background: var(--danger); color: white; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button class="back-btn" onclick="location.href='dojo.html'">←</button>
+        <h2>Defense Library</h2>
+        <div style="width:35px"></div>
+    </div>
+
+    <div class="belt-section">
+        <div class="belt-header">White Belt (Basic Defense) <div class="belt-line"></div></div>
+        
+        <div class="lesson-card" onclick="openVideo('Palm Strike Masterclass', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+            <div class="lesson-img-wrap">
+                <img src="https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?w=200" class="lesson-img">
+                <div class="play-overlay">▶️</div>
+            </div>
+            <div class="lesson-info">
+                <h4>Palm Strike (Sudo)</h4>
+                <p>Primary Strike • Foundation</p>
+            </div>
+        </div>
+
+        <div class="lesson-card" onclick="openVideo('Situational Awareness', 'URL_HERE')">
+            <div class="lesson-img-wrap">
+                <img src="https://images.unsplash.com/photo-1509564324749-47285521b470?w=200" class="lesson-img">
+                <div class="play-overlay">▶️</div>
+            </div>
+            <div class="lesson-info">
+                <h4>Awareness Drills</h4>
+                <p>Prevention • Survival</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="belt-section">
+        <div class="belt-header">Orange Belt (Intermediate) <div class="belt-line"></div></div>
+        
+        <div class="lesson-card locked" onclick="alert('Upgrade to Premium to unlock advanced techniques!')">
+            <div class="lesson-img-wrap">
+                <img src="https://images.unsplash.com/photo-1511883040705-6011fad9ed39?w=200" class="lesson-img">
+            </div>
+            <div class="lesson-info">
+                <h4>Wrist Grab Escape</h4>
+                <p>Tactical Release • Defense</p>
+            </div>
+            <div class="lock-badge">🔒</div>
+        </div>
+    </div>
+
+    <div class="modal" id="videoModal">
+        <h3 id="videoTitle" style="color: var(--gold); margin-bottom: 15px;"></h3>
+        <div class="video-container">
+            <iframe id="videoFrame" width="100%" height="100%" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <button class="modal-close" onclick="closeVideo()">CLOSE LESSON</button>
+    </div>
+
+    <script>
+        function openVideo(title, url) {
+            playKiai();
+            document.getElementById('videoTitle').innerText = title;
+            document.getElementById('videoFrame').src = url;
+            document.getElementById('videoModal').classList.add('active');
+        }
+
+        function closeVideo() {
+            document.getElementById('videoModal').classList.remove('active');
+            document.getElementById('videoFrame').src = "";
+        }
+
+        function playKiai() {
+            const audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
+            audio.volume = 0.3;
+            audio.play();
+        }
+    </script>
+
+</body>
+</html>
