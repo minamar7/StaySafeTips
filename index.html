@@ -52,7 +52,8 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
 
-/* QUIZ DESIGN - ORIGINAL STYLE */
+/* QUIZ DESIGN - FIX FOR VISIBILITY */
+#quiz-container h2, #quiz-container p { color: #fff !important; display: block !important; }
 .option-btn {
     background: #1e293b; color: white; border: none; padding: 15px; border-radius: 15px;
     width: 100%; margin-bottom: 10px; font-weight: bold; cursor: pointer; transition: 0.2s;
@@ -173,7 +174,7 @@ const translations = {
     'fr': { days: 'JOURS', training: 'Entraînement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', ready: 'Prêt pour le défi du jour?' },
     'es': { days: 'DÍAS', training: 'Entrenamiento Diario', start: 'INICIAR QUIZ', ach: '🏆 Logros', dojo: 'Dojo de Defensa Élite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Herramientas Élite 🔓', t1: 'TEMPORIZADOR', t2: 'SOS HUB', t3: 'NATURALEZA', t4: 'ESTAFAS', ready: '¿Listo para el desafío de hoy?' },
     'it': { days: 'GIORNI', training: 'Allenamento Quotidiano', start: 'INIZIA QUIZ', ach: '🏆 Traguardi', dojo: 'Dojo di Difesa Elite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Strumenti Elite 🔓', t1: 'TIMER SICURO', t2: 'SOS HUB', t3: 'NATURA', t4: 'TRUFFE', ready: 'Pronto per la sfida di oggi?' },
-    'ru': { days: 'ДНИ', training: 'Тренировка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПРИРОДА', t4: 'МОШЕННИКИ', ready: 'Готовы к испытанию?' }
+    'ru': { days: 'ДНИ', training: 'Тренировка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПΡΙΡΟΔΑ', t4: 'МОШЕННИКИ', ready: 'Готовы к испытанию?' }
 };
 
 let currentLang = localStorage.getItem('user_lang') || 'en';
