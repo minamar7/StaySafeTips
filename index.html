@@ -53,7 +53,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
 
 /* QUIZ DESIGN - FIX FOR VISIBILITY */
-#quiz-container h2, #quiz-container p { color: #fff !important; display: block !important; }
+#quiz-question p.q-text { color: #ffffff !important; display: block !important; font-size: 1.1rem; font-weight: bold; text-align: center; }
 .option-btn {
     background: #1e293b; color: white; border: none; padding: 15px; border-radius: 15px;
     width: 100%; margin-bottom: 10px; font-weight: bold; cursor: pointer; transition: 0.2s;
@@ -118,7 +118,9 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
                 <div id="quiz-pill" style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 5px;">Daily Training</div>
                 <div id="quiz-container">
                     <h2 id="quiz_title">🛡️ Stay Safe Elite</h2>
-                    <p id="quiz_text" style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Ready for today's safety challenge?</p>
+                    <div id="quiz-question">
+                        <p id="quiz_text" style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Ready for today's safety challenge?</p>
+                    </div>
                 </div>
                 <div id="quiz-options" style="margin-top:15px;"></div>
                 <button class="main-cta" id="quiz_btn" onclick="startEngine()">START QUIZ</button>
@@ -171,7 +173,7 @@ const translations = {
     'en': { days: 'DAYS', training: 'Daily Training', start: 'START QUIZ', ach: '🏆 Achievements', dojo: 'Elite Defense Dojo', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Tools 🔓', t1: 'SAFE TIMER', t2: 'SOS HUB', t3: 'NATURE', t4: 'SCAMS', ready: 'Ready for today\'s safety challenge?' },
     'el': { days: 'ΗΜΕΡΕΣ', training: 'Καθημερινή Εκπαίδευση', start: 'ΕΝΑΡΞΗ ΤΕΣΤ', ach: '🏆 Επιτεύγματα', dojo: 'Elite Dojo Άμυνας', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Εργαλεία 🔓', t1: 'ΧΡΟΝΟΜΕΤΡΟ', t2: 'SOS HUB', t3: 'ΦΥΣΗ', t4: 'ΑΠΑΤΕΣ', ready: 'Έτοιμος για τη σημερινή πρόκληση;' },
     'de': { days: 'TAGE', training: 'Tägliches Training', start: 'QUIZ STARTEN', ach: '🏆 Erfolge', dojo: 'Elite-Verteidigungs-Dojo', dojo_sub: 'MEISTER TANG SOO DO', tools: 'Elite-Tools 🔓', t1: 'SICHERER TIMER', t2: 'SOS HUB', t3: 'NATUR', t4: 'BETRUG', ready: 'Bereit für die heutige Herausforderung?' },
-    'fr': { days: 'JOURS', training: 'Entraînement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', ready: 'Prêt pour le défi du jour?' },
+    'fr': { days: 'JOURS', training: 'Entraϊnement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', ready: 'Prêt pour le défi du jour?' },
     'es': { days: 'DÍAS', training: 'Entrenamiento Diario', start: 'INICIAR QUIZ', ach: '🏆 Logros', dojo: 'Dojo de Defensa Élite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Herramientas Élite 🔓', t1: 'TEMPORIZADOR', t2: 'SOS HUB', t3: 'NATURALEZA', t4: 'ESTAFAS', ready: '¿Listo para el desafío de hoy?' },
     'it': { days: 'GIORNI', training: 'Allenamento Quotidiano', start: 'INIZIA QUIZ', ach: '🏆 Traguardi', dojo: 'Dojo di Difesa Elite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Strumenti Elite 🔓', t1: 'TIMER SICURO', t2: 'SOS HUB', t3: 'NATURA', t4: 'TRUFFE', ready: 'Pronto per la sfida di oggi?' },
     'ru': { days: 'ДНИ', training: 'Тренировка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПΡΙΡΟΔΑ', t4: 'МОШЕННИКИ', ready: 'Готовы к испытанию?' }
@@ -189,18 +191,31 @@ function initApp(lang){
 
 function applyTranslations(lang) {
     const t = translations[lang] || translations['en'];
-    document.getElementById('txt_days').innerText = t.days;
-    document.getElementById('quiz-pill').innerText = t.training;
-    document.getElementById('quiz_btn').innerText = t.start;
-    document.getElementById('txt_achievements').innerText = t.ach;
-    document.getElementById('txt_dojo_title').innerText = t.dojo;
-    document.getElementById('txt_dojo_sub').innerText = t.dojo_sub;
-    document.getElementById('txt_tools_title').innerText = t.tools;
-    document.getElementById('t1').innerText = t.t1;
-    document.getElementById('t2').innerText = t.t2;
-    document.getElementById('t3').innerText = t.t3;
-    document.getElementById('t4').innerText = t.t4;
-    document.getElementById('quiz_text').innerText = t.ready;
+    const daysEl = document.getElementById('txt_days');
+    const pillEl = document.getElementById('quiz-pill');
+    const btnEl = document.getElementById('quiz_btn');
+    const achEl = document.getElementById('txt_achievements');
+    const dojoTEl = document.getElementById('txt_dojo_title');
+    const dojoSEl = document.getElementById('txt_dojo_sub');
+    const toolsEl = document.getElementById('txt_tools_title');
+    const t1El = document.getElementById('t1');
+    const t2El = document.getElementById('t2');
+    const t3El = document.getElementById('t3');
+    const t4El = document.getElementById('t4');
+    const readyEl = document.getElementById('quiz_text');
+
+    if(daysEl) daysEl.innerText = t.days;
+    if(pillEl) pillEl.innerText = t.training;
+    if(btnEl) btnEl.innerText = t.start;
+    if(achEl) achEl.innerText = t.ach;
+    if(dojoTEl) dojoTEl.innerText = t.dojo;
+    if(dojoSEl) dojoSEl.innerText = t.dojo_sub;
+    if(toolsEl) toolsEl.innerText = t.tools;
+    if(t1El) t1El.innerText = t.t1;
+    if(t2El) t2El.innerText = t.t2;
+    if(t3El) t3El.innerText = t.t3;
+    if(t4El) t4El.innerText = t.t4;
+    if(readyEl) readyEl.innerText = t.ready;
 }
 
 function showMainApp() {
@@ -215,7 +230,7 @@ function showScreen(screen, btn) {
     document.getElementById('screen_premium').classList.add('hidden');
     document.getElementById('screen_' + screen).classList.remove('hidden');
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
+    if(btn) btn.classList.add('active');
 }
 
 function resetApp() {
@@ -224,11 +239,16 @@ function resetApp() {
 }
 
 function startEngine() {
-    document.getElementById('quiz_btn').classList.add('hidden');
-    document.getElementById('quiz_title').classList.add('hidden');
-    document.getElementById('quiz_text').classList.add('hidden');
+    const qBtn = document.getElementById('quiz_btn');
+    const qTitle = document.getElementById('quiz_title');
+    const qText = document.getElementById('quiz_text');
+    
+    if(qBtn) qBtn.classList.add('hidden');
+    if(qTitle) qTitle.classList.add('hidden');
+    if(qText) qText.classList.add('hidden');
+    
     if(window.QuizEngine) {
-        window.QuizEngine.start(currentLang, 'quiz-container');
+        window.QuizEngine.start(currentLang, 'quiz');
     }
 }
 
