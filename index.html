@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Stay Safe Elite</title>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-4000056160039274" crossorigin="anonymous"></script>
+<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -169,14 +169,22 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </div>
 
 <script>
+// ΤΟ SCRIPT ΓΙΑ ΤΟ BANNER ΜΕ ΤΟ ID ΣΟΥ
+window.googletag = window.googletag || {cmd: []};
+googletag.cmd.push(function() {
+    googletag.defineSlot('/4000056160039274/6359424861', [320, 50], 'ad-unit-footer').addService(googletag.pubads());
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+});
+
 const translations = {
     'en': { days: 'DAYS', training: 'Daily Training', start: 'START QUIZ', ach: '🏆 Achievements', dojo: 'Elite Defense Dojo', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Tools 🔓', t1: 'SAFE TIMER', t2: 'SOS HUB', t3: 'NATURE', t4: 'SCAMS', ready: 'Ready for today\'s safety challenge?' },
     'el': { days: 'ΗΜΕΡΕΣ', training: 'Καθημερινή Εκπαίδευση', start: 'ΕΝΑΡΞΗ ΤΕΣΤ', ach: '🏆 Επιτεύγματα', dojo: 'Elite Dojo Άμυνας', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Εργαλεία 🔓', t1: 'ΧΡΟΝΟΜΕΤΡΟ', t2: 'SOS HUB', t3: 'ΦΥΣΗ', t4: 'ΑΠΑΤΕΣ', ready: 'Έτοιμος για τη σημερινή πρόκληση;' },
     'de': { days: 'TAGE', training: 'Tägliches Training', start: 'QUIZ STARTEN', ach: '🏆 Erfolge', dojo: 'Elite-Verteidigungs-Dojo', dojo_sub: 'MEISTER TANG SOO DO', tools: 'Elite-Tools 🔓', t1: 'SICHERER TIMER', t2: 'SOS HUB', t3: 'NATUR', t4: 'BETRUG', ready: 'Bereit für die heutige Herausforderung?' },
     'fr': { days: 'JOURS', training: 'Entraϊnement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', ready: 'Prêt pour le défi du jour?' },
-    'es': { days: 'DÍAS', training: 'Entrenamiento Diario', start: 'INICIAR QUIZ', ach: '🏆 Logros', dojo: 'Dojo de Defensa Élite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Herramientas Élite 🔓', t1: 'TEMPORIZADOR', t2: 'SOS HUB', t3: 'NATURALEZA', t4: 'ESTAFAS', ready: '¿Listo para el desafío de hoy?' },
+    'es': { days: 'DÍAS', training: 'Entrenamiento Diario', start: 'INICIAR QUIZ', ach: '🏆 Logros', dojo: 'Dojo de Defensa Élite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Herramientας Élite 🔓', t1: 'TEMPORIZADOR', t2: 'SOS HUB', t3: 'NATURALEZA', t4: 'ESTAFAS', ready: '¿Listo para το desafío de hoy?' },
     'it': { days: 'GIORNI', training: 'Allenamento Quotidiano', start: 'INIZIA QUIZ', ach: '🏆 Traguardi', dojo: 'Dojo di Difesa Elite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Strumenti Elite 🔓', t1: 'TIMER SICURO', t2: 'SOS HUB', t3: 'NATURA', t4: 'TRUFFE', ready: 'Pronto per la sfida di oggi?' },
-    'ru': { days: 'ДНИ', training: 'Тренировка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПΡΙΡΟΔΑ', t4: 'МОШЕННИКИ', ready: 'Готовы к испытанию?' }
+    'ru': { days: 'ДНИ', training: 'Треνηровка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПΡΙΡΟΔΑ', t4: 'МОШЕННИКИ', ready: 'Гоτοвы к испытанию?' }
 };
 
 let currentLang = localStorage.getItem('user_lang') || 'en';
@@ -191,31 +199,16 @@ function initApp(lang){
 
 function applyTranslations(lang) {
     const t = translations[lang] || translations['en'];
-    const daysEl = document.getElementById('txt_days');
-    const pillEl = document.getElementById('quiz-pill');
-    const btnEl = document.getElementById('quiz_btn');
-    const achEl = document.getElementById('txt_achievements');
-    const dojoTEl = document.getElementById('txt_dojo_title');
-    const dojoSEl = document.getElementById('txt_dojo_sub');
-    const toolsEl = document.getElementById('txt_tools_title');
-    const t1El = document.getElementById('t1');
-    const t2El = document.getElementById('t2');
-    const t3El = document.getElementById('t3');
-    const t4El = document.getElementById('t4');
-    const readyEl = document.getElementById('quiz_text');
-
-    if(daysEl) daysEl.innerText = t.days;
-    if(pillEl) pillEl.innerText = t.training;
-    if(btnEl) btnEl.innerText = t.start;
-    if(achEl) achEl.innerText = t.ach;
-    if(dojoTEl) dojoTEl.innerText = t.dojo;
-    if(dojoSEl) dojoSEl.innerText = t.dojo_sub;
-    if(toolsEl) toolsEl.innerText = t.tools;
-    if(t1El) t1El.innerText = t.t1;
-    if(t2El) t2El.innerText = t.t2;
-    if(t3El) t3El.innerText = t.t3;
-    if(t4El) t4El.innerText = t.t4;
-    if(readyEl) readyEl.innerText = t.ready;
+    const ids = {
+        'txt_days': 'days', 'quiz-pill': 'training', 'quiz_btn': 'start', 
+        'txt_achievements': 'ach', 'txt_dojo_title': 'dojo', 
+        'txt_dojo_sub': 'dojo_sub', 'txt_tools_title': 'tools',
+        't1': 't1', 't2': 't2', 't3': 't3', 't4': 't4', 'quiz_text': 'ready'
+    };
+    for(let id in ids) {
+        let el = document.getElementById(id);
+        if(el) el.innerText = t[ids[id]];
+    }
 }
 
 function showMainApp() {
@@ -242,19 +235,13 @@ function startEngine() {
     const qBtn = document.getElementById('quiz_btn');
     const qTitle = document.getElementById('quiz_title');
     const qText = document.getElementById('quiz_text');
-    
     if(qBtn) qBtn.classList.add('hidden');
     if(qTitle) qTitle.classList.add('hidden');
     if(qText) qText.classList.add('hidden');
-    
-    if(window.QuizEngine) {
-        window.QuizEngine.start(currentLang, 'quiz');
-    }
+    if(window.QuizEngine) window.QuizEngine.start(currentLang, 'quiz');
 }
 
-window.onload = () => {
-    if(localStorage.getItem('app_init') === 'true') showMainApp();
-};
+window.onload = () => { if(localStorage.getItem('app_init') === 'true') showMainApp(); };
 </script>
 </body>
 </html>
