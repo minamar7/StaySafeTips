@@ -13,15 +13,17 @@
       --gold: #facc15;
       --danger: #ef4444;
       --card: rgba(15, 23, 42, 0.9);
+      --glass: rgba(255, 255, 255, 0.03);
     }
 
     body {
       margin: 0;
       background: var(--bg);
       color: #fff;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: -apple-system, system-ui, sans-serif;
       text-align: center;
       overflow: hidden;
+      min-height: 100vh;
     }
 
     .app-shell {
@@ -30,17 +32,19 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 60px 20px 40px;
+      padding: 60px 20px 110px; /* Αυξημένο padding για να μην κρύβεται τίποτα κάτω */
     }
 
-    h1 { font-size: 1.6rem; margin-bottom: 5px; color: var(--accent); }
-    p { color: #94a3b8; font-size: 0.9rem; }
+    header { margin-bottom: 20px; }
+    h1 { font-size: 1.8rem; margin: 0; color: var(--accent); letter-spacing: -0.5px; }
+    p { color: #94a3b8; font-size: 0.95rem; margin-top: 8px; }
 
+    /* TIMER DESIGN */
     .timer-container {
       position: relative;
-      width: 280px;
-      height: 280px;
-      margin: 40px auto;
+      width: 300px;
+      height: 300px;
+      margin: auto;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -50,66 +54,91 @@
       transform: rotate(-90deg);
       width: 100%;
       height: 100%;
+      filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.2));
     }
 
     .timer-circle-bg {
       fill: none;
-      stroke: rgba(255,255,255,0.05);
-      stroke-width: 8;
+      stroke: rgba(255,255,255,0.03);
+      stroke-width: 10;
     }
 
     .timer-circle-prog {
       fill: none;
       stroke: var(--accent);
-      stroke-width: 8;
+      stroke-width: 10;
       stroke-linecap: round;
       stroke-dasharray: 816; 
       stroke-dashoffset: 0;
-      transition: stroke-dashoffset 1s linear, stroke 0.3s;
+      transition: stroke-dashoffset 1s linear, stroke 0.4s, filter 0.4s;
     }
 
     .time-display {
       position: absolute;
-      font-size: 3.5rem;
+      font-size: 4rem;
       font-weight: 800;
       font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
 
+    /* CONTROLS */
     .controls {
-      margin-top: auto;
       display: grid;
-      gap: 15px;
+      gap: 12px;
+      width: 100%;
     }
 
     .btn {
-      padding: 18px;
-      border-radius: 20px;
-      font-size: 1rem;
+      padding: 20px;
+      border-radius: 24px;
+      font-size: 1.1rem;
       font-weight: 800;
       border: none;
       cursor: pointer;
-      transition: 0.2s;
+      transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .btn-arrival { background: var(--accent); color: #000; }
-    .btn-cancel { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
-    
-    .btn:active { transform: scale(0.96); }
+    .btn-arrival { 
+      background: linear-gradient(135deg, var(--accent), #0284c7); 
+      color: #020617;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
+    }
 
-    .alert-active .timer-circle-prog { stroke: var(--danger); animation: blink 0.5s infinite; }
-    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+    .btn-cancel { 
+      background: var(--glass); 
+      color: #94a3b8; 
+      border: 1px solid rgba(255,255,255,0.1); 
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn:active { transform: scale(0.95); }
+
+    /* ALERT STATE */
+    .alert-active .timer-circle-prog { 
+      stroke: var(--danger); 
+      filter: drop-shadow(0 0 20px var(--danger));
+      animation: pulse-glow 1s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
   </style>
 </head>
-<body>
+<body class="timer-page">
 
   <div class="app-shell">
     <header>
       <h1 id="status-title">Safe Arrival</h1>
-      <p id="status-desc">Timer active. We'll check on you soon.</p>
+      <p id="status-desc">Elite monitoring active. We'll check on you soon.</p>
     </header>
 
     <div class="timer-container" id="timer-box">
-      <svg class="timer-svg">
+      <svg class="timer-svg" viewBox="0 0 280 280">
         <circle class="timer-circle-bg" cx="140" cy="140" r="130"></circle>
         <circle id="progress" class="timer-circle-prog" cx="140" cy="140" r="130"></circle>
       </svg>
@@ -118,7 +147,7 @@
 
     <div class="controls">
       <button class="btn btn-arrival" onclick="safeArrival()">I HAVE ARRIVED ✅</button>
-      <button class="btn btn-cancel" onclick="cancelTimer()">CANCEL & EXIT</button>
+      <button class="btn btn-cancel" onclick="cancelTimer()">CANCEL SESSION</button>
     </div>
   </div>
 
@@ -131,7 +160,7 @@
     const CIRCUMFERENCE = 2 * Math.PI * 130;
 
     function startTimer() {
-      if (timerInterval) return; // Προστασία από διπλό πάτημα
+      if (timerInterval) return;
       timerInterval = setInterval(() => {
         remaining--;
         updateUI();
@@ -160,36 +189,40 @@
     function triggerAlert() {
       document.getElementById('status-title').innerText = "⚠️ TIME EXPIRED";
       document.getElementById('status-title').style.color = "var(--danger)";
-      document.getElementById('status-desc').innerText = "Emergency SMS prepared...";
+      document.getElementById('status-desc').innerText = "Sending SOS details to emergency contacts...";
       
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
           const link = `https://www.google.com/maps?q=${lat},${lon}`;
-          window.location.href = `sms:?&body=I have not checked in! My last location: ${link}`;
+          window.location.href = `sms:?&body=EMERGENCY! I have not checked in from my Safe Arrival timer. My last known location: ${link}`;
         }, () => {
-          window.location.href = `sms:?&body=I have not checked in! (Location unavailable)`;
+          window.location.href = `sms:?&body=EMERGENCY! I have not checked in. Location unavailable. Please check on me.`;
         });
       }
     }
 
     function safeArrival() {
       clearInterval(timerInterval);
-      alert("Glad you're safe! +50 XP");
-      let xp = parseInt(localStorage.getItem('xp')) || 0;
-      localStorage.setItem('xp', xp + 50);
+      // Confetti effect αν υπάρχει η βιβλιοθήκη
+      if(window.confetti) {
+          confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#facc15', '#38bdf8', '#fff'] });
+      }
+      
+      alert("Elite Level Safety! +50 XP awarded.");
+      let xp = parseInt(localStorage.getItem('user_xp')) || 0;
+      localStorage.setItem('user_xp', xp + 50);
       window.location.href = 'index.html';
     }
 
     function cancelTimer() {
-      if(confirm("Are you sure? This will disable your arrival check.")) {
+      if(confirm("Exit Safe Arrival? Your monitoring will stop.")) {
         clearInterval(timerInterval);
         window.location.href = 'index.html';
       }
     }
 
-    // Αυτόματη εκκίνηση
     window.onload = () => {
         updateUI();
         startTimer();
