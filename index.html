@@ -25,9 +25,9 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
 
-/* FLOATING SOS BUTTON */
+/* FLOATING SOS BUTTON - UPDATED POSITION ABOVE DOJO */
 .panic-btn { 
-    position: fixed; right: 20px; bottom: 100px; width: 70px; height: 70px; 
+    position: fixed; right: 20px; bottom: 210px; width: 70px; height: 70px; 
     background: var(--danger); border-radius: 50%; display: flex; align-items: center; 
     justify-content: center; box-shadow: 0 0 25px rgba(239, 68, 68, 0.6); 
     z-index: 999; border: 4px solid rgba(255,255,255,0.2); cursor: pointer;
@@ -35,64 +35,34 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 }
 @keyframes panic-pulse { 0% { transform: scale(1); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-/* UPGRADED DOJO GATEWAY BUTTON */
+/* SLIGHTLY SMALLER DOJO GATEWAY */
 .dojo-gateway {
     background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), #020617);
-    border: 3px solid var(--gold);
-    border-radius: 28px;
-    padding: 15px;
-    margin: 20px 0;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
-    transition: 0.3s;
+    border: 2px solid var(--gold); border-radius: 24px;
+    padding: 12px; margin: 15px 0;
+    position: relative; overflow: hidden; cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);
 }
-.dojo-gateway:active { transform: scale(0.97); }
-
 .dojo-avatar-circle {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid var(--gold);
-    overflow: hidden;
-    background: #000;
-    flex-shrink: 0;
-    box-shadow: 0 0 10px var(--gold);
+    width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--gold);
+    overflow: hidden; background: #000; flex-shrink: 0;
 }
 .dojo-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.gate-info h3 { margin: 0; font-size: 1rem; color: #fff; text-transform: uppercase; }
+.gate-info p { margin: 2px 0 0; font-size: 0.6rem; color: var(--gold); font-weight: bold; }
+.premium-tag { position: absolute; top: 8px; right: 12px; background: var(--gold); color: #000; font-size: 0.5rem; padding: 2px 6px; border-radius: 4px; font-weight: 900; }
 
-.gate-info h3 { margin: 0; font-size: 1.1rem; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; }
-.gate-info p { margin: 4px 0 0; font-size: 0.65rem; color: var(--gold); font-weight: bold; }
-.premium-tag { position: absolute; top: 12px; right: 15px; background: var(--gold); color: #000; font-size: 0.55rem; padding: 3px 8px; border-radius: 6px; font-weight: 900; }
-
-/* Cards & Grid */
+/* UI Elements */
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
-.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
 
-/* QUIZ SPECIFIC */
-.option-btn {
-    background: #1e293b; color: white; border: none; padding: 15px; border-radius: 15px;
-    width: 100%; margin-bottom: 10px; font-weight: bold; cursor: pointer; transition: 0.2s;
-}
-.option-btn.correct { background: var(--success) !important; color: white; }
-.option-btn.wrong { background: var(--danger) !important; color: white; }
-
-/* Navigation & Sonar Effect */
+/* Navigation */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .nav-tab.active { color: var(--accent); }
 
-.nav-radar-wrapper { position: relative; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
-.sonar-wave { position: absolute; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; opacity: 0; z-index: 0; animation: sonar-ping 2s cubic-bezier(0, 0.2, 0.8, 1) infinite; }
-.sonar-wave-delayed { animation-delay: 1s; }
-@keyframes sonar-ping { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(3); opacity: 0; } }
-.radar-emoji { position: relative; z-index: 1; font-size: 24px; }
-
-/* Language Selection Grid */
+/* Language Grid */
 .overlay { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; overflow-y: auto; }
 .lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; width: 100%; max-width: 400px; padding-bottom: 40px; }
 .lang-btn { background: #1e293b; padding: 15px; border-radius: 15px; color: white; cursor: pointer; border: 1px solid #334155; font-weight: bold; font-size: 14px; }
@@ -100,9 +70,8 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 /* Tools & Badges */
 .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
 .tool-card { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 22px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
-.tool-card i { font-size: 30px; display: block; margin-bottom: 8px; font-style: normal; }
 .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
-.badge { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 18px; text-align: center; font-size: 20px; border: 1px solid transparent; }
+.badge { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 18px; text-align: center; font-size: 20px; }
 .badge.unlocked { border: 1px solid var(--gold); background: rgba(250, 204, 21, 0.1); }
 </style>
 </head>
@@ -113,35 +82,35 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 </div>
 
 <section id="onboarding" class="overlay">
-<div>
-    <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
-    <h1>Stay Safe Elite</h1>
-    <p style="color:var(--muted);">Select Your Language</p>
-    <div class="lang-grid">
-        <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
-        <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
-        <div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
-        <div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
-        <div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
-        <div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
-        <div class="lang-btn" onclick="initApp('pt')">🇵Τ Portuguese</div>
-        <div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
-        <div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
-        <div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
+    <div>
+        <div style="font-size:60px; margin-bottom:20px;">🛡️</div>
+        <h1>Stay Safe Elite</h1>
+        <p style="color:var(--muted);">Select Your Language</p>
+        <div class="lang-grid">
+            <div class="lang-btn" onclick="initApp('el')">🇬🇷 Greek</div>
+            <div class="lang-btn" onclick="initApp('en')">🇺🇸 English</div>
+            <div class="lang-btn" onclick="initApp('de')">🇩🇪 German</div>
+            <div class="lang-btn" onclick="initApp('fr')">🇫🇷 French</div>
+            <div class="lang-btn" onclick="initApp('es')">🇪🇸 Spanish</div>
+            <div class="lang-btn" onclick="initApp('it')">🇮🇹 Italian</div>
+            <div class="lang-btn" onclick="initApp('pt')">🇵Τ Portuguese</div>
+            <div class="lang-btn" onclick="initApp('ru')">🇷🇺 Russian</div>
+            <div class="lang-btn" onclick="initApp('zh')">🇨🇳 Chinese</div>
+            <div class="lang-btn" onclick="initApp('hi')">🇮🇳 Hindi</div>
+        </div>
     </div>
-</div>
 </section>
 
 <div id="main_app" class="hidden">
     <header class="app-header">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <div style="color:var(--gold); font-weight:bold;">🔥 <span id="streak_val">1</span> DAYS</div>
-            <div style="font-weight:900; color:var(--accent);">LEVEL <span id="user-level">1</span></div>
+            <div style="font-weight:900; color:var(--accent); cursor:pointer;" onclick="localStorage.clear(); location.reload();">LEVEL <span id="user-level">1</span></div>
         </div>
         <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
     </header>
 
-    <main style="padding: 20px 20px 110px;">
+    <main style="padding: 20px 20px 140px;">
         <section id="screen_home">
             <div class="glass-card">
                 <div id="quiz-pill" style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 5px;">Daily Training</div>
@@ -149,13 +118,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
                     <h2 id="quiz_title">🛡️ Stay Safe Elite</h2>
                     <p id="quiz_text" style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Ready for today's safety challenge?</p>
                 </div>
-                
                 <div id="quiz-options" style="margin-top:15px;"></div>
-                
-                <div id="quiz-result" class="hidden" style="flex-direction: column; align-items: center;">
-                    <h3 id="quiz-result-score" style="color: var(--gold); margin-bottom: 10px;">Score: 0%</h3>
-                </div>
-
                 <button class="main-cta" id="quiz_btn" onclick="startEngine()">START QUIZ</button>
             </div>
 
@@ -174,7 +137,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
                 </div>
                 <div class="gate-info">
                     <h3>Elite Defense Dojo</h3>
-                    <p>MASTER TANG SOO DO • INSTINCT POWERED</p>
+                    <p>MASTER TANG SOO DO</p>
                 </div>
             </div>
         </section>
@@ -183,23 +146,10 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
             <div class="glass-card" style="border:1px solid var(--gold);">
                 <h2 style="color:var(--gold); margin:0;">Elite Tools 🔓</h2>
                 <div class="tools-grid">
-                    <div class="tool-card" onclick="window.location.href='timer.html'">
-                        <i>⏳</i><small>SAFE TIMER</small>
-                    </div>
-                    <div class="tool-card" onclick="window.location.href='sos-hub.html'">
-                        <i>🚨</i><small>SOS HUB</small>
-                    </div>
-                    <div class="tool-card" onclick="window.location.href='weather-alerts.html'">
-                        <i>🌍</i><small>NATURE</small>
-                    </div>
-                    <div class="tool-card" onclick="window.location.href='scam-alerts.html'">
-                        <i>⚠️</i><small>SCAMS</small>
-                    </div>
-                </div>
-                <div class="tools-grid" style="margin-top: 15px;">
-                    <div class="tool-card" style="grid-column: span 2;" onclick="window.location.href='checkup.html'">
-                        <i>🔍</i><small>ELITE CHECKUP</small>
-                    </div>
+                    <div class="tool-card" onclick="window.location.href='timer.html'"><i>⏳</i><small>SAFE TIMER</small></div>
+                    <div class="tool-card" onclick="window.location.href='sos-hub.html'"><i>🚨</i><small>SOS HUB</small></div>
+                    <div class="tool-card" onclick="window.location.href='weather-alerts.html'"><i>🌍</i><small>NATURE</small></div>
+                    <div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small>SCAMS</small></div>
                 </div>
             </div>
         </section>
@@ -207,20 +157,12 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 
     <nav class="nav-tabs">
         <button class="nav-tab active" id="nav_home" onclick="showScreen('home', this)">🏠</button>
-        
-        <button class="nav-tab" id="nav_radar" onclick="window.location.href='scam-alerts2.html'">
-            <div class="nav-radar-wrapper">
-                <div class="sonar-wave"></div>
-                <div class="sonar-wave sonar-wave-delayed"></div>
-                <div class="radar-emoji">📡</div>
-            </div>
-        </button>
-
+        <button class="nav-tab" onclick="window.location.href='scam-alerts2.html'">📡</button>
         <button class="nav-tab" id="nav_premium" onclick="showScreen('premium', this)">💎</button>
     </nav>
 
-    <div id="ad-unit-footer" style="position:fixed; bottom:80px; width:100%; height:50px; background:#020617; border-top:1px solid rgba(56,189,248,0.2); z-index:999; display:flex; align-items:center; justify-content:center;">
-        <span style="color:#1e293b; font-size:9px; letter-spacing:2px; text-transform:uppercase;">Secure Ad Stream Active</span>
+    <div id="ad-unit-footer" style="position:fixed; bottom:80px; width:100%; height:50px; background:#020617; border-top:1px solid rgba(56,189,248,0.2); z-index:998; display:flex; align-items:center; justify-content:center;">
+        <span style="color:#1e293b; font-size:9px; letter-spacing:2px; text-transform:uppercase;">Secure Ad Stream</span>
     </div>
 </div>
 
@@ -228,11 +170,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 let currentLang = localStorage.getItem('user_lang') || 'en';
 let isAppInitialized = localStorage.getItem('app_init') === 'true';
 
-window.onload = () => {
-    if(isAppInitialized) {
-        showMainApp();
-    }
-};
+window.onload = () => { if(isAppInitialized) showMainApp(); };
 
 function initApp(lang){
     localStorage.setItem('user_lang', lang);
@@ -245,31 +183,19 @@ function showMainApp() {
     document.getElementById('onboarding').classList.add('hidden');
     document.getElementById('main_app').classList.remove('hidden');
     document.getElementById('panic_button').classList.remove('hidden');
-    
-    const savedBadges = JSON.parse(localStorage.getItem('ss_badges') || '[]');
-    savedBadges.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.classList.add('unlocked');
-    });
 }
 
 function startEngine() {
     document.getElementById('quiz_btn').classList.add('hidden');
-    if(window.QuizEngine) {
-        window.QuizEngine.start(currentLang, 'quiz');
-    }
+    if(window.QuizEngine) window.QuizEngine.start(currentLang, 'quiz');
 }
 
 window.showScreen = function(screen, btn) {
     document.getElementById('screen_home').classList.add('hidden');
     document.getElementById('screen_premium').classList.add('hidden');
     document.getElementById('screen_'+screen).classList.remove('hidden');
-    
     document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-    if(btn) btn.classList.add('active');
-    else {
-        document.getElementById('nav_home').classList.add('active');
-    }
+    btn.classList.add('active');
 }
 </script>
 </body>
