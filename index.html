@@ -152,6 +152,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
                     <div class="tool-card" onclick="window.location.href='sos-hub.html'"><i>🚨</i><small id="t2">SOS HUB</small></div>
                     <div class="tool-card" onclick="window.location.href='weather-alerts.html'"><i>🌍</i><small id="t3">NATURE</small></div>
                     <div class="tool-card" onclick="window.location.href='scam-alerts.html'"><i>⚠️</i><small id="t4">SCAMS</small></div>
+                    <div class="tool-card" onclick="window.location.href='checkup.html'"><i>🛡️</i><small id="t5">CHECKUP</small></div>
                 </div>
             </div>
         </section>
@@ -178,13 +179,13 @@ googletag.cmd.push(function() {
 });
 
 const translations = {
-    'en': { days: 'DAYS', training: 'Daily Training', start: 'START QUIZ', ach: '🏆 Achievements', dojo: 'Elite Defense Dojo', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Tools 🔓', t1: 'SAFE TIMER', t2: 'SOS HUB', t3: 'NATURE', t4: 'SCAMS', ready: 'Ready for today\'s safety challenge?' },
-    'el': { days: 'ΗΜΕΡΕΣ', training: 'Καθημερινή Εκπαίδευση', start: 'ΕΝΑΡΞΗ ΤΕΣΤ', ach: '🏆 Επιτεύγματα', dojo: 'Elite Dojo Άμυνας', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Εργαλεία 🔓', t1: 'ΧΡΟΝΟΜΕΤΡΟ', t2: 'SOS HUB', t3: 'ΦΥΣΗ', t4: 'ΑΠΑΤΕΣ', ready: 'Έτοιμος για τη σημερινή πρόκληση;' },
-    'de': { days: 'TAGE', training: 'Tägliches Training', start: 'QUIZ STARTEN', ach: '🏆 Erfolge', dojo: 'Elite-Verteidigungs-Dojo', dojo_sub: 'MEISTER TANG SOO DO', tools: 'Elite-Tools 🔓', t1: 'SICHERER TIMER', t2: 'SOS HUB', t3: 'NATUR', t4: 'BETRUG', ready: 'Bereit für die heutige Herausforderung?' },
-    'fr': { days: 'JOURS', training: 'Entraϊnement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', ready: 'Prêt pour le défi du jour?' },
-    'es': { days: 'DÍAS', training: 'Entrenamiento Diario', start: 'INICIAR QUIZ', ach: '🏆 Logros', dojo: 'Dojo de Defensa Élite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Herramientας Élite 🔓', t1: 'TEMPORIZADOR', t2: 'SOS HUB', t3: 'NATURALEZA', t4: 'ESTAFAS', ready: '¿Listo para το desafío de hoy?' },
-    'it': { days: 'GIORNI', training: 'Allenamento Quotidiano', start: 'INIZIA QUIZ', ach: '🏆 Traguardi', dojo: 'Dojo di Difesa Elite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Strumenti Elite 🔓', t1: 'TIMER SICURO', t2: 'SOS HUB', t3: 'NATURA', t4: 'TRUFFE', ready: 'Pronto per la sfida di oggi?' },
-    'ru': { days: 'ДНИ', training: 'Треνηровка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПΡΙΡΟΔΑ', t4: 'МОШЕННИКИ', ready: 'Гоτοвы к испытанию?' }
+    'en': { days: 'DAYS', training: 'Daily Training', start: 'START QUIZ', ach: '🏆 Achievements', dojo: 'Elite Defense Dojo', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Tools 🔓', t1: 'SAFE TIMER', t2: 'SOS HUB', t3: 'NATURE', t4: 'SCAMS', t5: 'CHECKUP', ready: 'Ready for today\'s safety challenge?' },
+    'el': { days: 'ΗΜΕΡΕΣ', training: 'Καθημερινή Εκπαίδευση', start: 'ΕΝΑΡΞΗ ΤΕΣΤ', ach: '🏆 Επιτεύγματα', dojo: 'Elite Dojo Άμυνας', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Εργαλεία 🔓', t1: 'ΧΡΟΝΟΜΕΤΡΟ', t2: 'SOS HUB', t3: 'ΦΥΣΗ', t4: 'ΑΠΑΤΕΣ', t5: 'ΕΛΕΓΧΟΣ', ready: 'Έτοιμος για τη σημερινή πρόκληση;' },
+    'de': { days: 'TAGE', training: 'Tägliches Training', start: 'QUIZ STARTEN', ach: '🏆 Erfolge', dojo: 'Elite-Verteidigungs-Dojo', dojo_sub: 'MEISTER TANG SOO DO', tools: 'Elite-Tools 🔓', t1: 'SICHERER TIMER', t2: 'SOS HUB', t3: 'NATUR', t4: 'BETRUG', t5: 'CHECKUP', ready: 'Bereit für die heutige Herausforderung?' },
+    'fr': { days: 'JOURS', training: 'Entraϊnement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', t5: 'CHECKUP', ready: 'Prêt pour le défi du jour?' },
+    'es': { days: 'DÍAS', training: 'Entrenamiento Diario', start: 'INICIAR QUIZ', ach: '🏆 Logros', dojo: 'Dojo de Defensa Élite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Herramientας Élite 🔓', t1: 'TEMPORIZADOR', t2: 'SOS HUB', t3: 'NATURALEZA', t4: 'ESTAFAS', t5: 'CHECKUP', ready: '¿Listo para το desafío de hoy?' },
+    'it': { days: 'GIORNI', training: 'Allenamento Quotidiano', start: 'INIZΙΑ QUIZ', ach: '🏆 Traguardi', dojo: 'Dojo di Difesa Elite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Strumenti Elite 🔓', t1: 'TIMER SICURO', t2: 'SOS HUB', t3: 'NATURA', t4: 'TRUFFE', t5: 'CHECKUP', ready: 'Pronto per la sfida di oggi?' },
+    'ru': { days: 'ДНИ', training: 'Треνηровка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПΡΙΡΟΔΑ', t4: 'МОШЕННИКИ', t5: 'ПРОВЕРКА', ready: 'Гоτοвы к испытанию?' }
 };
 
 let currentLang = localStorage.getItem('user_lang') || 'en';
@@ -203,7 +204,7 @@ function applyTranslations(lang) {
         'txt_days': 'days', 'quiz-pill': 'training', 'quiz_btn': 'start', 
         'txt_achievements': 'ach', 'txt_dojo_title': 'dojo', 
         'txt_dojo_sub': 'dojo_sub', 'txt_tools_title': 'tools',
-        't1': 't1', 't2': 't2', 't3': 't3', 't4': 't4', 'quiz_text': 'ready'
+        't1': 't1', 't2': 't2', 't3': 't3', 't4': 't4', 't5': 't5', 'quiz_text': 'ready'
     };
     for(let id in ids) {
         let el = document.getElementById(id);
