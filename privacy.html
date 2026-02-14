@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Privacy Policy | Stay Safe Elite</title>
     <style>
-        :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --text: #f8fafc; --muted: #94a3b8; }
+        :root { 
+            --bg: #020617; 
+            --card: rgba(15, 23, 42, 0.9); 
+            --accent: #38bdf8; 
+            --gold: #facc15;
+            --text: #f8fafc; 
+            --muted: #94a3b8; 
+        }
         body { 
             font-family: -apple-system, system-ui, sans-serif; 
             line-height: 1.6; 
@@ -18,13 +25,30 @@
             max-width: 700px; 
             margin: 40px auto; 
             background: var(--card); 
-            padding: 30px; 
-            border-radius: 24px; 
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 35px; 
+            border-radius: 28px; 
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
         }
-        h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 10px; }
-        h2 { color: var(--accent); font-size: 1.2rem; margin-top: 25px; border-bottom: 1px solid rgba(56,189,248,0.2); padding-bottom: 5px; }
+        h1 { color: var(--gold); font-size: 1.8rem; margin-bottom: 10px; font-weight: 900; }
+        h2 { color: var(--accent); font-size: 1.2rem; margin-top: 25px; border-bottom: 1px solid rgba(56,189,248,0.2); padding-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* SPECIAL DISCLAIMER STYLE */
+        .disclaimer-highlight {
+            background: rgba(250, 204, 21, 0.05);
+            border: 2px solid var(--gold);
+            padding: 20px;
+            border-radius: 18px;
+            margin: 25px 0;
+        }
+        .disclaimer-highlight h3 { 
+            color: var(--gold); 
+            margin-top: 0; 
+            font-size: 1rem; 
+            text-transform: uppercase; 
+        }
+        .disclaimer-highlight p { color: #fef08a; font-size: 0.9rem; margin-bottom: 0; }
+
         p, li { color: var(--muted); font-size: 0.95rem; }
         ul { padding-left: 20px; }
         .back-btn {
@@ -32,8 +56,10 @@
             margin-bottom: 20px;
             color: var(--accent);
             text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -43,26 +69,31 @@
         <h1>Privacy Policy</h1>
         <p>Last Updated: February 2026</p>
 
-        <p>At <strong>Stay Safe Elite</strong>, accessible from our GitHub Pages and mobile application, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Stay Safe Elite and how we use it.</p>
+        <div class="disclaimer-highlight">
+            <h3>⚠️ Educational Disclaimer</h3>
+            <p>The content provided within <strong>Stay Safe Elite</strong> is for <strong>educational and informational purposes only</strong>. Self-defense techniques and tactical advice should only be used as a last resort in situations of absolute necessity. The developers are not responsible for any injury or legal consequences resulting from the use of this information.</p>
+        </div>
+
+        <p>At <strong>Stay Safe Elite</strong>, accessible via our GitHub Pages and mobile application, your privacy is our top priority. This document outlines how we handle information and our commitment to your safety.</p>
 
         <h2>1. Local Data Storage</h2>
-        <p>Stay Safe Elite does not require user registration. Your progress data, including XP, Levels, and Badges, is stored <strong>locally on your device</strong> (using LocalStorage). We do not have access to this data on our servers.</p>
+        <p>Stay Safe Elite does not require user registration. All progress data, including XP, Levels, Badges, and personal settings, is stored <strong>locally on your device</strong> (using LocalStorage). This data is private and never transmitted to our servers.</p>
 
         <h2>2. Google AdSense & Cookies</h2>
-        <p>We use Google AdSense to serve advertisements. Google, as a third-party vendor, uses cookies to serve ads on our app. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to Stay Safe Elite or other websites on the Internet.</p>
+        <p>We use Google AdSense to serve advertisements. Google, as a third-party vendor, uses cookies to serve ads based on your visit to Stay Safe Elite. </p>
         <ul>
-            <li>Users may opt-out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" style="color:var(--accent)">Google Ads Settings</a>.</li>
-            <li>We do not control these cookies used by third-party advertisers.</li>
+            <li>Users can opt-out of personalized advertising at <a href="https://www.google.com/settings/ads" target="_blank" style="color:var(--accent)">Google Ads Settings</a>.</li>
+            <li>Third-party advertisers may use their own cookies; we do not have access to or control over these.</li>
         </ul>
 
-        <h2>3. External Links</h2>
-        <p>Our application may contain links to external social media platforms (Instagram, TikTok). Please be aware that we are not responsible for the privacy practices of such other sites.</p>
+        <h2>3. External Platforms</h2>
+        <p>Our app provides links to external social media (Instagram, TikTok). We are not responsible for the privacy policies or practices of these external platforms.</p>
 
-        <h2>4. Device Information (Audit Tool)</h2>
-        <p>The "Elite Checkup" tool accesses basic device information (battery level, network status) in real-time. This information is processed <strong>only within your browser/app</strong> and is never transmitted, stored, or shared.</p>
+        <h2>4. System Audit Tool (Elite Checkup)</h2>
+        <p>The "Elite Checkup" tool analyzes basic device info (battery, network) in real-time. This processing happens <strong>exclusively on your device</strong>. No device data is ever collected, shared, or stored remotely.</p>
 
-        <h2>5. Consent</h2>
-        <p>By using our app, you hereby consent to our Privacy Policy and agree to its terms.</p>
+        <h2>5. User Consent</h2>
+        <p>By using the Stay Safe Elite application, you hereby consent to this Privacy Policy and agree to its terms and conditions.</p>
 
         <footer style="margin-top:40px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.05); font-size:12px; text-align:center;">
             <p>&copy; 2026 Stay Safe Elite - Specialized Security Awareness Tool</p>
