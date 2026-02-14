@@ -9,6 +9,7 @@
             --gold: #facc15; 
             --neon: #38bdf8; 
             --bg: #020617; 
+            --card-glass: rgba(15, 23, 42, 0.85);
             --shadow-gold: rgba(250, 204, 21, 0.4);
             --shadow-neon: rgba(56, 189, 248, 0.3);
             --safe-green: #22c55e;
@@ -24,212 +25,143 @@
             align-items: center; 
             min-height: 100vh;
             overflow-x: hidden;
-            padding: 20px 0;
+            padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
         }
         
         .dojo-frame {
             border: 2px solid var(--neon);
-            border-radius: 45px;
-            padding: 40px 25px;
-            width: 88%;
+            border-radius: 40px;
+            padding: 35px 22px;
+            width: 90%;
             max-width: 380px;
             text-align: center;
-            background: linear-gradient(180deg, rgba(5, 10, 30, 0.95) 0%, rgba(2, 6, 23, 1) 100%);
-            box-shadow: 0 0 40px var(--shadow-neon), inset 0 0 20px rgba(56,189,248,0.1);
+            background: linear-gradient(180deg, #050a1e 0%, #020617 100%);
+            box-shadow: 0 0 50px var(--shadow-neon);
             position: relative;
+            backdrop-filter: blur(10px);
         }
 
         h1 { 
-            font-size: 1.6rem; 
+            font-size: 1.5rem; 
             letter-spacing: 2px; 
             margin: 0; 
             color: var(--neon); 
             font-weight: 900; 
-            text-shadow: 0 0 15px var(--shadow-neon);
+            text-shadow: 0 0 10px var(--shadow-neon);
         }
 
         .motto { 
-            font-size: 0.65rem; 
-            letter-spacing: 3px; 
-            margin-bottom: 25px; 
+            font-size: 0.6rem; 
+            letter-spacing: 4px; 
+            margin-bottom: 20px; 
             color: #94a3b8;
             font-weight: bold; 
             text-transform: uppercase;
         }
 
+        /* Progress Bar */
         .progress-box {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(56, 189, 248, 0.2);
             border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 25px;
-            text-align: left;
+            padding: 15px;
+            margin-bottom: 20px;
         }
 
         .progress-info {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .progress-label {
-            font-size: 0.7rem;
-            color: var(--gold);
-            font-weight: 800;
+            margin-bottom: 8px;
+            font-size: 0.65rem;
             text-transform: uppercase;
+            font-weight: 800;
         }
 
-        .bar-bg {
-            background: rgba(255, 255, 255, 0.05);
-            height: 10px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .bar-fill {
-            background: linear-gradient(90deg, var(--neon), #0ea5e9);
-            height: 100%;
-            width: 35%; 
-            box-shadow: 0 0 15px var(--neon);
-            border-radius: 10px;
+        .bar-bg { background: rgba(255, 255, 255, 0.05); height: 8px; border-radius: 10px; overflow: hidden; }
+        .bar-fill { 
+            background: linear-gradient(90deg, var(--neon), var(--gold)); 
+            height: 100%; width: 35%; 
+            box-shadow: 0 0 10px var(--neon);
+            transition: 1s ease-in-out;
         }
 
         .kanji { 
-            font-size: 4rem; 
+            font-size: 3.5rem; 
             color: var(--gold); 
             display: block; 
-            margin: 10px 0; 
-            filter: drop-shadow(0 0 20px var(--shadow-gold));
+            margin: 5px 0; 
+            filter: drop-shadow(0 0 15px var(--shadow-gold));
             font-weight: bold;
         }
 
+        /* Video/Master Display Container */
         .master-display {
             border: 3px solid var(--gold); 
-            border-radius: 35px;
-            margin: 15px 0 10px 0;
+            border-radius: 25px;
+            margin-bottom: 15px;
             overflow: hidden;
             background: #000;
-            aspect-ratio: 1.3 / 1;
-            box-shadow: 0 0 25px var(--shadow-gold);
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 0 20px var(--shadow-gold);
             position: relative;
         }
 
         .master-display img { 
-            width: 100%; 
-            height: 100%; 
+            width: 100%; height: 100%; 
             object-fit: cover; 
-            display: block;
-            object-position: center 20%;
-            animation: masterBreath 8s ease-in-out infinite;
+            animation: masterBreath 10s ease-in-out infinite;
         }
 
         @keyframes masterBreath {
-            0%, 100% { transform: scale(1.05); }
-            50% { transform: scale(1.15); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
         }
 
-        /* Ready to Defend Badge */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--safe-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--safe-green);
-            animation: blink 1.5s infinite;
-        }
-
-        .status-text {
-            font-size: 0.6rem;
-            font-weight: 900;
-            color: var(--safe-green);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .label { 
-            font-size: 0.8rem; 
-            color: var(--gold); 
-            font-weight: 800; 
-            margin-bottom: 20px; 
-            display: block; 
-            letter-spacing: 1px;
-        }
-
+        /* Mission Menu */
         .menu-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; 
-            margin-bottom: 35px; 
+            gap: 10px; 
+            margin-bottom: 25px; 
         }
 
         .menu-item {
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 18px;
-            padding: 15px 5px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 15px;
+            padding: 12px 5px;
             background: rgba(56, 189, 248, 0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        .menu-item:hover { border-color: var(--neon); background: rgba(56, 189, 248, 0.1); }
-        .menu-item:active { transform: scale(0.92); }
+        .menu-item:active { transform: scale(0.9); background: rgba(56, 189, 248, 0.2); }
+        .menu-item img { width: 24px; height: 24px; margin-bottom: 8px; }
+        .menu-item span { font-size: 0.5rem; display: block; font-weight: 800; color: var(--gold); text-transform: uppercase; }
 
-        .menu-item img { width: 30px; height: 30px; margin-bottom: 10px; filter: drop-shadow(0 0 8px var(--neon)); }
-
-        .menu-item span { 
-            font-size: 0.55rem; 
-            display: block; 
-            font-weight: 800; 
-            color: var(--gold); 
-            line-height: 1.2;
-            text-transform: uppercase;
-        }
-
+        /* CTA Button */
         .btn-enter {
             background: linear-gradient(180deg, var(--gold) 0%, #ca8a04 100%);
             color: #020617; 
             border: none; 
             width: 100%; 
             padding: 18px;
-            border-radius: 18px; 
+            border-radius: 20px; 
             font-weight: 900; 
             font-size: 1.1rem;
             text-transform: uppercase;
-            box-shadow: 0 8px 20px var(--shadow-gold);
+            box-shadow: 0 8px 25px var(--shadow-gold);
             cursor: pointer;
             transition: 0.3s;
-            animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 8px 20px var(--shadow-gold); }
-            50% { transform: scale(1.02); box-shadow: 0 8px 30px var(--gold); }
-            100% { transform: scale(1); box-shadow: 0 8px 20px var(--shadow-gold); }
-        }
+        .btn-enter:active { transform: scale(0.96); box-shadow: 0 4px 10px var(--shadow-gold); }
 
         .back-nav { 
-            margin-top: 25px; 
-            font-size: 0.75rem; 
+            margin-top: 20px; 
+            font-size: 0.7rem; 
             color: #64748b; 
             text-decoration: none; 
             display: block; 
-            font-weight: bold;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
     </style>
@@ -241,50 +173,51 @@
         
         <div class="progress-box">
             <div class="progress-info">
-                <span class="progress-label">White Belt Status</span>
-                <span class="progress-label" style="color:var(--neon)">35%</span>
+                <span style="color:var(--gold)">White Belt Status</span>
+                <span style="color:var(--neon)">35% XP</span>
             </div>
-            <div class="bar-bg">
-                <div class="bar-fill"></div>
-            </div>
+            <div class="bar-bg"><div class="bar-fill"></div></div>
         </div>
 
         <div class="kanji">道場</div>
         
-        <div class="master-display">
+        <div class="master-display" id="video-box">
             <img src="https://minamar7.github.io/StaySafeTips/IMG_20260209_231913.jpg" alt="Master Action">
         </div>
 
-        <div class="status-badge">
-            <div class="status-dot"></div>
-            <span class="status-text">Ready to Defend</span>
-        </div>
-
-        <span class="label">MISSION SELECT</span>
-
         <div class="menu-grid">
-            <div class="menu-item" onclick="playSound(); location.href='techniques.html'">
+            <div class="menu-item" onclick="hapticFeedback(); location.href='techniques.html'">
                 <img src="https://cdn-icons-png.flaticon.com/512/2936/2936900.png" alt="Library">
                 <span>TECHNIQUE<br>LIBRARY</span>
             </div>
-            <div class="menu-item" onclick="alert('Focus Drills: Coming Soon')">
+            <div class="menu-item" onclick="hapticFeedback(); alert('Tactical Drills Loading...')">
                 <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" alt="Drills">
                 <span>FOCUS<br>DRILLS</span>
             </div>
-            <div class="menu-item" onclick="alert('Current Rank: White Belt')">
+            <div class="menu-item" onclick="hapticFeedback();">
                 <img src="https://cdn-icons-png.flaticon.com/512/3112/3112946.png" alt="Tracker">
-                <span>PROGRESS<br>TRACKER</span>
+                <span>MY RANK<br>STATS</span>
             </div>
         </div>
 
-        <button class="btn-enter" onclick="playSound(); setTimeout(() => location.href='techniques.html', 450)">ENTER THE DOJO</button>
+        <button class="btn-enter" onclick="enterDojo()">ENTER THE DOJO</button>
         <a href="index.html" class="back-nav">← EXIT TO DASHBOARD</a>
     </div>
 
     <script>
-        function playSound() {
-            var audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
-            audio.play().catch(e => console.log("Audio play deferred"));
+        function hapticFeedback() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(10); // Μικρή δόνηση για αίσθηση εφαρμογής
+            }
+            // Ήχος Kihap
+            new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3').play().catch(e => {});
+        }
+
+        function enterDojo() {
+            hapticFeedback();
+            setTimeout(() => {
+                location.href = 'techniques.html';
+            }, 300);
         }
     </script>
 </body>
