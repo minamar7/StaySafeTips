@@ -42,7 +42,6 @@
 
         h1 { color: var(--gold); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; margin: 0; }
 
-        /* PREMIUM TECH CARDS */
         .tech-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -95,7 +94,6 @@
             text-transform: uppercase;
         }
 
-        /* Progress Bar */
         .progress-container {
             width: 100px;
             height: 4px;
@@ -108,19 +106,6 @@
             height: 100%;
             background: var(--neon);
             box-shadow: 0 0 10px var(--neon);
-        }
-
-        .lock-tag {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            border: 1px solid rgba(255,255,255,0.1);
         }
 
         /* MODAL SYSTEM */
@@ -186,33 +171,29 @@
                 <div class="card-info">
                     <h3>Headlock Escape</h3>
                     <p>Level: Basic • 3 Steps</p>
-                    <div class="progress-container">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
+                    <div class="progress-container"><div class="progress-fill" style="width: 100%;"></div></div>
                 </div>
             </div>
         </div>
 
-        <div class="tech-card" style="opacity: 0.6;">
-            <div class="lock-tag">🔒 LVL 5</div>
-            <img src="https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?q=80&w=500" class="bg-thumb" style="filter: grayscale(1) brightness(0.3);">
+        <div class="tech-card" onclick="showTech('wrist')" style="border: 1px solid var(--gold);">
+            <img src="wrist_thumb.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
-                    <h3 style="color: #94a3b8;">Wrist Release</h3>
-                    <p style="color: #64748b;">Elite Defense Dojo</p>
-                    <div class="progress-container"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <h3>Wrist Release</h3>
+                    <p>Level: Intermediate • 2 Steps</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 100%;"></div></div>
                 </div>
             </div>
         </div>
 
-        <div class="tech-card" style="opacity: 0.6;">
-            <div class="lock-tag">🔒 LVL 10</div>
-            <img src="https://images.unsplash.com/photo-1599058917232-d750c185967c?q=80&w=500" class="bg-thumb" style="filter: grayscale(1) brightness(0.3);">
+        <div class="tech-card" onclick="showTech('hair')" style="border: 1px solid #ff4444;">
+             <img src="hair_thumb.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
-                    <h3 style="color: #94a3b8;">Striking Basics</h3>
-                    <p style="color: #64748b;">Mastering Power</p>
-                    <div class="progress-container"><div class="progress-fill" style="width: 0%;"></div></div>
+                    <h3>Hair Grab Defense</h3>
+                    <p>Level: Advanced • 3 Steps</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 100%;"></div></div>
                 </div>
             </div>
         </div>
@@ -244,19 +225,39 @@
                     <div class="img-wrapper"><img src="IMG_20260214_200544.jpg"></div>
                     <div class="step-box">
                         <div class="step-title">Step 1: Control</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Tuck your chin and secure the attacker's wrist firmly to manage the pressure and create breathing space.</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Tuck your chin and secure the attacker's wrist firmly to manage pressure.</div>
                     </div>
-
                     <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260214_191009.jpg"></div>
                     <div class="step-box" style="border-left-color: var(--neon);">
                         <div class="step-title">Step 2: Leverage</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Place one hand under the attacker's chin and grab the leg just above the knee. Pull upward and forward.</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Place one hand under the chin and pull the leg upward and forward.</div>
                     </div>
-
-                    <div class="img-wrapper"><img src="IMG_20260214_200132.jpg"></div>
+                `;
+            } 
+            
+            else if(id === 'wrist') {
+                title.innerText = "WRIST RELEASE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><img src="wrist_step1.jpg"></div>
                     <div class="step-box">
-                        <div class="step-title">Step 3: Release</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Force the attacker off-balance, releasing the hold and taking the opponent down.</div>
+                        <div class="step-title">Step 1: Rotate</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Rotate your wrist so the thin side faces the opening between the attacker's thumb and fingers.</div>
+                    </div>
+                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="wrist_step2.jpg"></div>
+                    <div class="step-box" style="border-left-color: var(--neon);">
+                        <div class="step-title">Step 2: Pull</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Sharp pull away towards the attacker's thumb to break the grip.</div>
+                    </div>
+                `;
+            }
+
+            else if(id === 'hair') {
+                title.innerText = "HAIR GRAB DEFENSE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><img src="hair_step1.jpg"></div>
+                    <div class="step-box">
+                        <div class="step-title">Step 1: Pin & Secure</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Pin the attacker's hand firmly against your head with both of your hands to stabilize the grab.</div>
                     </div>
                 `;
             }
@@ -266,15 +267,10 @@
         }
 
         function celebrateAndHide() {
-            // Confetti effect
             confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
+                particleCount: 150, spread: 70, origin: { y: 0.6 },
                 colors: ['#facc15', '#38bdf8', '#ffffff']
             });
-
-            // Delay closing to let user enjoy the win
             setTimeout(hideTech, 800);
         }
 
