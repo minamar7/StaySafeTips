@@ -41,7 +41,6 @@
 
         h1 { color: var(--gold); font-size: 1.6rem; letter-spacing: 2px; margin: 5px 0; font-weight: 900; }
 
-        /* AD UNIT PLACEHOLDER */
         .ad-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed #475569;
@@ -66,27 +65,9 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Premium Lock Style */
-        .premium-locked {
-            border-color: var(--premium-purple);
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(88, 28, 135, 0.1) 100%);
-        }
-        .lock-badge {
-            position: absolute;
-            top: 15px; right: 15px;
-            background: var(--premium-purple);
-            color: white;
-            font-size: 0.6rem;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-        }
-
-        .video-wrapper {
+        .img-wrapper {
             position: relative;
-            padding-bottom: 56.25%; 
+            padding-bottom: 125%; /* Perfect for portrait photos */
             height: 0;
             overflow: hidden;
             border-radius: 18px;
@@ -95,11 +76,11 @@
             background: #000;
         }
 
-        .video-wrapper iframe {
+        .img-wrapper img {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            border: 0;
+            object-fit: cover;
         }
 
         h2 { font-size: 1.1rem; color: var(--neon); margin: 10px 0; font-weight: 800; text-transform: uppercase; }
@@ -108,37 +89,30 @@
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
             color: #e2e8f0;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .step-num {
             background: var(--gold);
             color: #020617;
             font-weight: 900;
-            width: 22px; height: 22px;
+            width: 24px; height: 24px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; font-size: 0.7rem;
-        }
-
-        /* Action Buttons */
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            flex-shrink: 0; font-size: 0.75rem;
         }
 
         .btn-share {
-            flex: 1;
+            width: 100%;
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid var(--neon);
             color: var(--neon);
-            padding: 12px;
+            padding: 14px;
             border-radius: 14px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
@@ -146,27 +120,25 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: 0.3s;
         }
-        
-        .btn-share:active { transform: scale(0.95); background: rgba(56, 189, 248, 0.2); }
 
-        .btn-premium {
-            width: 100%;
-            background: linear-gradient(135deg, var(--premium-purple), #7c3aed);
-            color: white;
-            padding: 16px;
-            border-radius: 16px;
-            border: none;
-            font-weight: 900;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            margin-top: 15px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+        .premium-locked {
+            border-color: var(--premium-purple);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(88, 28, 135, 0.1) 100%);
+            padding: 25px;
+            text-align: center;
         }
-        
-        .btn-premium:active { transform: scale(0.97); }
+
+        .lock-badge {
+            background: var(--premium-purple);
+            color: white;
+            font-size: 0.6rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 900;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -180,72 +152,58 @@
         <div class="ad-box">ADVERTISEMENT - Support the Dojo</div>
 
         <section class="tech-card">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/rN9-mS_Y8H8?rel=0&modestbranding=1&autoplay=0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen></iframe>
+            <div class="img-wrapper">
+                <img src="IMG_20260214_200544.jpg" alt="Step 1 - Headlock Control">
             </div>
-            <h2>Headlock Defense</h2>
+            <h2>Step 1: Headlock Defense</h2>
             <div class="step-item">
                 <div class="step-num">1</div>
-                <div class="step-text"><strong>Protect:</strong> Tuck your chin and secure the attacker's wrist.</div>
+                <div class="step-text"><strong>Control:</strong> Tuck your chin and secure the attacker's wrist firmly to manage the pressure and create breathing space.</div>
             </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(56, 189, 248, 0.2); margin: 25px 0;">
+
+            <div class="img-wrapper" style="border-color: var(--neon);">
+                <img src="IMG_20260214_191009.jpg" alt="Step 2 - Leverage">
+            </div>
+            <h2>Step 2: Breaking Balance</h2>
             <div class="step-item">
                 <div class="step-num">2</div>
-                <div class="step-text"><strong>Escape:</strong> Rotate your hips and break the leverage.</div>
+                <div class="step-text"><strong>Leverage:</strong> Place one hand under the attacker's chin and grab the leg just above the knee with the other. Pull the leg upward and forward.</div>
             </div>
-            <div class="card-actions">
-                <button class="btn-share" onclick="triggerShare('Headlock Defense', 'https://www.youtube.com/watch?v=rN9-mS_Y8H8')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" width="14" style="filter:invert(70%) sepia(85%) saturate(1000%) hue-rotate(170deg);">
-                    <span>SHARE TECHNIQUE</span>
-                </button>
-            </div>
-        </section>
 
-        <section class="tech-card">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/N7M3g1RzL6g?rel=0&modestbranding=1&autoplay=0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen></iframe>
+            <hr style="border: 0; border-top: 1px solid rgba(56, 189, 248, 0.2); margin: 25px 0;">
+
+            <div class="img-wrapper">
+                <img src="IMG_20260214_200132.jpg" alt="Step 3 - Final Release">
             </div>
-            <h2>Advanced Kicking</h2>
+            <h2>Step 3: Execution & Takedown</h2>
             <div class="step-item">
-                <div class="step-num">1</div>
-                <div class="step-text"><strong>Chamber:</strong> Raise your knee high for power and balance.</div>
+                <div class="step-num">3</div>
+                <div class="step-text"><strong>Release:</strong> Use the created leverage to force the attacker off-balance, successfully releasing the hold and taking the opponent down.</div>
             </div>
-            <div class="card-actions">
-                <button class="btn-share" onclick="triggerShare('Advanced Kicking', 'https://www.youtube.com/watch?v=N7M3g1RzL6g')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" width="14" style="filter:invert(70%) sepia(85%) saturate(1000%) hue-rotate(170deg);">
-                    <span>SHARE TECHNIQUE</span>
-                </button>
-            </div>
+
+            <button class="btn-share" onclick="triggerShare('Headlock Escape Technique', window.location.href)">
+                <span>SHARE TECHNIQUE</span>
+            </button>
         </section>
 
         <section class="tech-card premium-locked">
             <div class="lock-badge">PREMIUM ONLY</div>
-            <h2>Master Tactical Defense</h2>
-            <p style="font-size:0.8rem; color:#94a3b8; line-height: 1.5;">Unlock the full library including Weapon Defense, Tactical Mindset training, and remove all advertisements.</p>
-            <button class="btn-premium" onclick="haptic(); alert('Redirecting to Premium Upgrade...')">GO PREMIUM</button>
+            <h2>Master the Flow</h2>
+            <p style="font-size:0.85rem; color:#94a3b8; line-height: 1.6;">Unlock the full video analysis for this move and master professional tactical defense.</p>
+            <button style="width:100%; background:var(--premium-purple); border:none; color:white; padding:16px; border-radius:14px; font-weight:900; text-transform:uppercase;" onclick="alert('Redirecting...')">UPGRADE TO PREMIUM</button>
         </section>
 
         <div class="ad-box">ADVERTISEMENT</div>
     </main>
 
     <script>
-        function haptic() {
-            if (navigator.vibrate) navigator.vibrate(40);
-        }
-
         function triggerShare(title, url) {
-            haptic();
             if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: 'Master this technique on Stay Safe Elite Dojo!',
-                    url: url,
-                }).catch(console.error);
+                navigator.share({ title: title, url: url }).catch(console.error);
             } else {
-                alert('Copy Link: ' + url);
+                alert('Technique Link: ' + url);
             }
         }
     </script>
