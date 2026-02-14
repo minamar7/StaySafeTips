@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Elite Defense Library</title>
+    <title>Technique Library - Stay Safe Elite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <style>
         :root { 
@@ -10,214 +10,198 @@
             --neon: #38bdf8; 
             --bg: #020617; 
             --card-bg: rgba(15, 23, 42, 0.9);
-            --danger: #ef4444;
-            --success: #22c55e;
+            --premium-purple: #a855f7;
         }
         
         body { 
             margin: 0; 
             background: var(--bg); 
             color: white; 
-            font-family: -apple-system, sans-serif; 
-            padding: env(safe-area-inset-top) 20px 100px 20px;
-            overflow-x: hidden;
+            font-family: -apple-system, system-ui, sans-serif; 
+            padding: 20px;
+            padding-bottom: 80px;
         }
 
-        /* Header */
-        .header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
-        .header h2 { margin: 0; font-size: 1.2rem; color: var(--neon); letter-spacing: 3px; text-transform: uppercase; }
-        
-        .back-btn { 
-            background: none; border: 1px solid var(--neon); color: var(--neon); 
-            width: 35px; height: 35px; border-radius: 10px; cursor: pointer;
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: env(safe-area-inset-top);
         }
 
-        /* Belt Sections */
-        .belt-header { 
-            display: flex; align-items: center; gap: 10px; color: var(--gold); 
-            font-weight: 900; font-size: 0.8rem; margin: 25px 0 15px; text-transform: uppercase;
+        .back-btn {
+            color: var(--neon);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
         }
-        .belt-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0.3; }
 
-        /* Lesson Cards */
-        .lesson-card {
+        h1 { color: var(--gold); font-size: 1.6rem; letter-spacing: 2px; margin: 5px 0; font-weight: 900; }
+
+        /* AD UNIT PLACEHOLDER */
+        .ad-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed #475569;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 0.6rem;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .tech-card {
             background: var(--card-bg);
-            border: 1px solid rgba(56, 189, 248, 0.1);
-            border-radius: 22px;
-            padding: 15px;
+            border-radius: 28px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Premium Lock Overlay */
+        .premium-locked {
+            border-color: var(--premium-purple);
+        }
+        .lock-badge {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: var(--premium-purple);
+            color: white;
+            font-size: 0.6rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; 
+            height: 0;
+            overflow: hidden;
+            border-radius: 18px;
+            margin-bottom: 18px;
+            border: 2px solid var(--gold);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
+        }
+
+        h2 { font-size: 1.1rem; color: var(--neon); margin: 10px 0; font-weight: 800; text-transform: uppercase; }
+        
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
             margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+        }
+
+        .step-num {
+            background: var(--gold);
+            color: #020617;
+            font-weight: 900;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 0.7rem;
+        }
+
+        /* Action Buttons */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-share {
+            flex: 1;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 15px;
-            position: relative;
-            transition: 0.3s;
-        }
-        .lesson-card:active { transform: scale(0.96); background: rgba(56, 189, 248, 0.1); }
-
-        .lesson-img-wrap { position: relative; width: 65px; height: 65px; flex-shrink: 0; }
-        .lesson-img { width: 100%; height: 100%; border-radius: 14px; object-fit: cover; border: 1.5px solid var(--gold); }
-        
-        .play-overlay { 
-            position: absolute; inset: 0; background: rgba(0,0,0,0.4); 
-            display: flex; align-items: center; justify-content: center; border-radius: 14px;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .lesson-info h4 { margin: 0; font-size: 0.95rem; }
-        .lesson-info p { margin: 4px 0 0; font-size: 0.6rem; color: var(--neon); font-weight: 700; text-transform: uppercase; }
-
-        /* Locked State */
-        .locked { opacity: 0.5; filter: grayscale(1); }
-        .lock-badge { position: absolute; top: 10px; right: 10px; font-size: 0.8rem; }
-
-        /* Video & Drill Modal */
-        .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 2000; padding: 20px;
+        .btn-premium {
+            width: 100%;
+            background: linear-gradient(90deg, var(--premium-purple), #7c3aed);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 900;
+            margin-top: 10px;
+            cursor: pointer;
         }
-        .modal.active { display: flex; }
-        .video-container { width: 100%; max-width: 500px; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--neon); position: relative; }
-        .modal-close { margin-top: 20px; padding: 12px 30px; border-radius: 15px; border: none; background: var(--danger); color: white; font-weight: bold; cursor: pointer; }
-
-        /* Drill UI */
-        #drill-ui { display: none; width: 100%; height: 100%; position: relative; background-size: cover; background-position: center; }
-        .target-zone { position: absolute; width: 60px; height: 60px; border: 3px dashed var(--gold); border-radius: 50%; display: none; }
-        .timer-bar { position: absolute; bottom: 0; left: 0; height: 5px; background: var(--gold); width: 100%; transition: linear; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <button class="back-btn" onclick="location.href='dojo.html'">←</button>
-        <h2>Defense Library</h2>
-        <div style="width:35px"></div>
-    </div>
+    <header>
+        <a href="dojo.html" class="back-btn">← RETURN TO DOJO</a>
+        <h1>TECHNIQUE LIBRARY</h1>
+    </header>
 
-    <div class="belt-section">
-        <div class="belt-header">White Belt (Basic Defense) <div class="belt-line"></div></div>
-        
-        <div class="lesson-card" onclick="openVideo('Palm Strike Masterclass', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
-            <div class="lesson-img-wrap">
-                <img src="https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?w=200" class="lesson-img">
-                <div class="play-overlay">▶️</div>
-            </div>
-            <div class="lesson-info">
-                <h4>Palm Strike (Sudo)</h4>
-                <p>Primary Strike • Foundation</p>
-            </div>
-        </div>
+    <main>
+        <div class="ad-box">Advertisement - Support our Free Content</div>
 
-        <div class="lesson-card" onclick="startFocusDrill()">
-            <div class="lesson-img-wrap">
-                <img src="https://images.unsplash.com/photo-1485038101928-74c241029bb7?w=200" class="lesson-img">
-                <div class="play-overlay">👁️</div>
+        <section class="tech-card">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/rN9-mS_Y8H8" allowfullscreen></iframe>
             </div>
-            <div class="lesson-info">
-                <h4>Awareness Drills</h4>
-                <p>Active Focus • INTERACTIVE</p>
+            <h2>Headlock Defense</h2>
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-text">Tuck your chin and secure the attacker's wrist.</div>
             </div>
-        </div>
-    </div>
+            <div class="card-actions">
+                <button class="btn-share" onclick="shareTech('Headlock Defense', 'https://youtu.be/rN9-mS_Y8H8')">
+                    <span>SHARE TECHNIQUE</span>
+                </button>
+            </div>
+        </section>
 
-    <div class="belt-section">
-        <div class="belt-header">Orange Belt (Intermediate) <div class="belt-line"></div></div>
-        
-        <div class="lesson-card locked" onclick="alert('Upgrade to Premium to unlock advanced techniques!')">
-            <div class="lesson-img-wrap">
-                <img src="https://images.unsplash.com/photo-1511883040705-6011fad9ed39?w=200" class="lesson-img">
-            </div>
-            <div class="lesson-info">
-                <h4>Wrist Grab Escape</h4>
-                <p>Tactical Release • Defense</p>
-            </div>
-            <div class="lock-badge">🔒</div>
-        </div>
-    </div>
+        <section class="tech-card premium-locked">
+            <div class="lock-badge">PREMIUM ONLY</div>
+            <h2>Advanced Knife Defense</h2>
+            <p style="font-size:0.75rem; color:#94a3b8;">Upgrade to Premium to unlock Master-level tactical weapon defense videos.</p>
+            <button class="btn-premium" onclick="alert('Upgrade to Premium to unlock!')">GET PREMIUM ACCESS</button>
+        </section>
 
-    <div class="modal" id="videoModal">
-        <h3 id="videoTitle" style="color: var(--gold); margin-bottom: 15px; text-align: center;"></h3>
-        
-        <div class="video-container">
-            <iframe id="videoFrame" width="100%" height="100%" src="" frameborder="0" allowfullscreen></iframe>
-            
-            <div id="drill-ui">
-                <div id="target" class="target-zone" onclick="drillSuccess()"></div>
-                <div id="drill-timer" class="timer-bar"></div>
-            </div>
-        </div>
-
-        <p id="drill-msg" style="margin-top:10px; font-size:0.8rem; color:var(--neon); display:none;">Tap the threat in 3 seconds!</p>
-        <button id="start-drill-btn" class="modal-close" style="background:var(--success); display:none;" onclick="runDrill()">START SCAN</button>
-        <button class="modal-close" onclick="closeVideo()">CLOSE</button>
-    </div>
+        <div class="ad-box">Advertisement</div>
+    </main>
 
     <script>
-        function openVideo(title, url) {
-            playKiai();
-            document.getElementById('drill-ui').style.display = 'none';
-            document.getElementById('videoFrame').style.display = 'block';
-            document.getElementById('start-drill-btn').style.display = 'none';
-            document.getElementById('drill-msg').style.display = 'none';
-            
-            document.getElementById('videoTitle').innerText = title;
-            document.getElementById('videoFrame').src = url;
-            document.getElementById('videoModal').classList.add('active');
-        }
-
-        function startFocusDrill() {
-            playKiai();
-            document.getElementById('videoFrame').style.display = 'none';
-            document.getElementById('drill-ui').style.display = 'block';
-            document.getElementById('drill-ui').style.backgroundImage = "url('https://images.unsplash.com/photo-1485038101928-74c241029bb7?w=800')";
-            
-            document.getElementById('videoTitle').innerText = "Focus Drill: Scan Area";
-            document.getElementById('start-drill-btn').style.display = 'inline-block';
-            document.getElementById('drill-msg').style.display = 'block';
-            document.getElementById('target').style.display = 'none';
-            
-            document.getElementById('videoModal').classList.add('active');
-        }
-
-        function runDrill() {
-            document.getElementById('start-drill-btn').style.display = 'none';
-            const target = document.getElementById('target');
-            const timer = document.getElementById('drill-timer');
-            
-            // Randomize target position
-            target.style.top = "40%";
-            target.style.left = "70%";
-            target.style.display = 'block';
-            
-            timer.style.width = "100%";
-            setTimeout(() => {
-                timer.style.transition = "3s linear";
-                timer.style.width = "0%";
-            }, 100);
-
-            window.drillTimeout = setTimeout(() => {
-                alert("❌ TOO SLOW! Awareness is your first line of defense.");
-                closeVideo();
-            }, 3100);
-        }
-
-        function drillSuccess() {
-            clearTimeout(window.drillTimeout);
-            playKiai();
-            alert("🎯 EXCELLENT SCAN! Threat neutralized.");
-            closeVideo();
-        }
-
-        function closeVideo() {
-            document.getElementById('videoModal').classList.remove('active');
-            document.getElementById('videoFrame').src = "";
-            document.getElementById('drill-timer').style.transition = "none";
-            document.getElementById('drill-timer').style.width = "100%";
-        }
-
-        function playKiai() {
-            const audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
-            audio.volume = 0.3;
-            audio.play();
+        function shareTech(title, url) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: 'Check out this self-defense technique by StaySafe Tips!',
+                    url: url,
+                }).catch(console.error);
+            } else {
+                alert('Sharing is not supported on this browser, but you can copy the link: ' + url);
+            }
         }
     </script>
 
