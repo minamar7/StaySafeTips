@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
     <meta charset="UTF-8">
     <title>Elite Defense Dojo</title>
@@ -27,7 +27,6 @@
         }
         
         .dojo-frame {
-            /* Αφαιρέθηκε το γαλάζιο πλαίσιο και η σκιά */
             border: none; 
             border-radius: 45px;
             padding: 40px 25px;
@@ -108,7 +107,6 @@
             margin: 15px 0 10px 0;
             overflow: hidden;
             background: #000;
-            /* Επαναφορά στο αρχικό aspect ratio */
             aspect-ratio: 1.3 / 1; 
             box-shadow: 0 0 25px var(--shadow-gold);
             position: relative;
@@ -119,7 +117,6 @@
             height: 100%; 
             object-fit: cover; 
             display: block;
-            /* Επαναφορά της θέσης της φωτογραφίας */
             object-position: center 20%; 
             animation: masterBreath 8s ease-in-out infinite;
         }
@@ -263,28 +260,41 @@
         <span class="label">MISSION SELECT</span>
 
         <div class="menu-grid">
-            <div class="menu-item" onclick="playSound(); location.href='techniques.html'">
+            <div class="menu-item" onclick="triggerAction('techniques.html')">
                 <img src="https://cdn-icons-png.flaticon.com/512/2936/2936900.png" alt="Library">
                 <span>TECHNIQUE<br>LIBRARY</span>
             </div>
-            <div class="menu-item" onclick="alert('Focus Drills: Coming Soon')">
+            <div class="menu-item" onclick="triggerAction(null, 'Focus Drills: Coming Soon')">
                 <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" alt="Drills">
                 <span>FOCUS<br>DRILLS</span>
             </div>
-            <div class="menu-item" onclick="alert('Current Rank: White Belt')">
+            <div class="menu-item" onclick="triggerAction(null, 'Current Rank: White Belt')">
                 <img src="https://cdn-icons-png.flaticon.com/512/3112/3112946.png" alt="Tracker">
                 <span>PROGRESS<br>TRACKER</span>
             </div>
         </div>
 
-        <button class="btn-enter" onclick="playSound(); setTimeout(() => location.href='techniques.html', 450)">ENTER THE DOJO</button>
+        <button class="btn-enter" onclick="triggerAction('techniques.html')">ENTER THE DOJO</button>
         <a href="index.html" class="back-nav">← EXIT TO DASHBOARD</a>
     </div>
 
     <script>
-        function playSound() {
+        function triggerAction(url, message) {
+            // 1. Δόνηση (Vibration API) - 50ms για αίσθηση "κλικ"
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+
+            // 2. Ήχος
             var audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
             audio.play().catch(e => console.log("Audio play deferred"));
+
+            // 3. Ενέργεια (Redirect ή Alert)
+            if (url) {
+                setTimeout(() => { window.location.href = url; }, 450);
+            } else if (message) {
+                alert(message);
+            }
         }
     </script>
 </body>
