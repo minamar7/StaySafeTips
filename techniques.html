@@ -9,7 +9,7 @@
             --gold: #facc15; 
             --neon: #38bdf8; 
             --bg: #020617; 
-            --card-bg: rgba(15, 23, 42, 0.9);
+            --card-bg: #0f172a;
             --premium-purple: #a855f7;
         }
         
@@ -19,7 +19,7 @@
             color: white; 
             font-family: -apple-system, system-ui, sans-serif; 
             padding: 20px;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
         }
 
         header {
@@ -34,110 +34,121 @@
             font-size: 0.75rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
             display: inline-block;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        h1 { color: var(--gold); font-size: 1.6rem; letter-spacing: 2px; margin: 5px 0; font-weight: 900; }
+        h1 { color: var(--gold); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; }
 
-        .ad-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px dashed #475569;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            font-size: 0.65rem;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* ELITE TOOLS STYLE GRID */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        .tech-card {
+        .tech-item {
             background: var(--card-bg);
-            border-radius: 28px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            padding: 20px;
-            margin-bottom: 25px;
+            border-radius: 24px;
+            aspect-ratio: 1/1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(56, 189, 248, 0.1);
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tech-item:active { transform: scale(0.95); background: #1e293b; }
+
+        .tech-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 5px var(--neon));
+        }
+
+        .tech-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 0.5px;
+            padding: 0 5px;
+        }
+
+        .lock-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.8rem;
+        }
+
+        /* MODAL (OVERLAY) SYSTEM */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            font-size: 2rem;
+            color: var(--neon);
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .img-wrapper {
-            position: relative;
-            padding-bottom: 125%; /* Perfect for portrait photos */
-            height: 0;
-            overflow: hidden;
-            border-radius: 18px;
-            margin-bottom: 18px;
-            border: 2px solid var(--gold);
-            background: #000;
-        }
-
-        .img-wrapper img {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
-
-        h2 { font-size: 1.1rem; color: var(--neon); margin: 10px 0; font-weight: 800; text-transform: uppercase; }
-        
-        .step-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-            color: #e2e8f0;
-            line-height: 1.5;
-        }
-
-        .step-num {
-            background: var(--gold);
-            color: #020617;
-            font-weight: 900;
-            width: 24px; height: 24px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; font-size: 0.75rem;
-        }
-
-        .btn-share {
             width: 100%;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid var(--neon);
-            color: var(--neon);
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .premium-locked {
-            border-color: var(--premium-purple);
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(88, 28, 135, 0.1) 100%);
-            padding: 25px;
-            text-align: center;
-        }
-
-        .lock-badge {
-            background: var(--premium-purple);
-            color: white;
-            font-size: 0.6rem;
-            padding: 4px 12px;
             border-radius: 20px;
-            font-weight: 900;
-            display: inline-block;
-            margin-bottom: 10px;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .img-wrapper img { width: 100%; display: block; }
+
+        .step-box {
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--gold);
+        }
+
+        .step-title { color: var(--gold); font-weight: 900; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; }
+        .step-text { font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; }
+
+        .ad-banner {
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed #475569;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.6rem;
+            color: #64748b;
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -148,63 +159,83 @@
         <h1>TECHNIQUE LIBRARY</h1>
     </header>
 
-    <main>
-        <div class="ad-box">ADVERTISEMENT - Support the Dojo</div>
+    <div class="tech-grid">
+        
+        <div class="tech-item" onclick="showTech('headlock')">
+            <img src="https://cdn-icons-png.flaticon.com/512/2928/2928158.png" class="tech-icon">
+            <div class="tech-label">Headlock<br>Escape</div>
+        </div>
 
-        <section class="tech-card">
-            <div class="img-wrapper">
-                <img src="IMG_20260214_200544.jpg" alt="Step 1 - Headlock Control">
+        <div class="tech-item" style="opacity: 0.5;">
+            <span class="lock-status">🔒</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/7504/7504180.png" class="tech-icon" style="filter: grayscale(1);">
+            <div class="tech-label">Wrist<br>Release</div>
+        </div>
+
+        <div class="tech-item" style="opacity: 0.5;">
+            <span class="lock-status">🔒</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/3043/3043184.png" class="tech-icon" style="filter: grayscale(1);">
+            <div class="tech-label">Ground<br>Defense</div>
+        </div>
+
+        <div class="tech-item" style="opacity: 0.5;">
+            <span class="lock-status">🔒</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/3501/3501257.png" class="tech-icon" style="filter: grayscale(1);">
+            <div class="tech-label">Striking<br>Basics</div>
+        </div>
+
+    </div>
+
+    <div class="ad-banner">SECURE AD STREAM - SUPPORT THE DOJO</div>
+
+    <div id="techModal" class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle" style="color: var(--neon); margin: 0; font-size: 1.2rem;"></h2>
+            <div class="close-btn" onclick="hideTech()">&times;</div>
+        </div>
+
+        <div id="modalBody">
             </div>
-            <h2>Step 1: Headlock Defense</h2>
-            <div class="step-item">
-                <div class="step-num">1</div>
-                <div class="step-text"><strong>Control:</strong> Tuck your chin and secure the attacker's wrist firmly to manage the pressure and create breathing space.</div>
-            </div>
 
-            <hr style="border: 0; border-top: 1px solid rgba(56, 189, 248, 0.2); margin: 25px 0;">
-
-            <div class="img-wrapper" style="border-color: var(--neon);">
-                <img src="IMG_20260214_191009.jpg" alt="Step 2 - Leverage">
-            </div>
-            <h2>Step 2: Breaking Balance</h2>
-            <div class="step-item">
-                <div class="step-num">2</div>
-                <div class="step-text"><strong>Leverage:</strong> Place one hand under the attacker's chin and grab the leg just above the knee with the other. Pull the leg upward and forward.</div>
-            </div>
-
-            <hr style="border: 0; border-top: 1px solid rgba(56, 189, 248, 0.2); margin: 25px 0;">
-
-            <div class="img-wrapper">
-                <img src="IMG_20260214_200132.jpg" alt="Step 3 - Final Release">
-            </div>
-            <h2>Step 3: Execution & Takedown</h2>
-            <div class="step-item">
-                <div class="step-num">3</div>
-                <div class="step-text"><strong>Release:</strong> Use the created leverage to force the attacker off-balance, successfully releasing the hold and taking the opponent down.</div>
-            </div>
-
-            <button class="btn-share" onclick="triggerShare('Headlock Escape Technique', window.location.href)">
-                <span>SHARE TECHNIQUE</span>
-            </button>
-        </section>
-
-        <section class="tech-card premium-locked">
-            <div class="lock-badge">PREMIUM ONLY</div>
-            <h2>Master the Flow</h2>
-            <p style="font-size:0.85rem; color:#94a3b8; line-height: 1.6;">Unlock the full video analysis for this move and master professional tactical defense.</p>
-            <button style="width:100%; background:var(--premium-purple); border:none; color:white; padding:16px; border-radius:14px; font-weight:900; text-transform:uppercase;" onclick="alert('Redirecting...')">UPGRADE TO PREMIUM</button>
-        </section>
-
-        <div class="ad-box">ADVERTISEMENT</div>
-    </main>
+        <button onclick="hideTech()" style="width:100%; background: var(--neon); color: black; border:none; padding:15px; border-radius:15px; font-weight:900; margin-top: 20px;">DONE</button>
+    </div>
 
     <script>
-        function triggerShare(title, url) {
-            if (navigator.share) {
-                navigator.share({ title: title, url: url }).catch(console.error);
-            } else {
-                alert('Technique Link: ' + url);
+        function showTech(id) {
+            const modal = document.getElementById('techModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            if(id === 'headlock') {
+                title.innerText = "HEADLOCK ESCAPE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><img src="IMG_20260214_200544.jpg"></div>
+                    <div class="step-box">
+                        <div class="step-title">Step 1: Control</div>
+                        <div class="step-text">Tuck your chin and secure the attacker's wrist firmly to manage the pressure and create breathing space.</div>
+                    </div>
+
+                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260214_191009.jpg"></div>
+                    <div class="step-box" style="border-left-color: var(--neon);">
+                        <div class="step-title">Step 2: Leverage</div>
+                        <div class="step-text">Place one hand under the attacker's chin and grab the leg just above the knee with the other. Pull the leg upward and forward.</div>
+                    </div>
+
+                    <div class="img-wrapper"><img src="IMG_20260214_200132.jpg"></div>
+                    <div class="step-box">
+                        <div class="step-title">Step 3: Release</div>
+                        <div class="step-text">Use the created leverage to force the attacker off-balance, successfully releasing the hold and taking the opponent down.</div>
+                    </div>
+                `;
             }
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+
+        function hideTech() {
+            document.getElementById('techModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     </script>
 
