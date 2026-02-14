@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>Technique Library - Stay Safe Elite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         :root { 
             --gold: #facc15; 
             --neon: #38bdf8; 
             --bg: #020617; 
             --card-bg: #0f172a;
-            --premium-purple: #a855f7;
         }
         
         body { 
@@ -19,7 +21,7 @@
             color: white; 
             font-family: -apple-system, system-ui, sans-serif; 
             padding: 20px;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
 
         header {
@@ -38,56 +40,90 @@
             margin-bottom: 10px;
         }
 
-        h1 { color: var(--gold); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; }
+        h1 { color: var(--gold); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; margin: 0; }
 
-        /* ELITE TOOLS STYLE GRID */
+        /* PREMIUM TECH CARDS */
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 25px;
         }
 
-        .tech-item {
-            background: var(--card-bg);
-            border-radius: 24px;
-            aspect-ratio: 1/1;
+        .tech-card {
+            position: relative;
+            height: 160px;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tech-card:active { transform: scale(0.97); }
+
+        .bg-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.5);
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(2, 6, 23, 0.95) 40%, transparent 100%);
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            border: 1px solid rgba(56, 189, 248, 0.1);
-            position: relative;
-            cursor: pointer;
-            transition: 0.2s;
+            padding: 25px;
         }
 
-        .tech-item:active { transform: scale(0.95); background: #1e293b; }
-
-        .tech-icon {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 5px var(--neon));
+        .card-info h3 {
+            margin: 0;
+            color: var(--gold);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .tech-label {
-            font-size: 0.7rem;
+        .card-info p {
+            margin: 4px 0 0;
+            color: var(--neon);
+            font-size: 0.65rem;
             font-weight: 800;
             text-transform: uppercase;
-            text-align: center;
-            letter-spacing: 0.5px;
-            padding: 0 5px;
         }
 
-        .lock-status {
+        /* Progress Bar */
+        .progress-container {
+            width: 100px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--neon);
+            box-shadow: 0 0 10px var(--neon);
+        }
+
+        .lock-tag {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 0.8rem;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* MODAL (OVERLAY) SYSTEM */
+        /* MODAL SYSTEM */
         .modal {
             display: none;
             position: fixed;
@@ -105,20 +141,6 @@
             to { transform: translateY(0); }
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .close-btn {
-            font-size: 2rem;
-            color: var(--neon);
-            font-weight: bold;
-            cursor: pointer;
-        }
-
         .img-wrapper {
             width: 100%;
             border-radius: 20px;
@@ -126,7 +148,6 @@
             overflow: hidden;
             margin-bottom: 15px;
         }
-
         .img-wrapper img { width: 100%; display: block; }
 
         .step-box {
@@ -136,19 +157,17 @@
             margin-bottom: 25px;
             border-left: 4px solid var(--gold);
         }
-
         .step-title { color: var(--gold); font-weight: 900; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; }
-        .step-text { font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; }
 
         .ad-banner {
             background: rgba(255,255,255,0.05);
-            border: 1px dashed #475569;
-            border-radius: 15px;
+            border: 1px dashed #334155;
+            border-radius: 20px;
             padding: 15px;
             text-align: center;
             font-size: 0.6rem;
             color: #64748b;
-            margin: 20px 0;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -156,32 +175,46 @@
 
     <header>
         <a href="dojo.html" class="back-btn">← RETURN TO DOJO</a>
-        <h1>TECHNIQUE LIBRARY</h1>
+        <h1>ELITE TECHNIQUES</h1>
     </header>
 
     <div class="tech-grid">
         
-        <div class="tech-item" onclick="showTech('headlock')">
-            <img src="https://cdn-icons-png.flaticon.com/512/2928/2928158.png" class="tech-icon">
-            <div class="tech-label">Headlock<br>Escape</div>
+        <div class="tech-card" onclick="showTech('headlock')" style="border: 1px solid var(--neon);">
+            <img src="IMG_20260214_200544.jpg" class="bg-thumb">
+            <div class="card-overlay">
+                <div class="card-info">
+                    <h3>Headlock Escape</h3>
+                    <p>Level: Basic • 3 Steps</p>
+                    <div class="progress-container">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="tech-item" style="opacity: 0.5;">
-            <span class="lock-status">🔒</span>
-            <img src="https://cdn-icons-png.flaticon.com/512/7504/7504180.png" class="tech-icon" style="filter: grayscale(1);">
-            <div class="tech-label">Wrist<br>Release</div>
+        <div class="tech-card" style="opacity: 0.6;">
+            <div class="lock-tag">🔒 LVL 5</div>
+            <img src="https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?q=80&w=500" class="bg-thumb" style="filter: grayscale(1) brightness(0.3);">
+            <div class="card-overlay">
+                <div class="card-info">
+                    <h3 style="color: #94a3b8;">Wrist Release</h3>
+                    <p style="color: #64748b;">Elite Defense Dojo</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 0%;"></div></div>
+                </div>
+            </div>
         </div>
 
-        <div class="tech-item" style="opacity: 0.5;">
-            <span class="lock-status">🔒</span>
-            <img src="https://cdn-icons-png.flaticon.com/512/3043/3043184.png" class="tech-icon" style="filter: grayscale(1);">
-            <div class="tech-label">Ground<br>Defense</div>
-        </div>
-
-        <div class="tech-item" style="opacity: 0.5;">
-            <span class="lock-status">🔒</span>
-            <img src="https://cdn-icons-png.flaticon.com/512/3501/3501257.png" class="tech-icon" style="filter: grayscale(1);">
-            <div class="tech-label">Striking<br>Basics</div>
+        <div class="tech-card" style="opacity: 0.6;">
+            <div class="lock-tag">🔒 LVL 10</div>
+            <img src="https://images.unsplash.com/photo-1599058917232-d750c185967c?q=80&w=500" class="bg-thumb" style="filter: grayscale(1) brightness(0.3);">
+            <div class="card-overlay">
+                <div class="card-info">
+                    <h3 style="color: #94a3b8;">Striking Basics</h3>
+                    <p style="color: #64748b;">Mastering Power</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 0%;"></div></div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -189,15 +222,14 @@
     <div class="ad-banner">SECURE AD STREAM - SUPPORT THE DOJO</div>
 
     <div id="techModal" class="modal">
-        <div class="modal-header">
-            <h2 id="modalTitle" style="color: var(--neon); margin: 0; font-size: 1.2rem;"></h2>
-            <div class="close-btn" onclick="hideTech()">&times;</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 id="modalTitle" style="color: var(--neon); margin: 0; font-size: 1.2rem; font-weight: 900;"></h2>
+            <div style="font-size: 2rem; color: var(--gold); cursor: pointer;" onclick="hideTech()">&times;</div>
         </div>
 
-        <div id="modalBody">
-            </div>
+        <div id="modalBody"></div>
 
-        <button onclick="hideTech()" style="width:100%; background: var(--neon); color: black; border:none; padding:15px; border-radius:15px; font-weight:900; margin-top: 20px;">DONE</button>
+        <button onclick="celebrateAndHide()" style="width:100%; background: var(--gold); color: black; border:none; padding:18px; border-radius:20px; font-weight:900; margin-top: 20px; letter-spacing: 1px;">TRAINING COMPLETE</button>
     </div>
 
     <script>
@@ -212,25 +244,38 @@
                     <div class="img-wrapper"><img src="IMG_20260214_200544.jpg"></div>
                     <div class="step-box">
                         <div class="step-title">Step 1: Control</div>
-                        <div class="step-text">Tuck your chin and secure the attacker's wrist firmly to manage the pressure and create breathing space.</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Tuck your chin and secure the attacker's wrist firmly to manage the pressure and create breathing space.</div>
                     </div>
 
                     <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260214_191009.jpg"></div>
                     <div class="step-box" style="border-left-color: var(--neon);">
                         <div class="step-title">Step 2: Leverage</div>
-                        <div class="step-text">Place one hand under the attacker's chin and grab the leg just above the knee with the other. Pull the leg upward and forward.</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Place one hand under the attacker's chin and grab the leg just above the knee. Pull upward and forward.</div>
                     </div>
 
                     <div class="img-wrapper"><img src="IMG_20260214_200132.jpg"></div>
                     <div class="step-box">
                         <div class="step-title">Step 3: Release</div>
-                        <div class="step-text">Use the created leverage to force the attacker off-balance, successfully releasing the hold and taking the opponent down.</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Force the attacker off-balance, releasing the hold and taking the opponent down.</div>
                     </div>
                 `;
             }
             
             modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Prevent scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function celebrateAndHide() {
+            // Confetti effect
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#facc15', '#38bdf8', '#ffffff']
+            });
+
+            // Delay closing to let user enjoy the win
+            setTimeout(hideTech, 800);
         }
 
         function hideTech() {
@@ -238,6 +283,5 @@
             document.body.style.overflow = 'auto';
         }
     </script>
-
 </body>
 </html>
