@@ -11,6 +11,7 @@
             --bg: #020617; 
             --shadow-gold: rgba(250, 204, 21, 0.4);
             --safe-green: #22c55e;
+            --reflex-red: #ef4444; /* Νέο χρώμα για τα Drills */
         }
         
         body { 
@@ -184,10 +185,18 @@
             transition: all 0.3s ease;
         }
 
+        /* Ειδικό στυλ για το κουμπί Drills */
+        .drill-item {
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
         .menu-item:hover { border-color: var(--neon); background: rgba(56, 189, 248, 0.1); }
+        .drill-item:hover { border-color: var(--reflex-red); background: rgba(239, 68, 68, 0.1); }
         .menu-item:active { transform: scale(0.92); }
 
         .menu-item img { width: 30px; height: 30px; margin-bottom: 10px; filter: drop-shadow(0 0 8px var(--neon)); }
+        .drill-item img { filter: drop-shadow(0 0 8px var(--reflex-red)); }
 
         .menu-item span { 
             font-size: 0.55rem; 
@@ -264,9 +273,9 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/2936/2936900.png" alt="Library">
                 <span>TECHNIQUE<br>LIBRARY</span>
             </div>
-            <div class="menu-item" onclick="triggerAction(null, 'Focus Drills: Coming Soon')">
+            <div class="menu-item drill-item" onclick="triggerAction('reflexdrill.html')">
                 <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" alt="Drills">
-                <span>FOCUS<br>DRILLS</span>
+                <span style="color: var(--reflex-red);">REFLEX<br>DRILLS</span>
             </div>
             <div class="menu-item" onclick="triggerAction(null, 'Current Rank: White Belt')">
                 <img src="https://cdn-icons-png.flaticon.com/512/3112/3112946.png" alt="Tracker">
@@ -280,16 +289,13 @@
 
     <script>
         function triggerAction(url, message) {
-            // 1. Δόνηση (Vibration API) - 50ms για αίσθηση "κλικ"
             if (navigator.vibrate) {
                 navigator.vibrate(50);
             }
 
-            // 2. Ήχος
             var audio = new Audio('https://www.soundjay.com/human/sounds/human-shout-01.mp3');
             audio.play().catch(e => console.log("Audio play deferred"));
 
-            // 3. Ενέργεια (Redirect ή Alert)
             if (url) {
                 setTimeout(() => { window.location.href = url; }, 450);
             } else if (message) {
