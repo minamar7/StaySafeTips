@@ -13,6 +13,7 @@
             --neon: #38bdf8; 
             --bg: #020617; 
             --card-bg: #0f172a;
+            --reflex: #ef4444; /* New color for Drills */
         }
         
         body { 
@@ -198,6 +199,17 @@
             </div>
         </div>
 
+        <div class="tech-card" onclick="showTech('drill1')" style="border: 1px solid var(--reflex);">
+            <img src="drill_thumb.jpg" class="bg-thumb">
+            <div class="card-overlay">
+                <div class="card-info">
+                    <h3 style="color: var(--reflex);">REFLEX DRILL</h3>
+                    <p style="color: white;">FOCUS: Threat Detection</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 100%; background: var(--reflex);"></div></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="ad-banner">SECURE AD STREAM - SUPPORT THE DOJO</div>
@@ -263,6 +275,18 @@
                     <div class="step-box">
                         <div class="step-title">Step 1: Pin & Secure</div>
                         <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Pin the attacker's hand firmly against your head with both hands to stabilize the grab and reduce pain.</div>
+                    </div>
+                `;
+            }
+
+            else if(id === 'drill1') {
+                title.innerText = "THREAT DETECTION DRILL";
+                title.style.color = "var(--reflex)";
+                body.innerHTML = `
+                    <div class="img-wrapper" style="border-color: var(--reflex);"><img src="drill_ui.jpg"></div>
+                    <div class="step-box" style="border-left-color: var(--reflex);">
+                        <div class="step-title">How to Practice</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Scan the image quickly. Identify the threat (GO) vs the distraction (NO-GO). React in under 1 second.</div>
                     </div>
                 `;
             }
