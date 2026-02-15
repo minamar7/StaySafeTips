@@ -23,7 +23,7 @@
             color: white; 
             font-family: -apple-system, system-ui, sans-serif; 
             padding: 20px;
-            padding-bottom: 140px; /* Space for Ad Banner */
+            padding-bottom: 140px; 
         }
 
         header {
@@ -103,7 +103,6 @@
             letter-spacing: 1px;
         }
 
-        /* TACTICAL OVERLAYS */
         .tactical-tag {
             position: absolute;
             bottom: 10px;
@@ -114,7 +113,6 @@
             text-shadow: 1px 1px 2px black;
         }
 
-        /* LIGHTBOX */
         #lightbox {
             display: none;
             position: fixed;
@@ -137,7 +135,6 @@
 
         #lightbox img.zoomed { transform: scale(2); }
 
-        /* AD BANNER */
         .ad-banner-bottom {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
@@ -188,7 +185,7 @@
                     </div>
 
                     <div class="drill-item">
-                        <span class="drill-label">#Body Language</span>
+                        <span class="drill-label">#2 Body Language</span>
                         <img src="IMG_20260215_015207.jpg" class="gallery-item" onclick="openLightbox(this.src, 'PRE-CONTACT CUES')">
                         <div class="tactical-tag" style="color:var(--reflex)">WEAPON DETECTED</div>
                     </div>
@@ -201,18 +198,18 @@
 
                     <div class="drill-item">
                         <span class="drill-label">#4 Crowd Scan</span>
-                        <img src="IMG_CROWD_SCAN.jpg" class="gallery-item" style="border: 1px solid var(--neon);" onclick="openLightbox(this.src, 'FIND AGGRESSOR: CROWD ANALYSIS')">
+                        <img src="IMG_20260215_150621.jpg" class="gallery-item" style="border: 1px solid var(--neon);" onclick="openLightbox(this.src, 'FIND AGGRESSOR: CROWD ANALYSIS')">
                         <div class="tactical-tag" style="color:var(--neon)">TARGET ID</div>
                     </div>
 
                     <div class="drill-item">
                         <span class="drill-label">#5 Exit Strategy</span>
-                        <img src="IMG_EXIT_STRATEGY.jpg" class="gallery-item" style="border: 1px solid var(--green);" onclick="openLightbox(this.src, 'EVACUATE: LOCATE EXITS')">
+                        <img src="IMG_20260215_150644.jpg" class="gallery-item" style="border: 1px solid var(--green);" onclick="openLightbox(this.src, 'EVACUATE: LOCATE EXITS')">
                         <div class="tactical-tag" style="color:var(--green)">EXIT LOCATED</div>
                     </div>
 
                     <div class="drill-item">
-                        <span class="drill-label">#6 Specialized Ad</span>
+                        <span class="drill-label">#6 Training Ad</span>
                         <div class="gallery-item" style="background:#000; display:flex; align-items:center; justify-content:center; border: 1px solid var(--gold);">
                             <span style="font-size:0.5rem; color:var(--gold); font-weight:900;">ADVERTISEMENT</span>
                         </div>
@@ -234,7 +231,7 @@
 
     <div id="lightbox" onclick="closeLightbox()">
         <img id="lightboxImg" src="" onclick="event.stopPropagation(); toggleZoom(this)">
-        <div id="lightboxDesc" style="color:var(--gold); font-weight:900; margin-top:20px; text-transform:uppercase; letter-spacing:1px;"></div>
+        <div id="lightboxDesc" style="color:var(--gold); font-weight:900; margin-top:20px; text-transform:uppercase; text-align:center;"></div>
     </div>
 
     <script>
