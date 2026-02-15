@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Offline Mode – Stay Safe Elite</title>
@@ -26,7 +26,7 @@
       color: var(--text-main);
       font-family: -apple-system, system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 100px; /* Χώρος για το navigation */
+      padding-bottom: 100px;
     }
 
     .app-shell {
@@ -89,7 +89,6 @@
       font-weight: bold;
     }
 
-    /* SOS Button in Block */
     .sos-btn {
       width: 100%;
       background: linear-gradient(135deg, var(--danger), #b91c1c);
@@ -104,7 +103,6 @@
       box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
     }
 
-    /* Floating Panic Button (Same as index) */
     .panic-btn { 
       position: fixed; 
       right: 20px; 
@@ -163,46 +161,46 @@
     <header style="margin-bottom: 30px;">
       <span class="offline-indicator">✓ OFFLINE READY</span>
       <h1 style="margin: 5px 0; font-size: 1.8rem;">📱 Offline Mode</h1>
-      <p style="color: var(--text-muted); font-size: 0.95rem;">Πρωτόκολλα ασφαλείας Stay Safe Elite</p>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">Stay Safe Elite Protection Protocols</p>
     </header>
 
     <div class="offline-block" style="border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.08);">
-        <h3 style="color: var(--danger);">🚨 ΕΠΕΙΓΟΥΣΑ ΑΝΑΓΚΗ</h3>
+        <h3 style="color: var(--danger);">🚨 EMERGENCY SOS</h3>
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
-            Άμεσος κίνδυνος; Καλέστε το 112 τώρα.
+            Immediate danger? Call 112 now.
         </p>
         <button class="sos-btn" onclick="window.location.href='tel:112'">
-            ΚΛΗΣΗ 112
+            CALL 112
         </button>
     </div>
 
     <main id="offline-container">
       <div class="offline-block">
-        <h3>🛡️ Οδηγός Επιβίωσης</h3>
+        <h3>🛡️ Survival Guide</h3>
         <ul>
-          <li>Μείνετε σε σημεία με κίνηση και ορατότητα.</li>
-          <li>Ενημερώστε κάποιον για την τοποθεσία σας.</li>
-          <li>Πλησιάστε πληρώματα ασφαλείας ή αστυνομία.</li>
+          <li>Stay in busy, well-lit areas with visibility.</li>
+          <li>Inform someone of your current location.</li>
+          <li>Approach security personnel or police.</li>
         </ul>
       </div>
 
       <div class="offline-block">
-        <h3>🔋 Εξοικονόμηση Ενέργειας</h3>
+        <h3>🔋 Battery Saver</h3>
         <ul>
-          <li>Χαμηλώστε τη φωτεινότητα στο ελάχιστο.</li>
-          <li>Κλείστε Wi-Fi, Bluetooth και GPS.</li>
+          <li>Lower brightness to the minimum level.</li>
+          <li>Turn off Wi-Fi, Bluetooth, and GPS.</li>
         </ul>
       </div>
     </main>
 
-    <button id="refresh-offline-btn">ΑΝΑΝΕΩΣΗ ΣΥΜΒΟΥΛΩΝ</button>
+    <button id="refresh-offline-btn">REFRESH TIPS</button>
   </div>
 
   <script>
     (() => {
       "use strict";
 
-      // Έλεγχος Elite Status - Συμβατό με index.html
+      // Elite Status Check
       if (localStorage.getItem("isElite") !== "true") {
         window.location.href = "index.html";
         return;
@@ -213,12 +211,12 @@
 
       const extraTips = [
         {
-          title: "⚠️ Τι να ΑΠΟΦΥΓΕΤΕ",
-          items: ["Μην περιπλανιέστε χωρίς πλάνο.", "Μην εμπιστεύεστε αγνώστους.", "Αποφύγετε σκοτεινά σοκάκια."]
+          title: "⚠️ What to AVOID",
+          items: ["Do not wander without a plan.", "Do not trust strangers.", "Avoid dark alleys."]
         },
         {
-          title: "📍 Προσανατολισμός",
-          items: ["Κινηθείτε σε φωτισμένους δρόμους.", "Μπείτε σε ανοιχτό κατάστημα.", "Προσποιηθείτε τηλεφωνική κλήση."]
+          title: "📍 Orientation",
+          items: ["Move along well-lit streets.", "Enter an open shop or business.", "Pretend to be on a phone call."]
         }
       ];
 
