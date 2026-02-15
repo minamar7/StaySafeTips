@@ -1,15 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Privacy Policy | Stay Safe Elite</title>
+    <style>
+        :root { 
+            --bg: #020617; 
+            --card: rgba(15, 23, 42, 0.9); 
+            --accent: #38bdf8; 
+            --gold: #facc15;
+            --text: #f8fafc; 
+            --muted: #94a3b8; 
+            --danger: #ef4444;
+        }
+        
+        body { 
+            font-family: -apple-system, system-ui, sans-serif; 
+            line-height: 1.6; 
+            color: var(--text); 
+            background: var(--bg); 
+            margin: 0; 
+            padding: 20px; 
+            background-image: radial-gradient(circle at top right, rgba(56, 189, 248, 0.05), transparent);
+        }
+
+        .container { 
+            max-width: 750px; 
+            margin: 40px auto; 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: 32px; 
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 25px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { opacity: 0.7; transform: translateX(-5px); }
+
+        h1 { 
+            color: var(--text); 
+            font-size: 2.2rem; 
+            margin: 0; 
+            font-weight: 900; 
+            letter-spacing: -1px;
+        }
+
+        h2 { 
+            color: var(--accent); 
+            font-size: 1.1rem; 
+            margin-top: 35px; 
+            margin-bottom: 15px;
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+        }
+        h2::before {
+            content: "";
+            width: 4px;
+            height: 18px;
+            background: var(--accent);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .disclaimer-highlight {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+        .disclaimer-highlight h3 { 
+            color: var(--danger); 
+            margin: 0 0 10px 0; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        .disclaimer-highlight p { color: #fca5a5; font-size: 0.9rem; margin: 0; }
+
+        p, li { color: var(--muted); font-size: 0.95rem; margin-bottom: 15px; }
+        ul { padding-left: 20px; list-style-type: none; }
+        ul li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        a { color: var(--accent); text-decoration: none; transition: 0.3s; }
+        a:hover { color: var(--gold); }
+
+        .contact-box {
+            background: rgba(250, 204, 21, 0.05);
+            border: 1px solid rgba(250, 204, 21, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
 <div class="container">
     <a href="index.html" class="back-btn">← Back to App</a>
     <h1>Privacy Policy</h1>
-    <p style="opacity:0.7; font-size:0.85rem; letter-spacing:1px;">Last Updated: February 2026</p>
+    <p style="opacity:0.5; font-size:0.75rem; letter-spacing:1px; font-weight: 700;">LAST UPDATED: FEBRUARY 2026</p>
 
     <div class="disclaimer-highlight">
         <h3>⚠️ Educational Disclaimer</h3>
         <p>The content provided within <strong>Stay Safe Elite</strong> is for <strong>educational and informational purposes only</strong>. Self-defense techniques and tactical advice should only be used as a last resort in situations of absolute necessity. The developers are not responsible for any injury, misuse, or legal consequences resulting from the application of this information.</p>
     </div>
 
-    <p style="margin-top:25px;">
-        Stay Safe Elite is committed to protecting your privacy. This Privacy Policy explains what information is collected, how it is used, and how users maintain control over their data.
+    <p style="margin-top:25px; color: var(--text);">
+        <strong>Stay Safe Elite</strong> is committed to protecting your privacy. This Privacy Policy explains what information is collected, how it is used, and how users maintain control over their data.
     </p>
 
     <h2>1. No Account Required</h2>
@@ -24,52 +152,53 @@
     </ul>
 
     <h2>3. Advertising & Third-Party Services</h2>
-    <p>This app uses Google AdMob and Google AdSense to display advertisements. These services may automatically collect certain information for advertising and analytics purposes.</p>
+    <p>This app uses Google AdMob and Google AdSense to display advertisements. These services may automatically collect certain information for advertising and analytics purposes, including:</p>
 
     <ul>
-        <li>Android Advertising ID</li>
-        <li>Device identifiers</li>
-        <li>Device model and operating system version</li>
-        <li>IP address (used for approximate location detection)</li>
-        <li>Ad interaction data</li>
-        <li>Diagnostic and crash data (if provided by Google services)</li>
+        <li>Android Advertising ID / iOS IDFA</li>
+        <li>Device identifiers and model info</li>
+        <li>Operating system version</li>
+        <li>IP address (for approximate location detection)</li>
+        <li>Ad interaction and diagnostic data</li>
     </ul>
 
     <p>This information is processed directly by Google in accordance with their Privacy Policy. Stay Safe Elite does not access, store, or control this third-party data.</p>
-
-    <p>
-        Users may opt-out of personalized advertising through
-        <a href="https://www.google.com/settings/ads" target="_blank">Google Ads Settings</a>.
-    </p>
+    <p>Users may opt-out of personalized advertising through <a href="https://www.google.com/settings/ads" target="_blank">Google Ads Settings</a>.</p>
 
     <h2>4. Data Sharing</h2>
     <p>We do not sell, rent, or trade user data. Any data collected through advertising services is handled exclusively by Google as an independent data controller.</p>
 
     <h2>5. Data Retention</h2>
-    <p>Stay Safe Elite does not retain personal user data on external servers. Any information collected by third-party advertising providers is retained according to their respective data retention policies.</p>
+    <p>Stay Safe Elite does not retain personal user data on external servers. Information collected by third-party advertising providers is retained according to their respective policies.</p>
 
     <h2>6. On-Device Tools (Elite Checkup)</h2>
-    <p>The “Elite Checkup” feature analyzes limited device metrics (such as battery level and network status) in real-time. All processing occurs locally on your device. No system data is transmitted, stored, or shared externally.</p>
+    <p>The “Elite Checkup” feature analyzes limited device metrics (battery level, network status) in real-time. All processing occurs locally. No system data is transmitted or shared externally.</p>
 
     <h2>7. External Links</h2>
-    <p>The app may contain links to external platforms (such as social media). We are not responsible for the privacy practices of third-party websites or services.</p>
+    <p>The app may contain links to external platforms. We are not responsible for the privacy practices of third-party websites or services.</p>
 
     <h2>8. Children’s Privacy</h2>
     <p>Stay Safe Elite is not directed at children under the age of 13. We do not knowingly collect personal data from children.</p>
 
     <h2>9. User Rights</h2>
-    <p>Users maintain full control of their local data. Since we do not operate centralized user databases, there is no account-based data to access or delete beyond local device storage.</p>
+    <p>Users maintain full control of their local data. Since we do not operate centralized databases, there is no account-based data to access beyond local device storage.</p>
 
     <h2>10. Consent</h2>
     <p>By using Stay Safe Elite, you acknowledge and agree to this Privacy Policy.</p>
 
     <h2>11. Contact</h2>
     <p>If you have any questions regarding this Privacy Policy or the app’s data practices, please contact:</p>
-    <p style="margin-top:10px;">
-        <strong style="color:var(--gold); font-size:1rem;">minamar76@gmail.com</strong>
-    </p>
+    
+    <div class="contact-box">
+        <strong style="color:var(--gold); font-size:1.1rem; letter-spacing: 1px;">minamar76@gmail.com</strong>
+    </div>
 
-    <footer style="margin-top:50px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.05); font-size:12px; text-align:center; opacity:0.6;">
-        <p>&copy; 2026 Stay Safe Elite - Security Awareness & Personal Safety Education Tool</p>
+    <footer>
+        <p style="font-size: 11px; opacity: 0.5; letter-spacing: 0.5px;">
+            &copy; 2026 Stay Safe Elite - Security Awareness & Personal Safety Education Tool
+        </p>
     </footer>
 </div>
+
+</body>
+</html>
