@@ -62,8 +62,6 @@
             transition: transform 0.3s;
         }
 
-        .img-display:active { transform: scale(0.98); }
-
         .content-padding {
             padding: 20px;
         }
@@ -89,29 +87,14 @@
             font-size: 0.9rem;
             line-height: 1.5;
             color: #cbd5e1;
+            margin-bottom: 15px;
         }
 
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-top: 20px;
-        }
-
-        /* Νέα κλάση για τα placeholders */
-        .gallery-placeholder {
-            background: rgba(255,255,255,0.05); 
-            border-radius: 18px; 
-            display:flex; 
-            align-items:center; 
-            justify-content:center; 
-            font-size: 0.6rem; 
-            color: #64748b; 
-            text-align:center; 
-            padding: 5px;
-            aspect-ratio: 1/1; /* Ίδια αναλογία με τις εικόνες */
-            border: 1px dashed rgba(255,255,255,0.1);
-            cursor: default;
+            margin-top: 10px;
         }
 
         .gallery-item {
@@ -126,25 +109,43 @@
 
         .gallery-item:active { transform: scale(0.95); opacity: 0.8; }
 
+        .drill-label {
+            font-size: 0.6rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 5px;
+            display: block;
+            letter-spacing: 1px;
+        }
+
         /* LIGHTBOX SYSTEM */
         #lightbox {
             display: none;
             position: fixed;
             z-index: 3000;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.95);
+            background: rgba(2, 6, 23, 0.98);
             justify-content: center;
             align-items: center;
+            flex-direction: column;
             padding: 20px;
-            box-sizing: border-box;
         }
 
         #lightbox img {
             max-width: 100%;
-            max-height: 80vh;
+            max-height: 70vh;
             border-radius: 20px;
             border: 2px solid var(--gold);
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        #lightboxDesc {
+            margin-top: 20px;
+            color: var(--gold);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
         }
 
         .close-lightbox {
@@ -153,7 +154,6 @@
             right: 30px;
             color: white;
             font-size: 2.5rem;
-            font-weight: bold;
             cursor: pointer;
         }
 
@@ -167,9 +167,6 @@
             font-weight: 900;
             font-size: 1rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
             margin-top: 30px;
         }
     </style>
@@ -183,25 +180,47 @@
 
     <div class="drill-container">
         <div class="main-card">
-            <img src="drill_game_ui.jpg" class="img-display" onclick="openLightbox(this.src)">
+            <img src="drill_game_ui.jpg" class="img-display" onclick="openLightbox(this.src, 'CORE INTERFACE')">
             
             <div class="content-padding">
                 <div class="objective-box">
                     <span class="section-title">TRAINING OBJECTIVE</span>
-                    <p class="text-desc">Identify the threat in under 1 second. Differentiate between "GO" and "NO-GO" signals.</p>
+                    <p class="text-desc">Identify threats, analyze body language, and detect concealed weapons in under 1 second.</p>
                 </div>
 
-                <span class="section-title">VISUAL EXAMPLES</span>
-                <div class="text-desc">Tap on any image to enlarge and study the details:</div>
+                <span class="section-title">ACTIVE DRILLS</span>
+                <p class="text-desc">Select a scenario to start your visual scan:</p>
                 
                 <div class="gallery-grid">
-                    <img src="IMG_20260215_014654.jpg" class="gallery-item" onclick="openLightbox(this.src)">
-                    <img src="IMG_20260215_015207.jpg" class="gallery-item" onclick="openLightbox(this.src)">
-                    <img src="IMG_20260215_015458.jpg" class="gallery-item" onclick="openLightbox(this.src)">
-                    
-                    <div class="gallery-placeholder">DRILL #4<br>COMING SOON</div>
-                    <div class="gallery-placeholder">DRILL #5<br>COMING SOON</div>
-                    <div class="gallery-placeholder">DRILL #6<br>COMING SOON</div>
+                    <div>
+                        <span class="drill-label">#1 Detection</span>
+                        <img src="IMG_20260215_014654.jpg" class="gallery-item" onclick="openLightbox(this.src, 'THREAT DETECTION: GO')">
+                    </div>
+
+                    <div>
+                        <span class="drill-label">#2 Body Language</span>
+                        <img src="IMG_20260215_015207.jpg" class="gallery-item" onclick="openLightbox(this.src, 'PRE-CONTACT CUES: ANALYZE')">
+                    </div>
+
+                    <div>
+                        <span class="drill-label">#3 Reaction</span>
+                        <img src="IMG_20260215_015458.jpg" class="gallery-item" onclick="openLightbox(this.src, 'RAPID REACTION: ENGAGE')">
+                    </div>
+
+                    <div>
+                        <span class="drill-label">#4 Weapon Scan</span>
+                        <div class="gallery-item" style="background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.6rem; text-align:center;">SCANNING HANDS<br>COMING SOON</div>
+                    </div>
+
+                    <div>
+                        <span class="drill-label">#5 Crowd Scan</span>
+                        <div class="gallery-item" style="background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.6rem; text-align:center;">FIND AGGRESSOR<br>COMING SOON</div>
+                    </div>
+
+                    <div>
+                        <span class="drill-label">#6 Night Vision</span>
+                        <div class="gallery-item" style="background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.6rem; text-align:center;">LOW LIGHT SCAN<br>COMING SOON</div>
+                    </div>
                 </div>
 
                 <button class="btn-complete" onclick="finishDrill()">Session Complete</button>
@@ -212,33 +231,31 @@
     <div id="lightbox" onclick="closeLightbox()">
         <span class="close-lightbox">&times;</span>
         <img id="lightboxImg" src="">
+        <div id="lightboxDesc"></div>
     </div>
 
     <script>
-        function openLightbox(src) {
+        function openLightbox(src, desc) {
             document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxDesc').innerText = desc;
             document.getElementById('lightbox').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLightbox() {
             document.getElementById('lightbox').style.display = 'none';
-            document.body.style.overflow = 'auto'; 
+            document.body.style.overflow = 'auto';
         }
 
         function finishDrill() {
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-            
             confetti({
                 particleCount: 150,
                 spread: 70,
                 origin: { y: 0.6 },
                 colors: ['#ef4444', '#facc15', '#ffffff']
             });
-
-            setTimeout(() => {
-                window.location.href = 'dojo.html';
-            }, 1500);
+            setTimeout(() => { window.location.href = 'dojo.html'; }, 1500);
         }
     </script>
 </body>
