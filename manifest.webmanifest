@@ -1,7 +1,7 @@
 {
   "name": "Stay Safe Elite",
   "short_name": "StaySafe",
-  "description": "Η απόλυτη εκπαιδευτική εφαρμογή για την προσωπική και ψηφιακή σας ασφάλεια.",
+  "description": "The ultimate educational app for your physical and digital security.",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
