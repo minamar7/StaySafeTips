@@ -5,6 +5,7 @@
     <title>Reflex Drills - Stay Safe Elite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4000056160039274" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -13,6 +14,7 @@
             --neon: #38bdf8; 
             --bg: #020617; 
             --reflex: #ef4444; 
+            --green: #22c55e;
         }
         
         body { 
@@ -21,7 +23,7 @@
             color: white; 
             font-family: -apple-system, system-ui, sans-serif; 
             padding: 20px;
-            padding-bottom: 120px;
+            padding-bottom: 140px; /* Space for Ad Banner */
         }
 
         header {
@@ -42,29 +44,17 @@
 
         h1 { color: var(--reflex); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; margin: 0; }
 
-        .drill-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        .drill-container { max-width: 500px; margin: 0 auto; }
 
         .main-card {
             background: rgba(15, 23, 42, 0.5);
             border-radius: 28px;
             overflow: hidden;
             margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .img-display {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .content-padding {
-            padding: 20px;
-        }
+        .content-padding { padding: 20px; }
 
         .objective-box {
             background: rgba(239, 68, 68, 0.1);
@@ -83,13 +73,6 @@
             display: block;
         }
 
-        .text-desc {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: #cbd5e1;
-            margin-bottom: 15px;
-        }
-
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -97,13 +80,14 @@
             margin-top: 10px;
         }
 
+        .drill-item { position: relative; cursor: pointer; }
+
         .gallery-item {
             border-radius: 18px;
             border: 1px solid rgba(255,255,255,0.1);
             width: 100%;
             aspect-ratio: 1/1;
             object-fit: cover;
-            cursor: pointer;
             transition: 0.3s;
         }
 
@@ -119,73 +103,51 @@
             letter-spacing: 1px;
         }
 
-        /* LIGHTBOX SYSTEM - WITH ZOOM SUPPORT */
+        /* TACTICAL OVERLAYS */
+        .tactical-tag {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.45rem;
+            font-weight: 900;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        /* LIGHTBOX */
         #lightbox {
             display: none;
             position: fixed;
-            z-index: 3000;
+            z-index: 5000;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 6, 23, 0.98);
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            box-sizing: border-box;
-            overflow: hidden; /* Prevent scroll bars during zoom */
-        }
-
-        .lightbox-content {
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.3s ease;
         }
 
         #lightbox img {
             width: 100%;
-            height: auto;
-            max-height: 70vh;
+            max-width: 450px;
             border-radius: 20px;
             border: 2px solid var(--gold);
-            object-fit: contain;
-            cursor: zoom-in;
             transition: transform 0.3s ease;
         }
 
-        /* Zoom state */
-        #lightbox img.zoomed {
-            transform: scale(2);
-            cursor: zoom-out;
-        }
+        #lightbox img.zoomed { transform: scale(2); }
 
-        #lightboxDesc {
-            margin-top: 25px;
-            color: var(--gold);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        .zoom-hint {
-            font-size: 0.6rem;
-            color: #64748b;
-            margin-top: 10px;
-            letter-spacing: 1px;
-        }
-
-        .close-lightbox {
-            position: absolute;
-            top: env(safe-area-inset-top, 40px);
-            right: 30px;
-            color: white;
-            font-size: 3rem;
-            line-height: 1;
-            cursor: pointer;
-            z-index: 3001;
+        /* AD BANNER */
+        .ad-banner-bottom {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: #000;
+            border-top: 1px solid var(--gold);
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            z-index: 4000;
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         .btn-complete {
@@ -196,7 +158,6 @@
             padding: 20px;
             border-radius: 20px;
             font-weight: 900;
-            font-size: 1rem;
             text-transform: uppercase;
             margin-top: 30px;
         }
@@ -211,46 +172,50 @@
 
     <div class="drill-container">
         <div class="main-card">
-            <img src="drill_game_ui.jpg" class="img-display" onclick="openLightbox(this.src, 'CORE INTERFACE')">
+            <img src="drill_game_ui.jpg" class="img-display" style="width:100%; aspect-ratio:16/9; object-fit:cover;" onclick="openLightbox(this.src, 'CORE INTERFACE')">
             
             <div class="content-padding">
                 <div class="objective-box">
                     <span class="section-title">TRAINING OBJECTIVE</span>
-                    <p class="text-desc">Identify threats, analyze body language, and detect concealed weapons in under 1 second.</p>
+                    <p style="font-size:0.85rem; color:#cbd5e1; margin:0;">Identify threats, analyze body language, and locate exits in under 1 second.</p>
                 </div>
 
-                <span class="section-title">ACTIVE DRILLS</span>
-                <p class="text-desc">Select a scenario to start your visual scan:</p>
-                
                 <div class="gallery-grid">
-                    <div>
+                    <div class="drill-item">
                         <span class="drill-label">#1 Detection</span>
                         <img src="IMG_20260215_014654.jpg" class="gallery-item" onclick="openLightbox(this.src, 'THREAT DETECTION: GO')">
+                        <div class="tactical-tag" style="color:var(--neon)">SCANNING...</div>
                     </div>
 
-                    <div>
-                        <span class="drill-label">#2 Body Language</span>
-                        <img src="IMG_20260215_015207.jpg" class="gallery-item" onclick="openLightbox(this.src, 'PRE-CONTACT CUES: ANALYZE')">
+                    <div class="drill-item">
+                        <span class="drill-label">#Body Language</span>
+                        <img src="IMG_20260215_015207.jpg" class="gallery-item" onclick="openLightbox(this.src, 'PRE-CONTACT CUES')">
+                        <div class="tactical-tag" style="color:var(--reflex)">WEAPON DETECTED</div>
                     </div>
 
-                    <div>
+                    <div class="drill-item">
                         <span class="drill-label">#3 Reaction</span>
                         <img src="IMG_20260215_015458.jpg" class="gallery-item" onclick="openLightbox(this.src, 'RAPID REACTION: ENGAGE')">
+                        <div class="tactical-tag" style="color:var(--gold)">ACTION NOW</div>
                     </div>
 
-                    <div>
-                        <span class="drill-label">#4 Weapon Scan</span>
-                        <div class="gallery-item" style="background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.6rem; text-align:center;">SCANNING HANDS<br>COMING SOON</div>
+                    <div class="drill-item">
+                        <span class="drill-label">#4 Crowd Scan</span>
+                        <img src="IMG_CROWD_SCAN.jpg" class="gallery-item" style="border: 1px solid var(--neon);" onclick="openLightbox(this.src, 'FIND AGGRESSOR: CROWD ANALYSIS')">
+                        <div class="tactical-tag" style="color:var(--neon)">TARGET ID</div>
                     </div>
 
-                    <div>
-                        <span class="drill-label">#5 Crowd Scan</span>
-                        <div class="gallery-item" style="background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.6rem; text-align:center;">FIND AGGRESSOR<br>COMING SOON</div>
+                    <div class="drill-item">
+                        <span class="drill-label">#5 Exit Strategy</span>
+                        <img src="IMG_EXIT_STRATEGY.jpg" class="gallery-item" style="border: 1px solid var(--green);" onclick="openLightbox(this.src, 'EVACUATE: LOCATE EXITS')">
+                        <div class="tactical-tag" style="color:var(--green)">EXIT LOCATED</div>
                     </div>
 
-                    <div>
-                        <span class="drill-label">#6 Night Vision</span>
-                        <div class="gallery-item" style="background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.6rem; text-align:center;">LOW LIGHT SCAN<br>COMING SOON</div>
+                    <div class="drill-item">
+                        <span class="drill-label">#6 Specialized Ad</span>
+                        <div class="gallery-item" style="background:#000; display:flex; align-items:center; justify-content:center; border: 1px solid var(--gold);">
+                            <span style="font-size:0.5rem; color:var(--gold); font-weight:900;">ADVERTISEMENT</span>
+                        </div>
                     </div>
                 </div>
 
@@ -259,13 +224,17 @@
         </div>
     </div>
 
-    <div id="lightbox">
-        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-        <div class="lightbox-content">
-            <img id="lightboxImg" src="" onclick="toggleZoom(event)">
-            <div id="lightboxDesc"></div>
-            <div class="zoom-hint">DOUBLE TAP TO ZOOM</div>
-        </div>
+    <div class="ad-banner-bottom">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-pub-4000056160039274"
+             data-ad-slot="6359424861"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightboxImg" src="" onclick="event.stopPropagation(); toggleZoom(this)">
+        <div id="lightboxDesc" style="color:var(--gold); font-weight:900; margin-top:20px; text-transform:uppercase; letter-spacing:1px;"></div>
     </div>
 
     <script>
@@ -273,7 +242,7 @@
             const lb = document.getElementById('lightbox');
             const img = document.getElementById('lightboxImg');
             img.src = src;
-            img.classList.remove('zoomed'); // Reset zoom on open
+            img.classList.remove('zoomed');
             document.getElementById('lightboxDesc').innerText = desc;
             lb.style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -284,25 +253,14 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Zoom Functionality
-        function toggleZoom(event) {
-            event.stopPropagation(); // Prevent closing lightbox when clicking image
-            const img = event.target;
+        function toggleZoom(img) {
             img.classList.toggle('zoomed');
         }
 
-        // Close lightbox when clicking the background (but not the image)
-        document.getElementById('lightbox').addEventListener('click', function(e) {
-            if (e.target === this) closeLightbox();
-        });
-
         function finishDrill() {
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ef4444', '#facc15', '#ffffff']
+                particleCount: 150, spread: 70, origin: { y: 0.6 },
+                colors: ['#ef4444', '#facc15', '#38bdf8']
             });
             setTimeout(() => { window.location.href = 'dojo.html'; }, 1500);
         }
