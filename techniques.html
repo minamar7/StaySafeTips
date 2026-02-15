@@ -13,7 +13,7 @@
             --neon: #38bdf8; 
             --bg: #020617; 
             --card-bg: #0f172a;
-            --reflex: #ef4444; /* New color for Drills */
+            --reflex: #ef4444; 
         }
         
         body { 
@@ -222,7 +222,7 @@
 
         <div id="modalBody"></div>
 
-        <button onclick="celebrateAndHide()" style="width:100%; background: var(--gold); color: black; border:none; padding:18px; border-radius:20px; font-weight:900; margin-top: 20px; letter-spacing: 1px;">TRAINING COMPLETE</button>
+        <button onclick="celebrateAndHide()" style="width:100%; background: var(--gold); color: black; border:none; padding:18px; border-radius:20px; font-weight:900; margin-top: 20px; letter-spacing: 1px; text-transform: uppercase;">Training Complete</button>
     </div>
 
     <script>
@@ -230,6 +230,9 @@
             const modal = document.getElementById('techModal');
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
+
+            // Reset Title Color to Neon (Default)
+            title.style.color = "var(--neon)";
 
             if(id === 'headlock') {
                 title.innerText = "HEADLOCK ESCAPE";
@@ -285,8 +288,12 @@
                 body.innerHTML = `
                     <div class="img-wrapper" style="border-color: var(--reflex);"><img src="drill_ui.jpg"></div>
                     <div class="step-box" style="border-left-color: var(--reflex);">
-                        <div class="step-title">How to Practice</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Scan the image quickly. Identify the threat (GO) vs the distraction (NO-GO). React in under 1 second.</div>
+                        <div class="step-title">Training Objective</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Scan the environment quickly. Identify the threat (GO) vs the distraction (NO-GO). Your goal is to react in under 1 second.</div>
+                    </div>
+                    <div class="step-box" style="border: 1px dashed var(--reflex); background: transparent;">
+                        <div class="step-title" style="color: white;">⚡ Pro Tip</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8;">Focus on the attacker's hands first. Hands carry the danger.</div>
                     </div>
                 `;
             }
@@ -298,7 +305,7 @@
         function celebrateAndHide() {
             confetti({
                 particleCount: 150, spread: 70, origin: { y: 0.6 },
-                colors: ['#facc15', '#38bdf8', '#ffffff']
+                colors: ['#facc15', '#38bdf8', '#ffffff', '#ef4444']
             });
             setTimeout(hideTech, 800);
         }
