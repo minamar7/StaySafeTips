@@ -178,7 +178,7 @@
         </div>
 
         <div class="tech-card" onclick="showTech('wrist')" style="border: 1px solid var(--gold);">
-            <img src="wrist_thumb.jpg" class="bg-thumb">
+            <img src="IMG_20260215_014654.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Wrist Release</h3>
@@ -189,7 +189,7 @@
         </div>
 
         <div class="tech-card" onclick="showTech('hair')" style="border: 1px solid #ff4444;">
-             <img src="hair_thumb.jpg" class="bg-thumb">
+             <img src="IMG_20260215_015207.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Hair Grab Defense</h3>
@@ -200,7 +200,7 @@
         </div>
 
         <div class="tech-card" onclick="showTech('drill1')" style="border: 1px solid var(--reflex);">
-            <img src="drill_thumb.jpg" class="bg-thumb">
+            <img src="drill_game_ui.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
                     <h3 style="color: var(--reflex);">REFLEX DRILL</h3>
@@ -231,7 +231,6 @@
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
 
-            // Reset Title Color to Neon (Default)
             title.style.color = "var(--neon)";
 
             if(id === 'headlock') {
@@ -258,12 +257,12 @@
             else if(id === 'wrist') {
                 title.innerText = "WRIST RELEASE";
                 body.innerHTML = `
-                    <div class="img-wrapper"><img src="wrist_step1.jpg"></div>
+                    <div class="img-wrapper"><img src="IMG_20260215_014654.jpg"></div>
                     <div class="step-box">
                         <div class="step-title">Step 1: Rotate</div>
                         <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Rotate your wrist so the thin side faces the opening between the attacker's thumb and fingers.</div>
                     </div>
-                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="wrist_step2.jpg"></div>
+                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260215_015458.jpg"></div>
                     <div class="step-box" style="border-left-color: var(--neon);">
                         <div class="step-title">Step 2: Pull Away</div>
                         <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Sharp pull away towards the attacker's thumb to break the grip.</div>
@@ -274,10 +273,15 @@
             else if(id === 'hair') {
                 title.innerText = "HAIR GRAB DEFENSE";
                 body.innerHTML = `
-                    <div class="img-wrapper"><img src="hair_step1.jpg"></div>
+                    <div class="img-wrapper"><img src="IMG_20260215_015207.jpg"></div>
                     <div class="step-box">
                         <div class="step-title">Step 1: Pin & Secure</div>
                         <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Pin the attacker's hand firmly against your head with both hands to stabilize the grab and reduce pain.</div>
+                    </div>
+                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260215_015711.jpg"></div>
+                    <div class="step-box" style="border-left-color: var(--neon);">
+                        <div class="step-title">Step 2: Control & Counter</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Maintain the pin while using leverage to control the attacker's wrist or elbow.</div>
                     </div>
                 `;
             }
@@ -286,10 +290,10 @@
                 title.innerText = "THREAT DETECTION DRILL";
                 title.style.color = "var(--reflex)";
                 body.innerHTML = `
-                    <div class="img-wrapper" style="border-color: var(--reflex);"><img src="drill_ui.jpg"></div>
+                    <div class="img-wrapper" style="border-color: var(--reflex);"><img src="drill_game_ui.jpg"></div>
                     <div class="step-box" style="border-left-color: var(--reflex);">
                         <div class="step-title">Training Objective</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Scan the environment quickly. Identify the threat (GO) vs the distraction (NO-GO). Your goal is to react in under 1 second.</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Scan the environment quickly. Identify the threat (GO) vs the distraction (NO-GO). React in under 1 second.</div>
                     </div>
                     <div class="step-box" style="border: 1px dashed var(--reflex); background: transparent;">
                         <div class="step-title" style="color: white;">⚡ Pro Tip</div>
