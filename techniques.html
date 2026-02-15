@@ -58,7 +58,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
             transition: 0.3s;
-            background: var(--card-bg); /* Σκούρο φόντο για όσα δεν έχουν φωτό ακόμα */
         }
 
         .tech-card:active { transform: scale(0.97); }
@@ -67,13 +66,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.4);
+            filter: brightness(0.5);
         }
 
         .card-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(2, 6, 23, 0.9) 40%, transparent 100%);
+            background: linear-gradient(to right, rgba(2, 6, 23, 0.95) 40%, transparent 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -110,7 +109,6 @@
             box-shadow: 0 0 10px var(--neon);
         }
 
-        /* MODAL SYSTEM */
         .modal {
             display: none;
             position: fixed;
@@ -134,14 +132,8 @@
             border: 2px solid var(--gold);
             overflow: hidden;
             margin-bottom: 15px;
-            background: #1e293b;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .img-wrapper img { width: 100%; display: block; }
-        .img-placeholder { color: #475569; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; }
 
         .step-box {
             background: rgba(255,255,255,0.03);
@@ -172,7 +164,6 @@
     </header>
 
     <div class="tech-grid">
-        
         <div class="tech-card" onclick="showTech('headlock')" style="border: 1px solid var(--neon);">
             <img src="IMG_20260214_200544.jpg" class="bg-thumb">
             <div class="card-overlay">
@@ -188,8 +179,7 @@
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Wrist Release</h3>
-                    <p>Level: Intermediate • Pending</p>
-                    <div class="progress-container"><div class="progress-fill" style="width: 20%; background: #475569;"></div></div>
+                    <p>Level: Intermediate • Tomorrow</p>
                 </div>
             </div>
         </div>
@@ -198,8 +188,7 @@
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Hair Grab Defense</h3>
-                    <p>Level: Advanced • Pending</p>
-                    <div class="progress-container"><div class="progress-fill" style="width: 20%; background: #475569;"></div></div>
+                    <p>Level: Advanced • Tomorrow</p>
                 </div>
             </div>
         </div>
@@ -214,10 +203,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
-    <div class="ad-banner">SECURE AD STREAM - SUPPORT THE DOJO</div>
 
     <div id="techModal" class="modal">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -238,37 +224,39 @@
                 title.innerText = "HEADLOCK ESCAPE";
                 body.innerHTML = `
                     <div class="img-wrapper"><img src="IMG_20260214_200544.jpg"></div>
-                    <div class="step-box"><div class="step-title">Step 1: Control</div><div>Tuck your chin and secure the wrist.</div></div>
+                    <div class="step-box"><div class="step-title">Step 1: Control</div><div>Tuck your chin and secure the attacker's wrist firmly.</div></div>
+                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260214_191009.jpg"></div>
+                    <div class="step-box" style="border-left-color: var(--neon);"><div class="step-title">Step 2: Leverage</div><div>Place hand under chin and grab leg above the knee.</div></div>
+                    <div class="img-wrapper"><img src="IMG_20260214_200132.jpg"></div>
+                    <div class="step-box"><div class="step-title">Step 3: Release</div><div>Force off-balance and take the opponent down.</div></div>
                 `;
-            } 
-            else if(id === 'wrist') {
-                title.innerText = "WRIST RELEASE";
-                body.innerHTML = `
-                    <div class="img-wrapper"><div class="img-placeholder">PHOTO COMING TOMORROW</div></div>
-                    <div class="step-box"><div class="step-title">Step 1: Rotate</div><div>Rotate towards the thumb opening.</div></div>
-                `;
-            }
-            else if(id === 'hair') {
-                title.innerText = "HAIR GRAB DEFENSE";
-                body.innerHTML = `
-                    <div class="img-wrapper"><div class="img-placeholder">PHOTO COMING TOMORROW</div></div>
-                    <div class="step-box"><div class="step-title">Step 1: Pin</div><div>Secure the attacker's hand to your head.</div></div>
-                `;
-            }
-            else if(id === 'drill1') {
+            } else if(id === 'drill1') {
                 title.innerText = "THREAT DETECTION DRILL";
                 title.style.color = "var(--reflex)";
                 body.innerHTML = `
                     <div class="img-wrapper" style="border-color: var(--reflex);"><img src="drill_game_ui.jpg"></div>
-                    <div class="step-box" style="border-left-color: var(--reflex);"><div class="step-title">Objective</div><div>Identify GO vs NO-GO signals.</div></div>
+                    <div class="step-box" style="border-left-color: var(--reflex);"><div class="step-title">Objective</div><div>Identify the threat (GO) vs distraction (NO-GO).</div></div>
+                    <div class="img-wrapper"><img src="IMG_20260215_014654.jpg"></div>
+                    <div class="img-wrapper"><img src="IMG_20260215_015207.jpg"></div>
+                    <div class="img-wrapper"><img src="IMG_20260215_015458.jpg"></div>
                 `;
+            } else {
+                title.innerText = "COMING SOON";
+                body.innerHTML = '<div class="step-box">Φωτογράφιση αύριο!</div>';
             }
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
 
-        function hideTech() { document.getElementById('techModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function celebrateAndHide() { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); setTimeout(hideTech, 800); }
+        function celebrateAndHide() {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            setTimeout(hideTech, 800);
+        }
+
+        function hideTech() {
+            document.getElementById('techModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     </script>
 </body>
 </html>
