@@ -58,6 +58,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
             transition: 0.3s;
+            background: var(--card-bg); /* Σκούρο φόντο για όσα δεν έχουν φωτό ακόμα */
         }
 
         .tech-card:active { transform: scale(0.97); }
@@ -66,13 +67,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.5);
+            filter: brightness(0.4);
         }
 
         .card-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(2, 6, 23, 0.95) 40%, transparent 100%);
+            background: linear-gradient(to right, rgba(2, 6, 23, 0.9) 40%, transparent 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -109,6 +110,7 @@
             box-shadow: 0 0 10px var(--neon);
         }
 
+        /* MODAL SYSTEM */
         .modal {
             display: none;
             position: fixed;
@@ -132,8 +134,14 @@
             border: 2px solid var(--gold);
             overflow: hidden;
             margin-bottom: 15px;
+            background: #1e293b;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .img-wrapper img { width: 100%; display: block; }
+        .img-placeholder { color: #475569; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; }
 
         .step-box {
             background: rgba(255,255,255,0.03);
@@ -177,23 +185,21 @@
         </div>
 
         <div class="tech-card" onclick="showTech('wrist')" style="border: 1px solid var(--gold);">
-            <img src="IMG_20260215_014654.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Wrist Release</h3>
-                    <p>Level: Intermediate • 2 Steps</p>
-                    <div class="progress-container"><div class="progress-fill" style="width: 100%;"></div></div>
+                    <p>Level: Intermediate • Pending</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 20%; background: #475569;"></div></div>
                 </div>
             </div>
         </div>
 
         <div class="tech-card" onclick="showTech('hair')" style="border: 1px solid #ff4444;">
-             <img src="IMG_20260215_015207.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Hair Grab Defense</h3>
-                    <p>Level: Advanced • 2 Steps</p>
-                    <div class="progress-container"><div class="progress-fill" style="width: 100%;"></div></div>
+                    <p>Level: Advanced • Pending</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 20%; background: #475569;"></div></div>
                 </div>
             </div>
         </div>
@@ -218,9 +224,7 @@
             <h2 id="modalTitle" style="color: var(--neon); margin: 0; font-size: 1.2rem; font-weight: 900;"></h2>
             <div style="font-size: 2rem; color: var(--gold); cursor: pointer;" onclick="hideTech()">&times;</div>
         </div>
-
         <div id="modalBody"></div>
-
         <button onclick="celebrateAndHide()" style="width:100%; background: var(--gold); color: black; border:none; padding:18px; border-radius:20px; font-weight:900; margin-top: 20px; letter-spacing: 1px; text-transform: uppercase;">Training Complete</button>
     </div>
 
@@ -230,93 +234,41 @@
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
 
-            title.style.color = "var(--neon)";
-
             if(id === 'headlock') {
                 title.innerText = "HEADLOCK ESCAPE";
                 body.innerHTML = `
                     <div class="img-wrapper"><img src="IMG_20260214_200544.jpg"></div>
-                    <div class="step-box">
-                        <div class="step-title">Step 1: Control</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Tuck your chin and secure the attacker's wrist firmly to manage pressure and create breathing space.</div>
-                    </div>
-                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260214_191009.jpg"></div>
-                    <div class="step-box" style="border-left-color: var(--neon);">
-                        <div class="step-title">Step 2: Leverage</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Place one hand under the chin and grab the leg just above the knee. Pull upward and forward.</div>
-                    </div>
-                    <div class="img-wrapper"><img src="IMG_20260214_200132.jpg"></div>
-                    <div class="step-box">
-                        <div class="step-title">Step 3: Release</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Force the attacker off-balance, releasing the hold and taking the opponent down.</div>
-                    </div>
+                    <div class="step-box"><div class="step-title">Step 1: Control</div><div>Tuck your chin and secure the wrist.</div></div>
                 `;
             } 
-            
             else if(id === 'wrist') {
                 title.innerText = "WRIST RELEASE";
                 body.innerHTML = `
-                    <div class="img-wrapper"><img src="IMG_20260215_014654.jpg"></div>
-                    <div class="step-box">
-                        <div class="step-title">Step 1: Rotate</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Rotate your wrist so the thin side faces the opening between the attacker's thumb and fingers.</div>
-                    </div>
-                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260215_015458.jpg"></div>
-                    <div class="step-box" style="border-left-color: var(--neon);">
-                        <div class="step-title">Step 2: Pull Away</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Sharp pull away towards the attacker's thumb to break the grip and escape.</div>
-                    </div>
+                    <div class="img-wrapper"><div class="img-placeholder">PHOTO COMING TOMORROW</div></div>
+                    <div class="step-box"><div class="step-title">Step 1: Rotate</div><div>Rotate towards the thumb opening.</div></div>
                 `;
             }
-
             else if(id === 'hair') {
                 title.innerText = "HAIR GRAB DEFENSE";
                 body.innerHTML = `
-                    <div class="img-wrapper"><img src="IMG_20260215_015207.jpg"></div>
-                    <div class="step-box">
-                        <div class="step-title">Step 1: Pin Hand</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Pin the attacker's hand firmly against your head with both hands to stabilize the grab.</div>
-                    </div>
-                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260215_015711.jpg"></div>
-                    <div class="step-box" style="border-left-color: var(--neon);">
-                        <div class="step-title">Step 2: Wrist Lock</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Step back and rotate your body to apply pressure on the attacker's wrist and force a release.</div>
-                    </div>
+                    <div class="img-wrapper"><div class="img-placeholder">PHOTO COMING TOMORROW</div></div>
+                    <div class="step-box"><div class="step-title">Step 1: Pin</div><div>Secure the attacker's hand to your head.</div></div>
                 `;
             }
-
             else if(id === 'drill1') {
                 title.innerText = "THREAT DETECTION DRILL";
                 title.style.color = "var(--reflex)";
                 body.innerHTML = `
                     <div class="img-wrapper" style="border-color: var(--reflex);"><img src="drill_game_ui.jpg"></div>
-                    <div class="step-box" style="border-left-color: var(--reflex);">
-                        <div class="step-title">Training Objective</div>
-                        <div style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">Scan the environment quickly. Identify the threat (GO) vs the distraction (NO-GO). React in under 1 second.</div>
-                    </div>
-                    <div class="step-box" style="border: 1px dashed var(--reflex); background: transparent;">
-                        <div class="step-title" style="color: white;">⚡ Pro Tip</div>
-                        <div style="font-size: 0.8rem; color: #94a3b8;">Focus on the attacker's hands first. Hands carry the danger.</div>
-                    </div>
+                    <div class="step-box" style="border-left-color: var(--reflex);"><div class="step-title">Objective</div><div>Identify GO vs NO-GO signals.</div></div>
                 `;
             }
-            
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
         }
 
-        function celebrateAndHide() {
-            confetti({
-                particleCount: 150, spread: 70, origin: { y: 0.6 },
-                colors: ['#facc15', '#38bdf8', '#ffffff', '#ef4444']
-            });
-            setTimeout(hideTech, 800);
-        }
-
-        function hideTech() {
-            document.getElementById('techModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        function hideTech() { document.getElementById('techModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function celebrateAndHide() { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); setTimeout(hideTech, 800); }
     </script>
 </body>
 </html>
