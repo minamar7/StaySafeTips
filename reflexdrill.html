@@ -48,8 +48,7 @@
         }
 
         .main-card {
-            background: rgba(15, 23, 42, 0.8);
-            border: 2px solid var(--reflex);
+            background: rgba(15, 23, 42, 0.5);
             border-radius: 28px;
             overflow: hidden;
             margin-bottom: 20px;
@@ -59,8 +58,11 @@
             width: 100%;
             aspect-ratio: 16/9;
             object-fit: cover;
-            border-bottom: 2px solid var(--reflex);
+            cursor: pointer;
+            transition: transform 0.3s;
         }
+
+        .img-display:active { transform: scale(0.98); }
 
         .content-padding {
             padding: 20px;
@@ -71,7 +73,7 @@
             border-left: 4px solid var(--reflex);
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .section-title {
@@ -92,16 +94,67 @@
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-top: 20px;
         }
 
+        /* Νέα κλάση για τα placeholders */
+        .gallery-placeholder {
+            background: rgba(255,255,255,0.05); 
+            border-radius: 18px; 
+            display:flex; 
+            align-items:center; 
+            justify-content:center; 
+            font-size: 0.6rem; 
+            color: #64748b; 
+            text-align:center; 
+            padding: 5px;
+            aspect-ratio: 1/1; /* Ίδια αναλογία με τις εικόνες */
+            border: 1px dashed rgba(255,255,255,0.1);
+            cursor: default;
+        }
+
         .gallery-item {
-            border-radius: 15px;
+            border-radius: 18px;
             border: 1px solid rgba(255,255,255,0.1);
             width: 100%;
             aspect-ratio: 1/1;
             object-fit: cover;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .gallery-item:active { transform: scale(0.95); opacity: 0.8; }
+
+        /* LIGHTBOX SYSTEM */
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.95);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #lightbox img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 20px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 40px;
+            right: 30px;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .btn-complete {
@@ -116,11 +169,9 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
-            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2);
+            margin-top: 30px;
         }
-
-        .btn-complete:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
@@ -132,22 +183,25 @@
 
     <div class="drill-container">
         <div class="main-card">
-            <img src="drill_game_ui.jpg" class="img-display" alt="Drill UI">
+            <img src="drill_game_ui.jpg" class="img-display" onclick="openLightbox(this.src)">
             
             <div class="content-padding">
                 <div class="objective-box">
                     <span class="section-title">TRAINING OBJECTIVE</span>
-                    <p class="text-desc">Identify the threat in under 1 second. Differentiate between "GO" (Danger) and "NO-GO" (Distraction) signals.</p>
+                    <p class="text-desc">Identify the threat in under 1 second. Differentiate between "GO" and "NO-GO" signals.</p>
                 </div>
 
                 <span class="section-title">VISUAL EXAMPLES</span>
-                <div class="text-desc">Study the scenarios below and practice your rapid response time:</div>
+                <div class="text-desc">Tap on any image to enlarge and study the details:</div>
                 
                 <div class="gallery-grid">
-                    <img src="IMG_20260215_014654.jpg" class="gallery-item">
-                    <img src="IMG_20260215_015207.jpg" class="gallery-item">
-                    <img src="IMG_20260215_015458.jpg" class="gallery-item">
-                    <div style="background: rgba(255,255,255,0.05); border-radius: 15px; display:flex; align-items:center; justify-content:center; font-size: 0.6rem; color: #64748b; text-align:center; padding: 5px;">MORE DRILLS<br>COMING SOON</div>
+                    <img src="IMG_20260215_014654.jpg" class="gallery-item" onclick="openLightbox(this.src)">
+                    <img src="IMG_20260215_015207.jpg" class="gallery-item" onclick="openLightbox(this.src)">
+                    <img src="IMG_20260215_015458.jpg" class="gallery-item" onclick="openLightbox(this.src)">
+                    
+                    <div class="gallery-placeholder">DRILL #4<br>COMING SOON</div>
+                    <div class="gallery-placeholder">DRILL #5<br>COMING SOON</div>
+                    <div class="gallery-placeholder">DRILL #6<br>COMING SOON</div>
                 </div>
 
                 <button class="btn-complete" onclick="finishDrill()">Session Complete</button>
@@ -155,12 +209,26 @@
         </div>
     </div>
 
+    <div id="lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox">&times;</span>
+        <img id="lightboxImg" src="">
+    </div>
+
     <script>
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = 'auto'; 
+        }
+
         function finishDrill() {
-            // Vibration feedback
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             
-            // Red/Gold/White Confetti
             confetti({
                 particleCount: 150,
                 spread: 70,
@@ -168,7 +236,6 @@
                 colors: ['#ef4444', '#facc15', '#ffffff']
             });
 
-            // Redirect to Dojo after 1.5s
             setTimeout(() => {
                 window.location.href = 'dojo.html';
             }, 1500);
