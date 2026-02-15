@@ -58,6 +58,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
             transition: 0.3s;
+            background: var(--card-bg);
         }
 
         .tech-card:active { transform: scale(0.97); }
@@ -132,6 +133,11 @@
             border: 2px solid var(--gold);
             overflow: hidden;
             margin-bottom: 15px;
+            background: #1e293b;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .img-wrapper img { width: 100%; display: block; }
 
@@ -143,17 +149,6 @@
             border-left: 4px solid var(--gold);
         }
         .step-title { color: var(--gold); font-weight: 900; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; }
-
-        .ad-banner {
-            background: rgba(255,255,255,0.05);
-            border: 1px dashed #334155;
-            border-radius: 20px;
-            padding: 15px;
-            text-align: center;
-            font-size: 0.6rem;
-            color: #64748b;
-            margin-top: 30px;
-        }
     </style>
 </head>
 <body>
@@ -193,13 +188,20 @@
             </div>
         </div>
 
-        <div class="tech-card" onclick="showTech('drill1')" style="border: 1px solid var(--reflex);">
-            <img src="drill_game_ui.jpg" class="bg-thumb">
+        <div class="tech-card" onclick="showTech('choke')" style="border: 1px solid #a855f7;">
             <div class="card-overlay">
                 <div class="card-info">
-                    <h3 style="color: var(--reflex);">REFLEX DRILL</h3>
-                    <p style="color: white;">FOCUS: Threat Detection</p>
-                    <div class="progress-container"><div class="progress-fill" style="width: 100%; background: var(--reflex);"></div></div>
+                    <h3>Rear Choke Escape</h3>
+                    <p>Level: Elite • Tomorrow</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-card" onclick="showTech('ground')" style="border: 1px solid #10b981;">
+            <div class="card-overlay">
+                <div class="card-info">
+                    <h3>Ground Defense</h3>
+                    <p>Level: Combat • Tomorrow</p>
                 </div>
             </div>
         </div>
@@ -230,19 +232,32 @@
                     <div class="img-wrapper"><img src="IMG_20260214_200132.jpg"></div>
                     <div class="step-box"><div class="step-title">Step 3: Release</div><div>Force off-balance and take the opponent down.</div></div>
                 `;
-            } else if(id === 'drill1') {
-                title.innerText = "THREAT DETECTION DRILL";
-                title.style.color = "var(--reflex)";
+            } else if(id === 'choke') {
+                title.innerText = "REAR CHOKE ESCAPE";
                 body.innerHTML = `
-                    <div class="img-wrapper" style="border-color: var(--reflex);"><img src="drill_game_ui.jpg"></div>
-                    <div class="step-box" style="border-left-color: var(--reflex);"><div class="step-title">Objective</div><div>Identify the threat (GO) vs distraction (NO-GO).</div></div>
-                    <div class="img-wrapper"><img src="IMG_20260215_014654.jpg"></div>
-                    <div class="img-wrapper"><img src="IMG_20260215_015207.jpg"></div>
-                    <div class="img-wrapper"><img src="IMG_20260215_015458.jpg"></div>
+                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
+                    <div class="step-box"><div class="step-title">Step 1: Create Air</div><div>Pull the attacker's arm down to create a gap for breathing.</div></div>
+                    <div class="step-box"><div class="step-title">Step 2: Step & Turn</div><div>Step behind the attacker and rotate your hips to break the hold.</div></div>
                 `;
-            } else {
-                title.innerText = "COMING SOON";
-                body.innerHTML = '<div class="step-box">Φωτογράφιση αύριο!</div>';
+            } else if(id === 'ground') {
+                title.innerText = "GROUND DEFENSE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
+                    <div class="step-box"><div class="step-title">Step 1: Shield</div><div>Use your legs to keep the attacker at a distance while on the ground.</div></div>
+                    <div class="step-box"><div class="step-title">Step 2: Technical Stand-up</div><div>Secure a safe path and stand up while maintaining a defensive posture.</div></div>
+                `;
+            } else if(id === 'wrist') {
+                title.innerText = "WRIST RELEASE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
+                    <div class="step-box"><div class="step-title">Step 1: Weak Point</div><div>Locate the thumb gap and rotate your wrist towards it.</div></div>
+                `;
+            } else if(id === 'hair') {
+                title.innerText = "HAIR GRAB DEFENSE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
+                    <div class="step-box"><div class="step-title">Step 1: Stabilize</div><div>Press the attacker's hand against your skull to prevent pulling.</div></div>
+                `;
             }
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
