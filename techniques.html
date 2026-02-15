@@ -171,10 +171,12 @@
         </div>
 
         <div class="tech-card" onclick="showTech('wrist')" style="border: 1px solid var(--gold);">
+            <img src="IMG_20260215_191602.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Wrist Release</h3>
-                    <p>Level: Intermediate • Tomorrow</p>
+                    <p>Level: Intermediate • 3 Steps</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 100%;"></div></div>
                 </div>
             </div>
         </div>
@@ -183,7 +185,7 @@
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Hair Grab Defense</h3>
-                    <p>Level: Advanced • Tomorrow</p>
+                    <p>Level: Advanced • Coming Soon</p>
                 </div>
             </div>
         </div>
@@ -192,7 +194,7 @@
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Rear Choke Escape</h3>
-                    <p>Level: Elite • Tomorrow</p>
+                    <p>Level: Elite • Coming Soon</p>
                 </div>
             </div>
         </div>
@@ -201,7 +203,7 @@
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Ground Defense</h3>
-                    <p>Level: Combat • Tomorrow</p>
+                    <p>Level: Combat • Coming Soon</p>
                 </div>
             </div>
         </div>
@@ -232,31 +234,55 @@
                     <div class="img-wrapper"><img src="IMG_20260214_200132.jpg"></div>
                     <div class="step-box"><div class="step-title">Step 3: Release</div><div>Force off-balance and take the opponent down.</div></div>
                 `;
-            } else if(id === 'choke') {
-                title.innerText = "REAR CHOKE ESCAPE";
-                body.innerHTML = `
-                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
-                    <div class="step-box"><div class="step-title">Step 1: Create Air</div><div>Pull the attacker's arm down to create a gap for breathing.</div></div>
-                    <div class="step-box"><div class="step-title">Step 2: Step & Turn</div><div>Step behind the attacker and rotate your hips to break the hold.</div></div>
-                `;
-            } else if(id === 'ground') {
-                title.innerText = "GROUND DEFENSE";
-                body.innerHTML = `
-                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
-                    <div class="step-box"><div class="step-title">Step 1: Shield</div><div>Use your legs to keep the attacker at a distance while on the ground.</div></div>
-                    <div class="step-box"><div class="step-title">Step 2: Technical Stand-up</div><div>Secure a safe path and stand up while maintaining a defensive posture.</div></div>
-                `;
-            } else if(id === 'wrist') {
+            } 
+            else if(id === 'wrist') {
                 title.innerText = "WRIST RELEASE";
                 body.innerHTML = `
-                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
-                    <div class="step-box"><div class="step-title">Step 1: Weak Point</div><div>Locate the thumb gap and rotate your wrist towards it.</div></div>
+                    <div class="img-wrapper">
+                        <img src="IMG_20260215_191602.jpg">
+                    </div>
+                    <div class="step-box">
+                        <div class="step-title">Step 1: Analyze the Grip</div>
+                        <div>The attacker secures a firm grip on the wrist. Identify the thumb gap, which is the weakest point of the hold.</div>
+                    </div>
+
+                    <div class="img-wrapper" style="border-color: var(--neon);">
+                        <img src="IMG_20260215_193002.jpg">
+                    </div>
+                    <div class="step-box" style="border-left-color: var(--neon);">
+                        <div class="step-title">Step 2: Downward Leverage</div>
+                        <div>Rotate your wrist toward the floor while using your free hand to drive the attacker's arm forward and down, breaking their posture.</div>
+                    </div>
+
+                    <div class="img-wrapper">
+                        <img src="IMG_20260215_193002.jpg">
+                    </div>
+                    <div class="step-box">
+                        <div class="step-title">Step 3: Release & Neutralize</div>
+                        <div>Fully release the wrist grip and use the downward momentum to bring the attacker low, neutralizing the threat.</div>
+                    </div>
                 `;
-            } else if(id === 'hair') {
+            } 
+            else if(id === 'choke') {
+                title.innerText = "REAR CHOKE ESCAPE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING SOON</span></div>
+                    <div class="step-box"><div class="step-title">Step 1: Create Air</div><div>Pull the attacker's arm down to create a gap for breathing.</div></div>
+                    <div class="step-box" style="border-left-color: var(--neon);"><div class="step-title">Step 2: Step & Turn</div><div>Step behind the attacker and rotate your hips to break the hold.</div></div>
+                `;
+            } 
+            else if(id === 'hair') {
                 title.innerText = "HAIR GRAB DEFENSE";
                 body.innerHTML = `
-                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING TOMORROW</span></div>
+                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING SOON</span></div>
                     <div class="step-box"><div class="step-title">Step 1: Stabilize</div><div>Press the attacker's hand against your skull to prevent pulling.</div></div>
+                `;
+            } 
+            else if(id === 'ground') {
+                title.innerText = "GROUND DEFENSE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING SOON</span></div>
+                    <div class="step-box"><div class="step-title">Step 1: Shield</div><div>Use your legs to keep the attacker at a distance while on the ground.</div></div>
                 `;
             }
             modal.style.display = 'block';
