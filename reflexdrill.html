@@ -119,42 +119,57 @@
             letter-spacing: 1px;
         }
 
-        /* LIGHTBOX SYSTEM */
+        /* LIGHTBOX SYSTEM - FIXED & CENTERED */
         #lightbox {
             display: none;
             position: fixed;
             z-index: 3000;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(2, 6, 23, 0.98);
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            justify-content: center; /* Vertical Center */
+            align-items: center; /* Horizontal Center */
             padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .lightbox-content {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         #lightbox img {
-            max-width: 100%;
+            width: 100%;
+            height: auto;
             max-height: 70vh;
             border-radius: 20px;
             border: 2px solid var(--gold);
+            object-fit: contain;
         }
 
         #lightboxDesc {
-            margin-top: 20px;
+            margin-top: 25px;
             color: var(--gold);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
             text-align: center;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
         }
 
         .close-lightbox {
             position: absolute;
-            top: 40px;
+            top: env(safe-area-inset-top, 40px);
             right: 30px;
             color: white;
-            font-size: 2.5rem;
+            font-size: 3rem;
+            line-height: 1;
             cursor: pointer;
+            z-index: 3001;
         }
 
         .btn-complete {
@@ -229,16 +244,19 @@
     </div>
 
     <div id="lightbox" onclick="closeLightbox()">
-        <span class="close-lightbox">&times;</span>
-        <img id="lightboxImg" src="">
-        <div id="lightboxDesc"></div>
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="">
+            <div id="lightboxDesc"></div>
+        </div>
     </div>
 
     <script>
         function openLightbox(src, desc) {
+            const lb = document.getElementById('lightbox');
             document.getElementById('lightboxImg').src = src;
             document.getElementById('lightboxDesc').innerText = desc;
-            document.getElementById('lightbox').style.display = 'flex';
+            lb.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
 
