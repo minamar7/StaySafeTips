@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reflex Drills - Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root { 
+            --gold: #facc15; 
+            --neon: #38bdf8; 
+            --bg: #020617; 
+            --reflex: #ef4444; 
+        }
+        
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: white; 
+            font-family: -apple-system, system-ui, sans-serif; 
+            padding: 20px;
+            padding-bottom: 120px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: env(safe-area-inset-top);
+        }
+
+        .back-btn {
+            color: var(--neon);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        h1 { color: var(--reflex); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; margin: 0; }
+
+        .drill-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .main-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid var(--reflex);
+            border-radius: 28px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .img-display {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-bottom: 2px solid var(--reflex);
+        }
+
+        .content-padding {
+            padding: 20px;
+        }
+
+        .objective-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--reflex);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .text-desc {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+
+        .btn-complete {
+            width: 100%;
+            background: var(--reflex);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+            margin-top: 20px;
+        }
+
+        .btn-complete:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="dojo.html" class="back-btn">← RETURN TO DOJO</a>
+        <h1>REFLEX TRAINING</h1>
+    </header>
+
+    <div class="drill-container">
+        <div class="main-card">
+            <img src="drill_game_ui.jpg" class="img-display" alt="Drill UI">
+            
+            <div class="content-padding">
+                <div class="objective-box">
+                    <span class="section-title">TRAINING OBJECTIVE</span>
+                    <p class="text-desc">Identify the threat in under 1 second. Differentiate between "GO" (Danger) and "NO-GO" (Distraction) signals.</p>
+                </div>
+
+                <span class="section-title">VISUAL EXAMPLES</span>
+                <div class="text-desc">Study the scenarios below and practice your rapid response time:</div>
+                
+                <div class="gallery-grid">
+                    <img src="IMG_20260215_014654.jpg" class="gallery-item">
+                    <img src="IMG_20260215_015207.jpg" class="gallery-item">
+                    <img src="IMG_20260215_015458.jpg" class="gallery-item">
+                    <div style="background: rgba(255,255,255,0.05); border-radius: 15px; display:flex; align-items:center; justify-content:center; font-size: 0.6rem; color: #64748b; text-align:center; padding: 5px;">MORE DRILLS<br>COMING SOON</div>
+                </div>
+
+                <button class="btn-complete" onclick="finishDrill()">Session Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function finishDrill() {
+            // Vibration feedback
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            
+            // Red/Gold/White Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ef4444', '#facc15', '#ffffff']
+            });
+
+            // Redirect to Dojo after 1.5s
+            setTimeout(() => {
+                window.location.href = 'dojo.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
