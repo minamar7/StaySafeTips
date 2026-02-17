@@ -182,10 +182,12 @@
         </div>
 
         <div class="tech-card" onclick="showTech('hair')" style="border: 1px solid #ff4444;">
+            <img src="IMG_20260217_191945.jpg" class="bg-thumb">
             <div class="card-overlay">
                 <div class="card-info">
                     <h3>Hair Grab Defense</h3>
-                    <p>Level: Advanced • Coming Soon</p>
+                    <p>Level: Advanced • 3 Steps</p>
+                    <div class="progress-container"><div class="progress-fill" style="width: 100%;"></div></div>
                 </div>
             </div>
         </div>
@@ -238,67 +240,32 @@
             else if(id === 'wrist') {
                 title.innerText = "WRIST RELEASE";
                 body.innerHTML = `
-                    <div class="img-wrapper">
-                        <img src="IMG_20260215_191602.jpg">
-                    </div>
-                    <div class="step-box">
-                        <div class="step-title">Step 1: Analyze the Grip</div>
-                        <div>The attacker secures a firm grip on the wrist. Identify the thumb gap, which is the weakest point of the hold.</div>
-                    </div>
-
-                    <div class="img-wrapper" style="border-color: var(--neon);">
-                        <img src="IMG_20260215_193002.jpg">
-                    </div>
-                    <div class="step-box" style="border-left-color: var(--neon);">
-                        <div class="step-title">Step 2: Downward Leverage</div>
-                        <div>Rotate your wrist toward the floor while using your free hand to drive the attacker's arm forward and down, breaking their posture.</div>
-                    </div>
-
-                    <div class="img-wrapper">
-                        <img src="IMG_20260215_193002.jpg">
-                    </div>
-                    <div class="step-box">
-                        <div class="step-title">Step 3: Release & Neutralize</div>
-                        <div>Fully release the wrist grip and use the downward momentum to bring the attacker low, neutralizing the threat.</div>
-                    </div>
+                    <div class="img-wrapper"><img src="IMG_20260215_191602.jpg"></div>
+                    <div class="step-box"><div class="step-title">Step 1: Analyze the Grip</div><div>The attacker secures a firm grip on the wrist. Identify the thumb gap.</div></div>
+                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260215_193002.jpg"></div>
+                    <div class="step-box" style="border-left-color: var(--neon);"><div class="step-title">Step 2: Downward Leverage</div><div>Rotate your wrist toward the floor while driving the attacker's arm down.</div></div>
+                    <div class="img-wrapper"><img src="IMG_20260215_193002.jpg"></div>
+                    <div class="step-box"><div class="step-title">Step 3: Release & Neutralize</div><div>Fully release the wrist grip and neutralize the threat.</div></div>
                 `;
             } 
+            else if(id === 'hair') {
+                title.innerText = "HAIR GRAB DEFENSE";
+                body.innerHTML = `
+                    <div class="img-wrapper"><img src="IMG_20260217_191945.jpg"></div>
+                    <div class="step-box"><div class="step-title">Step 1: Stabilize the Grip</div><div>Immediately press the attacker's hand firmly against your head with both hands.</div></div>
+                    <div class="img-wrapper" style="border-color: var(--neon);"><img src="IMG_20260217_212559.jpg"></div>
+                    <div class="step-box" style="border-left-color: var(--neon);"><div class="step-title">Step 2: Wrist Lock & Turn</div><div>While keeping the hand pinned, step back and rotate your body to apply a wrist lock.</div></div>
+                    <div class="img-wrapper"><img src="IMG_20260217_212701.jpg"></div>
+                    <div class="step-box"><div class="step-title">Step 3: Take Down</div><div>Continue the rotation and apply downward pressure to force the attacker to the ground.</div></div>
+                `;
+            }
             else if(id === 'choke') {
                 title.innerText = "REAR CHOKE ESCAPE";
                 body.innerHTML = `
                     <div class="img-wrapper"><span style="color:#64748b">PHOTO COMING SOON</span></div>
                     <div class="step-box"><div class="step-title">Step 1: Create Air</div><div>Pull the attacker's arm down to create a gap for breathing.</div></div>
-                    <div class="step-box" style="border-left-color: var(--neon);"><div class="step-title">Step 2: Step & Turn</div><div>Step behind the attacker and rotate your hips to break the hold.</div></div>
                 `;
-                        else if(id === 'hair') {
-                title.innerText = "HAIR GRAB DEFENSE";
-                body.innerHTML = `
-                    <div class="img-wrapper">
-                        <img src="IMG_20260217_191945.jpg">
-                    </div>
-                    <div class="step-box">
-                        <div class="step-title">Step 1: Stabilize the Grip</div>
-                        <div>Immediately press the attacker's hand firmly against your head with both of your hands to prevent them from pulling or jerking your hair.</div>
-                    </div>
-
-                    <div class="img-wrapper" style="border-color: var(--neon);">
-                        <img src="IMG_20260217_212559.jpg">
-                    </div>
-                    <div class="step-box" style="border-left-color: var(--neon);">
-                        <div class="step-title">Step 2: Wrist Lock & Turn</div>
-                        <div>While keeping the hand pinned, step back and rotate your body, applying a painful wrist lock to the attacker's hand.</div>
-                    </div>
-
-                    <div class="img-wrapper">
-                        <img src="IMG_20260217_212701.jpg">
-                    </div>
-                    <div class="step-box">
-                        <div class="step-title">Step 3: Take Down</div>
-                        <div>Continue the rotation and apply downward pressure to force the attacker to the ground, fully breaking the grip.</div>
-                    </div>
-                `;
-            }
-
+            } 
             else if(id === 'ground') {
                 title.innerText = "GROUND DEFENSE";
                 body.innerHTML = `
