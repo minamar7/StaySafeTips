@@ -2,19 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reflex Drills - Stay Safe Elite</title>
+    <title>Reflex Training - Stay Safe Elite</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4000056160039274" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
     <style>
         :root { 
             --gold: #facc15; 
             --neon: #38bdf8; 
             --bg: #020617; 
+            --card-bg: #0f172a;
             --reflex: #ef4444; 
-            --green: #22c55e;
         }
         
         body { 
@@ -23,13 +19,15 @@
             color: white; 
             font-family: -apple-system, system-ui, sans-serif; 
             padding: 20px;
-            padding-bottom: 140px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
         header {
             text-align: center;
             margin-bottom: 30px;
-            padding-top: env(safe-area-inset-top);
         }
 
         .back-btn {
@@ -42,121 +40,61 @@
             margin-bottom: 10px;
         }
 
-        h1 { color: var(--reflex); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; margin: 0; }
+        h1 { color: var(--gold); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; margin: 0; }
 
-        .drill-container { max-width: 500px; margin: 0 auto; }
-
-        .main-card {
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 28px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .content-padding { padding: 20px; }
-
-        .objective-box {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid var(--reflex);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-        }
-
-        .section-title {
-            color: var(--gold);
-            font-size: 0.8rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .drill-item { position: relative; cursor: pointer; }
-
-        .gallery-item {
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.1);
+        .drill-container {
+            background: var(--card-bg);
             width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
+            max-width: 400px;
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        #command-display {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--neon);
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--neon);
+            margin: 20px 0;
+        }
+
+        .start-btn {
+            background: var(--gold);
+            color: black;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
             transition: 0.3s;
         }
 
-        .gallery-item:active { transform: scale(0.95); opacity: 0.8; }
+        .start-btn:active { transform: scale(0.95); }
 
-        .drill-label {
-            font-size: 0.6rem;
-            color: var(--gold);
+        .status-bar {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
             text-transform: uppercase;
-            font-weight: 800;
-            margin-bottom: 5px;
-            display: block;
             letter-spacing: 1px;
         }
 
-        .tactical-tag {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            font-size: 0.45rem;
-            font-weight: 900;
-            pointer-events: none;
-            text-shadow: 1px 1px 2px black;
-        }
-
-        #lightbox {
-            display: none;
-            position: fixed;
-            z-index: 5000;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 6, 23, 0.98);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        #lightbox img {
-            width: 100%;
-            max-width: 450px;
-            border-radius: 20px;
-            border: 2px solid var(--gold);
-            transition: transform 0.3s ease;
-        }
-
-        #lightbox img.zoomed { transform: scale(2); }
-
-        .ad-banner-bottom {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: #000;
-            border-top: 1px solid var(--gold);
-            padding: 10px 0;
-            display: flex;
-            justify-content: center;
-            z-index: 4000;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .btn-complete {
-            width: 100%;
-            background: var(--reflex);
-            color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-top: 30px;
+        .drill-info {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -164,102 +102,59 @@
 
     <header>
         <a href="dojo.html" class="back-btn">← RETURN TO DOJO</a>
-        <h1>REFLEX TRAINING</h1>
+        <h1>REFLEX DRILL</h1>
     </header>
 
     <div class="drill-container">
-        <div class="main-card">
-            <img src="drill_game_ui.jpg" class="img-display" style="width:100%; aspect-ratio:16/9; object-fit:cover;" onclick="openLightbox(this.src, 'CORE INTERFACE')">
-            
-            <div class="content-padding">
-                <div class="objective-box">
-                    <span class="section-title">TRAINING OBJECTIVE</span>
-                    <p style="font-size:0.85rem; color:#cbd5e1; margin:0;">Identify threats, analyze body language, and locate exits in under 1 second.</p>
-                </div>
-
-                <div class="gallery-grid">
-                    <div class="drill-item">
-                        <span class="drill-label">#1 Detection</span>
-                        <img src="IMG_20260215_014654.jpg" class="gallery-item" onclick="openLightbox(this.src, 'THREAT DETECTION: GO')">
-                        <div class="tactical-tag" style="color:var(--neon)">SCANNING...</div>
-                    </div>
-
-                    <div class="drill-item">
-                        <span class="drill-label">#2 Body Language</span>
-                        <img src="IMG_20260215_015207.jpg" class="gallery-item" onclick="openLightbox(this.src, 'PRE-CONTACT CUES')">
-                        <div class="tactical-tag" style="color:var(--reflex)">WEAPON DETECTED</div>
-                    </div>
-
-                    <div class="drill-item">
-                        <span class="drill-label">#3 Reaction</span>
-                        <img src="IMG_20260215_015458.jpg" class="gallery-item" onclick="openLightbox(this.src, 'RAPID REACTION: ENGAGE')">
-                        <div class="tactical-tag" style="color:var(--gold)">ACTION NOW</div>
-                    </div>
-
-                    <div class="drill-item">
-                        <span class="drill-label">#4 Crowd Scan</span>
-                        <img src="IMG_20260215_150621.jpg" class="gallery-item" style="border: 1px solid var(--neon);" onclick="openLightbox(this.src, 'FIND AGGRESSOR: CROWD ANALYSIS')">
-                        <div class="tactical-tag" style="color:var(--neon)">TARGET ID</div>
-                    </div>
-
-                    <div class="drill-item">
-                        <span class="drill-label">#5 Exit Strategy</span>
-                        <img src="IMG_20260215_150644.jpg" class="gallery-item" style="border: 1px solid var(--green);" onclick="openLightbox(this.src, 'EVACUATE: LOCATE EXITS')">
-                        <div class="tactical-tag" style="color:var(--green)">EXIT LOCATED</div>
-                    </div>
-
-                    <div class="drill-item">
-                        <span class="drill-label">#6 Training Ad</span>
-                        <div class="gallery-item" style="background:#000; display:flex; align-items:center; justify-content:center; border: 1px solid var(--gold);">
-                            <span style="font-size:0.5rem; color:var(--gold); font-weight:900;">ADVERTISEMENT</span>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn-complete" onclick="finishDrill()">Session Complete</button>
-            </div>
-        </div>
+        <div class="status-bar" id="status">Ready to Train?</div>
+        <div id="command-display">PRESS START</div>
+        <button class="start-btn" id="drillBtn" onclick="toggleDrill()">Start Training</button>
     </div>
 
-    <div class="ad-banner-bottom">
-        <ins class="adsbygoogle"
-             style="display:inline-block;width:320px;height:50px"
-             data-ad-client="ca-pub-4000056160039274"
-             data-ad-slot="6359424861"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
-
-    <div id="lightbox" onclick="closeLightbox()">
-        <img id="lightboxImg" src="" onclick="event.stopPropagation(); toggleZoom(this)">
-        <div id="lightboxDesc" style="color:var(--gold); font-weight:900; margin-top:20px; text-transform:uppercase; text-align:center;"></div>
+    <div class="drill-info">
+        <p><strong>How to use:</strong> When you press Start, the app will give you random attack commands. React instantly with the correct defense move. This builds <strong>muscle memory</strong> and <strong>reaction speed</strong>.</p>
     </div>
 
     <script>
-        function openLightbox(src, desc) {
-            const lb = document.getElementById('lightbox');
-            const img = document.getElementById('lightboxImg');
-            img.src = src;
-            img.classList.remove('zoomed');
-            document.getElementById('lightboxDesc').innerText = desc;
-            lb.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+        let isRunning = false;
+        let drillInterval;
+        const commands = ["HEADLOCK!", "WRIST GRAB!", "HAIR GRAB!", "CHOKE!", "STRIKE!", "REACTION!"];
+        const display = document.getElementById('command-display');
+        const btn = document.getElementById('drillBtn');
+        const status = document.getElementById('status');
+
+        function toggleDrill() {
+            if (!isRunning) {
+                startDrill();
+            } else {
+                stopDrill();
+            }
         }
 
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        function startDrill() {
+            isRunning = true;
+            btn.innerText = "Stop Drill";
+            btn.style.background = "#ef4444"; // Reflex red
+            status.innerText = "Drill in progress...";
+            
+            drillInterval = setInterval(() => {
+                const randomCommand = commands[Math.floor(Math.random() * commands.length)];
+                display.innerText = randomCommand;
+                
+                // Flash effect
+                display.style.opacity = 0;
+                setTimeout(() => { display.style.opacity = 1; }, 50);
+                
+            }, 2500); // Change command every 2.5 seconds
         }
 
-        function toggleZoom(img) {
-            img.classList.toggle('zoomed');
-        }
-
-        function finishDrill() {
-            confetti({
-                particleCount: 150, spread: 70, origin: { y: 0.6 },
-                colors: ['#ef4444', '#facc15', '#38bdf8']
-            });
-            setTimeout(() => { window.location.href = 'dojo.html'; }, 1500);
+        function stopDrill() {
+            isRunning = false;
+            clearInterval(drillInterval);
+            btn.innerText = "Start Training";
+            btn.style.background = "var(--gold)";
+            status.innerText = "Ready to Train?";
+            display.innerText = "FINISHED";
         }
     </script>
 </body>
