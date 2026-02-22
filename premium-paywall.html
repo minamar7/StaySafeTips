@@ -115,7 +115,6 @@
       line-height: 1.4;
     }
 
-    /* CTA AREA */
     .cta {
       position: fixed;
       bottom: 16px;
@@ -248,19 +247,16 @@
 
 <div class="cta">
 
-  <!-- MONTHLY PLAN -->
   <div class="plan" onclick="selectPlan('monthly')">
     <div class="plan-title">€4.90 / month</div>
     <small>Full access • Cancel anytime</small>
   </div>
 
-  <!-- ANNUAL PLAN -->
   <div class="plan" onclick="selectPlan('annual')">
     <div class="plan-title">€44.90 / year</div>
     <small>Best value • Save 25%</small>
   </div>
 
-  <!-- LIFETIME PLAN -->
   <div class="plan" onclick="selectPlan('lifetime')">
     <div class="plan-title">€79.50 Lifetime</div>
     <small>One‑time payment • Permanent access</small>
@@ -285,19 +281,37 @@
     navigator.vibrate?.(30);
   }
 
-  function unlock() {
+  async function unlock() {
     navigator.vibrate?.([40,60,40]);
-    localStorage.setItem("ss_premium_plan", selected);
 
     const btn = document.querySelector(".unlock-btn");
-    btn.textContent = "Activating...";
+    btn.textContent = "Redirecting to Stripe...";
     btn.disabled = true;
     btn.style.opacity = .7;
 
-    setTimeout(() => {
-      alert("🎉 Stay Safe Elite Activated!");
-      location.href = "index.html";
-    }, 1200);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: selected })
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Something went wrong. Please try again.");
+        btn.textContent = "Unlock Elite Protection →";
+        btn.disabled = false;
+        btn.style.opacity = 1;
+      }
+    } catch (err) {
+      alert("Connection error. Try again.");
+      btn.textContent = "Unlock Elite Protection →";
+      btn.disabled = false;
+      btn.style.opacity = 1;
+    }
   }
 </script>
 
