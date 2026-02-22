@@ -27,7 +27,7 @@
     .paywall-container {
       max-width: 520px;
       margin: auto;
-      padding: 42px 18px 120px;
+      padding: 42px 18px 160px;
       animation: enter .8s ease;
     }
 
@@ -115,7 +115,7 @@
       line-height: 1.4;
     }
 
-    /* CTA */
+    /* CTA AREA */
     .cta {
       position: fixed;
       bottom: 16px;
@@ -131,29 +131,31 @@
       box-shadow: 0 -10px 40px rgba(0,0,0,.55);
     }
 
-    .price {
-      text-align: center;
+    .plan {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: 16px;
+      border-radius: 18px;
       margin-bottom: 14px;
+      cursor: pointer;
+      transition: .25s ease;
     }
 
-    .price del {
-      color: #64748b;
-      font-size: .9rem;
-      margin-right: 6px;
+    .plan:hover {
+      border-color: var(--gold);
+      background: rgba(255,255,255,.07);
+      transform: scale(1.02);
     }
 
-    .price strong {
-      font-size: 2.1rem;
-      font-weight: 900;
-    }
-
-    .price small {
-      display: block;
-      margin-top: 4px;
-      font-size: .7rem;
+    .plan-title {
+      font-size: 1.1rem;
       font-weight: 800;
-      color: var(--gold);
-      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+
+    .plan small {
+      font-size: .75rem;
+      color: #94a3b8;
     }
 
     .unlock-btn {
@@ -172,6 +174,7 @@
       align-items: center;
       transition: .2s ease;
       box-shadow: 0 14px 30px rgba(234,179,8,.3);
+      margin-top: 10px;
     }
 
     .unlock-btn:active {
@@ -193,17 +196,18 @@
 
 <div class="paywall-container">
   <header class="paywall-header">
-    <span class="premium-badge">Limited Offer</span>
+    <span class="premium-badge">Premium Access</span>
     <h1>Stay Safe Elite</h1>
-    <p class="subtitle">The ultimate protection shield — online & offline.</p>
+    <p class="subtitle">Advanced protection against real‑world threats, scams & AI fraud.</p>
   </header>
 
   <div class="benefits-grid">
+
     <div class="benefit-card">
       <div class="icon">🚨</div>
       <div>
-        <h3>Emergency Core</h3>
-        <p>Panic button, Live Location & SOS protocols.</p>
+        <h3>Emergency Intelligence</h3>
+        <p>Instant SOS, live location & crisis‑ready protocols.</p>
       </div>
     </div>
 
@@ -211,58 +215,79 @@
       <div class="icon">🛡️</div>
       <div>
         <h3>Security Deep Scan</h3>
-        <p>Device & social media vulnerability audit.</p>
+        <p>Detect weak points in your device & social accounts.</p>
       </div>
     </div>
 
     <div class="benefit-card">
       <div class="icon">🤖</div>
       <div>
-        <h3>AI Scam Protection</h3>
-        <p>Defense against phishing, deepfakes & AI fraud.</p>
+        <h3>AI Scam Defense</h3>
+        <p>Protection from deepfakes, voice cloning & phishing traps.</p>
       </div>
     </div>
 
     <div class="benefit-card">
       <div class="icon">🌐</div>
       <div>
-        <h3>Offline Survival</h3>
-        <p>Access critical info without internet or signal.</p>
+        <h3>Offline Survival Kit</h3>
+        <p>Critical safety knowledge even without signal or internet.</p>
       </div>
     </div>
 
     <div class="benefit-card">
       <div class="icon">✨</div>
       <div>
-        <h3>No Ads • Priority</h3>
-        <p>Ad-free experience & early access to features.</p>
+        <h3>No Ads • Priority Access</h3>
+        <p>Ad‑free experience & early access to new features.</p>
       </div>
     </div>
+
   </div>
 </div>
 
 <div class="cta">
-  <div class="price">
-    <del>€12.00</del>
-    <strong>€4.90</strong>
-    <small>ONE-TIME PAYMENT – Lifetime Access</small>
+
+  <!-- MONTHLY PLAN -->
+  <div class="plan" onclick="selectPlan('monthly')">
+    <div class="plan-title">€4.90 / month</div>
+    <small>Full access • Cancel anytime</small>
+  </div>
+
+  <!-- ANNUAL PLAN -->
+  <div class="plan" onclick="selectPlan('annual')">
+    <div class="plan-title">€44.90 / year</div>
+    <small>Best value • Save 25%</small>
+  </div>
+
+  <!-- LIFETIME PLAN -->
+  <div class="plan" onclick="selectPlan('lifetime')">
+    <div class="plan-title">€79.50 Lifetime</div>
+    <small>One‑time payment • Permanent access</small>
   </div>
 
   <button class="unlock-btn" onclick="unlock()">
-    Unlock Elite Access →
+    Unlock Elite Protection →
   </button>
 
   <div class="trust">
     <span>🔒 Secure</span>
     <span>⚡ Instant</span>
-    <span>⭐ Top Rated</span>
+    <span>⭐ Trusted Worldwide</span>
   </div>
 </div>
 
 <script>
+  let selected = "monthly";
+
+  function selectPlan(plan) {
+    selected = plan;
+    navigator.vibrate?.(30);
+  }
+
   function unlock() {
     navigator.vibrate?.([40,60,40]);
-    localStorage.setItem("ss_premium","true");
+    localStorage.setItem("ss_premium_plan", selected);
 
     const btn = document.querySelector(".unlock-btn");
     btn.textContent = "Activating...";
