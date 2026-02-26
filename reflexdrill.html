@@ -1,161 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <title>Reflex Training - Stay Safe Elite</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <style>
-        :root { 
-            --gold: #facc15; 
-            --neon: #38bdf8; 
-            --bg: #020617; 
-            --card-bg: #0f172a;
-            --reflex: #ef4444; 
-        }
-        
-        body { 
-            margin: 0; 
-            background: var(--bg); 
-            color: white; 
-            font-family: -apple-system, system-ui, sans-serif; 
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stay Safe – Reflex Drill</title>
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+<style>
+body {
+  margin: 0;
+  background: #0f0f0f;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
 
-        .back-btn {
-            color: var(--neon);
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
+.container {
+  padding: 20px;
+}
 
-        h1 { color: var(--gold); font-size: 1.5rem; letter-spacing: 2px; font-weight: 900; margin: 0; }
+h1 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #f5c542;
+}
 
-        .drill-container {
-            background: var(--card-bg);
-            width: 100%;
-            max-width: 400px;
-            border-radius: 30px;
-            padding: 30px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+#countdown {
+  font-size: 60px;
+  margin: 20px 0;
+  font-weight: bold;
+}
 
-        #command-display {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--neon);
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px var(--neon);
-            margin: 20px 0;
-        }
+#drillImage {
+  width: 90%;
+  max-width: 350px;
+  height: auto;
+  margin: 20px auto;
+  display: none;
+}
 
-        .start-btn {
-            background: var(--gold);
-            color: black;
-            border: none;
-            padding: 20px 40px;
-            border-radius: 50px;
-            font-weight: 900;
-            font-size: 1.2rem;
-            cursor: pointer;
-            width: 100%;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
+button {
+  padding: 12px 20px;
+  margin: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #f5c542;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-        .start-btn:active { transform: scale(0.95); }
+button:hover {
+  opacity: 0.9;
+}
 
-        .status-bar {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.5);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .drill-info {
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-    </style>
+footer {
+  margin-top: 30px;
+  font-size: 12px;
+  opacity: 0.5;
+}
+</style>
 </head>
+
 <body>
 
-    <header>
-        <a href="dojo.html" class="back-btn">← RETURN TO DOJO</a>
-        <h1>REFLEX DRILL</h1>
-    </header>
+<div class="container">
 
-    <div class="drill-container">
-        <div class="status-bar" id="status">Ready to Train?</div>
-        <div id="command-display">PRESS START</div>
-        <button class="start-btn" id="drillBtn" onclick="toggleDrill()">Start Training</button>
-    </div>
+<h1>Tang Soo Do Reflex Drill</h1>
 
-    <div class="drill-info">
-        <p><strong>How to use:</strong> When you press Start, the app will give you random attack commands. React instantly with the correct defense move. This builds <strong>muscle memory</strong> and <strong>reaction speed</strong>.</p>
-    </div>
+<div id="countdown"></div>
 
-    <script>
-        let isRunning = false;
-        let drillInterval;
-        const commands = ["HEADLOCK!", "WRIST GRAB!", "HAIR GRAB!", "CHOKE!", "STRIKE!", "REACTION!"];
-        const display = document.getElementById('command-display');
-        const btn = document.getElementById('drillBtn');
-        const status = document.getElementById('status');
+<img id="drillImage" src="">
 
-        function toggleDrill() {
-            if (!isRunning) {
-                startDrill();
-            } else {
-                stopDrill();
-            }
-        }
+<div>
+  <button onclick="startDrill()">Start</button>
+  <button onclick="startAuto()">Auto Mode</button>
+  <button onclick="stopAuto()">Stop</button>
+</div>
 
-        function startDrill() {
-            isRunning = true;
-            btn.innerText = "Stop Drill";
-            btn.style.background = "#ef4444"; // Reflex red
-            status.innerText = "Drill in progress...";
-            
-            drillInterval = setInterval(() => {
-                const randomCommand = commands[Math.floor(Math.random() * commands.length)];
-                display.innerText = randomCommand;
-                
-                // Flash effect
-                display.style.opacity = 0;
-                setTimeout(() => { display.style.opacity = 1; }, 50);
-                
-            }, 2500); // Change command every 2.5 seconds
-        }
+<footer>Stay Safe Training System</footer>
 
-        function stopDrill() {
-            isRunning = false;
-            clearInterval(drillInterval);
-            btn.innerText = "Start Training";
-            btn.style.background = "var(--gold)";
-            status.innerText = "Ready to Train?";
-            display.innerText = "FINISHED";
-        }
-    </script>
+</div>
+
+<script>
+
+const drills = [
+  { name: "Charyot", img: "images/tangsoo/charyot.png" },
+  { name: "Joonbi", img: "images/tangsoo/joonbi.png" },
+  { name: "Ap Kubi", img: "images/tangsoo/apkubi.png" },
+  { name: "Low Block", img: "images/tangsoo/lowblock.png" },
+  { name: "Middle Punch", img: "images/tangsoo/middlepunch.png" },
+  { name: "Knife Hand Block", img: "images/tangsoo/knifehand.png" }
+];
+
+let autoInterval = null;
+
+function startDrill() {
+  let counter = 3;
+  const countdown = document.getElementById("countdown");
+  const image = document.getElementById("drillImage");
+
+  image.style.display = "none";
+  countdown.innerHTML = counter;
+
+  const timer = setInterval(() => {
+    counter--;
+    if (counter > 0) {
+      countdown.innerHTML = counter;
+    } else {
+      clearInterval(timer);
+      countdown.innerHTML = "GO!";
+      showRandomDrill();
+      setTimeout(() => {
+        countdown.innerHTML = "";
+      }, 800);
+    }
+  }, 1000);
+}
+
+function showRandomDrill() {
+  const random = Math.floor(Math.random() * drills.length);
+  const image = document.getElementById("drillImage");
+
+  image.src = drills[random].img;
+  image.style.display = "block";
+}
+
+function startAuto() {
+  if (autoInterval) return;
+
+  startDrill();
+
+  autoInterval = setInterval(() => {
+    startDrill();
+  }, 6000);
+}
+
+function stopAuto() {
+  clearInterval(autoInterval);
+  autoInterval = null;
+}
+
+</script>
+
 </body>
 </html>
