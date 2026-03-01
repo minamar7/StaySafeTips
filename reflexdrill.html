@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stay Safe Elite – Reflex Drill Pro</title>
+<title>Stay Safe Elite – Reflex Drill</title>
 
 <style>
   :root {
@@ -17,7 +17,6 @@
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font-family: 'Segoe UI', Arial, sans-serif; text-align: center;
-    overflow-x: hidden;
   }
 
   .container {
@@ -45,7 +44,6 @@
   button { padding: 16px; border-radius: 12px; border: none; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 10px; }
   .btn-gold { background: var(--gold); color: black; }
   .btn-outline { background: #222; color: white; border: 1px solid #444; }
-  .btn-green { background: var(--green); color: white; border-radius: 0; margin-top: 0; }
 
   /* AdMob Banner Placeholder */
   #ad-banner {
@@ -69,7 +67,7 @@
             <img id="m-img" src="" style="height:100%; object-fit:contain;">
         </div>
         <div id="m-desc" style="padding:20px; text-align:left; font-size:13px; color:#bbb; line-height:1.6;"></div>
-        <button class="btn-green" onclick="closeModal()">LET'S GO!</button>
+        <button style="background:var(--green); color:white; border-radius:0; margin:0;" onclick="closeModal()">LET'S GO!</button>
     </div>
 </div>
 
@@ -98,21 +96,24 @@
     <button class="btn-gold" id="startBtn" onclick="startTraining()">START TRAINING</button>
     <button class="btn-outline" onclick="openGuide()">TECHNIQUE GUIDE</button>
 
-    <footer style="margin-top:30px; font-size:10px; opacity:0.3;">App ID: ca-app-pub-4000056160039274~9053144613</footer>
+    <footer style="margin-top:30px; font-size:10px; opacity:0.3;">
+        App ID: ca-app-pub-4000056160039274~9053144613
+    </footer>
 </div>
 
 <div id="ad-banner">ADMOB BANNER: ca-app-pub-4000056160039274/6359424861</div>
 
 <script>
-// CDN URL for reliable image loading from GitHub
+// CDN Path for reliable GitHub image delivery
 const BASE_URL = "https://cdn.jsdelivr.net/gh/minamar7/StaySafeTips@main/images/tangsoo/";
 
 const drills = [
-    { name: "Low Block", korean: "Ha Dan Mahk Kee", img: "lowblock.png", desc: "• Block downward in a circular motion.<br>• Protect the lower body areas.<br>• Keep the other hand tight on your hip." },
-    { name: "Middle Punch", korean: "Tung Dan Kong Kyuck", img: "middlepunch.png", desc: "• Strike toward the solar plexus.<br>• Rotate your fist at the last moment.<br>• Maintain a strong front stance." },
-    { name: "Knife Hand Block", korean: "Sudo Mahk Kee", img: "knifehand.png", desc: "• Use the edge of your palm.<br>• Keep fingers together and thumb tucked.<br>• Ideal for parrying incoming strikes." },
-    { name: "Front Kick", korean: "Ahp Chagee", img: "apkubi.png", desc: "• Lift your knee high (chamber).<br>• Strike with the ball of the foot.<br>• Snap back immediately after impact." },
-    { name: "Joon Bi Stance", korean: "Joon Be", img: "joonbi.png", desc: "• Feet shoulder-width apart.<br>• Fists in front of the belt.<br>• Ready for any movement." }
+    { name: "Low Block", korean: "Ha Dan Mahk Kee", img: "lowblock.png", desc: "• Block downward circular motion.<br>• Stay balanced." },
+    { name: "Middle Punch", korean: "Tung Dan Kong Kyuck", img: "middlepunch.png", desc: "• Target solar plexus.<br>• Strong rotation." },
+    { name: "Knife Hand Block", korean: "Sudo Mahk Kee", img: "knifehand.png", desc: "• Use hand edge.<br>• Back stance focus." },
+    { name: "Front Kick", korean: "Ahp Chagee", img: "apkubi.png", desc: "• Lift knee high.<br>• Strike with ball of foot." },
+    { name: "Charyot Stance", korean: "Charyot", img: "charyot.png", desc: "• Feet together.<br>• Hands at sides.<br>• Show respect." },
+    { name: "Joon Bi Stance", korean: "Joon Be", img: "joonbi.png", desc: "• Ready stance.<br>• Focused breathing." }
 ];
 
 let currentDrillCount = 0;
@@ -120,7 +121,6 @@ const totalDrillsInSet = 5;
 
 function openGuide() {
     const d = drills[Math.floor(Math.random() * drills.length)];
-    document.getElementById('m-title') ? document.getElementById('m-title').innerText = d.name.toUpperCase() : null;
     document.getElementById('m-desc').innerHTML = `<b style="color:var(--gold)">${d.korean}</b><br><br>${d.desc}`;
     document.getElementById('m-img').src = BASE_URL + d.img;
     document.getElementById('modalOverlay').style.display = 'flex';
@@ -138,17 +138,16 @@ function runCycle() {
         document.getElementById('successOverlay').style.display = 'flex';
         return;
     }
-
     document.getElementById('countdown').style.display = 'block';
     document.getElementById('drillImage').style.display = 'none';
     document.getElementById('drillName').innerText = "";
     
-    let timeLeft = 3;
-    const interval = setInterval(() => {
-        document.getElementById('countdown').innerText = timeLeft;
-        timeLeft--;
-        if (timeLeft < 0) {
-            clearInterval(interval);
+    let count = 3;
+    const timer = setInterval(() => {
+        document.getElementById('countdown').innerText = count;
+        count--;
+        if (count < 0) {
+            clearInterval(timer);
             showDrill();
         }
     }, 1000);
@@ -157,17 +156,15 @@ function runCycle() {
 function showDrill() {
     const d = drills[Math.floor(Math.random() * drills.length)];
     document.getElementById('countdown').style.display = 'none';
-    
     const img = document.getElementById('drillImage');
     img.src = BASE_URL + d.img;
     img.style.display = 'block';
     document.getElementById('drillName').innerHTML = `<span style="font-size:12px; opacity:0.6">${d.korean}</span><br>${d.name}`;
-
+    
     currentDrillCount++;
-    const percentage = (currentDrillCount / totalDrillsInSet) * 100;
-    document.getElementById('p-bar').style.width = percentage + "%";
+    document.getElementById('p-bar').style.width = (currentDrillCount / totalDrillsInSet * 100) + "%";
     document.getElementById('p-text').innerText = `Progress: ${currentDrillCount}/${totalDrillsInSet}`;
-
+    
     setTimeout(runCycle, 4000);
 }
 </script>
