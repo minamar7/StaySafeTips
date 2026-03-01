@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stay Safe Elite – Reflex Drill</title>
+<title>Stay Safe Elite – Reflex Drill Pro</title>
 
 <style>
   :root {
-    --gold: #f5c542; /* Stay Safe Gold branding */
+    --gold: #f5c542;
     --bg: #0f0f0f;
     --card: #1a1a1a;
     --green: #28a745;
@@ -17,23 +17,22 @@
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font-family: 'Segoe UI', Arial, sans-serif; text-align: center;
+    overflow-x: hidden;
   }
 
   .container {
     padding: 20px; max-width: 480px; margin: auto;
     min-height: 100vh; display: flex; flex-direction: column;
-    justify-content: center; padding-bottom: 90px; /* Space for AdMob Banner */
+    justify-content: center; padding-bottom: 100px;
   }
 
   h1 { color: var(--gold); text-transform: uppercase; letter-spacing: 3px; font-size: 26px; margin: 5px 0; }
   .subtitle { font-size: 11px; opacity: 0.6; text-transform: uppercase; margin-bottom: 20px; }
 
-  /* Progress Bar */
   .progress-wrapper { width: 90%; margin: 10px auto; }
   .progress-container { background: #333; height: 10px; border-radius: 10px; overflow: hidden; }
   .progress-bar { width: 0%; height: 100%; background: var(--gold); transition: width 0.4s; box-shadow: 0 0 10px var(--gold); }
 
-  /* Display Area */
   #display-area {
     height: 320px; border: 2px solid #222; border-radius: 20px;
     margin: 20px 0; display: flex; flex-direction: column;
@@ -43,10 +42,10 @@
   #drillImage { max-width: 85%; max-height: 220px; display: none; filter: drop-shadow(0 0 10px var(--gold)); }
   #countdown { font-size: 70px; font-weight: 900; color: var(--gold); }
 
-  /* Buttons */
   button { padding: 16px; border-radius: 12px; border: none; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 10px; }
   .btn-gold { background: var(--gold); color: black; }
   .btn-outline { background: #222; color: white; border: 1px solid #444; }
+  .btn-green { background: var(--green); color: white; border-radius: 0; margin-top: 0; }
 
   /* AdMob Banner Placeholder */
   #ad-banner {
@@ -55,10 +54,9 @@
     display: flex; justify-content: center; align-items: center; font-size: 10px; color: #444;
   }
 
-  /* Athlete Modal */
   .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 5000; justify-content: center; align-items: center; flex-direction: column; }
   .modal-card { background: #1a1a1a; width: 90%; max-width: 400px; border-radius: 20px; overflow: hidden; border: 1px solid #333; }
-  .athlete-frame { background: radial-gradient(circle, #333, #000); padding: 20px; height: 220px; }
+  .athlete-frame { background: radial-gradient(circle, #333, #000); padding: 20px; height: 220px; display: flex; justify-content: center; }
 </style>
 </head>
 
@@ -68,10 +66,10 @@
     <div class="modal-card">
         <div style="background:#252525; padding:15px; color:var(--gold); font-weight:bold; border-bottom:2px solid var(--gold);">TECHNIQUE GUIDE</div>
         <div class="athlete-frame">
-            <img id="m-img" src="https://raw.githubusercontent.com/minamar7/StaySafeTips/main/images/tangsoo/joonbi.png" style="height:100%; object-fit:contain;">
+            <img id="m-img" src="" style="height:100%; object-fit:contain;">
         </div>
-        <div id="m-desc" style="padding:20px; text-align:left; font-size:13px; color:#bbb; line-height:1.6;">Select a technique.</div>
-        <button style="background:var(--green); color:white; border-radius:0; margin:0;" onclick="closeModal()">LET'S GO!</button>
+        <div id="m-desc" style="padding:20px; text-align:left; font-size:13px; color:#bbb; line-height:1.6;"></div>
+        <button class="btn-green" onclick="closeModal()">LET'S GO!</button>
     </div>
 </div>
 
@@ -106,20 +104,23 @@
 <div id="ad-banner">ADMOB BANNER: ca-app-pub-4000056160039274/6359424861</div>
 
 <script>
-// Corrected Base URL for GitHub Images
-const BASE_URL = "https://raw.githubusercontent.com/minamar7/StaySafeTips/main/images/tangsoo/";
+// CDN URL for reliable image loading from GitHub
+const BASE_URL = "https://cdn.jsdelivr.net/gh/minamar7/StaySafeTips@main/images/tangsoo/";
 
 const drills = [
-    { name: "Low Block", korean: "Ha Dan Mahk Kee", img: "lowblock.png", desc: "• Cross arm to opposite shoulder.<br>• Strike downward.<br>• Pivot hips for power." },
-    { name: "Middle Punch", korean: "Tung Dan Kong Kyuck", img: "middlepunch.png", desc: "• Target solar plexus.<br>• Rotate fist 180°.<br>• Keep pulling hand tight." },
-    { name: "Knife Hand Block", korean: "Sudo Mahk Kee", img: "knifehand.png", desc: "• Use hand blade to deflect.<br>• Fingers tight.<br>• Maintain back stance." }
+    { name: "Low Block", korean: "Ha Dan Mahk Kee", img: "lowblock.png", desc: "• Block downward in a circular motion.<br>• Protect the lower body areas.<br>• Keep the other hand tight on your hip." },
+    { name: "Middle Punch", korean: "Tung Dan Kong Kyuck", img: "middlepunch.png", desc: "• Strike toward the solar plexus.<br>• Rotate your fist at the last moment.<br>• Maintain a strong front stance." },
+    { name: "Knife Hand Block", korean: "Sudo Mahk Kee", img: "knifehand.png", desc: "• Use the edge of your palm.<br>• Keep fingers together and thumb tucked.<br>• Ideal for parrying incoming strikes." },
+    { name: "Front Kick", korean: "Ahp Chagee", img: "apkubi.png", desc: "• Lift your knee high (chamber).<br>• Strike with the ball of the foot.<br>• Snap back immediately after impact." },
+    { name: "Joon Bi Stance", korean: "Joon Be", img: "joonbi.png", desc: "• Feet shoulder-width apart.<br>• Fists in front of the belt.<br>• Ready for any movement." }
 ];
 
-let currentDrill = 0;
-const totalDrills = 5;
+let currentDrillCount = 0;
+const totalDrillsInSet = 5;
 
 function openGuide() {
     const d = drills[Math.floor(Math.random() * drills.length)];
+    document.getElementById('m-title') ? document.getElementById('m-title').innerText = d.name.toUpperCase() : null;
     document.getElementById('m-desc').innerHTML = `<b style="color:var(--gold)">${d.korean}</b><br><br>${d.desc}`;
     document.getElementById('m-img').src = BASE_URL + d.img;
     document.getElementById('modalOverlay').style.display = 'flex';
@@ -133,19 +134,21 @@ function startTraining() {
 }
 
 function runCycle() {
-    if (currentDrill >= totalDrills) {
+    if (currentDrillCount >= totalDrillsInSet) {
         document.getElementById('successOverlay').style.display = 'flex';
         return;
     }
+
     document.getElementById('countdown').style.display = 'block';
     document.getElementById('drillImage').style.display = 'none';
+    document.getElementById('drillName').innerText = "";
     
-    let count = 3;
-    const timer = setInterval(() => {
-        document.getElementById('countdown').innerText = count;
-        count--;
-        if (count < 0) {
-            clearInterval(timer);
+    let timeLeft = 3;
+    const interval = setInterval(() => {
+        document.getElementById('countdown').innerText = timeLeft;
+        timeLeft--;
+        if (timeLeft < 0) {
+            clearInterval(interval);
             showDrill();
         }
     }, 1000);
@@ -154,15 +157,17 @@ function runCycle() {
 function showDrill() {
     const d = drills[Math.floor(Math.random() * drills.length)];
     document.getElementById('countdown').style.display = 'none';
+    
     const img = document.getElementById('drillImage');
-    img.src = BASE_URL + d.img; // Correctly pulls from GitHub
+    img.src = BASE_URL + d.img;
     img.style.display = 'block';
-    document.getElementById('drillName').innerText = d.name;
-    
-    currentDrill++;
-    document.getElementById('p-bar').style.width = (currentDrill / totalDrills * 100) + "%";
-    document.getElementById('p-text').innerText = `Progress: ${currentDrill}/${totalDrills}`;
-    
+    document.getElementById('drillName').innerHTML = `<span style="font-size:12px; opacity:0.6">${d.korean}</span><br>${d.name}`;
+
+    currentDrillCount++;
+    const percentage = (currentDrillCount / totalDrillsInSet) * 100;
+    document.getElementById('p-bar').style.width = percentage + "%";
+    document.getElementById('p-text').innerText = `Progress: ${currentDrillCount}/${totalDrillsInSet}`;
+
     setTimeout(runCycle, 4000);
 }
 </script>
