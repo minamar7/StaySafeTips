@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stay Safe – Reflex Drill Pro</title>
+<title>Stay Safe Elite – Reflex Drill Pro</title>
 
 <style>
   :root {
@@ -31,6 +31,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* Spacing for AdMob Bottom_Banner_Main */
+    padding-bottom: 80px; 
   }
 
   h1 {
@@ -130,7 +132,24 @@
   .btn-outline { background: #222; color: white; border: 1px solid #444; }
   .btn-green { background: var(--green); color: white; width: 100%; border-radius: 0; }
 
-  /* Overlays (Ads, Modals, Success) */
+  /* AdMob Banner Placeholder */
+  #admob-banner-space {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #333;
+    z-index: 1000;
+    font-size: 10px;
+    color: #444;
+  }
+
+  /* Overlays */
   .overlay {
     display: none;
     position: fixed;
@@ -175,7 +194,6 @@
     color: #bbb;
   }
 
-  /* Video Ad Simulator */
   #ad-box {
     width: 90%;
     height: 200px;
@@ -205,7 +223,7 @@
     <div class="modal-card">
         <div class="m-header" id="m-title">TECHNIQUE GUIDE</div>
         <div class="athlete-frame">
-            <img id="m-img" src="images/athlete_stance.png" style="width:100%; object-fit:contain;" alt="Technique View">
+            <img id="m-img" src="images/athlete_stance.png" style="width:100%; object-fit:contain;" alt="Athlete Pose">
         </div>
         <div class="m-body" id="m-desc">Select a technique to view details.</div>
         <button class="btn-green" onclick="closeModal()">LET'S GO!</button>
@@ -220,7 +238,7 @@
 </div>
 
 <div class="container" id="mainApp">
-    <h1>STAY SAFE</h1>
+    <h1>STAY SAFE ELITE</h1>
     <p class="subtitle">Tang Soo Do Training System</p>
 
     <div class="progress-wrapper">
@@ -242,7 +260,15 @@
     <footer>STAY SAFE TRAINING SYSTEM &copy; 2026</footer>
 </div>
 
+<div id="admob-banner-space">
+    ADMOB BANNER AREA
+</div>
+
 <script>
+/* AdMob Configuration Keys */
+const ADMOB_APP_ID = "ca-app-pub-4000056160039274~9053144613";
+const ADMOB_BANNER_ID = "ca-app-pub-4000056160039274/6359424861";
+
 /* Training Data */
 const drills = [
     { 
@@ -324,7 +350,6 @@ function triggerDrill() {
     currentDrillCount++;
     updateProgressBar();
 
-    // Next drill after 4 seconds of holding the technique
     setTimeout(runDrillCycle, 4000);
 }
 
@@ -340,7 +365,7 @@ function resetUI() {
     document.getElementById('drillName').innerText = "";
 }
 
-/* Ad Logic */
+/* Ad Logic for Interstitials/Rewarded */
 function showAd() {
     const adOverlay = document.getElementById('adOverlay');
     const adCounter = document.getElementById('adCounter');
