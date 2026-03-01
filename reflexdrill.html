@@ -1,147 +1,363 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stay Safe – Reflex Drill</title>
+<title>Stay Safe – Reflex Drill Pro</title>
 
 <style>
-body {
-  margin: 0;
-  background: #0f0f0f;
-  color: white;
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
+  :root {
+    --gold: #f5c542; /* Stay Safe Gold */
+    --bg: #0f0f0f;
+    --card: #1a1a1a;
+    --green: #28a745;
+    --text: #ffffff;
+  }
 
-.container {
-  padding: 20px;
-}
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+  }
 
-h1 {
-  margin-bottom: 10px;
-  font-size: 24px;
-  color: #f5c542;
-}
+  .container {
+    padding: 20px;
+    max-width: 480px;
+    margin: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-#countdown {
-  font-size: 60px;
-  margin: 20px 0;
-  font-weight: bold;
-}
+  h1 {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 5px;
+    font-size: 26px;
+  }
 
-#drillImage {
-  width: 90%;
-  max-width: 350px;
-  height: auto;
-  margin: 20px auto;
-  display: none;
-}
+  .subtitle {
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
 
-button {
-  padding: 12px 20px;
-  margin: 8px;
-  border: none;
-  border-radius: 8px;
-  background: #f5c542;
-  color: black;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-}
+  /* Progress Tracker */
+  .progress-wrapper {
+    width: 90%;
+    margin: 10px auto;
+  }
+  .progress-container {
+    background: #333;
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--gold);
+    transition: width 0.4s ease;
+    box-shadow: 0 0 10px var(--gold);
+  }
+  #p-text {
+    font-size: 10px;
+    color: var(--gold);
+    margin-top: 5px;
+    text-align: right;
+  }
 
-button:hover {
-  opacity: 0.9;
-}
+  /* Training Display */
+  #display-area {
+    height: 300px;
+    border: 2px solid #222;
+    border-radius: 20px;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #111;
+    position: relative;
+  }
 
-footer {
-  margin-top: 30px;
-  font-size: 12px;
-  opacity: 0.5;
-}
+  #drillImage {
+    max-width: 85%;
+    max-height: 200px;
+    display: none;
+    filter: drop-shadow(0 0 10px rgba(245, 197, 66, 0.2));
+  }
+
+  #drillName {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: var(--gold);
+  }
+
+  #countdown {
+    font-size: 70px;
+    font-weight: 900;
+    color: var(--gold);
+  }
+
+  /* Buttons */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  button {
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    text-transform: uppercase;
+  }
+  button:active { transform: scale(0.98); }
+  
+  .btn-gold { background: var(--gold); color: black; }
+  .btn-outline { background: #222; color: white; border: 1px solid #444; }
+  .btn-green { background: var(--green); color: white; width: 100%; border-radius: 0; }
+
+  /* Overlays (Ads, Modals, Success) */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 5000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .modal-card {
+    background: #1a1a1a;
+    width: 85%;
+    max-width: 380px;
+    border-radius: 25px;
+    overflow: hidden;
+    border: 1px solid #333;
+  }
+
+  .m-header {
+    background: #252525;
+    padding: 15px;
+    color: var(--gold);
+    font-weight: bold;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .athlete-frame {
+    background: radial-gradient(circle, #333 0%, #000 100%);
+    padding: 30px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .m-body {
+    padding: 20px;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #bbb;
+  }
+
+  /* Video Ad Simulator */
+  #ad-box {
+    width: 90%;
+    height: 200px;
+    background: #000;
+    border: 1px solid var(--gold);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+
+  footer { margin-top: 40px; font-size: 10px; opacity: 0.3; }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<h1>Tang Soo Do Reflex Drill</h1>
-
-<div id="countdown"></div>
-
-<img id="drillImage" src="">
-
-<div>
-  <button onclick="startDrill()">Start</button>
-  <button onclick="startAuto()">Auto Mode</button>
-  <button onclick="stopAuto()">Stop</button>
+<div id="adOverlay" class="overlay">
+    <div style="color: var(--gold); font-size: 12px; margin-bottom: 10px;">ADVERTISEMENT - SUPPORTING FREE DOJOS</div>
+    <div id="ad-box">
+        <div id="adCounter" style="font-size: 1.2rem; font-family: monospace;">Loading Video...</div>
+    </div>
+    <p style="font-size: 11px; opacity: 0.6;">Your results will be unlocked shortly</p>
 </div>
 
-<footer>Stay Safe Training System</footer>
+<div id="modalOverlay" class="overlay" style="background: rgba(0,0,0,0.9);">
+    <div class="modal-card">
+        <div class="m-header" id="m-title">TECHNIQUE GUIDE</div>
+        <div class="athlete-frame">
+            <img id="m-img" src="images/athlete_stance.png" style="width:100%; object-fit:contain;" alt="Technique View">
+        </div>
+        <div class="m-body" id="m-desc">Select a technique to view details.</div>
+        <button class="btn-green" onclick="closeModal()">LET'S GO!</button>
+    </div>
+</div>
 
+<div id="successOverlay" class="overlay">
+    <div style="font-size: 60px; margin-bottom: 10px;">🥇</div>
+    <h1 style="color: var(--gold);">SESSION COMPLETE!</h1>
+    <p style="margin-bottom: 30px; opacity: 0.8;">Excellent discipline, Sabomnim.</p>
+    <button class="btn-gold" style="width: auto; padding: 15px 50px;" onclick="location.reload()">RESTART</button>
+</div>
+
+<div class="container" id="mainApp">
+    <h1>STAY SAFE</h1>
+    <p class="subtitle">Tang Soo Do Training System</p>
+
+    <div class="progress-wrapper">
+        <div class="progress-container"><div id="p-bar" class="progress-bar"></div></div>
+        <div id="p-text">Progress: 0/5</div>
+    </div>
+
+    <div id="display-area">
+        <div id="countdown">READY</div>
+        <img id="drillImage" src="">
+        <div id="drillName"></div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-gold" id="startBtn" onclick="startTraining()">START TRAINING</button>
+        <button class="btn-outline" onclick="openGuide()">TECHNIQUE GUIDE</button>
+    </div>
+
+    <footer>STAY SAFE TRAINING SYSTEM &copy; 2026</footer>
 </div>
 
 <script>
-
+/* Training Data */
 const drills = [
-  { name: "Charyot", img: "images/tangsoo/charyot.png" },
-  { name: "Joonbi", img: "images/tangsoo/joonbi.png" },
-  { name: "Ap Kubi", img: "images/tangsoo/apkubi.png" },
-  { name: "Low Block", img: "images/tangsoo/lowblock.png" },
-  { name: "Middle Punch", img: "images/tangsoo/middlepunch.png" },
-  { name: "Knife Hand Block", img: "images/tangsoo/knifehand.png" }
+    { 
+        name: "Low Block", 
+        korean: "Ha Dan Mahk Kee", 
+        img: "images/tangsoo/lowblock.png", 
+        desc: "• Cross your blocking arm to the opposite shoulder.<br>• Strike downward in a circular motion.<br>• Rotate your hips into the block for maximum stability." 
+    },
+    { 
+        name: "Middle Punch", 
+        korean: "Tung Dan Kong Kyuck", 
+        img: "images/tangsoo/punch.png", 
+        desc: "• Punch directly toward the solar plexus center line.<br>• Twist your fist 180° at the point of impact.<br>• Keep the pulling hand tight against your hip." 
+    },
+    { 
+        name: "Knife Hand Block", 
+        korean: "Sudo Mahk Kee", 
+        img: "images/tangsoo/knifehand.png", 
+        desc: "• Use the edge of your palm to deflect strikes.<br>• Finger tips should be level with your eyes.<br>• Maintain a solid back stance (Dwit Kubi)." 
+    },
+    { 
+        name: "Front Kick", 
+        korean: "Ahp Chagee", 
+        img: "images/tangsoo/kick.png", 
+        desc: "• Chamber your knee high toward the chest.<br>• Strike with the ball of the foot.<br>• Snap the kick back immediately after impact." 
+    }
 ];
 
-let autoInterval = null;
+let currentDrillCount = 0;
+const totalDrillsInSet = 5;
 
-function startDrill() {
-  let counter = 3;
-  const countdown = document.getElementById("countdown");
-  const image = document.getElementById("drillImage");
+/* Modal Logic */
+function openGuide() {
+    const d = drills[Math.floor(Math.random() * drills.length)];
+    document.getElementById('m-title').innerText = d.name.toUpperCase();
+    document.getElementById('m-desc').innerHTML = `<b style="color:var(--gold)">${d.korean}</b><br><br>${d.desc}`;
+    document.getElementById('modalOverlay').style.display = 'flex';
+}
 
-  image.style.display = "none";
-  countdown.innerHTML = counter;
+function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
 
-  const timer = setInterval(() => {
-    counter--;
-    if (counter > 0) {
-      countdown.innerHTML = counter;
-    } else {
-      clearInterval(timer);
-      countdown.innerHTML = "GO!";
-      showRandomDrill();
-      setTimeout(() => {
-        countdown.innerHTML = "";
-      }, 800);
+/* Training Logic */
+function startTraining() {
+    document.getElementById('startBtn').style.visibility = 'hidden';
+    runDrillCycle();
+}
+
+function runDrillCycle() {
+    if (currentDrillCount >= totalDrillsInSet) {
+        showAd();
+        return;
     }
-  }, 1000);
+
+    resetUI();
+    let timeLeft = 3;
+    const cdDisplay = document.getElementById('countdown');
+    
+    const interval = setInterval(() => {
+        cdDisplay.innerText = timeLeft;
+        timeLeft--;
+        if (timeLeft < 0) {
+            clearInterval(interval);
+            triggerDrill();
+        }
+    }, 1000);
 }
 
-function showRandomDrill() {
-  const random = Math.floor(Math.random() * drills.length);
-  const image = document.getElementById("drillImage");
+function triggerDrill() {
+    const d = drills[Math.floor(Math.random() * drills.length)];
+    document.getElementById('countdown').style.display = 'none';
+    
+    const img = document.getElementById('drillImage');
+    const nameText = document.getElementById('drillName');
+    
+    img.src = d.img;
+    img.style.display = 'block';
+    nameText.innerHTML = `<span style="font-size:12px; opacity:0.6">${d.korean}</span><br>${d.name}`;
 
-  image.src = drills[random].img;
-  image.style.display = "block";
+    currentDrillCount++;
+    updateProgressBar();
+
+    // Next drill after 4 seconds of holding the technique
+    setTimeout(runDrillCycle, 4000);
 }
 
-function startAuto() {
-  if (autoInterval) return;
-
-  startDrill();
-
-  autoInterval = setInterval(() => {
-    startDrill();
-  }, 6000);
+function updateProgressBar() {
+    const percentage = (currentDrillCount / totalDrillsInSet) * 100;
+    document.getElementById('p-bar').style.width = percentage + "%";
+    document.getElementById('p-text').innerText = `Progress: ${currentDrillCount}/${totalDrillsInSet}`;
 }
 
-function stopAuto() {
-  clearInterval(autoInterval);
-  autoInterval = null;
+function resetUI() {
+    document.getElementById('countdown').style.display = 'block';
+    document.getElementById('drillImage').style.display = 'none';
+    document.getElementById('drillName').innerText = "";
 }
 
+/* Ad Logic */
+function showAd() {
+    const adOverlay = document.getElementById('adOverlay');
+    const adCounter = document.getElementById('adCounter');
+    adOverlay.style.display = 'flex';
+    
+    let adTime = 6; 
+    const adTicker = setInterval(() => {
+        adTime--;
+        adCounter.innerText = "Video Ending in: " + adTime + "s";
+        if (adTime <= 0) {
+            clearInterval(adTicker);
+            adOverlay.style.display = 'none';
+            document.getElementById('successOverlay').style.display = 'flex';
+        }
+    }, 1000);
+}
 </script>
 
 </body>
-</html> 
+</html>
