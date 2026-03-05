@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Stay Safe Elite – Tang Soo Do</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --gold: #f5c542;
+  --gold2: #ffda70;
+  --red: #e8212a;
+  --bg: #080810;
+  --card: #10101c;
+  --panel: #14141f;
+  --green: #1db954;
+  --text: #f0ede8;
+  --dim: #4a4a6a;
+  --border: #1e1e2e;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND ── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232,33,42,0.08) 0%, transparent 70%),
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px);
+  pointer-events:none; z-index:0;
+}
+
+/* ── LAYOUT ── */
+.app {
+  position:relative; z-index:1;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 80px 0;
+}
+
+/* ── HEADER ── */
+.header {
+  padding: 18px 20px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--border);
+}
+.header-left {}
+.app-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  line-height: 1;
+}
+.app-sub {
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.session-badge {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-align: right;
+}
+.session-badge span { color: var(--gold); font-weight:700; }
+
+/* ── PROGRESS ── */
+.progress-section {
+  padding: 12px 20px 8px;
+}
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.progress-row span { color: var(--gold); }
+.progress-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), var(--gold));
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 8px rgba(245,197,66,0.5);
+}
+
+/* ── 3D AVATAR STAGE ── */
+.avatar-stage {
+  position: relative;
+  margin: 8px 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--border);
+  height: 300px;
+}
+
+#three-mount { width:100%; height:100%; }
+
+.stage-overlay {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.phase-badge {
+  align-self: flex-end;
+  background: rgba(8,8,16,0.85);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+.phase-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  line-height: 1;
+}
+.phase-ko {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  margin-top: 1px;
+}
+
+.stage-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+/* Step dots */
+.step-dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--dim);
+  transition: all 0.3s;
+}
+.dot.active { background: var(--gold); box-shadow: 0 0 6px var(--gold); width:10px; border-radius:3px; }
+
+/* Avatar controls */
+.avatar-controls {
+  display: flex;
+  gap: 6px;
+  pointer-events: all;
+}
+.av-btn {
+  background: rgba(8,8,16,0.85);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+.av-btn:active, .av-btn.on { border-color: var(--gold); color: var(--gold); }
+
+/* Loading state */
+.stage-loader {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  background: var(--card);
+  z-index: 10;
+  transition: opacity 0.5s;
+}
+.loader-text { font-size: 10px; letter-spacing: 3px; color: var(--dim); text-transform: uppercase; }
+.loader-bar-wrap { width:120px; height:2px; background:var(--border); border-radius:2px; }
+.loader-bar { height:100%; background:var(--red); border-radius:2px; width:0%; transition: width 0.3s; }
+.no-model-msg { font-size:11px; letter-spacing:2px; color:var(--dim); text-align:center; padding:20px; line-height:1.8; }
+
+/* ── DRILL INFO CARD ── */
+.drill-card {
+  margin: 0 20px 8px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+}
+.drill-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: rgba(232,33,42,0.12);
+  border: 1px solid rgba(232,33,42,0.2);
+  display: flex; align-items:center; justify-content:center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.drill-info { flex: 1; }
+.drill-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  line-height: 1;
+}
+.drill-korean {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.drill-desc {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Countdown */
+.countdown-display {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 90px;
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(245,197,66,0.4);
+  line-height: 1;
+  letter-spacing: 4px;
+}
+
+/* ── BUTTONS ── */
+.btn-row {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(245,197,66,0.25);
+}
+.btn-primary:active { transform: scale(0.98); box-shadow: none; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+.btn-secondary:active { border-color: var(--gold); color: var(--gold); }
+
+/* ── TECHNIQUE MODAL ── */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 5000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--card);
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
+.modal-header {
+  background: var(--panel);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 3px;
+  color: var(--gold);
+}
+.modal-close {
+  background: none; border: 1px solid var(--border);
+  color: var(--dim); width:28px; height:28px; border-radius:6px;
+  cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;
+}
+
+/* 3D modal avatar */
+#modal-three-mount {
+  width: 100%;
+  height: 200px;
+  background: radial-gradient(circle, #1a1a2e, #080810);
+}
+
+.modal-body { padding: 16px 18px; }
+.modal-drill-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px; letter-spacing:2px; color:var(--gold);
+}
+.modal-drill-ko {
+  font-size:10px; letter-spacing:3px; color:var(--dim); margin-bottom:10px; text-transform:uppercase;
+}
+.modal-desc { font-size:13px; color:#aaa; line-height:1.6; }
+
+/* Phase steps in modal */
+.modal-steps {
+  display:flex; gap:6px; flex-wrap:wrap;
+  margin-top:12px;
+}
+.modal-step {
+  font-size:9px; letter-spacing:1.5px; padding:4px 10px;
+  border:1px solid var(--border); color:var(--dim); border-radius:3px;
+  text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+}
+.modal-step:hover, .modal-step.active-step {
+  border-color:var(--gold); color:var(--gold); background:rgba(245,197,66,0.08);
+}
+
+.btn-go {
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 0 0 20px 20px;
+  padding: 16px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px; letter-spacing:3px;
+  cursor:pointer; width:100%;
+  transition: all 0.2s;
+}
+.btn-go:active { filter: brightness(0.9); }
+
+/* ── SUCCESS ── */
+#successOverlay {
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.trophy { font-size: 70px; animation: bounce 0.6s ease infinite alternate; }
+@keyframes bounce { from { transform:translateY(0); } to { transform:translateY(-12px); } }
+.success-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:36px; letter-spacing:5px; color:var(--gold);
+}
+.success-sub { font-size:12px; letter-spacing:3px; color:var(--dim); text-transform:uppercase; }
+
+/* ── NAV BAR ── */
+.nav-bar {
+  position: fixed; bottom:0; left:50%;
+  transform: translateX(-50%);
+  width: 100%; max-width:480px;
+  background: rgba(10,10,16,0.95);
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding: 8px 0 12px;
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  gap:3px; cursor:pointer; padding:4px 0;
+}
+.nav-icon { font-size:20px; }
+.nav-label { font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; }
+.nav-item.active .nav-label { color:var(--gold); }
+.nav-item.active .nav-icon { filter: drop-shadow(0 0 4px var(--gold)); }
+</style>
+</head>
+<body>
+
+<!-- TECHNIQUE GUIDE MODAL -->
+<div id="modalOverlay" class="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">TECHNIQUE GUIDE</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-three-mount"></div>
+    <div class="modal-body">
+      <div class="modal-drill-name" id="m-name">High Block</div>
+      <div class="modal-drill-ko" id="m-ko">상단막기 · Sang Dan Makgi</div>
+      <div class="modal-desc" id="m-desc">Raise your forearm above your head at a 45° angle to deflect downward strikes. Chamber first, then drive upward with power.</div>
+      <div class="modal-steps" id="modal-steps"></div>
+    </div>
+    <button class="btn-go" onclick="closeModal()">LET'S TRAIN!</button>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div id="successOverlay" class="overlay">
+  <div class="trophy">🏆</div>
+  <div class="success-title">SESSION COMPLETE</div>
+  <div class="success-sub">훈련 완료 · Training Done</div>
+  <button class="btn-primary" style="width:200px;margin-top:8px;" onclick="location.reload()">RESTART</button>
+</div>
+
+<!-- MAIN APP -->
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="app-title">STAY SAFE ELITE</div>
+      <div class="app-sub">Tang Soo Do Training System</div>
+    </div>
+    <div class="session-badge">
+      DRILL <span id="drill-counter">0</span>/<span id="drill-total">5</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-row">
+      <span>Session Progress</span>
+      <span id="p-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="p-bar"></div>
+    </div>
+  </div>
+
+  <!-- 3D AVATAR STAGE -->
+  <div class="avatar-stage">
+    <div id="three-mount"></div>
+
+    <!-- Loading -->
+    <div class="stage-loader" id="stage-loader">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:var(--gold);">당수도</div>
+      <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
+      <div class="loader-text" id="loader-text">Loading avatar...</div>
+    </div>
+
+    <!-- Overlay HUD -->
+    <div class="stage-overlay">
+      <div class="phase-badge">
+        <div class="phase-name" id="phase-name">READY</div>
+        <div class="phase-ko" id="phase-ko">준비 자세</div>
+      </div>
+      <div class="stage-bottom">
+        <div class="step-dots" id="step-dots"></div>
+        <div class="avatar-controls">
+          <button class="av-btn on" id="av-auto" onclick="toggleAvatarAuto()">⟳</button>
+          <button class="av-btn" onclick="avatarPrev()">◀</button>
+          <button class="av-btn" onclick="avatarNext()">▶</button>
+          <button class="av-btn" id="av-orbit" onclick="toggleOrbit()">↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRILL CARD -->
+  <div class="drill-card" id="drill-card">
+    <div class="drill-icon" id="drill-icon">🥋</div>
+    <div class="drill-info">
+      <div class="drill-name" id="drill-name-display">READY TO TRAIN</div>
+      <div class="drill-korean" id="drill-ko-display">준비 · Stand by</div>
+      <div class="drill-desc" id="drill-desc-display">Press START TRAINING to begin your session</div>
+    </div>
+    <div class="countdown-display" id="countdown" style="display:none;">3</div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="btn-row">
+    <button class="btn-primary" id="startBtn" onclick="startTraining()">START TRAINING</button>
+    <button class="btn-secondary" onclick="openGuide()">TECHNIQUE GUIDE</button>
+  </div>
+
+</div>
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <div class="nav-item active">
+    <div class="nav-icon">🥋</div>
+    <div class="nav-label">Train</div>
+  </div>
+  <div class="nav-item">
+    <div class="nav-icon">📋</div>
+    <div class="nav-label">Drills</div>
+  </div>
+  <div class="nav-item">
+    <div class="nav-icon">📊</div>
+    <div class="nav-label">Progress</div>
+  </div>
+  <div class="nav-item">
+    <div class="nav-icon">⚙️</div>
+    <div class="nav-label">Settings</div>
+  </div>
+</div>
+
+<!-- THREE.JS -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ─── GLB PATH — update this to your GitHub Pages path ───────────────────────
+const GLB_PATH = 'avatar.glb'; // e.g. '/StaySafeTips/images/tangsoo/avatar.glb'
+
+const DEG = Math.PI / 180;
+
+// ─── HIGH BLOCK PHASES ───────────────────────────────────────────────────────
+const phases = [
+  {
+    name:'READY', ko:'준비 자세', dur:1800,
+    bones:{
+      RightArm:    new THREE.Euler(20*DEG,0,-35*DEG),
+      RightForeArm:new THREE.Euler(70*DEG,0,0),
+      RightHand:   new THREE.Euler(0,0,-10*DEG),
+      LeftArm:     new THREE.Euler(20*DEG,0,35*DEG),
+      LeftForeArm: new THREE.Euler(70*DEG,0,0),
+      LeftHand:    new THREE.Euler(0,0,10*DEG),
+      Spine:       new THREE.Euler(0,0,0),
+      Spine1:      new THREE.Euler(0,0,0),
+      Head:        new THREE.Euler(-2*DEG,0,0),
+    }
+  },
+  {
+    name:'CHAMBER', ko:'당겨 · Chamber', dur:900,
+    bones:{
+      RightArm:    new THREE.Euler(0,-10*DEG,-80*DEG),
+      RightForeArm:new THREE.Euler(90*DEG,0,0),
+      RightHand:   new THREE.Euler(0,0,0),
+      LeftArm:     new THREE.Euler(50*DEG,0,45*DEG),
+      LeftForeArm: new THREE.Euler(40*DEG,0,0),
+      LeftHand:    new THREE.Euler(0,0,5*DEG),
+      Spine:       new THREE.Euler(5*DEG,0,0),
+      Spine1:      new THREE.Euler(3*DEG,0,0),
+      Head:        new THREE.Euler(-5*DEG,0,0),
+    }
+  },
+  {
+    name:'RISING', ko:'올리기 · Rising', dur:550,
+    bones:{
+      RightArm:    new THREE.Euler(95*DEG,0,-55*DEG),
+      RightForeArm:new THREE.Euler(25*DEG,0,0),
+      RightHand:   new THREE.Euler(0,0,15*DEG),
+      LeftArm:     new THREE.Euler(30*DEG,0,50*DEG),
+      LeftForeArm: new THREE.Euler(80*DEG,0,0),
+      LeftHand:    new THREE.Euler(0,0,5*DEG),
+      Spine:       new THREE.Euler(5*DEG,0,-5*DEG),
+      Spine1:      new THREE.Euler(3*DEG,0,-2*DEG),
+      Head:        new THREE.Euler(-8*DEG,0,5*DEG),
+    }
+  },
+  {
+    name:'HIGH BLOCK!', ko:'상단막기 · Sang Dan Makgi', dur:1000,
+    bones:{
+      RightArm:    new THREE.Euler(148*DEG,0,-48*DEG),
+      RightForeArm:new THREE.Euler(10*DEG,28*DEG,18*DEG),
+      RightHand:   new THREE.Euler(0,0,28*DEG),
+      LeftArm:     new THREE.Euler(40*DEG,0,70*DEG),
+      LeftForeArm: new THREE.Euler(60*DEG,0,0),
+      LeftHand:    new THREE.Euler(0,0,0),
+      Spine:       new THREE.Euler(8*DEG,0,-8*DEG),
+      Spine1:      new THREE.Euler(5*DEG,0,-3*DEG),
+      Head:        new THREE.Euler(-10*DEG,0,8*DEG),
+    }
+  },
+  {
+    name:'HOLD', ko:'유지 · Yuji', dur:1500,
+    bones:{
+      RightArm:    new THREE.Euler(143*DEG,0,-46*DEG),
+      RightForeArm:new THREE.Euler(12*DEG,26*DEG,17*DEG),
+      RightHand:   new THREE.Euler(0,0,27*DEG),
+      LeftArm:     new THREE.Euler(38*DEG,0,68*DEG),
+      LeftForeArm: new THREE.Euler(62*DEG,0,0),
+      LeftHand:    new THREE.Euler(0,0,0),
+      Spine:       new THREE.Euler(7*DEG,0,-7*DEG),
+      Spine1:      new THREE.Euler(4*DEG,0,-2*DEG),
+      Head:        new THREE.Euler(-9*DEG,0,7*DEG),
+    }
+  }
+];
+
+// Build step dots
+const dotsEl = document.getElementById('step-dots');
+phases.forEach((_,i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' active':'');
+  d.id = `dot${i}`;
+  dotsEl.appendChild(d);
+});
+
+// Build modal steps
+const modalStepsEl = document.getElementById('modal-steps');
+phases.forEach((p,i) => {
+  const s = document.createElement('div');
+  s.className = 'modal-step' + (i===0?' active-step':'');
+  s.id = `mstep${i}`;
+  s.textContent = p.name;
+  s.onclick = () => { setModalPhase(i); };
+  modalStepsEl.appendChild(s);
+});
+
+// ─── SETUP TWO SCENES: main + modal ─────────────────────────────────────────
+function createScene(mountId, height) {
+  const mount = document.getElementById(mountId);
+  const w = mount.offsetWidth || 440;
+  const h = height;
+
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.shadowMap.enabled = true;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  mount.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 100);
+  camera.position.set(0, 1.3, 2.8);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0.95, 0);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 1.2;
+  controls.maxDistance = 5;
+  controls.maxPolarAngle = Math.PI * 0.80;
+  controls.autoRotate = false;
+  controls.autoRotateSpeed = 1.5;
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x334466, 1.4));
+  const key = new THREE.DirectionalLight(0xfff0e8, 2.2);
+  key.position.set(2,4,3); key.castShadow = true;
+  key.shadow.mapSize.set(1024,1024);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0x3366ff, 0.5);
+  fill.position.set(-3,2,-1); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xe8212a, 0.7);
+  rim.position.set(0,3,-4); scene.add(rim);
+  const gnd = new THREE.PointLight(0xe8212a, 0.3, 4);
+  gnd.position.set(0,0.1,0); scene.add(gnd);
+
+  // Floor
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(10,10),
+    new THREE.MeshStandardMaterial({ color:0x0c0c1a, roughness:0.9 })
+  );
+  floor.rotation.x = -Math.PI/2; floor.receiveShadow = true;
+  scene.add(floor);
+  const grid = new THREE.GridHelper(8,16,0x161628,0x161628);
+  grid.position.y = 0.002; scene.add(grid);
+
+  return { renderer, scene, camera, controls };
+}
+
+// ─── MAIN SCENE ──────────────────────────────────────────────────────────────
+const main = createScene('three-mount', 300);
+let mainBones = {}, mainRest = {};
+let mainPhase = 0, mainAuto = true, mainOrbit = false;
+let mainTimer = null;
+let tweenFrom={}, tweenTo={}, tweenStart=null, tweenDur=500, isTweening=false;
+
+// Particles
+const pCount = 50;
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(pCount*3);
+const pSpd = [];
+for(let i=0;i<pCount;i++){
+  pPos[i*3]=(Math.random()-0.5)*1.2;
+  pPos[i*3+1]=Math.random()*2.2;
+  pPos[i*3+2]=(Math.random()-0.5)*1.2;
+  pSpd.push(0.003+Math.random()*0.004);
+}
+pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+const pMat = new THREE.PointsMaterial({color:0xe8212a,size:0.012,transparent:true,opacity:0.0,blending:THREE.AdditiveBlending,depthWrite:false});
+const particles = new THREE.Points(pGeo,pMat);
+main.scene.add(particles);
+
+// ─── MODAL SCENE ──────────────────────────────────────────────────────────────
+const modal = createScene('modal-three-mount', 200);
+modal.camera.position.set(0,1.2,2.4);
+modal.controls.target.set(0,0.9,0);
+modal.controls.autoRotate = true;
+let modalBones = {}, modalRest = {};
+let modalPhase = 3; // show block pose by default
+
+// ─── LOAD GLB into both scenes ───────────────────────────────────────────────
+const loader = new GLTFLoader();
+let loadedGLTF = null;
+
+function cloneAndSetup(gltf, sceneObj, bonesRef, restRef) {
+  const m = gltf.scene.clone(true);
+  m.traverse(child => {
+    if(child.isMesh){ child.castShadow=true; child.receiveShadow=true; }
+  });
+  // Collect bones from skeleton
+  m.traverse(child => {
+    if(child.isSkinnedMesh && child.skeleton){
+      child.skeleton.bones.forEach(b => { if(b.name) bonesRef[b.name]=b; });
+    }
+    if(child.isBone || child.type==='Bone') bonesRef[child.name]=child;
+  });
+
+  Object.keys(bonesRef).forEach(n => { restRef[n]=bonesRef[n].rotation.clone(); });
+
+  const box = new THREE.Box3().setFromObject(m);
+  const size = box.getSize(new THREE.Vector3());
+  const sc = 1.75/size.y;
+  m.scale.setScalar(sc);
+  const center = box.getCenter(new THREE.Vector3());
+  m.position.set(-center.x*sc, -box.min.y*sc, -center.z*sc);
+
+  sceneObj.scene.add(m);
+  return m;
+}
+
+function setLoaderBar(v){ document.getElementById('loader-bar').style.width=v+'%'; }
+function setLoaderText(t){ document.getElementById('loader-text').textContent=t; }
+
+loader.load(
+  GLB_PATH,
+  (gltf) => {
+    loadedGLTF = gltf;
+    setLoaderText('Setting up...');setLoaderBar(85);
+
+    cloneAndSetup(gltf, main, mainBones, mainRest);
+    cloneAndSetup(gltf, modal, modalBones, modalRest);
+
+    setLoaderBar(100);
+    setTimeout(()=>{
+      const ldr = document.getElementById('stage-loader');
+      ldr.style.opacity='0';
+      setTimeout(()=>ldr.style.display='none',500);
+      applyMainPhase(0, true);
+      applyModalPhase(3, true);
+      scheduleMainAuto();
+    },300);
+  },
+  (p)=>{
+    const pct = Math.round((p.loaded/(p.total||838196))*80)+5;
+    setLoaderBar(pct);
+    setLoaderText(`Loading... ${Math.round(p.loaded/1024)}KB`);
+  },
+  ()=>{
+    setLoaderText('avatar.glb not found');
+    document.getElementById('stage-loader').innerHTML =
+      `<div class="no-model-msg">📁 Place <b>avatar.glb</b><br>in the same folder as this HTML<br><span style="color:var(--dim);font-size:9px;letter-spacing:1px;">or update GLB_PATH at the top of script</span></div>`;
+  }
+);
+
+// ─── BONE ANIMATION ──────────────────────────────────────────────────────────
+function easeInOut(t){ return t<0.5?2*t*t:-1+(4-2*t)*t; }
+
+function startTween(bonesRef, restRef, phaseIdx, fast=false){
+  const ph = phases[phaseIdx];
+  const from={}, to={};
+  Object.entries(ph.bones).forEach(([n,e])=>{
+    if(!bonesRef[n]) return;
+    from[n]={x:bonesRef[n].rotation.x, y:bonesRef[n].rotation.y, z:bonesRef[n].rotation.z};
+    const r=restRef[n]||new THREE.Euler();
+    to[n]={x:r.x+e.x, y:r.y+e.y, z:r.z+e.z};
+  });
+  return {from,to,start:performance.now(),dur:fast?250:(phaseIdx===3?300:480)};
+}
+
+function tickTween(tw, bonesRef, now){
+  if(!tw) return false;
+  const t=Math.min((now-tw.start)/tw.dur,1);
+  const e=easeInOut(t);
+  Object.keys(tw.to).forEach(n=>{
+    if(!bonesRef[n]) return;
+    bonesRef[n].rotation.x=tw.from[n].x+(tw.to[n].x-tw.from[n].x)*e;
+    bonesRef[n].rotation.y=tw.from[n].y+(tw.to[n].y-tw.from[n].y)*e;
+    bonesRef[n].rotation.z=tw.from[n].z+(tw.to[n].z-tw.from[n].z)*e;
+  });
+  return t>=1;
+}
+
+// Main scene
+let mainTween=null;
+function applyMainPhase(idx, instant=false){
+  mainPhase=idx;
+  const ph=phases[idx];
+  document.getElementById('phase-name').textContent=ph.name;
+  document.getElementById('phase-ko').textContent=ph.ko;
+  for(let i=0;i<5;i++){
+    const d=document.getElementById(`dot${i}`);
+    if(d) d.className='dot'+(i===idx?' active':'');
+  }
+  pMat.opacity = idx>=2?(idx===3?0.65:0.35):0.04;
+  if(!instant && Object.keys(mainBones).length>0){
+    mainTween=startTween(mainBones,mainRest,idx);
+  } else if(instant && Object.keys(mainBones).length>0){
+    const ph=phases[idx];
+    Object.entries(ph.bones).forEach(([n,e])=>{
+      if(!mainBones[n]) return;
+      const r=mainRest[n]||new THREE.Euler();
+      mainBones[n].rotation.set(r.x+e.x,r.y+e.y,r.z+e.z);
+    });
+  }
+}
+
+function scheduleMainAuto(){
+  if(!mainAuto) return;
+  clearTimeout(mainTimer);
+  mainTimer=setTimeout(()=>{
+    mainPhase=(mainPhase+1)%phases.length;
+    applyMainPhase(mainPhase);
+    scheduleMainAuto();
+  }, phases[mainPhase].dur);
+}
+
+window.avatarNext=()=>{ clearTimeout(mainTimer); mainPhase=(mainPhase+1)%phases.length; applyMainPhase(mainPhase); if(mainAuto) scheduleMainAuto(); };
+window.avatarPrev=()=>{ clearTimeout(mainTimer); mainPhase=(mainPhase-1+phases.length)%phases.length; applyMainPhase(mainPhase); if(mainAuto) scheduleMainAuto(); };
+window.toggleAvatarAuto=()=>{
+  mainAuto=!mainAuto;
+  document.getElementById('av-auto').className='av-btn'+(mainAuto?' on':'');
+  if(mainAuto) scheduleMainAuto(); else clearTimeout(mainTimer);
+};
+window.toggleOrbit=()=>{
+  mainOrbit=!mainOrbit;
+  main.controls.autoRotate=mainOrbit;
+  document.getElementById('av-orbit').className='av-btn'+(mainOrbit?' on':'');
+};
+
+// Modal scene
+let modalTween=null;
+function applyModalPhase(idx, instant=false){
+  modalPhase=idx;
+  for(let i=0;i<5;i++){
+    const s=document.getElementById(`mstep${i}`);
+    if(s) s.className='modal-step'+(i===idx?' active-step':'');
+  }
+  if(!instant && Object.keys(modalBones).length>0){
+    modalTween=startTween(modalBones,modalRest,idx);
+  } else if(instant && Object.keys(modalBones).length>0){
+    const ph=phases[idx];
+    Object.entries(ph.bones).forEach(([n,e])=>{
+      if(!modalBones[n]) return;
+      const r=modalRest[n]||new THREE.Euler();
+      modalBones[n].rotation.set(r.x+e.x,r.y+e.y,r.z+e.z);
+    });
+  }
+}
+window.setModalPhase=(idx)=>applyModalPhase(idx);
+
+// ─── RENDER LOOP ──────────────────────────────────────────────────────────────
+function animate(t){
+  requestAnimationFrame(animate);
+  // Tween main
+  if(mainTween){ const done=tickTween(mainTween,mainBones,t); if(done) mainTween=null; }
+  // Tween modal
+  if(modalTween){ const done=tickTween(modalTween,modalBones,t); if(done) modalTween=null; }
+
+  main.controls.update();
+  modal.controls.update();
+
+  // Particles
+  const pa=pGeo.attributes.position;
+  for(let i=0;i<pCount;i++){ pa.array[i*3+1]+=pSpd[i]; if(pa.array[i*3+1]>2.5) pa.array[i*3+1]=0; }
+  pa.needsUpdate=true;
+
+  main.renderer.render(main.scene,main.camera);
+  modal.renderer.render(modal.scene,modal.camera);
+}
+animate(0);
+
+// Resize
+window.addEventListener('resize',()=>{
+  const mnt=document.getElementById('three-mount');
+  const w=mnt.offsetWidth;
+  main.camera.aspect=w/300; main.camera.updateProjectionMatrix();
+  main.renderer.setSize(w,300);
+  modal.camera.aspect=w/200; modal.camera.updateProjectionMatrix();
+  modal.renderer.setSize(w,200);
+});
+
+</script>
+
+<!-- DRILL LOGIC -->
+<script>
+const BASE_URL = "/StaySafeTips/images/tangsoo/";
+
+const drills = [
+  { name:"High Block",     korean:"Sang Dan Makgi",       icon:"🛡️", desc:"Raise forearm above head at 45°. Chamber first, drive upward with power to deflect downward strikes.", phase:3 },
+  { name:"Low Block",      korean:"Ha Dan Mahk Kee",       icon:"⬇️", desc:"Cross arm to opposite shoulder, sweep down sharply to block low kicks.", phase:0 },
+  { name:"Middle Punch",   korean:"Tung Dan Kong Kyuck",   icon:"👊", desc:"Drive fist straight to solar plexus height. Rotate hips for maximum power.", phase:0 },
+  { name:"Knife Hand Block",korean:"Sudo Mahk Kee",        icon:"✋", desc:"Use the blade edge of your hand. Sweep outward from ear height.", phase:0 },
+  { name:"Front Kick",     korean:"Ahp Chagee",            icon:"🦵", desc:"Chamber knee high first. Snap foot forward, rechamber before setting down.", phase:0 },
+];
+
+let currentDrill = 0;
+const totalDrills = 5;
+document.getElementById('drill-total').textContent = totalDrills;
+
+window.openGuide = function() {
+  const d = drills[Math.floor(Math.random()*drills.length)];
+  document.getElementById('m-name').textContent = d.name;
+  document.getElementById('m-ko').textContent = d.korean;
+  document.getElementById('m-desc').textContent = d.desc;
+  // Set modal avatar to relevant phase
+  if(typeof applyModalPhase !== 'undefined'){
+    // applyModalPhase is defined in module — use global bridge
+  }
+  window._setModalPhase && window._setModalPhase(d.phase !== undefined ? d.phase : 3);
+  document.getElementById('modalOverlay').classList.add('open');
+};
+
+window.closeModal = function() {
+  document.getElementById('modalOverlay').classList.remove('open');
+};
+
+window.startTraining = function() {
+  document.getElementById('startBtn').style.display='none';
+  runCycle();
+};
+
+function updateProgress() {
+  const pct = Math.round((currentDrill/totalDrills)*100);
+  document.getElementById('p-bar').style.width = pct+'%';
+  document.getElementById('p-pct').textContent = pct+'%';
+  document.getElementById('drill-counter').textContent = currentDrill;
+}
+
+function runCycle() {
+  if(currentDrill >= totalDrills){
+    document.getElementById('successOverlay').classList.add('open');
+    return;
+  }
+
+  // Show countdown in drill card
+  const cd = document.getElementById('countdown');
+  const nameEl = document.getElementById('drill-name-display');
+  const koEl = document.getElementById('drill-ko-display');
+  const descEl = document.getElementById('drill-desc-display');
+  const iconEl = document.getElementById('drill-icon');
+
+  cd.style.display = 'block';
+  nameEl.textContent = 'GET READY';
+  koEl.textContent = '준비 · Prepare';
+  descEl.textContent = '';
+  iconEl.textContent = '⏱️';
+
+  let count = 3;
+  cd.textContent = count;
+  const timer = setInterval(()=>{
+    count--;
+    if(count > 0){
+      cd.textContent = count;
+    } else {
+      clearInterval(timer);
+      cd.style.display = 'none';
+      showDrill();
+    }
+  }, 1000);
+}
+
+function showDrill() {
+  const d = drills[Math.floor(Math.random()*drills.length)];
+
+  document.getElementById('drill-name-display').textContent = d.name.toUpperCase();
+  document.getElementById('drill-ko-display').textContent = d.korean;
+  document.getElementById('drill-desc-display').textContent = d.desc;
+  document.getElementById('drill-icon').textContent = d.icon;
+
+  // Drive the 3D avatar to show this technique
+  if(window.setModalPhase) window.setModalPhase(d.phase||3);
+
+  currentDrill++;
+  updateProgress();
+  setTimeout(runCycle, 4000);
+}
+</script>
+</body>
+</html>
