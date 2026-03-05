@@ -1,371 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Stay Safe Elite – Tang Soo Do</title>
+<title>Stay Safe Elite – Tang Soo Do Avatar</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --gold: #f5c542;
-  --gold2: #ffda70;
-  --red: #e8212a;
-  --bg: #080810;
-  --card: #10101c;
-  --panel: #14141f;
-  --green: #1db954;
-  --text: #f0ede8;
-  --dim: #4a4a6a;
-  --border: #1e1e2e;
+  --gold: #f5c542; --red: #e8212a; --bg: #080810; --card: #10101c;
+  --text: #f0ede8; --dim: #4a4a6a; --border: #1e1e2e;
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+.app { max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 80px; }
+.header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.app-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--gold); letter-spacing: 2px; }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-body::before {
-  content:'';
-  position:fixed; inset:0;
-  background:
-    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232,33,42,0.08) 0%, transparent 70%),
-    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px),
-    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.01) 40px, rgba(255,255,255,0.01) 41px);
-  pointer-events:none; z-index:0;
-}
-
-.app {
-  position:relative; z-index:1;
-  max-width: 480px;
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 0 0 80px 0;
-}
-
-.header {
-  padding: 18px 20px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-bottom: 1px solid var(--border);
-}
-.app-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 4px;
-  color: var(--gold);
-  line-height: 1;
-}
-.app-sub {
-  font-size: 9px;
-  letter-spacing: 4px;
-  color: var(--dim);
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-.session-badge {
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--dim);
-  text-align: right;
-}
-.session-badge span { color: var(--gold); font-weight:700; }
-
-.progress-section { padding: 12px 20px 8px; }
-.progress-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--dim);
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.progress-row span { color: var(--gold); }
-.progress-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--red), var(--gold));
-  border-radius: 2px; width: 0%;
-  transition: width 0.5s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 0 8px rgba(245,197,66,0.5);
-}
-
-/* ── AVATAR STAGE ── */
+/* AVATAR STAGE */
 .avatar-stage {
-  position: relative;
-  margin: 8px 20px;
-  border-radius: 16px;
-  overflow: hidden;
-  background: var(--card);
-  border: 1px solid var(--border);
-  height: 300px;
+  position: relative; margin: 15px 20px; border-radius: 16px;
+  background: radial-gradient(circle at center, #1a1a2e 0%, #080810 100%);
+  border: 1px solid var(--border); height: 350px; overflow: hidden;
 }
 #three-mount { width:100%; height:100%; }
 
 .stage-overlay {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 12px;
+  position: absolute; inset: 0; pointer-events: none;
+  display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
 }
-.phase-badge {
-  align-self: flex-end;
-  background: rgba(8,8,16,0.85);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 6px 12px;
-}
-.phase-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 15px;
-  letter-spacing: 2px;
-  color: var(--gold);
-  line-height: 1;
-}
-.phase-ko { font-size: 9px; letter-spacing: 2px; color: var(--dim); margin-top: 1px; }
-.stage-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
-.step-dots { display: flex; gap: 5px; align-items: center; }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); transition: all 0.3s; }
-.dot.active { background: var(--gold); box-shadow: 0 0 6px var(--gold); width:10px; border-radius:3px; }
-.avatar-controls { display: flex; gap: 6px; pointer-events: all; }
+.phase-badge { align-self: flex-start; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--gold); }
+.phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--gold); }
+
+.avatar-controls { pointer-events: auto; display: flex; gap: 10px; align-self: flex-end; }
 .av-btn {
-  background: rgba(8,8,16,0.85);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 10px; letter-spacing: 1px;
-  padding: 5px 10px; border-radius: 5px;
-  cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+  background: var(--card); border: 1px solid var(--border); color: white;
+  padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 12px;
 }
-.av-btn:active, .av-btn.on { border-color: var(--gold); color: var(--gold); }
+.av-btn:active { border-color: var(--gold); }
 
-.stage-loader {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 10px; background: var(--card); z-index: 10;
-  transition: opacity 0.5s; border-radius: 16px;
+.loader {
+  position: absolute; inset:0; background: var(--bg); display: flex; 
+  flex-direction: column; align-items: center; justify-content: center; z-index: 10;
 }
-.loader-text { font-size: 10px; letter-spacing: 3px; color: var(--dim); text-transform: uppercase; }
-.loader-bar-wrap { width:120px; height:2px; background:var(--border); border-radius:2px; }
-.loader-bar { height:100%; background:var(--red); border-radius:2px; width:0%; transition: width 0.3s; }
-.no-model-msg { font-size:11px; letter-spacing:2px; color:var(--dim); text-align:center; padding:20px; line-height:1.8; }
-
-/* ── DRILL CARD ── */
-.drill-card {
-  margin: 0 20px 8px;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px 18px;
-  display: flex; align-items: center; gap: 14px; min-height: 72px;
-}
-.drill-icon {
-  width: 42px; height: 42px; border-radius: 10px;
-  background: rgba(232,33,42,0.12); border: 1px solid rgba(232,33,42,0.2);
-  display: flex; align-items:center; justify-content:center;
-  font-size: 22px; flex-shrink: 0;
-}
-.drill-info { flex: 1; }
-.drill-name { font-family:'Bebas Neue',sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--gold); line-height: 1; }
-.drill-korean { font-size: 10px; letter-spacing: 2px; color: var(--dim); text-transform: uppercase; margin-top: 2px; }
-.drill-desc { font-size: 11px; color: #888; margin-top: 4px; letter-spacing: 0.5px; }
-.countdown-display {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 90px; color: var(--gold);
-  text-shadow: 0 0 30px rgba(245,197,66,0.4);
-  line-height: 1; letter-spacing: 4px;
-}
-
-.btn-row { padding: 0 20px; display: flex; flex-direction: column; gap: 8px; }
-.btn-primary {
-  background: var(--gold); color: #0a0a0a; border: none;
-  border-radius: 12px; padding: 16px;
-  font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px;
-  cursor: pointer; width: 100%; transition: all 0.2s;
-  box-shadow: 0 4px 20px rgba(245,197,66,0.25);
-}
-.btn-primary:active { transform: scale(0.98); box-shadow: none; }
-.btn-secondary {
-  background: transparent; color: var(--text); border: 1px solid var(--border);
-  border-radius: 12px; padding: 13px;
-  font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 3px;
-  cursor: pointer; width: 100%; transition: all 0.2s;
-}
-.btn-secondary:active { border-color: var(--gold); color: var(--gold); }
-
-/* ── MODAL ── */
-.overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.92); z-index: 5000;
-  justify-content: center; align-items: center; padding: 20px;
-  backdrop-filter: blur(4px);
-}
-.overlay.open { display: flex; }
-.modal {
-  background: var(--card); width: 100%; max-width: 400px;
-  border-radius: 20px; overflow: hidden;
-  border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-}
-.modal-header {
-  background: var(--panel); padding: 14px 18px;
-  display: flex; justify-content: space-between; align-items: center;
-  border-bottom: 1px solid var(--border);
-}
-.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--gold); }
-.modal-close {
-  background: none; border: 1px solid var(--border); color: var(--dim);
-  width:28px; height:28px; border-radius:6px; cursor:pointer;
-  font-size:14px; display:flex; align-items:center; justify-content:center;
-}
-#modal-three-mount { width: 100%; height: 200px; background: radial-gradient(circle, #1a1a2e, #080810); }
-.modal-body { padding: 16px 18px; }
-.modal-drill-name { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--gold); }
-.modal-drill-ko { font-size:10px; letter-spacing:3px; color:var(--dim); margin-bottom:10px; text-transform:uppercase; }
-.modal-desc { font-size:13px; color:#aaa; line-height:1.6; }
-.modal-steps { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; }
-.modal-step {
-  font-size:9px; letter-spacing:1.5px; padding:4px 10px;
-  border:1px solid var(--border); color:var(--dim); border-radius:3px;
-  text-transform:uppercase; cursor:pointer; transition:all 0.2s;
-}
-.modal-step:hover, .modal-step.active-step { border-color:var(--gold); color:var(--gold); background:rgba(245,197,66,0.08); }
-.btn-go {
-  background: var(--green); color: white; border: none;
-  border-radius: 0 0 20px 20px; padding: 16px;
-  font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:3px;
-  cursor:pointer; width:100%; transition: all 0.2s;
-}
-.btn-go:active { filter: brightness(0.9); }
-
-/* ── SUCCESS ── */
-#successOverlay { flex-direction: column; gap: 16px; text-align: center; }
-.trophy { font-size: 70px; animation: bounce 0.6s ease infinite alternate; }
-@keyframes bounce { from { transform:translateY(0); } to { transform:translateY(-12px); } }
-.success-title { font-family:'Bebas Neue',sans-serif; font-size:36px; letter-spacing:5px; color:var(--gold); }
-.success-sub { font-size:12px; letter-spacing:3px; color:var(--dim); text-transform:uppercase; }
-
-/* ── NAV BAR ── */
-.nav-bar {
-  position: fixed; bottom:0; left:50%; transform: translateX(-50%);
-  width: 100%; max-width:480px;
-  background: rgba(10,10,16,0.95); border-top: 1px solid var(--border);
-  display: flex; padding: 8px 0 12px; backdrop-filter: blur(12px); z-index: 100;
-}
-.nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:4px 0; }
-.nav-icon { font-size:20px; }
-.nav-label { font-size:8px; letter-spacing:2px; color:var(--dim); text-transform:uppercase; }
-.nav-item.active .nav-label { color:var(--gold); }
-.nav-item.active .nav-icon { filter: drop-shadow(0 0 4px var(--gold)); }
+.progress-bar { width: 150px; height: 4px; background: #222; margin-top: 10px; border-radius: 2px; overflow: hidden; }
+.progress-fill { width: 0%; height: 100%; background: var(--gold); transition: width 0.3s; }
 </style>
 </head>
 <body>
 
-<!-- TECHNIQUE GUIDE MODAL -->
-<div id="modalOverlay" class="overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">TECHNIQUE GUIDE</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div id="modal-three-mount"></div>
-    <div class="modal-body">
-      <div class="modal-drill-name" id="m-name">High Block</div>
-      <div class="modal-drill-ko" id="m-ko">상단막기 · Sang Dan Makgi</div>
-      <div class="modal-desc" id="m-desc">Raise your forearm above your head at a 45° angle to deflect downward strikes.</div>
-      <div class="modal-steps" id="modal-steps"></div>
-    </div>
-    <button class="btn-go" onclick="closeModal()">LET'S TRAIN!</button>
-  </div>
-</div>
-
-<!-- SUCCESS OVERLAY -->
-<div id="successOverlay" class="overlay">
-  <div class="trophy">🏆</div>
-  <div class="success-title">SESSION COMPLETE</div>
-  <div class="success-sub">훈련 완료 · Training Done</div>
-  <button class="btn-primary" style="width:200px;margin-top:8px;" onclick="location.reload()">RESTART</button>
-</div>
-
-<!-- MAIN APP -->
 <div class="app">
-  <div class="header">
-    <div class="header-left">
-      <div class="app-title">STAY SAFE ELITE</div>
-      <div class="app-sub">Tang Soo Do Training System</div>
-    </div>
-    <div class="session-badge">DRILL <span id="drill-counter">0</span>/<span id="drill-total">5</span></div>
-  </div>
-
-  <div class="progress-section">
-    <div class="progress-row"><span>Session Progress</span><span id="p-pct">0%</span></div>
-    <div class="progress-track"><div class="progress-fill" id="p-bar"></div></div>
-  </div>
-
-  <div class="avatar-stage">
-    <div id="three-mount"></div>
-    <div class="stage-loader" id="stage-loader">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:var(--gold);">당수도</div>
-      <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
-      <div class="loader-text" id="loader-text">Loading avatar...</div>
-    </div>
-    <div class="stage-overlay">
-      <div class="phase-badge">
-        <div class="phase-name" id="phase-name">READY</div>
-        <div class="phase-ko" id="phase-ko">준비 자세</div>
-      </div>
-      <div class="stage-bottom">
-        <div class="step-dots" id="step-dots"></div>
-        <div class="avatar-controls">
-          <button class="av-btn on" id="av-auto" onclick="toggleAvatarAuto()">⟳</button>
-          <button class="av-btn" onclick="avatarPrev()">◀</button>
-          <button class="av-btn" onclick="avatarNext()">▶</button>
-          <button class="av-btn" id="av-orbit" onclick="toggleOrbit()">↻</button>
+    <div class="header">
+        <div>
+            <div class="app-title">STAY SAFE ELITE</div>
+            <div style="font-size: 10px; color: var(--dim); letter-spacing: 2px;">TANG SOO DO INTERACTIVE</div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="drill-card" id="drill-card">
-    <div class="drill-icon" id="drill-icon">🥋</div>
-    <div class="drill-info">
-      <div class="drill-name" id="drill-name-display">READY TO TRAIN</div>
-      <div class="drill-korean" id="drill-ko-display">준비 · Stand by</div>
-      <div class="drill-desc" id="drill-desc-display">Press START TRAINING to begin your session</div>
+    <div class="avatar-stage">
+        <div id="three-mount"></div>
+        
+        <div class="loader" id="loader">
+            <div style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 20px;">ΦΟΡΤΩΣΗ AVATAR...</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <div class="stage-overlay">
+            <div class="phase-badge">
+                <div class="phase-name" id="phase-label">READY</div>
+                <div style="font-size: 10px; color: #aaa;">ΣΤΑΣΗ ΕΤΟΙΜΟΤΗΤΑΣ</div>
+            </div>
+
+            <div class="avatar-controls">
+                <button class="av-btn" onclick="playNext()">ΕΠΟΜΕΝΗ ΚΙΝΗΣΗ ▶</button>
+            </div>
+        </div>
     </div>
-    <div class="countdown-display" id="countdown" style="display:none;">3</div>
-  </div>
 
-  <div class="btn-row">
-    <button class="btn-primary" id="startBtn" onclick="startTraining()">START TRAINING</button>
-    <button class="btn-secondary" onclick="openGuide()">TECHNIQUE GUIDE</button>
-  </div>
-</div>
-
-<div class="nav-bar">
-  <div class="nav-item active"><div class="nav-icon">🥋</div><div class="nav-label">Train</div></div>
-  <div class="nav-item"><div class="nav-icon">📋</div><div class="nav-label">Drills</div></div>
-  <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">Progress</div></div>
-  <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></div>
+    <div style="padding: 0 20px;">
+        <div style="background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+            <h3 style="color: var(--gold); font-family: 'Bebas Neue'; margin-bottom: 5px;">Πληροφορίες Άσκησης</h3>
+            <p style="font-size: 14px; color: #ccc; line-height: 1.5;">
+                Αυτό το 3D Avatar χρησιμοποιεί τις κινήσεις από το βίντεο που ανέβασες. 
+                Πάτα το κουμπί για να δεις την ανάλυση της τεχνικής **High Block (Sang Dan Makgi)**.
+            </p>
+        </div>
+    </div>
 </div>
 
 <script type="importmap">
 {
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
 }
 </script>
 
@@ -374,387 +103,109 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// ─── !! ΑΛΛΑΞΕ ΤΟ PATH ΑΝ ΧΡΕΙΑΣΤΕΙ !!
-const GLB_PATH = 'avatar.glb';
+// Ρυθμίσεις Σκηνής
+const container = document.getElementById('three-mount');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+camera.position.set(0, 1.4, 3);
 
-const DEG = Math.PI / 180;
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
 
-const phases = [
-  { name:'READY',       ko:'준비 자세',              dur:1800,
-    bones:{ RightArm:[20*DEG,0,-35*DEG], RightForeArm:[70*DEG,0,0], RightHand:[0,0,-10*DEG],
-            LeftArm:[20*DEG,0,35*DEG],   LeftForeArm:[70*DEG,0,0],  LeftHand:[0,0,10*DEG],
-            Spine:[0,0,0], Spine1:[0,0,0], Head:[-2*DEG,0,0] }},
-  { name:'CHAMBER',     ko:'당겨 · Chamber',          dur:900,
-    bones:{ RightArm:[0,-10*DEG,-80*DEG], RightForeArm:[90*DEG,0,0], RightHand:[0,0,0],
-            LeftArm:[50*DEG,0,45*DEG],    LeftForeArm:[40*DEG,0,0],  LeftHand:[0,0,5*DEG],
-            Spine:[5*DEG,0,0], Spine1:[3*DEG,0,0], Head:[-5*DEG,0,0] }},
-  { name:'RISING',      ko:'올리기 · Rising',          dur:550,
-    bones:{ RightArm:[95*DEG,0,-55*DEG], RightForeArm:[25*DEG,0,0], RightHand:[0,0,15*DEG],
-            LeftArm:[30*DEG,0,50*DEG],   LeftForeArm:[80*DEG,0,0],  LeftHand:[0,0,5*DEG],
-            Spine:[5*DEG,0,-5*DEG], Spine1:[3*DEG,0,-2*DEG], Head:[-8*DEG,0,5*DEG] }},
-  { name:'HIGH BLOCK!', ko:'상단막기 · Sang Dan Makgi', dur:1000,
-    bones:{ RightArm:[148*DEG,0,-48*DEG], RightForeArm:[10*DEG,28*DEG,18*DEG], RightHand:[0,0,28*DEG],
-            LeftArm:[40*DEG,0,70*DEG],    LeftForeArm:[60*DEG,0,0],             LeftHand:[0,0,0],
-            Spine:[8*DEG,0,-8*DEG], Spine1:[5*DEG,0,-3*DEG], Head:[-10*DEG,0,8*DEG] }},
-  { name:'HOLD',        ko:'유지 · Yuji',              dur:1500,
-    bones:{ RightArm:[143*DEG,0,-46*DEG], RightForeArm:[12*DEG,26*DEG,17*DEG], RightHand:[0,0,27*DEG],
-            LeftArm:[38*DEG,0,68*DEG],    LeftForeArm:[62*DEG,0,0],             LeftHand:[0,0,0],
-            Spine:[7*DEG,0,-7*DEG], Spine1:[4*DEG,0,-2*DEG], Head:[-9*DEG,0,7*DEG] }},
-];
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, 1, 0);
 
-// Build step dots & modal steps
-const dotsEl = document.getElementById('step-dots');
-phases.forEach((_,i) => {
-  const d = document.createElement('div');
-  d.className = 'dot'+(i===0?' active':''); d.id=`dot${i}`;
-  dotsEl.appendChild(d);
-});
-const modalStepsEl = document.getElementById('modal-steps');
-phases.forEach((p,i) => {
-  const s = document.createElement('div');
-  s.className='modal-step'+(i===0?' active-step':''); s.id=`mstep${i}`;
-  s.textContent=p.name; s.onclick=()=>setModalPhase(i);
-  modalStepsEl.appendChild(s);
-});
+// Φωτισμός
+scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+dirLight.position.set(2, 4, 2);
+dirLight.castShadow = true;
+scene.add(dirLight);
 
-// ─── SCENE FACTORY ───────────────────────────────────────────────────────────
-function createScene(mountId, h) {
-  const mount = document.getElementById(mountId);
-  const w = mount.clientWidth || mount.offsetWidth || 380;
-
-  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(w, h);
-  renderer.shadowMap.enabled = true;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  mount.appendChild(renderer.domElement);
-
-  const scene = new THREE.Scene();
-
-  // ── Camera: wide FOV, position set AFTER model loads ──
-  const camera = new THREE.PerspectiveCamera(50, w/h, 0.01, 100);
-  camera.position.set(0, 1, 4);
-
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.08;
-  controls.maxPolarAngle = Math.PI * 0.82;
-  controls.autoRotate = false;
-  controls.autoRotateSpeed = 1.5;
-
-  // Lights
-  scene.add(new THREE.AmbientLight(0x445566, 1.6));
-  const key = new THREE.DirectionalLight(0xfff0e8, 2.4);
-  key.position.set(2,5,3); key.castShadow=true;
-  key.shadow.mapSize.set(1024,1024);
-  scene.add(key);
-  const fill = new THREE.DirectionalLight(0x3366ff, 0.5);
-  fill.position.set(-3,2,-1); scene.add(fill);
-  const rim = new THREE.DirectionalLight(0xe8212a, 0.6);
-  rim.position.set(0,4,-4); scene.add(rim);
-
-  // Floor
-  const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(12,12),
-    new THREE.MeshStandardMaterial({color:0x0c0c14, roughness:0.9, metalness:0.0})
-  );
-  floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; scene.add(floor);
-  const grid = new THREE.GridHelper(10,20,0x161622,0x161622);
-  grid.position.y=0.002; scene.add(grid);
-
-  return { renderer, scene, camera, controls, w, h };
-}
-
-const S  = createScene('three-mount',       300);
-const SM = createScene('modal-three-mount', 200);
-SM.controls.autoRotate = true;
-
-// Particles (main only)
-const pGeo = new THREE.BufferGeometry();
-const pArr = new Float32Array(60*3), pSpd = [];
-for(let i=0;i<60;i++){
-  pArr[i*3]=(Math.random()-.5)*1.4; pArr[i*3+1]=Math.random()*2.4; pArr[i*3+2]=(Math.random()-.5)*1.4;
-  pSpd.push(.003+Math.random()*.004);
-}
-pGeo.setAttribute('position', new THREE.BufferAttribute(pArr,3));
-const pMat = new THREE.PointsMaterial({color:0xe8212a,size:.013,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false});
-S.scene.add(new THREE.Points(pGeo,pMat));
-
-// ─── MODEL LOADING ───────────────────────────────────────────────────────────
-let mainBones={}, mainRest={}, modalBones={}, modalRest={};
-let mainPhase=0, mainAuto=true, mainOrbit=false, mainTimer=null;
-let mainTw=null, modalTw=null;
-
-function ldBar(v){ document.getElementById('loader-bar').style.width=v+'%'; }
-function ldTxt(t){ document.getElementById('loader-text').textContent=t; }
-
-function setupModel(gltf, sc, bonesRef, restRef) {
-  const model = gltf.scene.clone(true);
-
-  model.traverse(c => {
-    if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; }
-    if(c.isSkinnedMesh && c.skeleton)
-      c.skeleton.bones.forEach(b => { if(b.name) bonesRef[b.name]=b; });
-  });
-
-  // Save rest pose
-  Object.keys(bonesRef).forEach(n => { restRef[n]=bonesRef[n].rotation.clone(); });
-
-  // ── BOUNDING BOX before scaling ──────────────────────────────────
-  const tmpBox = new THREE.Box3().setFromObject(model);
-  const tmpSize = tmpBox.getSize(new THREE.Vector3());
-  const tmpMin  = tmpBox.min.clone();
-  const tmpCtr  = tmpBox.getCenter(new THREE.Vector3());
-
-  // Scale so height = 1.6 world units
-  const scaleFactor = 1.6 / tmpSize.y;
-  model.scale.setScalar(scaleFactor);
-
-  // Place feet exactly on floor (y=0), center x/z
-  model.position.set(
-    -tmpCtr.x * scaleFactor,
-    -tmpMin.y * scaleFactor,
-    -tmpCtr.z * scaleFactor
-  );
-
-  sc.scene.add(model);
-
-  // ── AIM CAMERA at the model AFTER placing it ──────────────────────
-  // Recompute box in world space after scale+position
-  const worldBox = new THREE.Box3().setFromObject(model);
-  const worldSize = worldBox.getSize(new THREE.Vector3());
-  const worldCtr  = worldBox.getCenter(new THREE.Vector3());
-
-  const modelH    = worldSize.y;           // ~1.6
-  const midY      = worldBox.min.y + modelH * 0.52;  // just above waist
-  const camDist   = modelH * 2.1;          // distance scales with model size
-
-  sc.controls.target.set(worldCtr.x, midY, worldCtr.z);
-  sc.camera.position.set(worldCtr.x, midY, worldCtr.z + camDist);
-  sc.camera.fov = 46;
-  sc.camera.updateProjectionMatrix();
-  sc.controls.update();
-
-  return model;
-}
-
+// Φόρτωση Avatar
 const loader = new GLTFLoader();
-loader.load(
-  GLB_PATH,
-  gltf => {
-    ldBar(90); ldTxt('Setting up...');
-    setupModel(gltf, S,  mainBones,  mainRest);
-    setupModel(gltf, SM, modalBones, modalRest);
-    ldBar(100);
-    setTimeout(()=>{
-      const l=document.getElementById('stage-loader');
-      l.style.opacity='0';
-      setTimeout(()=>l.style.display='none', 500);
-      applyPhase(0, true);
-      applyModalPhase(3, true);
-      scheduleAuto();
-    }, 300);
-  },
-  p => {
-    const pct = Math.round((p.loaded/(p.total||838196))*85)+5;
-    ldBar(pct); ldTxt(`Loading... ${Math.round(p.loaded/1024)}KB`);
-  },
-  () => {
-    document.getElementById('stage-loader').innerHTML =
-      `<div class="no-model-msg">📁 Place <b style="color:var(--gold)">avatar.glb</b><br>next to this HTML file</div>`;
-  }
-);
+let avatar, skeleton, bones = {};
+const clock = new THREE.Clock();
 
-// ─── TWEEN ENGINE ────────────────────────────────────────────────────────────
-function easeIO(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
+// Ορισμός Στάσεων (Phases) - Προσαρμοσμένο στα bones του Ready Player Me
+const phases = [
+    { name: "READY", label: "ΕΤΟΙΜΟΤΗΤΑ", rotation: { 
+        "RightArm": [0.5, 0, -0.2], "LeftArm": [0.5, 0, 0.2],
+        "RightForeArm": [0.8, 0, 0], "LeftForeArm": [0.8, 0, 0] 
+    }},
+    { name: "CHAMBER", label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", rotation: { 
+        "RightArm": [0, 0, -1.2], "LeftArm": [0.6, 0, 0.5],
+        "RightForeArm": [1.5, 0, 0], "LeftForeArm": [0.5, 0, 0] 
+    }},
+    { name: "BLOCK", label: "HIGH BLOCK!", rotation: { 
+        "RightArm": [2.2, 0, -0.8], "LeftArm": [0.4, 0, 1.1],
+        "RightForeArm": [0.5, 0.5, 0.3], "LeftForeArm": [1.2, 0, 0] 
+    }}
+];
 
-function makeTween(bonesRef, restRef, idx){
-  const ph = phases[idx];
-  const from={}, to={};
-  Object.entries(ph.bones).forEach(([n,e])=>{
-    if(!bonesRef[n]) return;
-    from[n]={x:bonesRef[n].rotation.x, y:bonesRef[n].rotation.y, z:bonesRef[n].rotation.z};
-    const r=restRef[n]||new THREE.Euler();
-    to[n]={x:r.x+e[0], y:r.y+e[1], z:r.z+e[2]};
-  });
-  const dur = idx===3 ? 280 : 460;
-  return {from,to,start:performance.now(),dur};
-}
+let currentPhaseIdx = 0;
 
-function tickTween(tw, bonesRef, now){
-  if(!tw) return true;
-  const t=Math.min((now-tw.start)/tw.dur,1), e=easeIO(t);
-  Object.keys(tw.to).forEach(n=>{
-    if(!bonesRef[n]) return;
-    bonesRef[n].rotation.x = tw.from[n].x+(tw.to[n].x-tw.from[n].x)*e;
-    bonesRef[n].rotation.y = tw.from[n].y+(tw.to[n].y-tw.from[n].y)*e;
-    bonesRef[n].rotation.z = tw.from[n].z+(tw.to[n].z-tw.from[n].z)*e;
-  });
-  return t>=1;
-}
+// Αρχείο που ανέβασες
+const MODEL_URL = 'avatar (1).glb'; 
 
-// ─── PHASE CONTROL ───────────────────────────────────────────────────────────
-function applyPhase(idx, instant=false){
-  mainPhase=idx;
-  const ph=phases[idx];
-  document.getElementById('phase-name').textContent=ph.name;
-  document.getElementById('phase-ko').textContent=ph.ko;
-  for(let i=0;i<5;i++){
-    const d=document.getElementById(`dot${i}`);
-    if(d) d.className='dot'+(i===idx?' active':'');
-  }
-  pMat.opacity = idx>=2?(idx===3?.65:.35):.04;
-
-  if(Object.keys(mainBones).length===0) return;
-  if(instant){
-    Object.entries(ph.bones).forEach(([n,e])=>{
-      if(!mainBones[n]) return;
-      const r=mainRest[n]||new THREE.Euler();
-      mainBones[n].rotation.set(r.x+e[0],r.y+e[1],r.z+e[2]);
+loader.load(MODEL_URL, (gltf) => {
+    avatar = gltf.scene;
+    scene.add(avatar);
+    
+    avatar.traverse(n => {
+        if (n.isMesh) n.castShadow = n.receiveShadow = true;
+        if (n.isBone) {
+            // Καθαρισμός ονόματος (το RPM προσθέτει prefixes)
+            const name = n.name.replace('MixamoRig', '').replace('Left', 'Left').replace('Right', 'Right');
+            if (n.name.includes('RightArm')) bones.RightArm = n;
+            if (n.name.includes('LeftArm')) bones.LeftArm = n;
+            if (n.name.includes('RightForeArm')) bones.RightForeArm = n;
+            if (n.name.includes('LeftForeArm')) bones.LeftForeArm = n;
+        }
     });
-  } else {
-    mainTw = makeTween(mainBones, mainRest, idx);
-  }
+
+    document.getElementById('loader').style.display = 'none';
+    applyPhase(0);
+}, 
+(xhr) => {
+    const p = (xhr.loaded / xhr.total) * 100;
+    document.getElementById('progress-fill').style.width = p + '%';
+});
+
+function applyPhase(idx) {
+    const p = phases[idx];
+    document.getElementById('phase-label').innerText = p.label;
+    
+    for (let b in p.rotation) {
+        if (bones[b]) {
+            bones[b].rotation.set(p.rotation[b][0], p.rotation[b][1], p.rotation[b][2]);
+        }
+    }
 }
 
-function applyModalPhase(idx, instant=false){
-  for(let i=0;i<5;i++){
-    const s=document.getElementById(`mstep${i}`);
-    if(s) s.className='modal-step'+(i===idx?' active-step':'');
-  }
-  if(Object.keys(modalBones).length===0) return;
-  if(instant){
-    const ph=phases[idx];
-    Object.entries(ph.bones).forEach(([n,e])=>{
-      if(!modalBones[n]) return;
-      const r=modalRest[n]||new THREE.Euler();
-      modalBones[n].rotation.set(r.x+e[0],r.y+e[1],r.z+e[2]);
-    });
-  } else {
-    modalTw = makeTween(modalBones, modalRest, idx);
-  }
+window.playNext = () => {
+    currentPhaseIdx = (currentPhaseIdx + 1) % phases.length;
+    applyPhase(currentPhaseIdx);
+};
+
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
 }
+animate();
 
-function scheduleAuto(){
-  if(!mainAuto) return;
-  clearTimeout(mainTimer);
-  mainTimer=setTimeout(()=>{
-    mainPhase=(mainPhase+1)%phases.length;
-    applyPhase(mainPhase);
-    scheduleAuto();
-  }, phases[mainPhase].dur);
-}
-
-// Expose to window for onclick handlers
-window.avatarNext     = ()=>{ clearTimeout(mainTimer); mainPhase=(mainPhase+1)%phases.length; applyPhase(mainPhase); if(mainAuto) scheduleAuto(); };
-window.avatarPrev     = ()=>{ clearTimeout(mainTimer); mainPhase=(mainPhase-1+phases.length)%phases.length; applyPhase(mainPhase); if(mainAuto) scheduleAuto(); };
-window.toggleAvatarAuto = ()=>{ mainAuto=!mainAuto; document.getElementById('av-auto').className='av-btn'+(mainAuto?' on':''); if(mainAuto) scheduleAuto(); else clearTimeout(mainTimer); };
-window.toggleOrbit    = ()=>{ mainOrbit=!mainOrbit; S.controls.autoRotate=mainOrbit; document.getElementById('av-orbit').className='av-btn'+(mainOrbit?' on':''); };
-window.setModalPhase  = (idx)=>applyModalPhase(idx);
-
-// Called by drill logic
-window.setAvatarForDrill  = (idx)=>{ applyPhase(idx); applyModalPhase(idx); };
-window.setModalToDrill    = (idx)=>applyModalPhase(idx);
-
-// ─── RENDER LOOP ─────────────────────────────────────────────────────────────
-function animate(t){
-  requestAnimationFrame(animate);
-  if(mainTw  && tickTween(mainTw,  mainBones,  t)) mainTw=null;
-  if(modalTw && tickTween(modalTw, modalBones, t)) modalTw=null;
-  S.controls.update(); SM.controls.update();
-  const pa=pGeo.attributes.position;
-  for(let i=0;i<60;i++){ pa.array[i*3+1]+=pSpd[i]; if(pa.array[i*3+1]>2.5) pa.array[i*3+1]=0; }
-  pa.needsUpdate=true;
-  S.renderer.render(S.scene, S.camera);
-  SM.renderer.render(SM.scene, SM.camera);
-}
-animate(0);
-
-// ─── RESIZE ──────────────────────────────────────────────────────────────────
-window.addEventListener('resize', ()=>{
-  [
-    { sc:S,  mountId:'three-mount',       h:300 },
-    { sc:SM, mountId:'modal-three-mount', h:200 },
-  ].forEach(({sc, mountId, h})=>{
-    const w = document.getElementById(mountId).clientWidth || 380;
-    sc.renderer.setSize(w, h);
-    sc.camera.aspect = w/h;
-    sc.camera.updateProjectionMatrix();
-  });
+// Resize handling
+window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
 });
 </script>
 
-<!-- ── DRILL LOGIC ─────────────────────────────────────────────────────────── -->
-<script>
-const BASE_URL = "/StaySafeTips/images/tangsoo/";
-
-const drills = [
-  { name:"High Block",      korean:"Sang Dan Makgi",     icon:"🛡️", desc:"Raise forearm above head at 45°. Chamber first, drive upward to deflect strikes.", phaseIdx:3 },
-  { name:"Low Block",       korean:"Ha Dan Mahk Kee",    icon:"⬇️", desc:"Cross arm to opposite shoulder, sweep down to block low kicks.",                   phaseIdx:0 },
-  { name:"Middle Punch",    korean:"Tung Dan Kong Kyuck",icon:"👊", desc:"Drive fist to solar plexus height. Rotate hips for maximum power.",                 phaseIdx:0 },
-  { name:"Knife Hand Block",korean:"Sudo Mahk Kee",      icon:"✋", desc:"Blade edge of hand sweeps outward from ear height.",                                phaseIdx:2 },
-  { name:"Front Kick",      korean:"Ahp Chagee",         icon:"🦵", desc:"Chamber knee high. Snap foot forward, rechamber before setting down.",              phaseIdx:0 },
-];
-
-let currentDrill = 0;
-const totalDrills = 5;
-document.getElementById('drill-total').textContent = totalDrills;
-
-window.openGuide = function() {
-  const d = drills[Math.floor(Math.random()*drills.length)];
-  document.getElementById('m-name').textContent  = d.name;
-  document.getElementById('m-ko').textContent    = d.korean;
-  document.getElementById('m-desc').textContent  = d.desc;
-  if(window.setModalToDrill) window.setModalToDrill(d.phaseIdx);
-  document.getElementById('modalOverlay').classList.add('open');
-};
-
-window.closeModal = function() {
-  document.getElementById('modalOverlay').classList.remove('open');
-};
-
-window.startTraining = function() {
-  document.getElementById('startBtn').style.display='none';
-  runCycle();
-};
-
-function updateProgress() {
-  const pct = Math.round((currentDrill/totalDrills)*100);
-  document.getElementById('p-bar').style.width   = pct+'%';
-  document.getElementById('p-pct').textContent   = pct+'%';
-  document.getElementById('drill-counter').textContent = currentDrill;
-}
-
-function runCycle() {
-  if(currentDrill >= totalDrills){
-    document.getElementById('successOverlay').classList.add('open');
-    return;
-  }
-  const cd = document.getElementById('countdown');
-  document.getElementById('drill-name-display').textContent = 'GET READY';
-  document.getElementById('drill-ko-display').textContent   = '준비 · Prepare';
-  document.getElementById('drill-desc-display').textContent = '';
-  document.getElementById('drill-icon').textContent         = '⏱️';
-  cd.style.display='block'; cd.textContent='3';
-  let count=3;
-  const timer=setInterval(()=>{
-    count--;
-    if(count>0){ cd.textContent=count; }
-    else { clearInterval(timer); cd.style.display='none'; showDrill(); }
-  },1000);
-}
-
-function showDrill() {
-  const d = drills[Math.floor(Math.random()*drills.length)];
-  document.getElementById('drill-name-display').textContent = d.name.toUpperCase();
-  document.getElementById('drill-ko-display').textContent   = d.korean;
-  document.getElementById('drill-desc-display').textContent = d.desc;
-  document.getElementById('drill-icon').textContent         = d.icon;
-  if(window.setAvatarForDrill) window.setAvatarForDrill(d.phaseIdx);
-  currentDrill++;
-  updateProgress();
-  setTimeout(runCycle, 4000);
-}
-</script>
 </body>
 </html>
