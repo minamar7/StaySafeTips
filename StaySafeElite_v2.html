@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stay Safe Elite – Reflex Drill</title>
+
+<style>
+:root {
+  --gold: #f5c542;
+  --bg: #0f0f0f;
+  --card: #1a1a1a;
+  --green: #28a745;
+  --text: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  text-align: center;
+}
+
+.container {
+  padding: 20px;
+  max-width: 480px;
+  margin: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 90px;
+}
+
+h1 {
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 26px;
+  margin: 5px 0;
+}
+
+.subtitle {
+  font-size: 11px;
+  opacity: 0.6;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.progress-wrapper {
+  width: 90%;
+  margin: 10px auto;
+}
+
+.progress-container {
+  background: #333;
+  height: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.4s;
+  box-shadow: 0 0 10px var(--gold);
+}
+
+/* ── display-area: same size/style as original ── */
+#display-area {
+  height: 320px;
+  border: 2px solid #222;
+  border-radius: 20px;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 3D canvas fills the area */
+#three-mount {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Countdown overlay ON TOP of the 3D canvas */
+#countdown {
+  position: relative;
+  z-index: 10;
+  font-size: 70px;
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 30px var(--gold);
+  display: block;
+  pointer-events: none;
+}
+
+/* Drill name overlay */
+#drillName {
+  position: absolute;
+  bottom: 12px;
+  left: 0; right: 0;
+  z-index: 10;
+  font-weight: bold;
+  color: var(--gold);
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Phase label top-right */
+#phaseLabel {
+  position: absolute;
+  top: 10px; right: 12px;
+  z-index: 10;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Step dots bottom-left */
+#stepDots {
+  position: absolute;
+  bottom: 10px; left: 12px;
+  z-index: 10;
+  display: flex;
+  gap: 5px;
+  pointer-events: none;
+}
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #444;
+  transition: all 0.3s;
+}
+.dot.active {
+  background: var(--gold);
+  box-shadow: 0 0 5px var(--gold);
+  width: 10px;
+  border-radius: 3px;
+}
+
+/* Mini avatar controls */
+#avatarControls {
+  position: absolute;
+  top: 10px; left: 12px;
+  z-index: 10;
+  display: flex;
+  gap: 4px;
+}
+.av-btn {
+  background: rgba(0,0,0,0.7);
+  border: 1px solid #333;
+  color: #aaa;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+.av-btn:active, .av-btn.on { border-color: var(--gold); color: var(--gold); }
+
+/* Loader */
+#stageLoader {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; z-index: 20;
+  background: #111;
+  border-radius: 18px;
+  transition: opacity 0.5s;
+}
+.ld-bar-wrap { width: 100px; height: 2px; background: #333; border-radius: 2px; }
+.ld-bar { height: 100%; background: var(--gold); border-radius: 2px; width: 0%; transition: width 0.3s; }
+.ld-text { font-size: 9px; letter-spacing: 3px; color: #555; text-transform: uppercase; }
+
+button {
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  text-transform: uppercase;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-gold { background: var(--gold); color: black; }
+.btn-outline { background: #222; color: white; border: 1px solid #444; }
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.95);
+  z-index: 5000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-card {
+  background: #1a1a1a;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+/* Modal athlete frame now holds 3D scene */
+.athlete-frame {
+  background: radial-gradient(circle, #333, #000);
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+#modal-three-mount {
+  width: 100%; height: 100%;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TECHNIQUE GUIDE MODAL -->
+<div id="modalOverlay" class="overlay">
+  <div class="modal-card">
+    <div style="background:#252525; padding:15px; color:var(--gold); font-weight:bold;">TECHNIQUE GUIDE</div>
+    <div class="athlete-frame">
+      <!-- 3D avatar replaces the static image -->
+      <div id="modal-three-mount"></div>
+    </div>
+    <div id="m-desc" style="padding:20px; text-align:left; font-size:13px; color:#bbb;"></div>
+    <button style="background:var(--green); color:white;" onclick="closeModal()">LET'S GO!</button>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY (unchanged) -->
+<div id="successOverlay" class="overlay">
+  <div style="font-size: 60px;">🏆</div>
+  <h1 style="color:var(--gold);">SESSION COMPLETE</h1>
+  <button class="btn-gold" style="width:auto;" onclick="location.reload()">RESTART</button>
+</div>
+
+<!-- MAIN CONTAINER (structure identical to original) -->
+<div class="container">
+  <h1>STAY SAFE ELITE</h1>
+  <div class="subtitle">Tang Soo Do Training System</div>
+
+  <div class="progress-wrapper">
+    <div class="progress-container">
+      <div id="p-bar" class="progress-bar"></div>
+    </div>
+    <div id="p-text" style="font-size:10px; color:var(--gold); text-align:right;">Progress: 0/5</div>
+  </div>
+
+  <!-- display-area: same id/size — 3D avatar inside, countdown on top -->
+  <div id="display-area">
+
+    <!-- 3D canvas -->
+    <div id="three-mount"></div>
+
+    <!-- Overlays inside display-area -->
+    <div id="avatarControls">
+      <button class="av-btn on" id="av-auto" onclick="toggleAvatarAuto()">⟳</button>
+      <button class="av-btn" onclick="avatarPrev()">◀</button>
+      <button class="av-btn" onclick="avatarNext()">▶</button>
+      <button class="av-btn" id="av-orbit" onclick="toggleOrbit()">↻</button>
+    </div>
+
+    <div id="phaseLabel">READY</div>
+
+    <!-- Countdown sits on top of 3D — same as original -->
+    <div id="countdown">READY</div>
+
+    <div id="drillName"></div>
+
+    <div id="stepDots">
+      <div class="dot active" id="dot0"></div>
+      <div class="dot" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+      <div class="dot" id="dot4"></div>
+    </div>
+
+    <!-- Loader -->
+    <div id="stageLoader">
+      <div style="color:var(--gold);font-size:12px;letter-spacing:3px;">당수도</div>
+      <div class="ld-bar-wrap"><div class="ld-bar" id="ld-bar"></div></div>
+      <div class="ld-text" id="ld-text">Loading avatar...</div>
+    </div>
+  </div>
+
+  <button class="btn-gold" id="startBtn" onclick="startTraining()">START TRAINING</button>
+  <button class="btn-outline" onclick="openGuide()">TECHNIQUE GUIDE</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     THREE.JS — 3D Avatar + High Block Animation
+     ══════════════════════════════════════════ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader }   from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// ── PATH TO YOUR GLB ────────────────────────────────────────────────────────
+// Put avatar.glb in the same folder as this HTML on GitHub Pages.
+// If it lives elsewhere, change this path:
+const GLB_PATH = 'avatar.glb';
+
+const DEG = Math.PI / 180;
+
+// ── HIGH BLOCK PHASES (5 steps) ─────────────────────────────────────────────
+const phases = [
+  { label:'READY',       ko:'준비 자세',              dur:1800,
+    b:{ RightArm:[-20*DEG,0,35*DEG],  RightForeArm:[70*DEG,0,0],  RightHand:[0,0,-10*DEG],
+        LeftArm: [ 20*DEG,0,35*DEG],  LeftForeArm: [70*DEG,0,0],  LeftHand: [0,0, 10*DEG],
+        Spine:[0,0,0], Spine1:[0,0,0], Head:[-2*DEG,0,0] }},
+  { label:'CHAMBER',     ko:'당겨 · Chamber',          dur:900,
+    b:{ RightArm:[0,0,80*DEG],        RightForeArm:[90*DEG,0,0],  RightHand:[0,0,0],
+        LeftArm: [50*DEG,0,45*DEG],   LeftForeArm: [40*DEG,0,0],  LeftHand: [0,0,5*DEG],
+        Spine:[5*DEG,0,0], Spine1:[3*DEG,0,0], Head:[-5*DEG,0,0] }},
+  { label:'RISING',      ko:'올리기 · Rising',          dur:550,
+    b:{ RightArm:[95*DEG,0,55*DEG],   RightForeArm:[25*DEG,0,0],  RightHand:[0,0,15*DEG],
+        LeftArm: [30*DEG,0,50*DEG],   LeftForeArm: [80*DEG,0,0],  LeftHand: [0,0,5*DEG],
+        Spine:[5*DEG,0,-5*DEG], Spine1:[3*DEG,0,-2*DEG], Head:[-8*DEG,0,5*DEG] }},
+  { label:'HIGH BLOCK!', ko:'상단막기 · Sang Dan Makgi', dur:1000,
+    b:{ RightArm:[148*DEG,0,48*DEG],  RightForeArm:[10*DEG,28*DEG,18*DEG], RightHand:[0,0,28*DEG],
+        LeftArm: [40*DEG,0,70*DEG],   LeftForeArm: [60*DEG,0,0],  LeftHand: [0,0,0],
+        Spine:[8*DEG,0,-8*DEG], Spine1:[5*DEG,0,-3*DEG], Head:[-10*DEG,0,8*DEG] }},
+  { label:'HOLD',        ko:'유지 · Yuji',              dur:1500,
+    b:{ RightArm:[143*DEG,0,46*DEG],  RightForeArm:[12*DEG,26*DEG,17*DEG], RightHand:[0,0,27*DEG],
+        LeftArm: [38*DEG,0,68*DEG],   LeftForeArm: [62*DEG,0,0],  LeftHand: [0,0,0],
+        Spine:[7*DEG,0,-7*DEG], Spine1:[4*DEG,0,-2*DEG], Head:[-9*DEG,0,7*DEG] }},
+];
+
+// ── HELPER: build a Three.js scene ──────────────────────────────────────────
+function buildScene(mountId, w, h) {
+  const mount = document.getElementById(mountId);
+  const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  mount.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 100);
+  camera.position.set(0, 1.3, 2.8);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0.95, 0);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 1.2;
+  controls.maxDistance = 5;
+  controls.maxPolarAngle = Math.PI * 0.80;
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0x334466, 1.4));
+  const key = new THREE.DirectionalLight(0xfff0e8, 2.2);
+  key.position.set(2,4,3); key.castShadow = true;
+  scene.add(key);
+  scene.add(Object.assign(new THREE.DirectionalLight(0x3366ff,0.5), {position: new THREE.Vector3(-3,2,-1)}));
+  scene.add(Object.assign(new THREE.DirectionalLight(0xe8212a,0.7), {position: new THREE.Vector3(0,3,-4)}));
+
+  // Floor
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(10,10),
+    new THREE.MeshStandardMaterial({color:0x0c0c14, roughness:0.9})
+  );
+  floor.rotation.x = -Math.PI/2; floor.receiveShadow = true; scene.add(floor);
+  const grid = new THREE.GridHelper(8, 16, 0x161622, 0x161622);
+  grid.position.y = 0.002; scene.add(grid);
+
+  return { renderer, scene, camera, controls };
+}
+
+// ── BUILD TWO SCENES ─────────────────────────────────────────────────────────
+const mainW = Math.min(440, window.innerWidth - 40);
+const mainH = 316; // fits inside display-area (320px - 4px border)
+const S  = buildScene('three-mount',       mainW, mainH);
+const SM = buildScene('modal-three-mount', mainW, 220);
+SM.controls.autoRotate = true;
+SM.controls.autoRotateSpeed = 1.5;
+
+// Particles for main scene
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(50*3);
+const pSpd = [];
+for(let i=0;i<50;i++){
+  pPos[i*3]=(Math.random()-.5)*1.2; pPos[i*3+1]=Math.random()*2.2; pPos[i*3+2]=(Math.random()-.5)*1.2;
+  pSpd.push(.003+Math.random()*.004);
+}
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos,3));
+const pMat = new THREE.PointsMaterial({color:0xe8212a,size:.012,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false});
+S.scene.add(new THREE.Points(pGeo, pMat));
+
+// ── LOAD GLB ─────────────────────────────────────────────────────────────────
+const loader = new GLTFLoader();
+let mainBones={}, mainRest={}, modalBones={}, modalRest={};
+let mainPhase=0, mainAuto=true, mainOrbit=false, mainTimer=null;
+let mainTween=null, modalTween=null;
+
+function setupModel(gltf, sc, bonesRef, restRef) {
+  const m = gltf.scene.clone(true);
+  m.traverse(c => {
+    if(c.isMesh){ c.castShadow=true; c.receiveShadow=true; }
+    if(c.isSkinnedMesh && c.skeleton)
+      c.skeleton.bones.forEach(b => { if(b.name) bonesRef[b.name]=b; });
+  });
+  Object.keys(bonesRef).forEach(n => { restRef[n] = bonesRef[n].rotation.clone(); });
+  const box = new THREE.Box3().setFromObject(m);
+  const sc2 = 1.75 / box.getSize(new THREE.Vector3()).y;
+  m.scale.setScalar(sc2);
+  const ctr = box.getCenter(new THREE.Vector3());
+  m.position.set(-ctr.x*sc2, -box.min.y*sc2, -ctr.z*sc2);
+  sc.scene.add(m);
+}
+
+function ldBar(v){ document.getElementById('ld-bar').style.width=v+'%'; }
+function ldTxt(t){ document.getElementById('ld-text').textContent=t; }
+
+loader.load(GLB_PATH,
+  gltf => {
+    ldBar(90); ldTxt('Setting up...');
+    setupModel(gltf, S,  mainBones,  mainRest);
+    setupModel(gltf, SM, modalBones, modalRest);
+    ldBar(100);
+    setTimeout(()=>{
+      const l=document.getElementById('stageLoader');
+      l.style.opacity='0';
+      setTimeout(()=>l.style.display='none',500);
+      applyPhase(0, true);
+      applyModalPhase(3, true);
+      scheduleAuto();
+    },300);
+  },
+  p => { ldBar(Math.round((p.loaded/(p.total||838196))*85)+5); ldTxt(`Loading... ${Math.round(p.loaded/1024)}KB`); },
+  ()  => {
+    document.getElementById('stageLoader').innerHTML =
+      `<div style="font-size:11px;color:#555;letter-spacing:2px;padding:20px;line-height:2">
+        📁 Place <b style="color:var(--gold)">avatar.glb</b><br>next to this HTML file<br>
+        <span style="font-size:9px">or update GLB_PATH in the script</span></div>`;
+  }
+);
+
+// ── TWEEN ENGINE ─────────────────────────────────────────────────────────────
+function ease(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
+
+function startTween(bonesRef, restRef, idx, fast){
+  const ph=phases[idx]; const from={}, to={};
+  Object.entries(ph.b).forEach(([n,e])=>{
+    if(!bonesRef[n]) return;
+    from[n]={x:bonesRef[n].rotation.x, y:bonesRef[n].rotation.y, z:bonesRef[n].rotation.z};
+    const r=restRef[n]||new THREE.Euler();
+    to[n]={x:r.x+e[0], y:r.y+e[1], z:r.z+e[2]};
+  });
+  return {from,to,start:performance.now(),dur:fast?250:(idx===3?300:480)};
+}
+
+function tickTween(tw, bonesRef, now){
+  if(!tw) return true;
+  const t=Math.min((now-tw.start)/tw.dur,1), e=ease(t);
+  Object.keys(tw.to).forEach(n=>{
+    if(!bonesRef[n]) return;
+    bonesRef[n].rotation.x = tw.from[n].x+(tw.to[n].x-tw.from[n].x)*e;
+    bonesRef[n].rotation.y = tw.from[n].y+(tw.to[n].y-tw.from[n].y)*e;
+    bonesRef[n].rotation.z = tw.from[n].z+(tw.to[n].z-tw.from[n].z)*e;
+  });
+  return t>=1;
+}
+
+// ── PHASE CONTROL ─────────────────────────────────────────────────────────────
+function applyPhase(idx, instant=false){
+  mainPhase=idx;
+  const ph=phases[idx];
+  document.getElementById('phaseLabel').textContent = ph.label;
+  for(let i=0;i<5;i++){
+    const d=document.getElementById(`dot${i}`);
+    if(d) d.className='dot'+(i===idx?' active':'');
+  }
+  pMat.opacity = idx>=2?(idx===3?.65:.35):.04;
+  if(instant){ Object.entries(ph.b).forEach(([n,e])=>{ if(!mainBones[n]) return; const r=mainRest[n]||new THREE.Euler(); mainBones[n].rotation.set(r.x+e[0],r.y+e[1],r.z+e[2]); }); }
+  else mainTween = startTween(mainBones, mainRest, idx);
+}
+
+function applyModalPhase(idx, instant=false){
+  if(instant){ const ph=phases[idx]; Object.entries(ph.b).forEach(([n,e])=>{ if(!modalBones[n]) return; const r=modalRest[n]||new THREE.Euler(); modalBones[n].rotation.set(r.x+e[0],r.y+e[1],r.z+e[2]); }); }
+  else modalTween = startTween(modalBones, modalRest, idx);
+}
+
+function scheduleAuto(){
+  if(!mainAuto) return;
+  clearTimeout(mainTimer);
+  mainTimer=setTimeout(()=>{ mainPhase=(mainPhase+1)%phases.length; applyPhase(mainPhase); scheduleAuto(); }, phases[mainPhase].dur);
+}
+
+// Expose controls to global scope for onclick handlers
+window.avatarNext  = ()=>{ clearTimeout(mainTimer); mainPhase=(mainPhase+1)%phases.length; applyPhase(mainPhase); if(mainAuto) scheduleAuto(); };
+window.avatarPrev  = ()=>{ clearTimeout(mainTimer); mainPhase=(mainPhase-1+phases.length)%phases.length; applyPhase(mainPhase); if(mainAuto) scheduleAuto(); };
+window.toggleAvatarAuto = ()=>{
+  mainAuto=!mainAuto;
+  document.getElementById('av-auto').className='av-btn'+(mainAuto?' on':'');
+  if(mainAuto) scheduleAuto(); else clearTimeout(mainTimer);
+};
+window.toggleOrbit = ()=>{
+  mainOrbit=!mainOrbit;
+  S.controls.autoRotate=mainOrbit;
+  document.getElementById('av-orbit').className='av-btn'+(mainOrbit?' on':'');
+};
+// Called by drill logic to sync avatar pose with current drill
+window.setAvatarForDrill = (phaseIdx) => { applyPhase(phaseIdx); applyModalPhase(phaseIdx); };
+// Called by openGuide to set modal pose
+window.setModalToDrill = (phaseIdx) => applyModalPhase(phaseIdx);
+
+// ── RENDER LOOP ───────────────────────────────────────────────────────────────
+function animate(t){
+  requestAnimationFrame(animate);
+  if(!tickTween(mainTween, mainBones,  t)) ; else mainTween=null;
+  if(!tickTween(modalTween,modalBones, t)) ; else modalTween=null;
+  S.controls.update(); SM.controls.update();
+  // Particles
+  const pa=pGeo.attributes.position;
+  for(let i=0;i<50;i++){ pa.array[i*3+1]+=pSpd[i]; if(pa.array[i*3+1]>2.5) pa.array[i*3+1]=0; }
+  pa.needsUpdate=true;
+  S.renderer.render(S.scene, S.camera);
+  SM.renderer.render(SM.scene,SM.camera);
+}
+animate(0);
+
+// Resize
+window.addEventListener('resize',()=>{
+  const w=Math.min(440, window.innerWidth-40);
+  S.camera.aspect=w/mainH; S.camera.updateProjectionMatrix(); S.renderer.setSize(w,mainH);
+  SM.camera.aspect=w/220; SM.camera.updateProjectionMatrix(); SM.renderer.setSize(w,220);
+});
+</script>
+
+
+<!-- ══════════════════════════════
+     ORIGINAL DRILL LOGIC (unchanged)
+     ══════════════════════════════ -->
+<script>
+const BASE_URL = "/StaySafeTips/images/tangsoo/";
+
+// Added phaseIndex so avatar can mirror each drill
+const drills = [
+  { name:"Low Block",        korean:"Ha Dan Mahk Kee",     img:"lowblock.png",    desc:"Cross arm to opposite shoulder.", phaseIdx:1 },
+  { name:"Middle Punch",     korean:"Tung Dan Kong Kyuck", img:"middlepunch.png", desc:"Target solar plexus.",            phaseIdx:0 },
+  { name:"Knife Hand Block", korean:"Sudo Mahk Kee",       img:"knifehand.png",   desc:"Use hand blade.",                 phaseIdx:2 },
+  { name:"Front Kick",       korean:"Ahp Chagee",          img:"apkubi.png",      desc:"Chamber knee high.",              phaseIdx:0 },
+  { name:"High Block",       korean:"Sang Dan Makgi",      img:"highblock.png",   desc:"Raise forearm above head at 45° to deflect downward strikes.", phaseIdx:3 },
+];
+
+let currentDrill = 0;
+const totalDrills = 5;
+
+function openGuide() {
+  const d = drills[Math.floor(Math.random() * drills.length)];
+  document.getElementById('m-desc').innerHTML =
+    `<b style="color:var(--gold)">${d.korean}</b><br><br>${d.desc}`;
+  // Show 3D avatar in modal at matching pose (no static image needed)
+  if(window.setModalToDrill) window.setModalToDrill(d.phaseIdx);
+  document.getElementById('modalOverlay').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').style.display = 'none';
+}
+
+function startTraining() {
+  document.getElementById('startBtn').style.visibility = 'hidden';
+  runCycle();
+}
+
+function runCycle() {
+  if (currentDrill >= totalDrills) {
+    document.getElementById('successOverlay').style.display = 'flex';
+    return;
+  }
+
+  document.getElementById('countdown').style.display = 'block';
+  document.getElementById('drillName').innerText = '';
+
+  let count = 3;
+  document.getElementById('countdown').innerText = count;
+  const timer = setInterval(() => {
+    count--;
+    if (count > 0) {
+      document.getElementById('countdown').innerText = count;
+    } else {
+      clearInterval(timer);
+      showDrill();
+    }
+  }, 1000);
+}
+
+function showDrill() {
+  const d = drills[Math.floor(Math.random() * drills.length)];
+
+  document.getElementById('countdown').style.display = 'none';
+  document.getElementById('drillName').innerText = d.name + ' · ' + d.korean;
+
+  // Drive the 3D avatar to show this technique
+  if(window.setAvatarForDrill) window.setAvatarForDrill(d.phaseIdx);
+
+  currentDrill++;
+  document.getElementById('p-bar').style.width  = (currentDrill / totalDrills * 100) + "%";
+  document.getElementById('p-text').innerText   = `Progress: ${currentDrill}/${totalDrills}`;
+
+  setTimeout(runCycle, 4000);
+}
+</script>
+
+</body>
+</html>
