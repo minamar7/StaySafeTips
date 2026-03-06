@@ -29,7 +29,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
   position: absolute; inset: 0; pointer-events: none;
   display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
 }
-.phase-badge { align-self: flex-start; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--gold); }
+.phase-badge { alignself: flex-start; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--gold); }
 .phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--gold); }
 
 .avatar-controls { pointer-events: auto; display: flex; gap: 10px; align-self: flex-end; }
@@ -119,10 +119,9 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 const loader = new GLTFLoader();
 let avatar, bones = {};
 
-// ⭐ Σωστός εντοπισμός Mixamo bones για Ready Player Me
+// εντοπισμός bones
 function detectBones(node) {
     if (!node.isBone) return;
-
     const name = node.name.toLowerCase();
 
     if (name.includes("rightarm")) bones.RightArm = node;
@@ -134,25 +133,28 @@ function detectBones(node) {
     if (name.includes("lefthand")) bones.LeftHand = node;
 }
 
-// ⭐ Tang Soo Do High Block – σωστές γωνίες
+// φάσεις – πιο “καθαρό” High Block
 const phases = [
     { label: "READY", rotation: { 
-        RightArm: [0.3, 0.1, -0.15],
-        RightForeArm: [0.4, 0, 0],
-        LeftArm: [0.3, -0.1, 0.15],
-        LeftForeArm: [0.4, 0, 0]
+        RightArm:      [0.25, 0.05, -0.1],
+        RightForeArm:  [0.4, 0, 0],
+        LeftArm:       [0.25, -0.05, 0.1],
+        LeftForeArm:   [0.4, 0, 0]
     }},
     { label: "PREPARATION", rotation: { 
-        RightArm: [1.1, 0.2, -0.9],
-        RightForeArm: [1.3, 0.1, 0.1],
-        LeftArm: [-0.3, 0.1, 0.5],
-        LeftForeArm: [0.2, 0, 0]
+        RightArm:      [1.2, 0.25, -1.0],
+        RightForeArm:  [1.4, 0.1, 0.15],
+        LeftArm:       [-0.35, 0.1, 0.55],
+        LeftForeArm:   [0.25, 0, 0]
     }},
     { label: "HIGH BLOCK!", rotation: { 
-        RightArm: [1.9, -0.15, -0.35],
-        RightForeArm: [1.1, 0.35, 0.15],
-        LeftArm: [-0.6, 0.1, 0.6],
-        LeftForeArm: [0.15, 0, 0]
+        // ώμος πολύ ψηλά, λίγο μπροστά, λίγο προς τα μέσα
+        RightArm:      [2.1, -0.25, -0.25],
+        // πήχης μπροστά από το μέτωπο, σχεδόν οριζόντιος, ελαφρά λοξός
+        RightForeArm:  [1.0, 0.55, 0.25],
+        // αριστερό χέρι chamber στο πλάι
+        LeftArm:       [-0.7, 0.15, 0.7],
+        LeftForeArm:   [0.2, 0, 0]
     }}
 ];
 
@@ -193,4 +195,4 @@ animate();
 </script>
 
 </body>
-</html> 
+</html>
