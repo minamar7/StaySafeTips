@@ -18,7 +18,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
 .header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 .app-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--gold); letter-spacing: 2px; }
 
-/* AVATAR STAGE */
 .avatar-stage {
   position: relative; margin: 15px 20px; border-radius: 16px;
   background: radial-gradient(circle at center, #1a1a2e 0%, #080810 100%);
@@ -60,7 +59,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
 
     <div class="avatar-stage">
         <div id="three-mount"></div>
-        
         <div class="loader" id="loader">
             <div style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 20px;">ΦΟΡΤΩΣΗ AVATAR...</div>
             <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
@@ -82,8 +80,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
         <div style="background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
             <h3 style="color: var(--gold); font-family: 'Bebas Neue'; margin-bottom: 5px;">Πληροφορίες Άσκησης</h3>
             <p style="font-size: 14px; color: #ccc; line-height: 1.5;">
-                Αυτό το 3D Avatar χρησιμοποιεί τις κινήσεις από το βίντεο που ανέβασες. 
-                Πάτα το κουμπί για να δεις την ανάλυση της τεχνικής **High Block (Sang Dan Makgi)**.
+                Αυτή η τεχνική απαιτεί σωστό συγχρονισμό. Το χέρι που μπλοκάρει πρέπει να σχηματίζει γωνία 45 μοιρών πάνω από το μέτωπο.
             </p>
         </div>
     </div>
@@ -111,47 +108,39 @@ camera.position.set(0, 1.4, 3);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.shadowMap.enabled = true;
 container.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
 controls.target.set(0, 1, 0);
 
-scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-dirLight.position.set(2, 4, 2);
-dirLight.castShadow = true;
-scene.add(dirLight);
+scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 
 const loader = new GLTFLoader();
 let avatar, bones = {};
 
-// ΔΙΟΡΘΩΜΕΝΕΣ ΚΙΝΗΣΕΙΣ ΓΙΑ HIGH BLOCK
+// Διορθωμένες γωνίες (Rotation: [x, y, z]) για σωστό High Block
 const phases = [
-    { name: "READY", label: "ΕΤΟΙΜΟΤΗΤΑ", rotation: { 
-        "RightArm": [0.6, 0, -0.3], "LeftArm": [0.6, 0, 0.3],
-        "RightForeArm": [0.9, 0, 0], "LeftForeArm": [0.9, 0, 0] 
+    { label: "ΕΤΟΙΜΟΤΗΤΑ", rotation: { 
+        "RightArm": [0.3, 0, -0.2], "LeftArm": [0.3, 0, 0.2],
+        "RightForeArm": [0.5, 0, 0], "LeftForeArm": [0.5, 0, 0] 
     }},
-    { name: "CHAMBER", label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", rotation: { 
-        "RightArm": [1.1, 0.5, -1.2], "LeftArm": [0.4, 0, 0.5],
-        "RightForeArm": [1.4, 0, 0], "LeftForeArm": [0.3, 0, 0] 
+    { label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", rotation: { 
+        "RightArm": [1.5, 0.5, -1.5], "LeftArm": [0.2, 0, 0.3],
+        "RightForeArm": [1.8, 0, 0], "LeftForeArm": [0.2, 0, 0] 
     }},
-    { name: "BLOCK", label: "HIGH BLOCK!", rotation: { 
-        "RightArm": [2.5, 0, -0.6], "LeftArm": [0.3, 0, 1.3],
-        "RightForeArm": [0.6, 0.7, 0.2], "LeftForeArm": [1.5, 0, 0] 
+    { label: "HIGH BLOCK!", rotation: { 
+        "RightArm": [2.8, 0, -0.5], "LeftArm": [0.2, 0, 0.8],
+        "RightForeArm": [0.5, 0.5, 0.5], "LeftForeArm": [1.0, 0, 0] 
     }}
 ];
 
-let currentPhaseIdx = 0;
-const MODEL_URL = 'avatar (1).glb'; 
+let currentIdx = 0;
 
-loader.load(MODEL_URL, (gltf) => {
+loader.load('avatar (1).glb', (gltf) => {
     avatar = gltf.scene;
     scene.add(avatar);
     
     avatar.traverse(n => {
-        if (n.isMesh) n.castShadow = n.receiveShadow = true;
         if (n.isBone) {
             if (n.name.includes('RightArm')) bones.RightArm = n;
             if (n.name.includes('LeftArm')) bones.LeftArm = n;
@@ -159,13 +148,8 @@ loader.load(MODEL_URL, (gltf) => {
             if (n.name.includes('LeftForeArm')) bones.LeftForeArm = n;
         }
     });
-
     document.getElementById('loader').style.display = 'none';
     applyPhase(0);
-}, 
-(xhr) => {
-    const p = (xhr.loaded / xhr.total) * 100;
-    document.getElementById('progress-fill').style.width = p + '%';
 });
 
 function applyPhase(idx) {
@@ -179,22 +163,15 @@ function applyPhase(idx) {
 }
 
 window.playNext = () => {
-    currentPhaseIdx = (currentPhaseIdx + 1) % phases.length;
-    applyPhase(currentPhaseIdx);
+    currentIdx = (currentIdx + 1) % phases.length;
+    applyPhase(currentIdx);
 };
 
 function animate() {
     requestAnimationFrame(animate);
-    controls.update();
     renderer.render(scene, camera);
 }
 animate();
-
-window.addEventListener('resize', () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-});
 </script>
 </body>
 </html>
