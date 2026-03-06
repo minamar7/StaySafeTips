@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>StaySafeTips Elite – High Block Mastery</title>
+<title>StaySafeTips Elite – Tang Soo Do Master</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -30,20 +30,24 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
   position: absolute; inset: 0; pointer-events: none;
   display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
 }
-.phase-badge { align-self: flex-start; background: rgba(0,0,0,0.8); padding: 10px 15px; border-radius: 8px; border-left: 4px solid var(--gold); }
+.phase-badge { align-self: flex-start; background: rgba(0,0,0,0.85); padding: 10px 15px; border-radius: 8px; border-left: 4px solid var(--gold); }
 .phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--gold); }
 
 .avatar-controls { pointer-events: auto; display: flex; flex-direction: column; gap: 8px; align-self: flex-end; }
 .av-btn {
   background: var(--card); border: 1px solid var(--border); color: white;
   padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700;
-  text-transform: uppercase; transition: 0.2s;
+  text-transform: uppercase; transition: 0.2s; letter-spacing: 1px;
 }
 .av-btn.primary { background: #1a3a6c; border: none; box-shadow: 0 4px 15px rgba(26,58,108,0.4); }
 .av-btn:active { transform: scale(0.95); background: var(--gold); color: #000; }
 
 .info-card {
   margin: 0 20px; background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);
+}
+.loader {
+  position: absolute; inset:0; background: var(--bg); display: flex; 
+  flex-direction: column; align-items: center; justify-content: center; z-index: 10;
 }
 </style>
 </head>
@@ -59,25 +63,33 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
 
     <div class="avatar-stage">
         <div id="three-mount"></div>
+        
+        <div class="loader" id="loader">
+            <div style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 20px;">SYNCING MASTER...</div>
+        </div>
+
         <div class="stage-overlay">
             <div class="phase-badge">
                 <div class="phase-name" id="phase-label">READY</div>
-                <div id="phase-sub" style="font-size: 10px; color: #aaa; text-transform: uppercase;">Chunbee</div>
+                <div id="phase-sub" style="font-size: 10px; color: #aaa; text-transform: uppercase;">Chunbee Stance</div>
             </div>
             <div class="avatar-controls">
                 <button class="av-btn primary" id="autoBtn" onclick="runAutoDrill()">START DRILL ⚡</button>
                 <button class="av-btn" onclick="playNext()">NEXT STEP ▶</button>
+                <button class="av-btn" style="background:#000; font-size:9px;" onclick="resetCamera()">RESET VIEW ↻</button>
             </div>
         </div>
     </div>
 
     <div class="info-card">
-        <h3 style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 22px;">Technique Analysis</h3>
+        <h3 style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 22px; margin-bottom: 5px;">Technique Mastery</h3>
         <p id="drill-desc" style="font-size: 14px; color: #ccc; line-height: 1.5;">
-            Correct High Block (Sang Dan Makgi) using core rotation.
+            Ready to analyze the High Block (Sang Dan Makgi). Focus on precision and speed.
         </p>
     </div>
 </div>
+
+<audio id="kiai-audio" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
 
 <script type="importmap">
 {
@@ -108,21 +120,22 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.target.set(0, 1.1, 0);
 
-// Improved Lighting to ensure Avatar is visible
-scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-const light = new THREE.DirectionalLight(0xffffff, 2);
-light.position.set(2, 5, 2);
-scene.add(light);
+// High quality lighting
+scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+sun.position.set(5, 10, 5);
+scene.add(sun);
 
 const loader = new GLTFLoader();
 let avatar, bones = {};
 
+// Movement Phases with Bone Rotations
 const phases = [
-    { label: "READY", sub: "CHUNBEE", desc: "Foundation stance. Eyes forward.", speed: 800,
+    { label: "READY", sub: "CHUNBEE", desc: "Balance your weight. Fists in front of the belt.", speed: 800,
       rot: { "Spine": [0,0,0], "RightArm": [0.6, 0, -0.3], "LeftArm": [0.6, 0, 0.3], "RightForeArm": [0.9, 0, 0], "LeftForeArm": [0.9, 0, 0] }},
-    { label: "CHAMBER", sub: "PREPARATION", desc: "Cross arms. Right hand on left shoulder.", speed: 500,
+    { label: "CHAMBER", sub: "PREPARATION", desc: "Cross the blocking arm. Rotate hips for power.", speed: 500,
       rot: { "Spine": [0.1, 0.3, 0], "RightArm": [1.1, 0.5, -1.2], "LeftArm": [0.4, 0, 0.5], "RightForeArm": [1.4, 0, 0], "LeftForeArm": [0.3, 0, 0] }},
-    { label: "HIGH BLOCK", sub: "SANG DAN MAKGI", desc: "Drive upward with 45° angle. Snap!", speed: 200,
+    { label: "HIGH BLOCK", sub: "SANG DAN MAKGI", desc: "EXPLODE! Drive the forearm up at 45 degrees.", speed: 220,
       rot: { "Spine": [-0.1, -0.4, 0], "RightArm": [2.5, 0, -0.6], "LeftArm": [0.3, 0, 1.3], "RightForeArm": [0.6, 0.7, 0.2], "LeftForeArm": [1.5, 0, 0] }}
 ];
 
@@ -134,24 +147,24 @@ loader.load('avatar (1).glb', (gltf) => {
     
     avatar.traverse(n => {
         if (n.isBone) {
-            const name = n.name;
-            if (name.includes('Spine2')) bones.Spine = n;
-            if (name.includes('RightArm')) bones.RightArm = n;
-            if (name.includes('LeftArm')) bones.LeftArm = n;
-            if (name.includes('RightForeArm')) bones.RightForeArm = n;
-            if (name.includes('LeftForeArm')) bones.LeftForeArm = n;
+            if (n.name.includes('Spine2')) bones.Spine = n;
+            if (n.name.includes('RightArm')) bones.RightArm = n;
+            if (n.name.includes('LeftArm')) bones.LeftArm = n;
+            if (n.name.includes('RightForeArm')) bones.RightForeArm = n;
+            if (n.name.includes('LeftForeArm')) bones.LeftForeArm = n;
         }
-        // Change Outfit to Royal Blue
+        // Digital Uniform Color: Royal Blue
         if (n.isMesh) {
-            if (n.material.name.toLowerCase().includes('outfit') || n.name.toLowerCase().includes('top')) {
-                n.material.color.setHex(0x1a3a6c); 
+            const matName = n.material.name.toLowerCase();
+            if (matName.includes('outfit') || matName.includes('top') || matName.includes('bottom')) {
+                n.material.color.setHex(0x1a3a6c);
             }
         }
     });
+    
+    document.getElementById('loader').style.display = 'none';
     applyPhase(0);
-}, undefined, (error) => {
-    console.error("Error loading avatar:", error);
-});
+}, undefined, (e) => console.error(e));
 
 function applyPhase(idx) {
     currentIdx = idx;
@@ -160,6 +173,12 @@ function applyPhase(idx) {
     document.getElementById('phase-sub').innerText = p.sub;
     document.getElementById('drill-desc').innerText = p.desc;
     
+    if(p.label === "HIGH BLOCK") {
+        document.getElementById('kiai-audio').play().catch(()=>{});
+        // Screen shake effect
+        new TWEEN.Tween(camera.position).to({ x: 0.05 }, 50).repeat(3).yoyo(true).start();
+    }
+
     for (let b in p.rot) {
         if (bones[b]) {
             new TWEEN.Tween(bones[b].rotation)
@@ -176,13 +195,17 @@ window.runAutoDrill = async () => {
     const btn = document.getElementById('autoBtn');
     btn.disabled = true;
     btn.innerText = "DRILLING...";
-    applyPhase(0); await new Promise(r => setTimeout(r, 1500));
+    
+    applyPhase(0); await new Promise(r => setTimeout(r, 1200));
     applyPhase(1); await new Promise(r => setTimeout(r, 800));
     applyPhase(2); await new Promise(r => setTimeout(r, 2500));
     applyPhase(0);
+    
     btn.disabled = false;
     btn.innerText = "START DRILL ⚡";
 };
+
+window.resetCamera = () => { controls.reset(); camera.position.set(0, 1.4, 3.5); };
 
 function animate(time) {
     requestAnimationFrame(animate);
