@@ -1,197 +1,216 @@
-<!DOCTYPE html>
-<html lang="el">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Stay Safe Elite – Tang Soo Do Avatar</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-:root {
-  --gold: #f5c542; --red: #e8212a; --bg: #080810; --card: #10101c;
-  --text: #f0ede8; --dim: #4a4a6a; --border: #1e1e2e;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
-
-.app { max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 80px; }
-.header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.app-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--gold); letter-spacing: 2px; }
-
-.avatar-stage {
-  position: relative; margin: 15px 20px; border-radius: 16px;
-  background: radial-gradient(circle at center, #1a1a2e 0%, #080810 100%);
-  border: 1px solid var(--border); height: 350px; overflow: hidden;
-}
-#three-mount { width:100%; height:100%; }
-
-.stage-overlay {
-  position: absolute; inset: 0; pointer-events: none;
-  display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
-}
-.phase-badge { align-self: flex-start; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--gold); }
-.phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--gold); }
-
-.avatar-controls { pointer-events: auto; display: flex; gap: 10px; align-self: flex-end; }
-.av-btn {
-  background: var(--card); border: 1px solid var(--border); color: white;
-  padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 12px;
-}
-.av-btn:active { border-color: var(--gold); }
-
-.loader {
-  position: absolute; inset:0; background: var(--bg); display: flex; 
-  flex-direction: column; align-items: center; justify-content: center; z-index: 10;
-}
-.progress-bar { width: 150px; height: 4px; background: #222; margin-top: 10px; border-radius: 2px; overflow: hidden; }
-.progress-fill { width: 0%; height: 100%; background: var(--gold); transition: width 0.3s; }
-</style>
-</head>
-<body>
-
-<div class="app">
-    <div class="header">
-        <div>
-            <div class="app-title">STAY SAFE ELITE</div>
-            <div style="font-size: 10px; color: var(--dim); letter-spacing: 2px;">TANG SOO DO INTERACTIVE</div>
-        </div>
-    </div>
-
-    <div class="avatar-stage">
-        <div id="three-mount"></div>
-        
-        <div class="loader" id="loader">
-            <div style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 20px;">ΦΟΡΤΩΣΗ AVATAR...</div>
-            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        </div>
-
-        <div class="stage-overlay">
-            <div class="phase-badge">
-                <div class="phase-name" id="phase-label">READY</div>
-                <div style="font-size: 10px; color: #aaa;">ΣΤΑΣΗ ΕΤΟΙΜΟΤΗΤΑΣ</div>
-            </div>
-
-            <div class="avatar-controls">
-                <button class="av-btn" onclick="playNext()">ΕΠΟΜΕΝΗ ΚΙΝΗΣΗ ▶</button>
-            </div>
-        </div>
-    </div>
-
-    <div style="padding: 0 20px;">
-        <div style="background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
-            <h3 style="color: var(--gold); font-family: 'Bebas Neue'; margin-bottom: 5px;">Πληροφορίες Άσκησης</h3>
-            <p style="font-size: 14px; color: #ccc; line-height: 1.5;">
-                Ανάλυση τεχνικής: <b>High Block (Sang Dan Makgi)</b>.
-            </p>
-        </div>
-    </div>
-</div>
-
-<script type="importmap">
-{
-    "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-    }
-}
-</script>
-
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const container = document.getElementById('three-mount');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-camera.position.set(0, 1.4, 3);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+45,
+container.clientWidth / container.clientHeight,
+0.1,
+100
+);
+
+camera.position.set(0,1.4,3);
+
+const renderer = new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setSize(container.clientWidth,container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
+
 container.appendChild(renderer.domElement);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(0, 1, 0);
+const controls = new OrbitControls(camera,renderer.domElement);
+controls.target.set(0,1,0);
+controls.enableDamping = true;
 
-scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+scene.add(new THREE.AmbientLight(0xffffff,1.3));
+
+const dirLight = new THREE.DirectionalLight(0xffffff,1);
+dirLight.position.set(3,5,2);
+scene.add(dirLight);
 
 const loader = new GLTFLoader();
-let avatar, bones = {};
 
-// εντοπισμός bones
-function detectBones(node) {
-    if (!node.isBone) return;
-    const name = node.name.toLowerCase();
+let avatar;
+let bones = {};
 
-    if (name.includes("rightarm")) bones.RightArm = node;
-    if (name.includes("rightforearm")) bones.RightForeArm = node;
-    if (name.includes("righthand")) bones.RightHand = node;
+function detectBones(node){
 
-    if (name.includes("leftarm")) bones.LeftArm = node;
-    if (name.includes("leftforearm")) bones.LeftForeArm = node;
-    if (name.includes("lefthand")) bones.LeftHand = node;
+if(!node.isBone) return;
+
+const name = node.name.toLowerCase();
+
+if(name.includes("rightarm")) bones.RightArm = node;
+if(name.includes("rightforearm")) bones.RightForeArm = node;
+if(name.includes("righthand")) bones.RightHand = node;
+
+if(name.includes("leftarm")) bones.LeftArm = node;
+if(name.includes("leftforearm")) bones.LeftForeArm = node;
+if(name.includes("lefthand")) bones.LeftHand = node;
+
 }
 
-// ⭐ ΝΕΕΣ ΓΩΝΙΕΣ — όπως μου ζήτησες
-const phases = [
-    { label: "READY", rotation: { 
-        RightArm:      [0.25, 0.05, -0.1],
-        RightForeArm:  [0.4, 0, 0],
-        LeftArm:       [0.25, -0.05, 0.1],
-        LeftForeArm:   [0.4, 0, 0]
-    }},
-    { label: "PREPARATION", rotation: { 
-        RightArm:      [1.3, 0.25, -1.1],
-        RightForeArm:  [1.45, 0.15, 0.15],
+const phases=[
 
-        LeftArm:       [-1.0, 0.2, 0.3],   // αγκώνας στο πλευρό
-        LeftForeArm:   [-0.3, 0, 0]        // χέρι πίσω
-    }},
-    { label: "HIGH BLOCK!", rotation: { 
-        RightArm:      [2.35, -0.25, -0.15],   // πολύ ψηλά
-        RightForeArm:  [1.55, 0.55, 0.25],     // μπροστά από το μέτωπο
+{
+label:"READY",
+rotation:{
+RightArm:[0.15,0.05,-0.05],
+RightForeArm:[0.25,0,0],
+LeftArm:[0.15,-0.05,0.05],
+LeftForeArm:[0.25,0,0]
+}
+},
 
-        LeftArm:       [-1.1, 0.15, 0.25],     // chamber στο πλευρό
-        LeftForeArm:   [-0.4, 0, 0]
-    }}
+{
+label:"PREPARATION",
+rotation:{
+RightArm:[0.7,0.2,-1.4],
+RightForeArm:[1.0,0.2,0.2],
+LeftArm:[-0.9,0.1,0.25],
+LeftForeArm:[-0.6,0,0]
+}
+},
+
+{
+label:"HIGH BLOCK",
+rotation:{
+RightArm:[1.9,-0.15,-0.25],
+RightForeArm:[1.35,0.35,0.25],
+LeftArm:[-1.1,0.15,0.3],
+LeftForeArm:[-0.6,0,0]
+}
+}
+
 ];
 
-let currentPhaseIdx = 0;
+let currentPhase=0;
+let animating=false;
 
-loader.load("avatar (1).glb", (gltf) => {
-    avatar = gltf.scene;
-    scene.add(avatar);
+loader.load("avatar (1).glb",(gltf)=>{
 
-    avatar.traverse(detectBones);
+avatar=gltf.scene;
 
-    document.getElementById('loader').style.display = 'none';
-    applyPhase(0);
+scene.add(avatar);
+
+avatar.traverse(detectBones);
+
+document.getElementById("loader").style.display="none";
+
+applyPhaseInstant(0);
+
 });
 
-function applyPhase(idx) {
-    const p = phases[idx];
-    document.getElementById('phase-label').innerText = p.label;
+function applyPhaseInstant(i){
 
-    for (let b in p.rotation) {
-        if (bones[b]) {
-            const [x, y, z] = p.rotation[b];
-            bones[b].rotation.set(x, y, z);
-        }
-    }
+const p=phases[i];
+
+document.getElementById("phase-label").innerText=p.label;
+
+for(let b in p.rotation){
+
+if(bones[b]){
+
+const r=p.rotation[b];
+
+bones[b].rotation.set(r[0],r[1],r[2]);
+
 }
 
-window.playNext = () => {
-    currentPhaseIdx = (currentPhaseIdx + 1) % phases.length;
-    applyPhase(currentPhaseIdx);
+}
+
+}
+
+function animateToPhase(next){
+
+if(animating) return;
+
+animating=true;
+
+const duration=500;
+
+const start=performance.now();
+
+const startRot={};
+
+for(let b in phases[next].rotation){
+
+if(bones[b]){
+
+startRot[b]=bones[b].rotation.clone();
+
+}
+
+}
+
+function step(now){
+
+let t=(now-start)/duration;
+
+if(t>1)t=1;
+
+for(let b in phases[next].rotation){
+
+if(!bones[b]) continue;
+
+const target=phases[next].rotation[b];
+
+const sr=startRot[b];
+
+bones[b].rotation.x=THREE.MathUtils.lerp(sr.x,target[0],t);
+bones[b].rotation.y=THREE.MathUtils.lerp(sr.y,target[1],t);
+bones[b].rotation.z=THREE.MathUtils.lerp(sr.z,target[2],t);
+
+}
+
+if(t<1){
+
+requestAnimationFrame(step);
+
+}else{
+
+animating=false;
+
+}
+
+}
+
+requestAnimationFrame(step);
+
+document.getElementById("phase-label").innerText=phases[next].label;
+
+}
+
+window.playNext=()=>{
+
+currentPhase=(currentPhase+1)%phases.length;
+
+animateToPhase(currentPhase);
+
 };
 
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-animate();
-</script>
+function animate(){
 
-</body>
-</html>
+requestAnimationFrame(animate);
+
+controls.update();
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+window.addEventListener("resize",()=>{
+
+camera.aspect=container.clientWidth/container.clientHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(container.clientWidth,container.clientHeight);
+
+});
+</script>
