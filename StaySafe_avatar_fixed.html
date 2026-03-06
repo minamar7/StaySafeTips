@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Stay Safe Elite – Tang Soo Do Avatar</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --gold: #f5c542; --red: #e8212a; --bg: #080810; --card: #10101c;
+  --text: #f0ede8; --dim: #4a4a6a; --border: #1e1e2e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+
+.app { max-width: 480px; margin: 0 auto; min-height: 100vh; padding-bottom: 80px; }
+.header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.app-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--gold); letter-spacing: 2px; }
+
+.avatar-stage {
+  position: relative; margin: 15px 20px; border-radius: 16px;
+  background: radial-gradient(circle at center, #1a1a2e 0%, #080810 100%);
+  border: 1px solid var(--border); height: 350px; overflow: hidden;
+}
+#three-mount { width:100%; height:100%; }
+
+.stage-overlay {
+  position: absolute; inset: 0; pointer-events: none;
+  display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
+}
+.phase-badge { align-self: flex-start; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--gold); }
+.phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--gold); }
+
+.avatar-controls { pointer-events: auto; display: flex; gap: 10px; align-self: flex-end; }
+.av-btn {
+  background: var(--card); border: 1px solid var(--border); color: white;
+  padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 12px;
+}
+.av-btn:active { border-color: var(--gold); }
+
+.loader {
+  position: absolute; inset:0; background: var(--bg); display: flex; 
+  flex-direction: column; align-items: center; justify-content: center; z-index: 10;
+}
+.progress-bar { width: 150px; height: 4px; background: #222; margin-top: 10px; border-radius: 2px; overflow: hidden; }
+.progress-fill { width: 0%; height: 100%; background: var(--gold); transition: width 0.3s; }
+</style>
+</head>
+<body>
+
+<div class="app">
+    <div class="header">
+        <div>
+            <div class="app-title">STAY SAFE ELITE</div>
+            <div style="font-size: 10px; color: var(--dim); letter-spacing: 2px;">TANG SOO DO INTERACTIVE</div>
+        </div>
+    </div>
+
+    <div class="avatar-stage">
+        <div id="three-mount"></div>
+        
+        <div class="loader" id="loader">
+            <div style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 20px;">ΦΟΡΤΩΣΗ AVATAR...</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+
+        <div class="stage-overlay">
+            <div class="phase-badge">
+                <div class="phase-name" id="phase-label">READY</div>
+                <div style="font-size: 10px; color: #aaa;" id="phase-sub">ΣΤΑΣΗ ΕΤΟΙΜΟΤΗΤΑΣ</div>
+            </div>
+
+            <div class="avatar-controls">
+                <button class="av-btn" onclick="playNext()">ΕΠΟΜΕΝΗ ΚΙΝΗΣΗ ▶</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding: 0 20px;">
+        <div style="background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+            <h3 style="color: var(--gold); font-family: 'Bebas Neue'; margin-bottom: 5px;">Πληροφορίες Άσκησης</h3>
+            <p id="phase-desc" style="font-size: 14px; color: #ccc; line-height: 1.5;">
+                Θέση ετοιμότητας. Τα χέρια σε φυσική φύλαξη, βλέμμα μπροστά.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const container = document.getElementById('three-mount');
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+camera.position.set(0, 1.4, 3);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, 1, 0);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+dirLight.position.set(2, 4, 2);
+dirLight.castShadow = true;
+scene.add(dirLight);
+
+const loader = new GLTFLoader();
+let bones = {}, restRot = {};
+let currentPhaseIdx = 0, tween = null;
+
+// ─── CALIBRATED TO avatar.glb ───────────────────────────────────
+// Rest pose (measured from file):
+//   RightArm/LeftArm X=+57deg  RightForeArm Z=-25deg  LeftForeArm Z=+25deg
+// All values below = DELTA added ON TOP of rest rotation.
+// High Block: 57deg rest + 106deg delta = 163deg total = arm above head
+// ────────────────────────────────────────────────────────────────
+const D = Math.PI / 180;
+
+const phases = [
+    {
+        label: "ΕΤΟΙΜΟΤΗΤΑ",
+        sub:   "준비 자세 · Ready",
+        desc:  "Θέση ετοιμότητας. Χέρια σε φυσική φύλαξη, βλέμμα μπροστά.",
+        delta: {
+            RightArm:     [ -5*D,  0, -15*D], RightForeArm: [35*D, 0,  5*D], RightHand: [0,0,0],
+            LeftArm:      [ -5*D,  0,  15*D], LeftForeArm:  [35*D, 0, -5*D], LeftHand:  [0,0,0],
+            Spine: [0,0,0], Spine1: [0,0,0], Head: [8*D, 0, 0]
+        }
+    },
+    {
+        label: "ΠΡΟΕΤΟΙΜΑΣΙΑ",
+        sub:   "당겨 · Chamber",
+        desc:  "Δεξί χέρι τραβιέται πίσω στο ισχίο. Αριστερό μπροστά σε φύλαξη.",
+        delta: {
+            RightArm:     [-30*D, 0, -55*D], RightForeArm: [55*D, 0, 10*D], RightHand: [0,0,0],
+            LeftArm:      [ 10*D, 0,  25*D], LeftForeArm:  [15*D, 0,-10*D], LeftHand:  [0,0,5*D],
+            Spine: [5*D,0,0], Spine1: [3*D,0,0], Head: [10*D,0,0]
+        }
+    },
+    {
+        label: "ΑΝΕΒΑΣΜΑ",
+        sub:   "올리기 · Rising",
+        desc:  "Το δεξί χέρι ανεβαίνει διαγώνια με ορμή προς τα πάνω.",
+        delta: {
+            RightArm:     [ 60*D, 0, -40*D], RightForeArm: [ 5*D, 0,-10*D], RightHand: [0,0,12*D],
+            LeftArm:      [  5*D, 0,  35*D], LeftForeArm:  [40*D, 0, -5*D], LeftHand:  [0,0, 5*D],
+            Spine: [5*D,0,-5*D], Spine1: [3*D,0,-2*D], Head: [14*D,0,5*D]
+        }
+    },
+    {
+        label: "HIGH BLOCK!",
+        sub:   "상단막기 · Sang Dan Makgi",
+        desc:  "Πλήρες άνω μπλοκάρισμα! Πήχης 45° πάνω από το κεφάλι αποκρούει επίθεση από ψηλά.",
+        delta: {
+            // 57deg rest + 106deg = 163deg total → χέρι πάνω από κεφάλι
+            RightArm:     [106*D,  0, -42*D], RightForeArm: [-12*D,22*D,22*D], RightHand: [0,0,18*D],
+            LeftArm:      [ 10*D,  0,  42*D], LeftForeArm:  [ 38*D, 0, -5*D], LeftHand:  [0,0,  0],
+            Spine: [8*D,0,-8*D], Spine1: [5*D,0,-3*D], Head: [18*D,0,8*D]
+        }
+    },
+    {
+        label: "ΚΡΑΤΗΣΕ!",
+        sub:   "유지 · Hold",
+        desc:  "Σταθεροποίησε το μπλοκάρισμα. Έλεγξε ισορροπία και αναπνοή.",
+        delta: {
+            RightArm:     [103*D,  0, -40*D], RightForeArm: [-10*D,20*D,20*D], RightHand: [0,0,16*D],
+            LeftArm:      [  8*D,  0,  40*D], LeftForeArm:  [ 36*D, 0, -5*D], LeftHand:  [0,0,  0],
+            Spine: [7*D,0,-7*D], Spine1: [4*D,0,-2*D], Head: [16*D,0,7*D]
+        }
+    }
+];
+
+// Smooth easing
+const easeIO = t => t < .5 ? 2*t*t : -1+(4-2*t)*t;
+
+function startTween(idx) {
+    const ph = phases[idx], from = {}, to = {};
+    Object.entries(ph.delta).forEach(([n, e]) => {
+        if (!bones[n]) return;
+        from[n] = {x:bones[n].rotation.x, y:bones[n].rotation.y, z:bones[n].rotation.z};
+        const r = restRot[n] || new THREE.Euler();
+        to[n]   = {x:r.x+e[0], y:r.y+e[1], z:r.z+e[2]};
+    });
+    tween = {from, to, t0:performance.now(), dur: idx===3 ? 340 : 520};
+}
+
+function tickTween(now) {
+    if (!tween) return;
+    const t = Math.min((now-tween.t0)/tween.dur, 1), e = easeIO(t);
+    Object.keys(tween.to).forEach(n => {
+        if (!bones[n]) return;
+        bones[n].rotation.x = tween.from[n].x + (tween.to[n].x-tween.from[n].x)*e;
+        bones[n].rotation.y = tween.from[n].y + (tween.to[n].y-tween.from[n].y)*e;
+        bones[n].rotation.z = tween.from[n].z + (tween.to[n].z-tween.from[n].z)*e;
+    });
+    if (t >= 1) tween = null;
+}
+
+function applyPhase(idx, instant=false) {
+    const p = phases[idx];
+    document.getElementById('phase-label').innerText = p.label;
+    document.getElementById('phase-sub').innerText   = p.sub;
+    document.getElementById('phase-desc').innerText  = p.desc;
+    if (!Object.keys(bones).length) return;
+    if (instant) {
+        Object.entries(p.delta).forEach(([n,e]) => {
+            if (!bones[n]) return;
+            const r = restRot[n] || new THREE.Euler();
+            bones[n].rotation.set(r.x+e[0], r.y+e[1], r.z+e[2]);
+        });
+    } else startTween(idx);
+}
+
+// ── Load model ────────────────────────────────────────────────────
+const MODEL_URL = 'avatar.glb';  // ← άλλαξε σε 'avatar (1).glb' αν χρειαστεί
+
+loader.load(MODEL_URL, (gltf) => {
+    const avatar = gltf.scene;
+
+    // Skeleton-based bone collection (αξιόπιστο για GLB)
+    avatar.traverse(n => {
+        if (n.isMesh) n.castShadow = n.receiveShadow = true;
+        if (n.isSkinnedMesh && n.skeleton)
+            n.skeleton.bones.forEach(b => { if (b.name) bones[b.name] = b; });
+    });
+
+    // Αποθήκευσε rest rotations — ΚΡΙΣΙΜΟ για σωστά deltas
+    Object.keys(bones).forEach(n => { restRot[n] = bones[n].rotation.clone(); });
+
+    // Scale: native 1.8745 units height → 1.62 world units
+    const box = new THREE.Box3().setFromObject(avatar);
+    const sf  = 1.62 / box.getSize(new THREE.Vector3()).y;
+    const ctr = box.getCenter(new THREE.Vector3());
+    avatar.scale.setScalar(sf);
+    avatar.position.set(-ctr.x*sf, -box.min.y*sf, -ctr.z*sf);
+    scene.add(avatar);
+
+    // Κάμερα στο σωστό ύψος (hips ≈ 0.88)
+    const hipsY = 1.0192 * sf;
+    controls.target.set(0, hipsY, 0);
+    camera.position.set(0, hipsY * 0.8, 3.2);
+    controls.update();
+
+    document.getElementById('loader').style.display = 'none';
+    applyPhase(0, true);
+
+}, (xhr) => {
+    const p = xhr.total ? xhr.loaded/xhr.total*100 : xhr.loaded/838196*100;
+    document.getElementById('progress-fill').style.width = Math.min(p,99) + '%';
+});
+
+window.playNext = () => {
+    currentPhaseIdx = (currentPhaseIdx + 1) % phases.length;
+    applyPhase(currentPhaseIdx);
+};
+
+function animate(time) {
+    requestAnimationFrame(animate);
+    tickTween(time);
+    controls.update();
+    renderer.render(scene, camera);
+}
+animate(0);
+
+window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+});
+</script>
+
+</body>
+</html>
