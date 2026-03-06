@@ -118,19 +118,25 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 const loader = new GLTFLoader();
 let avatar, bones = {};
 
-// Διορθωμένες γωνίες (Rotation: [x, y, z]) για σωστό High Block
+// 🔥 ΝΕΕΣ, ΡΕΑΛΙΣΤΙΚΕΣ ΓΩΝΙΕΣ TANG SOO DO (ΔΕΞΙ HIGH BLOCK)
 const phases = [
     { label: "ΕΤΟΙΜΟΤΗΤΑ", rotation: { 
-        "RightArm": [0.3, 0, -0.2], "LeftArm": [0.3, 0, 0.2],
-        "RightForeArm": [0.5, 0, 0], "LeftForeArm": [0.5, 0, 0] 
+        "RightArm": [0.25, 0, -0.15], 
+        "LeftArm": [0.25, 0, 0.15],
+        "RightForeArm": [0.45, 0, 0], 
+        "LeftForeArm": [0.45, 0, 0] 
     }},
     { label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", rotation: { 
-        "RightArm": [1.5, 0.5, -1.5], "LeftArm": [0.2, 0, 0.3],
-        "RightForeArm": [1.8, 0, 0], "LeftForeArm": [0.2, 0, 0] 
+        "RightArm": [1.35, 0.35, -1.25], 
+        "LeftArm": [-0.25, 0.05, 0.45],
+        "RightForeArm": [1.55, 0.1, 0], 
+        "LeftForeArm": [0.1, 0, 0] 
     }},
     { label: "HIGH BLOCK!", rotation: { 
-        "RightArm": [2.8, 0, -0.5], "LeftArm": [0.2, 0, 0.8],
-        "RightForeArm": [0.5, 0.5, 0.5], "LeftForeArm": [1.0, 0, 0] 
+        "RightArm": [2.35, -0.15, -0.35], 
+        "RightForeArm": [1.25, 0.45, 0.15], 
+        "LeftArm": [-0.55, 0.05, 0.55], 
+        "LeftForeArm": [0.05, 0, 0] 
     }}
 ];
 
