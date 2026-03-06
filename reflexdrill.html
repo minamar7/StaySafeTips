@@ -1,57 +1,153 @@
-<script type="module">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>Stay Safe Elite – Tang Soo Do Avatar</title>
 
-const container = document.getElementById('three-mount');
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
 
-const scene = new THREE.Scene();
+<style>
 
-const camera = new THREE.PerspectiveCamera(
-45,
-container.clientWidth / container.clientHeight,
-0.1,
-100
-);
+body{
+margin:0;
+background:#0e0e11;
+color:white;
+font-family:Arial;
+}
 
-camera.position.set(0,1.4,3);
+.avatar-stage{
+position:relative;
+height:60vh;
+}
 
-const renderer = new THREE.WebGLRenderer({antialias:true,alpha:true});
-renderer.setSize(container.clientWidth,container.clientHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+#three-mount{
+width:100%;
+height:100%;
+}
 
-container.appendChild(renderer.domElement);
+.loader{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+}
 
-const controls = new OrbitControls(camera,renderer.domElement);
-controls.target.set(0,1,0);
-controls.enableDamping = true;
+.progress-bar{
+width:200px;
+height:6px;
+background:#333;
+border-radius:10px;
+margin-top:10px;
+}
 
-scene.add(new THREE.AmbientLight(0xffffff,1.3));
+.progress-fill{
+height:6px;
+width:0%;
+background:gold;
+}
 
-const dirLight = new THREE.DirectionalLight(0xffffff,1);
-dirLight.position.set(3,5,2);
-scene.add(dirLight);
+.stage-overlay{
+position:absolute;
+bottom:20px;
+left:20px;
+}
 
-const loader = new GLTFLoader();
+.phase-badge{
+background:#111;
+padding:10px 16px;
+border-radius:10px;
+border:1px solid #444;
+}
+
+.phase-name{
+font-size:20px;
+color:gold;
+}
+
+.avatar-controls{
+margin-top:10px;
+}
+
+.av-btn{
+background:gold;
+border:none;
+padding:10px 14px;
+font-weight:bold;
+cursor:pointer;
+border-radius:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="avatar-stage">
+
+<div id="three-mount"></div>
+
+<div class="loader" id="loader">
+<div style="color:gold;font-size:20px;">ΦΟΡΤΩΣΗ AVATAR...</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<div class="stage-overlay">
+
+<div class="phase-badge">
+<div class="phase-name" id="phase-label">READY</div>
+<div style="font-size:10px;color:#aaa;">ΣΤΑΣΗ ΕΤΟΙΜΟΤΗΤΑΣ</div>
+</div>
+
+<div class="avatar-controls">
+<button class="av-btn" onclick="playNext()">ΕΠΟΜΕΝΗ ΚΙΝΗΣΗ ▶</button>
+</div>
+
+</div>
+</div>
+
+<div style="padding:20px">
+<h3 style="color:gold;">Πληροφορίες Άσκησης</h3>
+<p>Ανάλυση τεχνικής: <b>High Block (Sang Dan Makgi)</b></p>
+</div>
+
+<script>
+
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,100);
+camera.position.set(0,1.6,3);
+
+let renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight*0.6);
+document.getElementById("three-mount").appendChild(renderer.domElement);
+
+let light = new THREE.HemisphereLight(0xffffff,0x444444,1.3);
+scene.add(light);
+
+let dir = new THREE.DirectionalLight(0xffffff,1);
+dir.position.set(2,3,2);
+scene.add(dir);
 
 let avatar;
-let bones = {};
+let bones={};
 
-function detectBones(node){
+let loader = new THREE.GLTFLoader();
 
-if(!node.isBone) return;
+loader.load("avatar.glb",(gltf)=>{
 
-const name = node.name.toLowerCase();
+avatar=gltf.scene;
+scene.add(avatar);
 
-if(name.includes("rightarm")) bones.RightArm = node;
-if(name.includes("rightforearm")) bones.RightForeArm = node;
-if(name.includes("righthand")) bones.RightHand = node;
-
-if(name.includes("leftarm")) bones.LeftArm = node;
-if(name.includes("leftforearm")) bones.LeftForeArm = node;
-if(name.includes("lefthand")) bones.LeftHand = node;
-
+avatar.traverse(obj=>{
+if(obj.isBone){
+bones[obj.name]=obj;
 }
+});
+
+document.getElementById("loader").style.display="none";
+
+});
 
 const phases=[
 
@@ -60,6 +156,7 @@ label:"READY",
 rotation:{
 RightArm:[0.15,0.05,-0.05],
 RightForeArm:[0.25,0,0],
+
 LeftArm:[0.15,-0.05,0.05],
 LeftForeArm:[0.25,0,0]
 }
@@ -68,9 +165,10 @@ LeftForeArm:[0.25,0,0]
 {
 label:"PREPARATION",
 rotation:{
-RightArm:[0.7,0.2,-1.4],
-RightForeArm:[1.0,0.2,0.2],
-LeftArm:[-0.9,0.1,0.25],
+RightArm:[0.9,0.2,-1.25],
+RightForeArm:[1.2,0.2,0.15],
+
+LeftArm:[-1.0,0.15,0.35],
 LeftForeArm:[-0.6,0,0]
 }
 },
@@ -78,139 +176,60 @@ LeftForeArm:[-0.6,0,0]
 {
 label:"HIGH BLOCK",
 rotation:{
-RightArm:[1.9,-0.15,-0.25],
-RightForeArm:[1.35,0.35,0.25],
-LeftArm:[-1.1,0.15,0.3],
-LeftForeArm:[-0.6,0,0]
+RightArm:[1.9,-0.2,-0.25],
+RightForeArm:[1.25,0.35,0.25],
+
+LeftArm:[-1.15,0.1,0.35],
+LeftForeArm:[-0.75,0,0]
 }
 }
 
 ];
 
-let currentPhase=0;
-let animating=false;
+let phaseIndex=0;
 
-loader.load("avatar (1).glb",(gltf)=>{
-
-avatar=gltf.scene;
-
-scene.add(avatar);
-
-avatar.traverse(detectBones);
-
-document.getElementById("loader").style.display="none";
-
-applyPhaseInstant(0);
-
-});
-
-function applyPhaseInstant(i){
-
-const p=phases[i];
+function applyPhase(p){
 
 document.getElementById("phase-label").innerText=p.label;
 
-for(let b in p.rotation){
+for(let bone in p.rotation){
 
-if(bones[b]){
+if(bones[bone]){
 
-const r=p.rotation[b];
+let r=p.rotation[bone];
 
-bones[b].rotation.set(r[0],r[1],r[2]);
-
-}
-
-}
-
-}
-
-function animateToPhase(next){
-
-if(animating) return;
-
-animating=true;
-
-const duration=500;
-
-const start=performance.now();
-
-const startRot={};
-
-for(let b in phases[next].rotation){
-
-if(bones[b]){
-
-startRot[b]=bones[b].rotation.clone();
+bones[bone].rotation.x=r[0];
+bones[bone].rotation.y=r[1];
+bones[bone].rotation.z=r[2];
 
 }
 
 }
 
-function step(now){
-
-let t=(now-start)/duration;
-
-if(t>1)t=1;
-
-for(let b in phases[next].rotation){
-
-if(!bones[b]) continue;
-
-const target=phases[next].rotation[b];
-
-const sr=startRot[b];
-
-bones[b].rotation.x=THREE.MathUtils.lerp(sr.x,target[0],t);
-bones[b].rotation.y=THREE.MathUtils.lerp(sr.y,target[1],t);
-bones[b].rotation.z=THREE.MathUtils.lerp(sr.z,target[2],t);
-
 }
 
-if(t<1){
+function playNext(){
 
-requestAnimationFrame(step);
+phaseIndex++;
 
-}else{
-
-animating=false;
-
+if(phaseIndex>=phases.length){
+phaseIndex=0;
 }
 
-}
-
-requestAnimationFrame(step);
-
-document.getElementById("phase-label").innerText=phases[next].label;
+applyPhase(phases[phaseIndex]);
 
 }
-
-window.playNext=()=>{
-
-currentPhase=(currentPhase+1)%phases.length;
-
-animateToPhase(currentPhase);
-
-};
 
 function animate(){
 
 requestAnimationFrame(animate);
-
-controls.update();
-
 renderer.render(scene,camera);
 
 }
 
 animate();
 
-window.addEventListener("resize",()=>{
+</script>
 
-camera.aspect=container.clientWidth/container.clientHeight;
-
-camera.updateProjectionMatrix();
-
-renderer.setSize(container.clientWidth,container.clientHeight);
-
-});
-</script> 
+</body>
+</html>
