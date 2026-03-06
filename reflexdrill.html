@@ -29,7 +29,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
   position: absolute; inset: 0; pointer-events: none;
   display: flex; flex-direction: column; justify-content: space-between; padding: 15px;
 }
-.phase-badge { alignself: flex-start; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--gold); }
+.phase-badge { align-self: flex-start; background: rgba(0,0,0,0.6); padding: 8px 12px; border-radius: 8px; border-left: 3px solid var(--gold); }
 .phase-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--gold); }
 
 .avatar-controls { pointer-events: auto; display: flex; gap: 10px; align-self: flex-end; }
@@ -133,7 +133,7 @@ function detectBones(node) {
     if (name.includes("lefthand")) bones.LeftHand = node;
 }
 
-// φάσεις – πιο “καθαρό” High Block
+// ⭐ ΝΕΕΣ ΓΩΝΙΕΣ — όπως μου ζήτησες
 const phases = [
     { label: "READY", rotation: { 
         RightArm:      [0.25, 0.05, -0.1],
@@ -142,19 +142,18 @@ const phases = [
         LeftForeArm:   [0.4, 0, 0]
     }},
     { label: "PREPARATION", rotation: { 
-        RightArm:      [1.2, 0.25, -1.0],
-        RightForeArm:  [1.4, 0.1, 0.15],
-        LeftArm:       [-0.35, 0.1, 0.55],
-        LeftForeArm:   [0.25, 0, 0]
+        RightArm:      [1.3, 0.25, -1.1],
+        RightForeArm:  [1.45, 0.15, 0.15],
+
+        LeftArm:       [-1.0, 0.2, 0.3],   // αγκώνας στο πλευρό
+        LeftForeArm:   [-0.3, 0, 0]        // χέρι πίσω
     }},
     { label: "HIGH BLOCK!", rotation: { 
-        // ώμος πολύ ψηλά, λίγο μπροστά, λίγο προς τα μέσα
-        RightArm:      [2.1, -0.25, -0.25],
-        // πήχης μπροστά από το μέτωπο, σχεδόν οριζόντιος, ελαφρά λοξός
-        RightForeArm:  [1.0, 0.55, 0.25],
-        // αριστερό χέρι chamber στο πλάι
-        LeftArm:       [-0.7, 0.15, 0.7],
-        LeftForeArm:   [0.2, 0, 0]
+        RightArm:      [2.35, -0.25, -0.15],   // πολύ ψηλά
+        RightForeArm:  [1.55, 0.55, 0.25],     // μπροστά από το μέτωπο
+
+        LeftArm:       [-1.1, 0.15, 0.25],     // chamber στο πλευρό
+        LeftForeArm:   [-0.4, 0, 0]
     }}
 ];
 
