@@ -118,26 +118,35 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 const loader = new GLTFLoader();
 let avatar, bones = {};
 
-// 🔥 ΝΕΕΣ, ΡΕΑΛΙΣΤΙΚΕΣ ΓΩΝΙΕΣ TANG SOO DO (ΔΕΞΙ HIGH BLOCK)
+// Φάσεις κίνησης – δεξί High Block
 const phases = [
-    { label: "ΕΤΟΙΜΟΤΗΤΑ", rotation: { 
-        "RightArm": [0.25, 0, -0.15], 
-        "LeftArm": [0.25, 0, 0.15],
-        "RightForeArm": [0.45, 0, 0], 
-        "LeftForeArm": [0.45, 0, 0] 
-    }},
-    { label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", rotation: { 
-        "RightArm": [1.35, 0.35, -1.25], 
-        "LeftArm": [-0.25, 0.05, 0.45],
-        "RightForeArm": [1.55, 0.1, 0], 
-        "LeftForeArm": [0.1, 0, 0] 
-    }},
-    { label: "HIGH BLOCK!", rotation: { 
-        "RightArm": [2.35, -0.15, -0.35], 
-        "RightForeArm": [1.25, 0.45, 0.15], 
-        "LeftArm": [-0.55, 0.05, 0.55], 
-        "LeftForeArm": [0.05, 0, 0] 
-    }}
+    { 
+        label: "ΕΤΟΙΜΟΤΗΤΑ", 
+        rotation: { 
+            RightArm:   [0.1, 0, -0.1],
+            RightForeArm:[0.2, 0, 0],
+            LeftArm:    [0.1, 0, 0.1],
+            LeftForeArm:[0.2, 0, 0]
+        }
+    },
+    { 
+        label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", 
+        rotation: { 
+            RightArm:   [0.9, 0.1, -0.6],
+            RightForeArm:[1.0, 0.1, 0.1],
+            LeftArm:    [-0.4, 0.1, 0.4],
+            LeftForeArm:[0.1, 0, 0]
+        }
+    },
+    { 
+        label: "HIGH BLOCK!", 
+        rotation: { 
+            RightArm:   [1.7, -0.1, -0.3],
+            RightForeArm:[1.2, 0.3, 0.1],
+            LeftArm:    [-0.6, 0.1, 0.5],
+            LeftForeArm:[0.1, 0, 0]
+        }
+    }
 ];
 
 let currentIdx = 0;
@@ -145,15 +154,21 @@ let currentIdx = 0;
 loader.load('avatar (1).glb', (gltf) => {
     avatar = gltf.scene;
     scene.add(avatar);
-    
+
+    // Αυτόματη ανίχνευση bones για Ready Player Me / humanoid rigs
     avatar.traverse(n => {
-        if (n.isBone) {
-            if (n.name.includes('RightArm')) bones.RightArm = n;
-            if (n.name.includes('LeftArm')) bones.LeftArm = n;
-            if (n.name.includes('RightForeArm')) bones.RightForeArm = n;
-            if (n.name.includes('LeftForeArm')) bones.LeftForeArm = n;
-        }
+        if (!n.isBone) return;
+        const name = n.name.toLowerCase();
+
+        if (name.includes("right") && name.includes("upper")) bones.RightArm = n;
+        if (name.includes("right") && name.includes("lower")) bones.RightForeArm = n;
+        if (name.includes("right") && name.includes("hand")) bones.RightHand = n;
+
+        if (name.includes("left") && name.includes("upper")) bones.LeftArm = n;
+        if (name.includes("left") && name.includes("lower")) bones.LeftForeArm = n;
+        if (name.includes("left") && name.includes("hand")) bones.LeftHand = n;
     });
+
     document.getElementById('loader').style.display = 'none';
     applyPhase(0);
 });
@@ -161,11 +176,14 @@ loader.load('avatar (1).glb', (gltf) => {
 function applyPhase(idx) {
     const p = phases[idx];
     document.getElementById('phase-label').innerText = p.label;
-    for (let b in p.rotation) {
-        if (bones[b]) {
-            bones[b].rotation.set(p.rotation[b][0], p.rotation[b][1], p.rotation[b][2]);
+
+    Object.keys(p.rotation).forEach(key => {
+        const bone = bones[key];
+        if (bone) {
+            const [x, y, z] = p.rotation[key];
+            bone.rotation.set(x, y, z);
         }
-    }
+    });
 }
 
 window.playNext = () => {
@@ -180,4 +198,4 @@ function animate() {
 animate();
 </script>
 </body>
-</html> 
+</html>
