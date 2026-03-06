@@ -118,19 +118,19 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 const loader = new GLTFLoader();
 let avatar, bones = {};
 
-// 🔥 ΤΕΛΙΚΕΣ ΔΙΟΡΘΩΜΕΝΕΣ ΓΩΝΙΕΣ TANG SOO DO
+// 🔥 ΔΙΟΡΘΩΜΕΝΕΣ ΓΩΝΙΕΣ ΓΙΑ ΠΙΣΤΗ ΑΝΑΠΑΡΑΣΤΑΣΗ
 const phases = [
-    { label: "ΕΤΟΙΜΟΤΗΤΑ", rotation: { 
-        "RightArm": [0.1, 0, -0.05], "LeftArm": [0.1, 0, 0.05],
-        "RightForeArm": [0.1, 0, 0], "LeftForeArm": [0.1, 0, 0] 
+    { label: "ΕΤΟΙΜΟΤΗΤΑ (CHUNBEE)", rotation: { 
+        "RightArm": [0.3, 0, -0.1], "LeftArm": [0.3, 0, 0.1],
+        "RightForeArm": [0.2, 0, 0], "LeftForeArm": [0.2, 0, 0] 
     }},
     { label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", rotation: { 
-        "RightArm": [1.2, 0.4, -1.1], "LeftArm": [0.3, 0.1, 0.6],
-        "RightForeArm": [1.6, 0, 0], "LeftForeArm": [0.4, 0, 0] 
+        "RightArm": [1.4, 0.4, -1.2], "LeftArm": [0.2, 0, 0.5],
+        "RightForeArm": [1.8, 0, 0], "LeftForeArm": [0.3, 0, 0] 
     }},
     { label: "HIGH BLOCK!", rotation: { 
-        "RightArm": [2.6, 0, -0.4], "RightForeArm": [0.7, 0.3, 0], 
-        "LeftArm": [0.1, -0.2, 0.8], "LeftForeArm": [1.5, 0, 0] 
+        "RightArm": [2.6, 0, -0.5], "LeftArm": [0.2, -0.2, 0.7],
+        "RightForeArm": [0.6, 0.5, 0.2], "LeftForeArm": [1.6, 0, 0] 
     }}
 ];
 
