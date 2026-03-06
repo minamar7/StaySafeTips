@@ -59,6 +59,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
 
     <div class="avatar-stage">
         <div id="three-mount"></div>
+        
         <div class="loader" id="loader">
             <div style="color: var(--gold); font-family: 'Bebas Neue'; font-size: 20px;">ΦΟΡΤΩΣΗ AVATAR...</div>
             <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
@@ -80,7 +81,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
         <div style="background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
             <h3 style="color: var(--gold); font-family: 'Bebas Neue'; margin-bottom: 5px;">Πληροφορίες Άσκησης</h3>
             <p style="font-size: 14px; color: #ccc; line-height: 1.5;">
-                Αυτή η τεχνική απαιτεί σωστό συγχρονισμό. Το χέρι που μπλοκάρει πρέπει να σχηματίζει γωνία 45 μοιρών πάνω από το μέτωπο.
+                Ανάλυση τεχνικής: **High Block (Sang Dan Makgi)**.
             </p>
         </div>
     </div>
@@ -118,56 +119,50 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.2));
 const loader = new GLTFLoader();
 let avatar, bones = {};
 
-// Φάσεις κίνησης – δεξί High Block
+// ⭐ Σωστός εντοπισμός Mixamo bones για Ready Player Me
+function detectBones(node) {
+    if (!node.isBone) return;
+
+    const name = node.name.toLowerCase();
+
+    if (name.includes("rightarm")) bones.RightArm = node;
+    if (name.includes("rightforearm")) bones.RightForeArm = node;
+    if (name.includes("lefthand")) bones.LeftHand = node;
+
+    if (name.includes("leftarm")) bones.LeftArm = node;
+    if (name.includes("leftforearm")) bones.LeftForeArm = node;
+    if (name.includes("righthand")) bones.RightHand = node;
+}
+
+// ⭐ Tang Soo Do High Block – σωστές γωνίες
 const phases = [
-    { 
-        label: "ΕΤΟΙΜΟΤΗΤΑ", 
-        rotation: { 
-            mixamorigRightArm:   [0.1, 0, -0.1],
-            mixamorigRightForeArm:[0.2, 0, 0],
-            mixamorigLeftArm:    [0.1, 0, 0.1],
-            mixamorigLeftForeArm:[0.2, 0, 0]
-        }
-    },
-    { 
-        label: "ΠΡΟΕΤΟΙΜΑΣΙΑ", 
-        rotation: { 
-            mixamorigRightArm:   [0.9, 0.1, -0.6],
-            mixamorigRightForeArm:[1.0, 0.1, 0.1],
-            mixamorigLeftArm:    [-0.4, 0.1, 0.4],
-            mixamorigLeftForeArm:[0.1, 0, 0]
-        }
-    },
-    { 
-        label: "HIGH BLOCK!", 
-        rotation: { 
-            mixamorigRightArm:   [1.7, -0.1, -0.3],
-            mixamorigRightForeArm:[1.2, 0.3, 0.1],
-            mixamorigLeftArm:    [-0.6, 0.1, 0.5],
-            mixamorigLeftForeArm:[0.1, 0, 0]
-        }
-    }
+    { label: "READY", rotation: { 
+        RightArm: [0.2, 0, -0.1],
+        RightForeArm: [0.4, 0, 0],
+        LeftArm: [0.2, 0, 0.1],
+        LeftForeArm: [0.4, 0, 0]
+    }},
+    { label: "PREPARATION", rotation: { 
+        RightArm: [0.9, 0.1, -0.6],
+        RightForeArm: [1.0, 0.1, 0.1],
+        LeftArm: [-0.4, 0.1, 0.4],
+        LeftForeArm: [0.1, 0, 0]
+    }},
+    { label: "HIGH BLOCK!", rotation: { 
+        RightArm: [1.7, -0.1, -0.3],
+        RightForeArm: [1.2, 0.3, 0.1],
+        LeftArm: [-0.6, 0.1, 0.5],
+        LeftForeArm: [0.1, 0, 0]
+    }}
 ];
 
-let currentIdx = 0;
+let currentPhaseIdx = 0;
 
-loader.load('avatar (1).glb', (gltf) => {
+loader.load("avatar (1).glb", (gltf) => {
     avatar = gltf.scene;
     scene.add(avatar);
 
-    // Εντοπισμός Mixamo bones
-    avatar.traverse(n => {
-        if (!n.isBone) return;
-        const name = n.name;
-
-        if (name.includes("mixamorigRightArm")) bones.mixamorigRightArm = n;
-        if (name.includes("mixamorigRightForeArm")) bones.mixamorigRightForeArm = n;
-        if (name.includes("mixamorigRightHand")) bones.mixamorigRightHand = n;
-
-        if (name.includes("mixamorigLeftArm")) bones.mixamorigLeftArm = n;
-        if (name.includes("mixamorigLeftForeArm")) bones.mixamorigLeftForeArm = n;
-        if (name.includes("mixamorigLeftHand")) bones.mixamorigLeftHand = n;
-    });
+    avatar.traverse(detectBones);
 
     document.getElementById('loader').style.display = 'none';
     applyPhase(0);
@@ -177,18 +172,17 @@ function applyPhase(idx) {
     const p = phases[idx];
     document.getElementById('phase-label').innerText = p.label;
 
-    Object.keys(p.rotation).forEach(key => {
-        const bone = bones[key];
-        if (bone) {
-            const [x, y, z] = p.rotation[key];
-            bone.rotation.set(x, y, z);
+    for (let b in p.rotation) {
+        if (bones[b]) {
+            const [x, y, z] = p.rotation[b];
+            bones[b].rotation.set(x, y, z);
         }
-    });
+    }
 }
 
 window.playNext = () => {
-    currentIdx = (currentIdx + 1) % phases.length;
-    applyPhase(currentIdx);
+    currentPhaseIdx = (currentPhaseIdx + 1) % phases.length;
+    applyPhase(currentPhaseIdx);
 };
 
 function animate() {
@@ -197,5 +191,6 @@ function animate() {
 }
 animate();
 </script>
+
 </body>
 </html>
