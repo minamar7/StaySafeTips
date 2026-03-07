@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SOS HUB – Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020617; --card: rgba(15,23,42,0.9);
+            --accent: #38bdf8; --gold: #facc15;
+            --danger: #ef4444; --success: #22c55e;
+            --border: rgba(255,255,255,0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: white; font-family: 'DM Sans', -apple-system, sans-serif; padding: 50px 20px 100px; overflow-x: hidden; min-height: 100vh; }
+        body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at 20% 20%, rgba(56,189,248,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(239,68,68,0.06) 0%, transparent 60%); pointer-events: none; z-index: 0; }
+        .content { position: relative; z-index: 1; }
+
+        .back-btn { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.4s ease 0.1s forwards; }
+        .page-header { margin-bottom: 32px; opacity: 0; animation: fadeUp 0.4s ease 0.2s forwards; }
+        .page-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3.2rem; letter-spacing: 0.05em; line-height: 1; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .page-header p { color: #64748b; font-size: 0.88rem; margin-top: 6px; }
+
+        .section-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin: 28px 0 14px; display: flex; align-items: center; gap: 8px; }
+        .section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(56,189,248,0.3), transparent); }
+
+        .hospital-btn { display: flex; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 20px; border-radius: 20px; border: none; width: 100%; font-weight: 800; font-size: 1rem; cursor: pointer; letter-spacing: 0.05em; box-shadow: 0 8px 32px rgba(37,99,235,0.4); transition: transform 0.15s; font-family: 'DM Sans', sans-serif; }
+        .hospital-btn:active { transform: scale(0.97); }
+        .hospital-note { text-align: center; font-size: 0.72rem; color: #475569; margin-top: 10px; }
+
+        .aid-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .aid-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 18px 20px; display: flex; align-items: center; gap: 16px; cursor: pointer; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.15s; opacity: 0; animation: fadeUp 0.45s ease forwards; }
+        .aid-card:nth-child(1) { animation-delay: 0.3s; }
+        .aid-card:nth-child(2) { animation-delay: 0.4s; }
+        .aid-card:nth-child(3) { animation-delay: 0.5s; }
+        .aid-card:hover { border-color: rgba(56,189,248,0.4); transform: translateX(4px); }
+        .aid-icon-wrap { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+        .cpr .aid-icon-wrap { background: rgba(239,68,68,0.15); }
+        .bleeding .aid-icon-wrap { background: rgba(220,38,38,0.12); }
+        .choking .aid-icon-wrap { background: rgba(251,191,36,0.12); }
+        .aid-info { flex: 1; }
+        .aid-title { font-weight: 800; font-size: 1rem; margin-bottom: 3px; }
+        .aid-steps-count { font-size: 0.75rem; color: #64748b; }
+        .aid-arrow { color: #334155; font-size: 1.2rem; transition: transform 0.2s, color 0.2s; }
+        .aid-card:hover .aid-arrow { transform: translateX(4px); color: var(--accent); }
+
+        .contacts-card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; overflow: hidden; opacity: 0; animation: fadeUp 0.45s ease 0.6s forwards; }
+        .phone-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .phone-row:last-child { border-bottom: none; }
+        .phone-name { font-weight: 600; font-size: 0.9rem; }
+        .phone-sub { font-size: 0.72rem; color: #64748b; margin-top: 2px; }
+        .call-btn { padding: 9px 20px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em; text-decoration: none; transition: transform 0.15s; }
+        .call-btn:active { transform: scale(0.95); }
+        .call-green { background: var(--success); color: white; box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
+        .call-red { background: var(--danger); color: white; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+
+        /* MODAL */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: flex-end; justify-content: center; z-index: 1000; backdrop-filter: blur(8px); }
+        .modal.open { display: flex; }
+        .modal-sheet { background: #0f172a; border-radius: 32px 32px 0 0; border: 1px solid rgba(255,255,255,0.1); border-bottom: none; width: 100%; max-width: 520px; max-height: 92vh; overflow: hidden; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.32,0.72,0,1); }
+        .modal.open .modal-sheet { transform: translateY(0); }
+        .modal-handle { width: 40px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 14px auto 0; flex-shrink: 0; }
+        .modal-header { padding: 16px 24px 0; flex-shrink: 0; }
+        .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.05em; color: var(--accent); }
+
+        .emergency-call-bar { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--danger); color: white; padding: 14px 20px; border-radius: 16px; text-decoration: none; font-weight: 900; font-size: 0.9rem; margin: 14px 24px 0; box-shadow: 0 4px 20px rgba(239,68,68,0.4); animation: pulse-red 2s infinite; flex-shrink: 0; }
+        @keyframes pulse-red { 0%,100% { box-shadow: 0 4px 20px rgba(239,68,68,0.4); } 50% { box-shadow: 0 4px 30px rgba(239,68,68,0.7); } }
+
+        .steps-wrapper { flex: 1; overflow: hidden; padding: 20px 24px 0; position: relative; }
+        .step-counter { font-size: 0.75rem; font-weight: 700; color: #475569; letter-spacing: 0.08em; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+        .step-dots { display: flex; gap: 6px; align-items: center; }
+        .dot { width: 6px; height: 6px; border-radius: 3px; background: #1e293b; transition: all 0.3s; }
+        .dot.active { width: 20px; background: var(--accent); }
+
+        .step-stage { position: relative; height: 300px; overflow: hidden; }
+
+        .step-slide { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #1e293b; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); padding: 24px; opacity: 0; transform: translateX(60px) scale(0.95); transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none; }
+        .step-slide.active { opacity: 1; transform: translateX(0) scale(1); pointer-events: all; }
+        .step-slide.exit { opacity: 0; transform: translateX(-60px) scale(0.95); transition: opacity 0.25s ease, transform 0.25s ease; }
+
+        .step-number-badge { position: absolute; top: 14px; left: 14px; background: var(--accent); color: #020617; font-weight: 900; font-size: 0.7rem; padding: 4px 10px; border-radius: 8px; letter-spacing: 0.05em; }
+
+        .step-img-wrap { width: 110px; height: 110px; background: rgba(56,189,248,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; }
+        .step-img-wrap::before { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--accent); border-right-color: rgba(56,189,248,0.3); animation: spin-ring 2s linear infinite; }
+        @keyframes spin-ring { to { transform: rotate(360deg); } }
+
+        .step-img { width: 70px; height: 70px; object-fit: contain; }
+        .step-slide.active .step-img { animation: img-bounce 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s both; }
+        @keyframes img-bounce { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .step-text { font-weight: 800; font-size: 1.05rem; text-align: center; color: white; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.3; }
+        .step-tip { margin-top: 8px; font-size: 0.75rem; color: #64748b; text-align: center; line-height: 1.4; }
+
+        .step-nav { display: flex; gap: 12px; padding: 16px 24px 32px; flex-shrink: 0; }
+        .nav-btn { flex: 1; padding: 16px; border: none; border-radius: 16px; font-weight: 800; font-size: 0.9rem; cursor: pointer; transition: transform 0.15s, opacity 0.2s; font-family: 'DM Sans', sans-serif; letter-spacing: 0.04em; }
+        .nav-btn:active { transform: scale(0.96); }
+        .btn-prev { background: #1e293b; color: #64748b; border: 1px solid rgba(255,255,255,0.08); }
+        .btn-prev:disabled { opacity: 0.3; cursor: default; }
+        .btn-next { background: linear-gradient(135deg, var(--accent), #0ea5e9); color: #020617; }
+        .btn-done { background: linear-gradient(135deg, var(--success), #16a34a); color: white; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+<div class="content">
+
+    <a href="index.html" class="back-btn">← DASHBOARD</a>
+
+    <div class="page-header">
+        <h1>SOS Hub</h1>
+        <p>Emergency Locator & Visual First Aid Guide</p>
+    </div>
+
+    <div class="section-label">🏥 Nearby Medical Help</div>
+    <button class="hospital-btn" onclick="findHospitals()">🗺️ &nbsp;FIND HOSPITALS NEAR ME</button>
+    <p class="hospital-note">Opens GPS • Emergency rooms & clinics</p>
+
+    <div class="section-label">🩺 Visual First Aid Guide</div>
+    <div class="aid-grid">
+        <div class="aid-card cpr" onclick="openAid('CPR')">
+            <div class="aid-icon-wrap">🫀</div>
+            <div class="aid-info">
+                <div class="aid-title">CPR Technique</div>
+                <div class="aid-steps-count">6 animated steps</div>
+            </div>
+            <div class="aid-arrow">›</div>
+        </div>
+        <div class="aid-card bleeding" onclick="openAid('BLEEDING')">
+            <div class="aid-icon-wrap">🩸</div>
+            <div class="aid-info">
+                <div class="aid-title">Bleeding Control</div>
+                <div class="aid-steps-count">4 animated steps</div>
+            </div>
+            <div class="aid-arrow">›</div>
+        </div>
+        <div class="aid-card choking" onclick="openAid('CHOKING')">
+            <div class="aid-icon-wrap">🥨</div>
+            <div class="aid-info">
+                <div class="aid-title">Choking Rescue (Heimlich)</div>
+                <div class="aid-steps-count">4 animated steps</div>
+            </div>
+            <div class="aid-arrow">›</div>
+        </div>
+    </div>
+
+    <div class="section-label">📞 Emergency Contacts</div>
+    <div class="contacts-card">
+        <div class="phone-row">
+            <div><div class="phone-name">Universal Emergency</div><div class="phone-sub">EU Standard</div></div>
+            <a href="tel:112" class="call-btn call-red">📞 112</a>
+        </div>
+        <div class="phone-row">
+            <div><div class="phone-name">Ambulance</div><div class="phone-sub">Greece</div></div>
+            <a href="tel:166" class="call-btn call-green">📞 166</a>
+        </div>
+        <div class="phone-row">
+            <div><div class="phone-name">Police</div><div class="phone-sub">Greece</div></div>
+            <a href="tel:100" class="call-btn call-green">📞 100</a>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div id="aidModal" class="modal" onclick="handleModalBgClick(event)">
+    <div class="modal-sheet" id="modalSheet">
+        <div class="modal-handle"></div>
+        <div class="modal-header">
+            <div class="modal-title" id="modalTitle"></div>
+        </div>
+        <a href="tel:112" class="emergency-call-bar">🚨 &nbsp;TAP TO CALL EMERGENCY (112)</a>
+        <div class="steps-wrapper">
+            <div class="step-counter">
+                <span id="stepCounterText">STEP 1 OF 6</span>
+                <div class="step-dots" id="stepDots"></div>
+            </div>
+            <div class="step-stage" id="stepStage"></div>
+        </div>
+        <div class="step-nav">
+            <button class="nav-btn btn-prev" id="btnPrev" onclick="prevStep()">← BACK</button>
+            <button class="nav-btn btn-next" id="btnNext" onclick="nextStep()">NEXT →</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const aidData = {
+        'CPR': {
+            title: 'CPR TECHNIQUE',
+            steps: [
+                { icon: 'https://cdn-icons-png.flaticon.com/512/5610/5610944.png', text: 'Call Emergency', tip: 'Call 112 immediately before starting CPR' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/3774/3774247.png', text: 'Check Vital Signs', tip: 'Tap shoulders, shout — check for response' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807695.png', text: 'Lift Chin & Check Breathing', tip: 'Tilt head back, listen for 10 seconds' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807718.png', text: 'Give Rescue Breaths', tip: '2 slow breaths, watch chest rise' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807681.png', text: 'Chest Compressions', tip: '30 compressions — push hard 5cm deep' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/2966/2966334.png', text: 'Wait for Ambulance', tip: 'Continue 30:2 ratio until help arrives' }
+            ]
+        },
+        'BLEEDING': {
+            title: 'BLEEDING CONTROL',
+            steps: [
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807699.png', text: 'Apply Direct Pressure', tip: 'Use cloth or hands — press firmly on wound' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807702.png', text: 'Elevate the Limb', tip: 'Raise above heart level to slow bleeding' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807706.png', text: 'Apply Tight Bandage', tip: 'Wrap firmly — do not remove if soaked, add more' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807710.png', text: 'Keep Victim Calm', tip: 'Call 112 if bleeding does not stop in 10 min' }
+            ]
+        },
+        'CHOKING': {
+            title: 'CHOKING (HEIMLICH)',
+            steps: [
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807714.png', text: 'Stand Behind Victim', tip: 'Place one foot forward for balance' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807720.png', text: 'Perform Upward Thrusts', tip: 'Fist above navel, sharp inward-upward thrusts' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/4807/4807724.png', text: 'Clear the Airway', tip: 'Check mouth — remove object if visible' },
+                { icon: 'https://cdn-icons-png.flaticon.com/512/5610/5610944.png', text: 'Call 112 if Unconscious', tip: 'Begin CPR if victim loses consciousness' }
+            ]
+        }
+    };
+
+    let currentSteps = [];
+    let currentIndex = 0;
+
+    function findHospitals() {
+        window.open("https://www.google.com/maps/search/hospitals+near+me/", '_blank');
+    }
+
+    function openAid(type) {
+        const data = aidData[type];
+        currentSteps = data.steps;
+        currentIndex = 0;
+
+        document.getElementById('modalTitle').innerText = data.title;
+
+        document.getElementById('stepDots').innerHTML = currentSteps.map((_, i) =>
+            `<div class="dot ${i === 0 ? 'active' : ''}" id="dot-${i}"></div>`
+        ).join('');
+
+        document.getElementById('stepStage').innerHTML = currentSteps.map((step, i) => `
+            <div class="step-slide ${i === 0 ? 'active' : ''}" id="slide-${i}">
+                <div class="step-number-badge">STEP ${i + 1}</div>
+                <div class="step-img-wrap">
+                    <img src="${step.icon}" class="step-img" alt="${step.text}">
+                </div>
+                <div class="step-text">${step.text}</div>
+                <div class="step-tip">${step.tip}</div>
+            </div>
+        `).join('');
+
+        updateNav();
+        document.getElementById('aidModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function goToStep(newIndex) {
+        const oldSlide = document.getElementById(`slide-${currentIndex}`);
+        const newSlide = document.getElementById(`slide-${newIndex}`);
+
+        oldSlide.classList.remove('active');
+        oldSlide.classList.add('exit');
+        setTimeout(() => oldSlide.classList.remove('exit'), 300);
+
+        newSlide.classList.add('active');
+
+        document.getElementById(`dot-${currentIndex}`).classList.remove('active');
+        document.getElementById(`dot-${newIndex}`).classList.add('active');
+
+        currentIndex = newIndex;
+        updateNav();
+    }
+
+    function nextStep() {
+        if (currentIndex < currentSteps.length - 1) {
+            goToStep(currentIndex + 1);
+        } else {
+            closeModal();
+            if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+        }
+    }
+
+    function prevStep() {
+        if (currentIndex > 0) goToStep(currentIndex - 1);
+    }
+
+    function updateNav() {
+        const isLast = currentIndex === currentSteps.length - 1;
+        document.getElementById('stepCounterText').innerText = `STEP ${currentIndex + 1} OF ${currentSteps.length}`;
+        document.getElementById('btnPrev').disabled = currentIndex === 0;
+        const next = document.getElementById('btnNext');
+        next.className = `nav-btn ${isLast ? 'btn-done' : 'btn-next'}`;
+        next.innerText = isLast ? '✓ GOT IT' : 'NEXT →';
+    }
+
+    function closeModal() {
+        document.getElementById('aidModal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function handleModalBgClick(e) {
+        if (e.target === document.getElementById('aidModal')) closeModal();
+    }
+
+    // Swipe navigation
+    let touchStartX = 0;
+    document.getElementById('modalSheet').addEventListener('touchstart', e => {
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    document.getElementById('modalSheet').addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? nextStep() : prevStep(); }
+    }, { passive: true });
+</script>
+</body>
+</html>
