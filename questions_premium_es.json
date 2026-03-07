@@ -1,0 +1,214 @@
+{
+  "es": {
+    "levels": {
+      "7": [
+        {
+          "q": "Recibes una videollamada de tu jefe. La imagen es clara, pero la voz suena metálica y casi no parpadea. Te pide una transferencia urgente. ¿Qué haces?",
+          "o": [
+            "Hago la transferencia inmediatamente",
+            "Cuelgo y llamo a mi jefe por teléfono para verificar",
+            "Le pido que me mande un email"
+          ],
+          "a": 1,
+          "exp": "Los deepfakes de video son cada vez más realistas. Siempre verifica por otro canal antes de transferir dinero."
+        },
+        {
+          "q": "Un amigo te manda un mensaje de voz pidiendo 50€ por Bizum porque ha perdido el móvil. ¿Qué haces?",
+          "o": [
+            "Le mando el dinero enseguida, es mi amigo",
+            "Llamo al número real de mi amigo para confirmar",
+            "Le pido que me mande una foto con su DNI"
+          ],
+          "a": 1,
+          "exp": "Los estafadores clonan voces con IA. Llama siempre al número original antes de enviar dinero."
+        },
+        {
+          "q": "Ves un anuncio con un famoso promocionando una plataforma de inversión con rentabilidades del 300%. ¿Qué es probablemente?",
+          "o": [
+            "Una oportunidad real de inversión",
+            "Un deepfake de estafa con IA",
+            "Un producto bancario nuevo"
+          ],
+          "a": 1,
+          "exp": "Los estafadores usan deepfakes de famosos para promocionar fraudes de inversión. Ninguna inversión garantiza rentabilidades tan altas."
+        },
+        {
+          "q": "Un 'técnico bancario' te pide compartir pantalla para solucionar un problema con tu cuenta. ¿Qué haces?",
+          "o": [
+            "Comparto la pantalla para resolver el problema rápido",
+            "Cuelgo y llamo al número oficial del banco",
+            "Le doy acceso pero solo a la app del banco"
+          ],
+          "a": 1,
+          "exp": "Los bancos nunca piden compartir pantalla. Es una técnica clásica para robar credenciales."
+        },
+        {
+          "q": "Recibes un video de tu CEO pidiendo un pago urgente a una cuenta nueva. ¿Qué debes hacer?",
+          "o": [
+            "Ejecuto el pago, es una orden directiva",
+            "Verifico con el CEO por teléfono o en persona antes de actuar",
+            "Reenvío el video al departamento financiero para que decidan"
+          ],
+          "a": 1,
+          "exp": "El 'CEO fraud' o BEC es uno de los fraudes más costosos para empresas. Siempre verifica pagos inusuales directamente."
+        }
+      ],
+      "8": [
+        {
+          "q": "Recibes un email diciendo que tu contraseña fue filtrada en la Dark Web. ¿Cuál es el primer paso?",
+          "o": [
+            "Hago clic en el enlace del email para cambiarla",
+            "Voy directamente a la web oficial y cambio mi contraseña",
+            "Ignoro el email, son todos falsos"
+          ],
+          "a": 1,
+          "exp": "Nunca hagas clic en enlaces de emails de alerta. Ve siempre directamente al sitio oficial. Puedes verificar en haveibeenpwned.com"
+        },
+        {
+          "q": "Un email de extorsión menciona una contraseña antigua tuya y pide Bitcoin. ¿Qué significa esto?",
+          "o": [
+            "Han hackeado tu dispositivo ahora mismo",
+            "Obtuvieron tu contraseña de una filtración antigua de datos",
+            "Alguien te espía en tiempo real"
+          ],
+          "a": 1,
+          "exp": "Esta es una estafa llamada 'sextortion'. Usan contraseñas de filtraciones antiguas para parecer creíbles. Ignora y cambia esa contraseña."
+        },
+        {
+          "q": "En el aeropuerto te conectas a 'WiFi_Aeropuerto_Gratis'. ¿Qué riesgo corres?",
+          "o": [
+            "Ninguno, es la red oficial",
+            "Podría ser una red falsa para interceptar tus datos (Evil Twin)",
+            "Solo es inseguro para compras online"
+          ],
+          "a": 1,
+          "exp": "Las redes WiFi públicas sin contraseña pueden ser redes trampa. Usa siempre VPN en WiFi público."
+        },
+        {
+          "q": "Tu móvil pierde toda la señal de repente y no la recupera. ¿Qué podría estar ocurriendo?",
+          "o": [
+            "Simplemente hay mala cobertura",
+            "Podrías ser víctima de un ataque SIM Swapping",
+            "El móvil necesita reiniciarse"
+          ],
+          "a": 1,
+          "exp": "El SIM Swapping es cuando los criminales duplican tu SIM para recibir tus SMS de verificación. Llama a tu operadora inmediatamente."
+        },
+        {
+          "q": "Recibes una alerta de inicio de sesión desde otro país. ¿Qué debes hacer primero?",
+          "o": [
+            "Ignorarla, probablemente es un error",
+            "Cambiar la contraseña y activar autenticación en dos pasos inmediatamente",
+            "Esperar para ver si ocurre de nuevo"
+          ],
+          "a": 1,
+          "exp": "Un inicio de sesión desde otro país es señal de cuenta comprometida. Actúa inmediatamente cambiando credenciales."
+        }
+      ],
+      "9": [
+        {
+          "q": "Un 'asesor financiero' te promete un 200% de rentabilidad semanal. ¿Qué es más probable?",
+          "o": [
+            "Una inversión legítima de alto riesgo",
+            "Un esquema Ponzi o fraude de inversión",
+            "Un producto nuevo de criptomonedas legal"
+          ],
+          "a": 1,
+          "exp": "Ninguna inversión legítima garantiza rentabilidades tan altas. Es la señal más clara de un esquema Ponzi o estafa."
+        },
+        {
+          "q": "¿Qué NUNCA debes compartir, ni siquiera con el soporte oficial?",
+          "o": [
+            "Tu nombre de usuario",
+            "Tu contraseña o código de verificación SMS",
+            "Tu dirección de email"
+          ],
+          "a": 1,
+          "exp": "El soporte legítimo nunca necesita tu contraseña. Si alguien la pide, es una estafa."
+        },
+        {
+          "q": "Aparece un NFT gratuito en tu cartera de crypto pidiéndote conectarte a una web para desbloquearlo. ¿Qué es?",
+          "o": [
+            "Un regalo legítimo de la comunidad",
+            "Un NFT trampa para vaciar tu cartera (Drainer)",
+            "Una promoción oficial de la blockchain"
+          ],
+          "a": 1,
+          "exp": "Los NFT no solicitados son trampas. Conectar tu cartera a esa web puede transferir todos tus fondos al estafador."
+        },
+        {
+          "q": "¿Dónde debes guardar grandes cantidades de criptomonedas a largo plazo?",
+          "o": [
+            "En el exchange donde las compraste",
+            "En una cartera fría (hardware wallet) offline",
+            "En una app de móvil con contraseña segura"
+          ],
+          "a": 1,
+          "exp": "Las carteras de hardware como Ledger o Trezor mantienen tus claves privadas offline, lejos de hackers."
+        },
+        {
+          "q": "Recibes un 'Airdrop' de crypto de una empresa desconocida. ¿Qué suele ser?",
+          "o": [
+            "Dinero gratis por ser usuario activo",
+            "Una táctica para que interactúes con un contrato malicioso",
+            "Una promoción oficial de Ethereum"
+          ],
+          "a": 1,
+          "exp": "Los airdrops no solicitados a menudo requieren que 'apruebes' un contrato que vacía tu cartera. Ignóralos siempre."
+        }
+      ],
+      "10": [
+        {
+          "q": "Recibes un email de 'Microsoft Seguridad' diciendo que tu cuenta será bloqueada. Tiene tu nombre y logo oficial. ¿Qué haces?",
+          "o": [
+            "Hago clic en el enlace y verifico mi cuenta",
+            "Ignoro el email y accedo a mi cuenta Microsoft directamente",
+            "Reenvío el email a mis contactos para advertirles"
+          ],
+          "a": 1,
+          "exp": "El phishing avanzado usa nombres reales y logos oficiales. Nunca hagas clic: ve siempre directamente a la web oficial."
+        },
+        {
+          "q": "Alguien te pide instalar una 'app de seguridad' para solucionar un problema técnico. ¿Qué haces?",
+          "o": [
+            "La instalo si parece oficial",
+            "Rechazo y cuelgo — es acceso remoto para robar mis datos",
+            "La instalo solo si me la mandan por email"
+          ],
+          "a": 1,
+          "exp": "Las apps de acceso remoto como AnyDesk o TeamViewer son herramientas legítimas usadas ilegítimamente por estafadores."
+        },
+        {
+          "q": "Un llamante conoce tu nombre, dirección e IBAN y dice ser de tu banco. ¿Qué significa esto?",
+          "o": [
+            "Es definitivamente tu banco, tienen tus datos",
+            "Podrían haber comprado tus datos de una filtración — cuelga y llama al banco",
+            "Es seguro porque saben tu IBAN"
+          ],
+          "a": 1,
+          "exp": "Los datos personales se venden en la dark web. Tener tu información no verifica la identidad del llamante."
+        },
+        {
+          "q": "Recibes un código QR para 'verificar tu identidad'. ¿Qué debes hacer?",
+          "o": [
+            "Escanearlo, es un método seguro moderno",
+            "Desconfiar — los QR pueden redirigir a webs de phishing o activar pagos",
+            "Escanearlo solo con el móvil del trabajo"
+          ],
+          "a": 1,
+          "exp": "El 'QRishing' es phishing mediante códigos QR. Siempre verifica la URL antes de introducir datos."
+        },
+        {
+          "q": "Te dicen que muevas tu dinero a una 'cuenta segura' para protegerlo de hackers. ¿Qué es esto?",
+          "o": [
+            "Un protocolo real de seguridad bancaria",
+            "Una estafa clásica — los bancos nunca piden esto",
+            "Solo es válido si lo pide la Policía"
+          ],
+          "a": 1,
+          "exp": "La estafa de 'cuenta segura' es el fraude más denunciado en Europa. Ningún banco ni autoridad pide mover dinero así."
+        }
+      ]
+    }
+  }
+}
