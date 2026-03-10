@@ -1,66 +1,67 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Reflex Drill – Tang Soo Do | Stay Safe Elite</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-<style>
-:root{--bg:#080808;--gold:#d4a53a;--gold2:#f0c865;--white:#f2ede4;--muted:#484848;--border:rgba(212,165,58,0.13);}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--white);font-family:'Barlow Condensed',sans-serif;min-height:100vh;overflow-x:hidden;}
-.page{max-width:440px;margin:0 auto;padding:20px 14px 90px;}
-.back-btn{color:var(--gold);text-decoration:none;font-size:0.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;display:inline-flex;align-items:center;gap:5px;margin-bottom:20px;opacity:.75;}
-.back-btn::before{content:'←';}
-.hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;}
-.eyebrow{font-size:0.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.04em;line-height:.88;}
-h1 span{color:var(--gold);}
-.badge{background:#111;border:1px solid var(--border);border-radius:3px;padding:6px 12px;text-align:center;}
-.badge-rank{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);line-height:1;}
-.badge-lbl{font-size:0.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:11px;}
-.tab{background:#0e0e0e;border:1px solid rgba(255,255,255,.05);border-radius:3px;padding:8px 2px 7px;text-align:center;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
-.tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:.18s;}
-.tab.active,.tab:hover{background:rgba(212,165,58,.05);border-color:var(--border);}
-.tab.active::after,.tab:hover::after{transform:scaleX(1);}
-.tab-icon{font-size:1.1rem;display:block;margin-bottom:2px;}
-.tab-lbl{font-size:0.57rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
-.tab.active .tab-lbl{color:var(--gold);}
-.stats{display:flex;gap:1px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden;margin-bottom:11px;}
-.stat{flex:1;background:#0e0e0e;padding:9px 4px;text-align:center;}
-.sv{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--gold);display:block;line-height:1;}
-.sl{font-size:0.57rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
-.canvas-card{background:#090909;border:1px solid var(--border);border-radius:5px;overflow:hidden;margin-bottom:10px;position:relative;}
-.canvas-top{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);}
-.tech-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.07em;color:var(--gold);}
-.ph-badge{font-size:0.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:2px 8px;border:1px solid rgba(255,255,255,.07);border-radius:2px;transition:all .3s;}
-.ph-badge.ki{color:var(--gold);border-color:rgba(212,165,58,.3);background:rgba(212,165,58,.08);}
-#c3d{display:block;width:100%;height:380px;}
-.load-wrap{position:absolute;top:40px;left:0;right:0;bottom:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#090909;z-index:10;}
-.load-txt{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--muted);}
-.load-bar-bg{width:160px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
-.load-bar{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width .2s;}
-.flash{position:absolute;top:40px;left:0;right:0;bottom:0;pointer-events:none;opacity:0;transition:opacity .06s;}
-.phase-desc{padding:9px 14px;border-top:1px solid rgba(255,255,255,.04);min-height:52px;}
-.ph-title{font-weight:900;font-size:0.82rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;}
-.ph-tip{font-size:0.71rem;color:var(--muted);line-height:1.45;}
-.speed-row{padding:0 14px 10px;display:flex;align-items:center;gap:10px;}
-.sp-lbl{font-size:0.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
-input[type=range]{flex:1;height:3px;-webkit-appearance:none;background:rgba(255,255,255,.08);border-radius:2px;outline:none;}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;}
-.sp-val{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold);min-width:34px;text-align:right;}
-.btn-row{display:flex;gap:6px;}
-.btn{flex:1;padding:14px 4px;border:none;border-radius:3px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.07em;cursor:pointer;transition:all .15s;}
-.btn:active{transform:scale(.97);}
-.btn-play{background:var(--gold);color:#080808;}
-.btn-play:hover{background:var(--gold2);}
-.btn-play.on{background:#141200;color:var(--gold);border:1px solid rgba(212,165,58,.3);}
-.btn-sec{background:#131313;color:var(--white);border:1px solid rgba(255,255,255,.08);}
-.btn-rst{background:#0e0e0e;color:var(--muted);border:1px solid rgba(255,255,255,.05);}
-</style>
+    <meta charset="UTF-8">
+    <title>Reflex Drill – Tang Soo Do | Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        :root{--bg:#080808;--gold:#d4a53a;--gold2:#f0c865;--white:#f2ede4;--muted:#484848;--border:rgba(212,165,58,0.13);}
+        *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+        body{background:var(--bg);color:var(--white);font-family:'Barlow Condensed',sans-serif;min-height:100vh;overflow-x:hidden;}
+        .page{max-width:440px;margin:0 auto;padding:20px 14px 90px;}
+        .back-btn{color:var(--gold);text-decoration:none;font-size:0.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;display:inline-flex;align-items:center;gap:5px;margin-bottom:20px;opacity:.75;}
+        .back-btn::before{content:'←';}
+        .hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;}
+        .eyebrow{font-size:0.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+        h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.04em;line-height:.88;}
+        h1 span{color:var(--gold);}
+        .badge{background:#111;border:1px solid var(--border);border-radius:3px;padding:6px 12px;text-align:center;}
+        .badge-rank{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);line-height:1;}
+        .badge-lbl{font-size:0.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+        .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:11px;}
+        .tab{background:#0e0e0e;border:1px solid rgba(255,255,255,.05);border-radius:3px;padding:8px 2px 7px;text-align:center;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
+        .tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:.18s;}
+        .tab.active,.tab:hover{background:rgba(212,165,58,.05);border-color:var(--border);}
+        .tab.active::after,.tab:hover::after{transform:scaleX(1);}
+        .tab-icon{font-size:1.1rem;display:block;margin-bottom:2px;}
+        .tab-lbl{font-size:0.57rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
+        .tab.active .tab-lbl{color:var(--gold);}
+        .stats{display:flex;gap:1px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden;margin-bottom:11px;}
+        .stat{flex:1;background:#0e0e0e;padding:9px 4px;text-align:center;}
+        .sv{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--gold);display:block;line-height:1;}
+        .sl{font-size:0.57rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+        .canvas-card{background:#090909;border:1px solid var(--border);border-radius:5px;overflow:hidden;margin-bottom:10px;position:relative;}
+        .canvas-top{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);}
+        .tech-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.07em;color:var(--gold);}
+        .ph-badge{font-size:0.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:2px 8px;border:1px solid rgba(255,255,255,.07);border-radius:2px;transition:all .3s;}
+        .ph-badge.ki{color:var(--gold);border-color:rgba(212,165,58,.3);background:rgba(212,165,58,.08);}
+        #c3d{display:block;width:100%;height:380px;}
+        .load-wrap{position:absolute;top:40px;left:0;right:0;bottom:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#090909;z-index:10;}
+        .load-txt{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--muted);}
+        .load-bar-bg{width:160px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
+        .load-bar{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width .2s;}
+        .flash{position:absolute;top:40px;left:0;right:0;bottom:0;pointer-events:none;opacity:0;transition:opacity .06s;}
+        .phase-desc{padding:9px 14px;border-top:1px solid rgba(255,255,255,.04);min-height:52px;}
+        .ph-title{font-weight:900;font-size:0.82rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;}
+        .ph-tip{font-size:0.71rem;color:var(--muted);line-height:1.45;}
+        .speed-row{padding:0 14px 10px;display:flex;align-items:center;gap:10px;}
+        .sp-lbl{font-size:0.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+        input[type=range]{flex:1;height:3px;-webkit-appearance:none;background:rgba(255,255,255,.08);border-radius:2px;outline:none;}
+        input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;}
+        .sp-val{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold);min-width:34px;text-align:right;}
+        .btn-row{display:flex;gap:6px;}
+        .btn{flex:1;padding:14px 4px;border:none;border-radius:3px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.07em;cursor:pointer;transition:all .15s;}
+        .btn:active{transform:scale(.97);}
+        .btn-play{background:var(--gold);color:#080808;}
+        .btn-play:hover{background:var(--gold2);}
+        .btn-play.on{background:#141200;color:var(--gold);border:1px solid rgba(212,165,58,.3);}
+        .btn-sec{background:#131313;color:var(--white);border:1px solid rgba(255,255,255,.08);}
+        .btn-rst{background:#0e0e0e;color:var(--muted);border:1px solid rgba(255,255,255,.05);}
+    </style>
 </head>
 <body>
 <div class="page">
@@ -107,245 +108,189 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
     <button class="btn btn-rst" onclick="resetDrill()">RESET</button>
   </div>
 </div>
-<script>
-// ─── POSES ─────────────────────────────────────
-// RIGHT ARM rotation X (negative = shoulder back/up toward head)
-// RIGHT ARM rotation Z (negative = arm raises up)
-// LEFT ARM rotation X (positive = shoulder forward/down)
-// LEFT ARM rotation Z (positive = arm to side/back for hikite)
-// FOREARM rotation Y (negative = bend elbow inward)
 
+<script>
+// ─── ΔΙΟΡΘΩΜΕΝΕΣ ΠΟΖΕΣ (ΤΕΧΝΙΚΕΣ) ────────────────
 const TECHS = [
  {name:'HIGH BLOCK',col:'#d4a53a',phases:[
-  {n:'Fighting Stance',       tip:'Left foot forward, fists in guard. Centre your Ki.',               d:1.8,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:-10,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:-10,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Chamber — Arm Rises',   tip:'Right arm begins rising toward forehead — explosive movement!',   d:0.6,
-   b:{Spine:{x:8,y:0,z:0},RightArm:{x:-90,y:0,z:-45},RightForeArm:{x:0,y:-100,z:0},LeftArm:{x:5,y:0,z:50},LeftForeArm:{x:0,y:-85,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'FULL BLOCK — KI-HAP! 🔥',tip:'Right fist covers forehead! Left fist SNAPS to hip at side!',     d:0.8,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:-160,y:0,z:-50},RightForeArm:{x:0,y:-135,z:0},LeftArm:{x:35,y:0,z:95},LeftForeArm:{x:0,y:-90,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Hold — Maximum Power',  tip:'Lock position — forearm shields forehead, left arm locked at hip!', d:1.0,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:-162,y:0,z:-52},RightForeArm:{x:0,y:-138,z:0},LeftArm:{x:37,y:0,z:98},LeftForeArm:{x:0,y:-92,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Return to Guard',       tip:'Lower arms smoothly — maintain defensive posture.',                 d:1.2,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:-10,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:-10,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
+  {n:'Fighting Stance', tip:'Left foot forward, guard up.', d:1.5,
+   b:{RightArm:{x:20,y:0,z:-40},RightForeArm:{x:0,y:-90,z:0},LeftArm:{x:20,y:0,z:40},LeftForeArm:{x:0,y:90,z:0}}},
+  {n:'Chamber Rise', tip:'Right arm prepares to cross.', d:0.6,
+   b:{RightArm:{x:45,y:0,z:-10},RightForeArm:{x:0,y:-110,z:0},LeftArm:{x:10,y:0,z:60},LeftForeArm:{x:0,y:-40,z:0}}},
+  {n:'FULL BLOCK — KI-HAP!', tip:'Shield your head! Pull left hand to hip.', d:0.8,
+   b:{RightArm:{x:120,y:0,z:-120},RightForeArm:{x:0,y:-10,z:0},LeftArm:{x:40,y:0,z:95},LeftForeArm:{x:0,y:-90,z:0}}},
+  {n:'Hold Power', tip:'Maximum tension at the top.', d:1.0,
+   b:{RightArm:{x:125,y:0,z:-125},RightForeArm:{x:0,y:-15,z:0},LeftArm:{x:42,y:0,z:98},LeftForeArm:{x:0,y:-92,z:0}}},
+  {n:'Return', tip:'Back to ready position.', d:1.2,
+   b:{RightArm:{x:20,y:0,z:-40},RightForeArm:{x:0,y:-90,z:0},LeftArm:{x:20,y:0,z:40},LeftForeArm:{x:0,y:90,z:0}}},
  ]},
  {name:'FRONT KICK',col:'#38bdf8',phases:[
-  {n:'Fighting Stance',       tip:'Left foot forward, weight balanced, fists in guard.',             d:1.8,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Chamber Knee High',     tip:'Snap knee to hip height — the chamber stores ALL the power!',     d:0.7,
-   b:{Spine:{x:3,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:-88,y:0,z:-5},RightLeg:{x:-95,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'SNAP KICK — KI-HAP! 💥', tip:'Explode forward — strike with ball of foot. Hips drive!',       d:0.5,
-   b:{Spine:{x:0,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:-78,y:0,z:-5},RightLeg:{x:22,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Retract Fast!',         tip:'Pull leg back instantly — NEVER leave it extended!',              d:0.6,
-   b:{Spine:{x:3,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:-80,y:0,z:-5},RightLeg:{x:-90,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Return to Stance',      tip:'Step down in control — guard stays up always.',                   d:1.5,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
+  {n:'Stance', tip:'Ready to kick.', d:1.2, b:{RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0}}},
+  {n:'Chamber Knee', tip:'Knee high!', d:0.7, b:{RightUpLeg:{x:-95,y:0,z:-5},RightLeg:{x:-100,y:0,z:0}}},
+  {n:'SNAP KICK!', tip:'Ki-hap! Strike with ball of foot.', d:0.5, b:{RightUpLeg:{x:-85,y:0,z:-5},RightLeg:{x:10,y:0,z:0}}},
+  {n:'Retract', tip:'Pull it back fast!', d:0.6, b:{RightUpLeg:{x:-90,y:0,z:-5},RightLeg:{x:-95,y:0,z:0}}},
+  {n:'Return', tip:'Balance and land.', d:1.2, b:{RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0}}},
  ]},
  {name:'REVERSE PUNCH',col:'#a855f7',phases:[
-  {n:'Forward Stance',          tip:'Left foot forward, right rear — front arm leads guard.',        d:1.8,
-   b:{Spine:{x:5,y:15,z:0},RightArm:{x:15,y:0,z:-78},RightForeArm:{x:0,y:-82,z:0},LeftArm:{x:-8,y:0,z:52},LeftForeArm:{x:0,y:-48,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'Chamber at Hip',          tip:'Pull rear fist to hip (palm up) — coil the power!',            d:1.0,
-   b:{Spine:{x:5,y:20,z:0},RightArm:{x:35,y:0,z:-62},RightForeArm:{x:0,y:-65,z:0},LeftArm:{x:-6,y:0,z:50},LeftForeArm:{x:0,y:-44,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'DRIVE PUNCH — KI-HAP! 👊',tip:'Punch straight — fist rotates palm-down. FULL hip rotation!', d:0.5,
-   b:{Spine:{x:8,y:-15,z:0},RightArm:{x:-5,y:0,z:-5},RightForeArm:{x:0,y:6,z:0},LeftArm:{x:20,y:0,z:76},LeftForeArm:{x:0,y:-80,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'Full Extension',          tip:'Arm fully extended, hips square — maximum power!',             d:1.2,
-   b:{Spine:{x:10,y:-18,z:0},RightArm:{x:-8,y:0,z:-3},RightForeArm:{x:0,y:8,z:0},LeftArm:{x:22,y:0,z:78},LeftForeArm:{x:0,y:-84,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'Hikite — Retract',        tip:'Snap arm back to hip — keep front guard extended!',            d:1.5,
-   b:{Spine:{x:5,y:15,z:0},RightArm:{x:15,y:0,z:-78},RightForeArm:{x:0,y:-82,z:0},LeftArm:{x:-8,y:0,z:52},LeftForeArm:{x:0,y:-48,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
+  {n:'Stance', tip:'Left lead.', d:1.5, b:{RightArm:{x:20,y:0,z:-80},LeftArm:{x:0,y:0,z:50}}},
+  {n:'Chamber', tip:'Hand at hip.', d:0.8, b:{RightArm:{x:40,y:0,z:-60},LeftArm:{x:0,y:0,z:50}}},
+  {n:'PUNCH!', tip:'Rotate hips and strike!', d:0.5, b:{RightArm:{x:-5,y:0,z:-5},LeftArm:{x:30,y:0,z:90}}},
+  {n:'Impact', tip:'Hold the punch.', d:1.0, b:{RightArm:{x:-8,y:0,z:-3},LeftArm:{x:32,y:0,z:95}}},
+  {n:'Return', tip:'Recover guard.', d:1.2, b:{RightArm:{x:20,y:0,z:-80},LeftArm:{x:0,y:0,z:50}}},
  ]},
  {name:'LOW BLOCK',col:'#22c55e',phases:[
-  {n:'Ready Stance',            tip:'Natural stance, arms relaxed. Centre and breathe.',             d:1.8,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-22},RightForeArm:{x:0,y:-14,z:0},LeftArm:{x:0,y:0,z:22},LeftForeArm:{x:0,y:14,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Chamber Across Body',     tip:'Raise arm ACROSS chest to opposite shoulder — coil up!',       d:1.0,
-   b:{Spine:{x:8,y:0,z:0},RightArm:{x:0,y:0,z:-58},RightForeArm:{x:0,y:-78,z:0},LeftArm:{x:5,y:0,z:18},LeftForeArm:{x:0,y:8,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'SWEEP DOWN — KI-HAP! 💥', tip:'Drive arm diagonally DOWN and OUT — deflect the kick!',        d:0.7,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:0,y:0,z:52},RightForeArm:{x:0,y:26,z:0},LeftArm:{x:15,y:0,z:28},LeftForeArm:{x:0,y:-14,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Hold Low Block',          tip:'Fist above knee — arm angled outward. Guard arm at chest.',    d:1.4,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:0,y:0,z:55},RightForeArm:{x:0,y:28,z:0},LeftArm:{x:17,y:0,z:30},LeftForeArm:{x:0,y:-16,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Return to Guard',         tip:'Return smoothly — stay ready for the next attack.',             d:1.5,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-22},RightForeArm:{x:0,y:-14,z:0},LeftArm:{x:0,y:0,z:22},LeftForeArm:{x:0,y:14,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
- ]},
+  {n:'Stance', tip:'Natural guard.', d:1.5, b:{RightArm:{x:0,y:0,z:-25},LeftArm:{x:0,y:0,z:25}}},
+  {n:'Cross Chamber', tip:'Right hand to left shoulder.', d:0.9, b:{RightArm:{x:10,y:0,z:-65},RightForeArm:{x:0,y:-80,z:0}}},
+  {n:'SWEEP DOWN!', tip:'Deflect the low attack!', d:0.6, b:{RightArm:{x:-10,y:0,z:60},RightForeArm:{x:0,y:30,z:0}}},
+  {n:'Hold Block', tip:'Strong finish.', d:1.2, b:{RightArm:{x:-12,y:0,z:65},RightForeArm:{x:0,y:35,z:0}}},
+  {n:'Return', tip:'Ready again.', d:1.2, b:{RightArm:{x:0,y:0,z:-25},LeftArm:{x:0,y:0,z:25}}},
+ ]}
 ];
 
-// ─── THREE.JS ──────────────────────────────────
+// ─── THREE.JS CORE ──────────────────────────────
 const c = document.getElementById('c3d');
 const W0 = c.parentElement.offsetWidth;
 c.width = W0; c.height = 380;
 
-const renderer = new THREE.WebGLRenderer({canvas:c, antialias:true, alpha:false});
+const renderer = new THREE.WebGLRenderer({canvas:c, antialias:true});
 renderer.setSize(W0, 380);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputEncoding = THREE.sRGBEncoding;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x080c16);
-scene.fog = new THREE.FogExp2(0x080c16, 0.06);
 
 const camera = new THREE.PerspectiveCamera(40, W0/380, 0.1, 100);
-camera.position.set(0, 1.35, 3.6);
+camera.position.set(0, 1.4, 3.5);
 camera.lookAt(0, 1.0, 0);
 
-// Lights
-scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-const key = new THREE.DirectionalLight(0xfff8f0, 1.5);
-key.position.set(2,5,3); key.castShadow=true;
-key.shadow.mapSize.set(1024,1024);
-key.shadow.camera.left=-2; key.shadow.camera.right=2;
-key.shadow.camera.top=3; key.shadow.camera.bottom=-0.5;
-scene.add(key);
-const fill = new THREE.DirectionalLight(0x8ab4f8, 0.45);
-fill.position.set(-3,3,-2); scene.add(fill);
-const rim = new THREE.DirectionalLight(0xd4a53a, 0.35);
-rim.position.set(0,3,-4); scene.add(rim);
+// Lighting
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const sun = new THREE.DirectionalLight(0xfff8f0, 1.2);
+sun.position.set(2, 5, 3);
+sun.castShadow = true;
+scene.add(sun);
 
-// Floor
-const floorMesh = new THREE.Mesh(
-  new THREE.PlaneGeometry(20,20),
-  new THREE.MeshStandardMaterial({color:0x0a0e1a,roughness:1,metalness:0})
-);
-floorMesh.rotation.x=-Math.PI/2; floorMesh.receiveShadow=true;
-scene.add(floorMesh);
-scene.add(new THREE.GridHelper(20,28,0x0d1a50,0x0a1238));
+// Floor & Grid
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(20,20), new THREE.MeshStandardMaterial({color:0x0a0e1a}));
+floor.rotation.x = -Math.PI/2; floor.receiveShadow = true;
+scene.add(floor);
+scene.add(new THREE.GridHelper(20,30,0x1a2a50,0x0d1228));
 
-// Glow ring under avatar
-const ring = new THREE.Mesh(
-  new THREE.RingGeometry(0.5,1.0,64),
-  new THREE.MeshBasicMaterial({color:0xd4a53a,transparent:true,opacity:0.07,side:THREE.DoubleSide})
-);
-ring.rotation.x=-Math.PI/2; ring.position.y=0.002; scene.add(ring);
-
-// ─── LOAD AVATAR ───────────────────────────────
+// Loader
 let bones={}, restPose={}, ready=false;
-const DEG=Math.PI/180;
+const DEG = Math.PI/180;
 
-new THREE.GLTFLoader().load('avatar.glb',
-  gltf=>{
-    const av=gltf.scene;
-    av.castShadow=true;
-    av.traverse(n=>{
-      if(n.isMesh){n.castShadow=true;n.receiveShadow=true;}
-      if(n.name) bones[n.name]=n;
+new THREE.GLTFLoader().load('avatar.glb', gltf => {
+    const av = gltf.scene;
+    av.traverse(n => {
+        if(n.isMesh) { n.castShadow = true; n.receiveShadow = true; }
+        if(n.isBone) bones[n.name] = n;
     });
     scene.add(av);
-    // store rest pose
-    for(const k in bones) restPose[k]=bones[k].rotation.clone();
-    ready=true;
-    document.getElementById('loadWrap').style.display='none';
-    document.getElementById('btnPlay').disabled=false;
-    applyPose(TECHS[0].phases[0].b,1);
+    for(const k in bones) restPose[k] = bones[k].rotation.clone();
+    ready = true;
+    document.getElementById('loadWrap').style.display = 'none';
+    document.getElementById('btnPlay').disabled = false;
     updateUI();
-  },
-  p=>{ const pct=p.total?(p.loaded/p.total*100|0):0;
-       document.getElementById('loadBar').style.width=pct+'%';
-       document.getElementById('loadTxt').textContent='LOADING '+pct+'%'; },
-  e=>{ document.getElementById('loadTxt').textContent='ERROR: put avatar.glb next to this HTML'; }
-);
+}, p => {
+    const pct = p.total ? (p.loaded/p.total*100|0) : 0;
+    document.getElementById('loadBar').style.width = pct+'%';
+}, e => {
+    document.getElementById('loadTxt').textContent = "Error: avatar.glb not found";
+});
 
 function applyPose(pose, alpha){
-  if(!ready) return;
-  for(const name in pose){
-    const b=bones[name]; if(!b) continue;
-    const r=restPose[name]; if(!r) continue;
-    const t=pose[name];
-    b.rotation.x=r.x+t.x*DEG*alpha;
-    b.rotation.y=r.y+t.y*DEG*alpha;
-    b.rotation.z=r.z+t.z*DEG*alpha;
-  }
+    if(!ready) return;
+    for(const name in pose){
+        const b = bones[name]; if(!b) continue;
+        const r = restPose[name];
+        const t = pose[name];
+        b.rotation.x = r.x + (t.x || 0) * DEG * alpha;
+        b.rotation.y = r.y + (t.y || 0) * DEG * alpha;
+        b.rotation.z = r.z + (t.z || 0) * DEG * alpha;
+    }
 }
 
-const eio=t=>t<.5?2*t*t:-1+(4-2*t)*t;
-
-function blendPose(p0,p1,t){
-  const e=eio(t),out={};
-  for(const k in p0){
-    const a=p0[k],b=p1[k]||a;
-    out[k]={x:a.x+(b.x-a.x)*e, y:a.y+(b.y-a.y)*e, z:a.z+(b.z-a.z)*e};
-  }
-  return out;
-}
-
-// ─── ANIMATION ENGINE ──────────────────────────
-let techIdx=0,phaseIdx=0,phaseT=0,playing=false,speed=1;
-let reps=0,secs=0,timerH=null,lastTs=null;
-const flash=document.getElementById('flash');
+// Animation Loop
+let techIdx=0, phaseIdx=0, phaseT=0, playing=false, speed=1, reps=0, secs=0, timerH=null, lastTs=null;
 
 function tick(ts){
-  if(!playing){lastTs=null;return;}
-  if(!lastTs)lastTs=ts;
-  const dt=(ts-lastTs)/1000;lastTs=ts;
-  const tech=TECHS[techIdx];
-  const dur=tech.phases[phaseIdx].d/speed;
-  phaseT+=dt/dur;
-  if(phaseT>=1){
-    phaseT=0;phaseIdx++;
-    if(phaseIdx>=tech.phases.length){phaseIdx=0;reps++;document.getElementById('svRep').textContent=reps;}
-    updateUI();
-  }
-  const p0=tech.phases[phaseIdx].b;
-  const p1=tech.phases[(phaseIdx+1)%tech.phases.length].b;
-  applyPose(blendPose(p0,p1,phaseT),1);
-  // ki-hap flash
-  const ki=phaseIdx>=2&&phaseIdx<=3;
-  if(ki){
-    const pulse=.3+.3*Math.sin(Date.now()*.02);
-    flash.style.background=`radial-gradient(ellipse at 50% 60%, ${tech.col}55 0%, transparent 65%)`;
-    flash.style.opacity=pulse;
-  } else flash.style.opacity=0;
-  requestAnimationFrame(tick);
-}
+    if(!playing) { lastTs=null; return; }
+    if(!lastTs) lastTs=ts;
+    const dt = (ts - lastTs)/1000; lastTs=ts;
 
-// always render
-(function loop(){requestAnimationFrame(loop);
-  if(!playing&&ready){const t=Date.now()*.0008;if(bones.Spine){const r=restPose.Spine;bones.Spine.rotation.x=r.x+Math.sin(t)*.007;}}
-  renderer.render(scene,camera);
-})();
+    const tech = TECHS[techIdx];
+    const dur = tech.phases[phaseIdx].d / speed;
+    phaseT += dt/dur;
 
-// ─── UI ────────────────────────────────────────
-function updateUI(){
-  const tech=TECHS[techIdx],ph=tech.phases[phaseIdx];
-  document.getElementById('techName').textContent=tech.name;
-  document.getElementById('phTitle').textContent=ph.n;
-  document.getElementById('phTip').textContent=ph.tip;
-  const badge=document.getElementById('phBadge');
-  const ki=phaseIdx>=2&&phaseIdx<=3;
-  badge.textContent=ki?'KI-HAP!':'Phase '+(phaseIdx+1);
-  if(ki)badge.classList.add('ki'); else badge.classList.remove('ki');
-}
-function switchTech(idx,el){
-  if(playing)togglePlay();
-  techIdx=idx;phaseIdx=0;phaseT=0;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  applyPose(TECHS[idx].phases[0].b,1);
-  updateUI();
-}
-function togglePlay(){
-  playing=!playing;
-  const btn=document.getElementById('btnPlay');
-  if(playing){
-    btn.textContent='⏸ PAUSE';btn.classList.add('on');
-    if(!timerH)timerH=setInterval(()=>{secs++;document.getElementById('svTime').textContent=secs+'s';const p=reps?(secs/reps).toFixed(1):'--';document.getElementById('svPace').textContent=p+'s';},1000);
+    if(phaseT >= 1){
+        phaseT = 0; phaseIdx++;
+        if(phaseIdx >= tech.phases.length){ phaseIdx=0; reps++; document.getElementById('svRep').textContent=reps; }
+        updateUI();
+    }
+
+    const p0 = tech.phases[phaseIdx].b;
+    const p1 = tech.phases[(phaseIdx+1)%tech.phases.length].b;
+   
+    // Simple Lerp
+    const e = phaseT; // ease linear
+    const currentPose = {};
+    for(const k in p0){
+        const a = p0[k], b = p1[k] || a;
+        currentPose[k] = { x: a.x+(b.x-a.x)*e, y: a.y+(b.y-a.y)*e, z: a.z+(b.z-a.z)*e };
+    }
+    applyPose(currentPose, 1);
+   
+    // Ki-hap flash
+    document.getElementById('flash').style.opacity = (phaseIdx === 2) ? 0.4 : 0;
     requestAnimationFrame(tick);
-  } else {
-    btn.textContent='▶ PLAY';btn.classList.remove('on');
-  }
 }
-function slowMo(){const s=document.getElementById('speedSlider');s.value=0.3;setSpeed(0.3);}
-function setSpeed(v){speed=parseFloat(v);document.getElementById('speedVal').textContent=speed.toFixed(2)+'×';}
+
+function loop(){
+    requestAnimationFrame(loop);
+    renderer.render(scene, camera);
+}
+loop();
+
+// UI Logic
+function updateUI(){
+    const tech = TECHS[techIdx];
+    document.getElementById('techName').textContent = tech.name;
+    document.getElementById('phTitle').textContent = tech.phases[phaseIdx].n;
+    document.getElementById('phTip').textContent = tech.phases[phaseIdx].tip;
+    const badge = document.getElementById('phBadge');
+    badge.textContent = (phaseIdx === 2) ? 'KI-HAP!' : 'Phase '+(phaseIdx+1);
+}
+
+function switchTech(idx, el){
+    if(playing) togglePlay();
+    techIdx = idx; phaseIdx = 0; phaseT = 0;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    updateUI();
+}
+
+function togglePlay(){
+    playing = !playing;
+    const btn = document.getElementById('btnPlay');
+    if(playing){
+        btn.textContent = '⏸ PAUSE';
+        if(!timerH) timerH = setInterval(() => { secs++; document.getElementById('svTime').textContent=secs+'s'; }, 1000);
+        requestAnimationFrame(tick);
+    } else {
+        btn.textContent = '▶ PLAY';
+    }
+}
+
+function setSpeed(v){ speed = parseFloat(v); document.getElementById('speedVal').textContent = speed.toFixed(2)+'×'; }
+
 function resetDrill(){
-  if(playing)togglePlay();
-  reps=0;secs=0;phaseIdx=0;phaseT=0;
-  if(timerH){clearInterval(timerH);timerH=null;}
-  document.getElementById('svRep').textContent='0';
-  document.getElementById('svTime').textContent='0s';
-  document.getElementById('svPace').textContent='--';
-  applyPose(TECHS[techIdx].phases[0].b,1);
-  updateUI();
+    location.reload(); // Ο πιο σίγουρος τρόπος για reset σε 3D state
 }
-updateUI();
+
+function slowMo(){ setSpeed(0.5); document.getElementById('speedSlider').value = 0.5; }
 </script>
 </body>
 </html>
