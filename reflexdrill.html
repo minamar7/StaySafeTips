@@ -93,7 +93,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
     <div class="flash" id="flash"></div>
     <div class="phase-desc">
       <div class="ph-title" id="phTitle">Loading…</div>
-      <div class="ph-tip" id="phTip">Please wait while the 3D avatar loads.</div>
+      <div class="ph-tip" id="phTip">Please wait...</div>
     </div>
     <div class="speed-row">
       <div class="sp-lbl">Speed</div>
@@ -108,244 +108,161 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   </div>
 </div>
 <script>
-// ─── POSES ─────────────────────────────────────
-// RIGHT ARM rotation X (negative = shoulder back/up toward head)
-// RIGHT ARM rotation Z (negative = arm raises up)
-// LEFT ARM rotation X (positive = shoulder forward/down)
-// LEFT ARM rotation Z (positive = arm to side/back for hikite)
-// FOREARM rotation Y (negative = bend elbow inward)
+// ─── AUDIO ENGINE ──────────────────────────────
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playKihap() {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.12);
+  gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime + 0.12);
+}
 
+// ─── TANG SOO DO - REVISED POSES ───────────────────
 const TECHS = [
  {name:'HIGH BLOCK',col:'#d4a53a',phases:[
-  {n:'Fighting Stance',       tip:'Left foot forward, fists in guard. Centre your Ki.',               d:1.8,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:-10,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:-10,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Chamber — Arm Rises',   tip:'Right arm begins rising toward forehead — explosive movement!',   d:0.6,
-   b:{Spine:{x:8,y:0,z:0},RightArm:{x:-90,y:0,z:-45},RightForeArm:{x:0,y:-100,z:0},LeftArm:{x:5,y:0,z:50},LeftForeArm:{x:0,y:-85,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'FULL BLOCK — KI-HAP! 🔥',tip:'Right fist covers forehead! Left fist SNAPS to hip at side!',     d:0.8,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:-160,y:0,z:-50},RightForeArm:{x:0,y:-135,z:0},LeftArm:{x:35,y:0,z:95},LeftForeArm:{x:0,y:-90,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Hold — Maximum Power',  tip:'Lock position — forearm shields forehead, left arm locked at hip!', d:1.0,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:-162,y:0,z:-52},RightForeArm:{x:0,y:-138,z:0},LeftArm:{x:37,y:0,z:98},LeftForeArm:{x:0,y:-92,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Return to Guard',       tip:'Lower arms smoothly — maintain defensive posture.',                 d:1.2,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:-10,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:-10,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
+  {n:'Fighting Stance', d:1.5, b:{Spine:{x:5},RightArm:{x:20,z:-20},RightForeArm:{y:-35},LeftArm:{x:20,z:20},LeftForeArm:{y:35}}},
+  {n:'Chamber Across', d:0.4, b:{Spine:{x:8,y:15},RightArm:{x:10,y:45,z:35},RightForeArm:{y:-95},LeftArm:{x:20,z:25}}},
+  {n:'SANG DAN MAKGI!', d:0.3, b:{Spine:{x:10,y:-15},RightArm:{x:-110,y:-5,z:-45},RightForeArm:{y:-105},LeftArm:{x:35,z:95},LeftForeArm:{y:-90}}},
+  {n:'Kime (Lock)', d:0.8, b:{Spine:{x:12},RightArm:{x:-115,z:-50},RightForeArm:{y:-110},LeftArm:{x:40,z:100},LeftForeArm:{y:-95}}},
+  {n:'Return', d:1.0, b:{Spine:{x:5},RightArm:{x:20,z:-20},LeftArm:{x:20,z:20}}}
  ]},
  {name:'FRONT KICK',col:'#38bdf8',phases:[
-  {n:'Fighting Stance',       tip:'Left foot forward, weight balanced, fists in guard.',             d:1.8,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Chamber Knee High',     tip:'Snap knee to hip height — the chamber stores ALL the power!',     d:0.7,
-   b:{Spine:{x:3,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:-88,y:0,z:-5},RightLeg:{x:-95,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'SNAP KICK — KI-HAP! 💥', tip:'Explode forward — strike with ball of foot. Hips drive!',       d:0.5,
-   b:{Spine:{x:0,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:-78,y:0,z:-5},RightLeg:{x:22,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Retract Fast!',         tip:'Pull leg back instantly — NEVER leave it extended!',              d:0.6,
-   b:{Spine:{x:3,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:-80,y:0,z:-5},RightLeg:{x:-90,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Return to Stance',      tip:'Step down in control — guard stays up always.',                   d:1.5,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-35},RightForeArm:{x:0,y:-25,z:0},LeftArm:{x:0,y:0,z:35},LeftForeArm:{x:0,y:25,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
+  {n:'Fighting Stance', d:1.5, b:{Spine:{x:5},RightUpLeg:{x:0},RightLeg:{x:0}}},
+  {n:'High Chamber', d:0.4, b:{Spine:{x:10},RightUpLeg:{x:-105},RightLeg:{x:-115}}},
+  {n:'AP CHAGI!', d:0.3, b:{Spine:{x:-5},RightUpLeg:{x:-85},RightLeg:{x:15}}},
+  {n:'Snap Back', d:0.4, b:{Spine:{x:5},RightUpLeg:{x:-110},RightLeg:{x:-120}}},
+  {n:'Return', d:1.0, b:{Spine:{x:5},RightUpLeg:{x:0},RightLeg:{x:0}}}
  ]},
  {name:'REVERSE PUNCH',col:'#a855f7',phases:[
-  {n:'Forward Stance',          tip:'Left foot forward, right rear — front arm leads guard.',        d:1.8,
-   b:{Spine:{x:5,y:15,z:0},RightArm:{x:15,y:0,z:-78},RightForeArm:{x:0,y:-82,z:0},LeftArm:{x:-8,y:0,z:52},LeftForeArm:{x:0,y:-48,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'Chamber at Hip',          tip:'Pull rear fist to hip (palm up) — coil the power!',            d:1.0,
-   b:{Spine:{x:5,y:20,z:0},RightArm:{x:35,y:0,z:-62},RightForeArm:{x:0,y:-65,z:0},LeftArm:{x:-6,y:0,z:50},LeftForeArm:{x:0,y:-44,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'DRIVE PUNCH — KI-HAP! 👊',tip:'Punch straight — fist rotates palm-down. FULL hip rotation!', d:0.5,
-   b:{Spine:{x:8,y:-15,z:0},RightArm:{x:-5,y:0,z:-5},RightForeArm:{x:0,y:6,z:0},LeftArm:{x:20,y:0,z:76},LeftForeArm:{x:0,y:-80,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'Full Extension',          tip:'Arm fully extended, hips square — maximum power!',             d:1.2,
-   b:{Spine:{x:10,y:-18,z:0},RightArm:{x:-8,y:0,z:-3},RightForeArm:{x:0,y:8,z:0},LeftArm:{x:22,y:0,z:78},LeftForeArm:{x:0,y:-84,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
-  {n:'Hikite — Retract',        tip:'Snap arm back to hip — keep front guard extended!',            d:1.5,
-   b:{Spine:{x:5,y:15,z:0},RightArm:{x:15,y:0,z:-78},RightForeArm:{x:0,y:-82,z:0},LeftArm:{x:-8,y:0,z:52},LeftForeArm:{x:0,y:-48,z:0},RightUpLeg:{x:15,y:0,z:-5},RightLeg:{x:-10,y:0,z:0},LeftUpLeg:{x:-18,y:0,z:5},LeftLeg:{x:14,y:0,z:0}}},
+  {n:'Forward Stance', d:1.5, b:{Spine:{x:5,y:20},RightArm:{x:25,z:-75},LeftArm:{x:-10,z:40}}},
+  {n:'Cocking', d:0.3, b:{Spine:{x:5,y:35},RightArm:{x:35,z:-55}}},
+  {n:'TSUKI!', d:0.3, b:{Spine:{x:12,y:-35},RightArm:{x:-85,y:0,z:5},LeftArm:{x:30,z:100},LeftForeArm:{y:-100}}},
+  {n:'Full Extension', d:0.7, b:{Spine:{x:15,y:-40},RightArm:{x:-90,z:10}}},
+  {n:'Return', d:1.0, b:{Spine:{x:5,y:20},RightArm:{x:25,z:-75}}}
  ]},
  {name:'LOW BLOCK',col:'#22c55e',phases:[
-  {n:'Ready Stance',            tip:'Natural stance, arms relaxed. Centre and breathe.',             d:1.8,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-22},RightForeArm:{x:0,y:-14,z:0},LeftArm:{x:0,y:0,z:22},LeftForeArm:{x:0,y:14,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Chamber Across Body',     tip:'Raise arm ACROSS chest to opposite shoulder — coil up!',       d:1.0,
-   b:{Spine:{x:8,y:0,z:0},RightArm:{x:0,y:0,z:-58},RightForeArm:{x:0,y:-78,z:0},LeftArm:{x:5,y:0,z:18},LeftForeArm:{x:0,y:8,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'SWEEP DOWN — KI-HAP! 💥', tip:'Drive arm diagonally DOWN and OUT — deflect the kick!',        d:0.7,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:0,y:0,z:52},RightForeArm:{x:0,y:26,z:0},LeftArm:{x:15,y:0,z:28},LeftForeArm:{x:0,y:-14,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Hold Low Block',          tip:'Fist above knee — arm angled outward. Guard arm at chest.',    d:1.4,
-   b:{Spine:{x:10,y:0,z:0},RightArm:{x:0,y:0,z:55},RightForeArm:{x:0,y:28,z:0},LeftArm:{x:17,y:0,z:30},LeftForeArm:{x:0,y:-16,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
-  {n:'Return to Guard',         tip:'Return smoothly — stay ready for the next attack.',             d:1.5,
-   b:{Spine:{x:5,y:0,z:0},RightArm:{x:0,y:0,z:-22},RightForeArm:{x:0,y:-14,z:0},LeftArm:{x:0,y:0,z:22},LeftForeArm:{x:0,y:14,z:0},RightUpLeg:{x:8,y:0,z:-5},RightLeg:{x:-6,y:0,z:0},LeftUpLeg:{x:-4,y:0,z:5},LeftLeg:{x:12,y:0,z:0}}},
- ]},
+  {n:'Ready Stance', d:1.5, b:{Spine:{x:0},RightArm:{x:20,z:-15},LeftArm:{x:20,z:15}}},
+  {n:'Prep Across', d:0.4, b:{Spine:{x:5},RightArm:{x:-35,y:35,z:-30},RightForeArm:{y:-85}}},
+  {n:'HA DAN MAKGI!', d:0.3, b:{Spine:{x:12},RightArm:{x:35,z:65},RightForeArm:{y:45},LeftArm:{x:35,z:100},LeftForeArm:{y:-100}}},
+  {n:'Focus', d:0.8, b:{Spine:{x:15},RightArm:{x:40,z:70}}},
+  {n:'Return', d:1.0, b:{Spine:{x:0},RightArm:{x:20,z:-15}}}
+ ]}
 ];
 
-// ─── THREE.JS ──────────────────────────────────
+// ─── THREE.JS ENGINE ──────────────────────────────
 const c = document.getElementById('c3d');
-const W0 = c.parentElement.offsetWidth;
-c.width = W0; c.height = 380;
-
-const renderer = new THREE.WebGLRenderer({canvas:c, antialias:true, alpha:false});
-renderer.setSize(W0, 380);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({canvas:c, antialias:true});
+renderer.setSize(c.parentElement.offsetWidth, 380);
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputEncoding = THREE.sRGBEncoding;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x080c16);
-scene.fog = new THREE.FogExp2(0x080c16, 0.06);
-
-const camera = new THREE.PerspectiveCamera(40, W0/380, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(40, c.width/380, 0.1, 100);
 camera.position.set(0, 1.35, 3.6);
 camera.lookAt(0, 1.0, 0);
 
-// Lights
-scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-const key = new THREE.DirectionalLight(0xfff8f0, 1.5);
-key.position.set(2,5,3); key.castShadow=true;
-key.shadow.mapSize.set(1024,1024);
-key.shadow.camera.left=-2; key.shadow.camera.right=2;
-key.shadow.camera.top=3; key.shadow.camera.bottom=-0.5;
-scene.add(key);
-const fill = new THREE.DirectionalLight(0x8ab4f8, 0.45);
-fill.position.set(-3,3,-2); scene.add(fill);
-const rim = new THREE.DirectionalLight(0xd4a53a, 0.35);
-rim.position.set(0,3,-4); scene.add(rim);
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const key = new THREE.DirectionalLight(0xffffff, 1.3);
+key.position.set(2,5,3); key.castShadow=true; scene.add(key);
 
-// Floor
-const floorMesh = new THREE.Mesh(
-  new THREE.PlaneGeometry(20,20),
-  new THREE.MeshStandardMaterial({color:0x0a0e1a,roughness:1,metalness:0})
-);
-floorMesh.rotation.x=-Math.PI/2; floorMesh.receiveShadow=true;
-scene.add(floorMesh);
-scene.add(new THREE.GridHelper(20,28,0x0d1a50,0x0a1238));
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(20,20), new THREE.MeshStandardMaterial({color:0x0a0e1a}));
+floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; scene.add(floor);
+scene.add(new THREE.GridHelper(20,30,0x1a2a40,0x0a1238));
 
-// Glow ring under avatar
-const ring = new THREE.Mesh(
-  new THREE.RingGeometry(0.5,1.0,64),
-  new THREE.MeshBasicMaterial({color:0xd4a53a,transparent:true,opacity:0.07,side:THREE.DoubleSide})
-);
-ring.rotation.x=-Math.PI/2; ring.position.y=0.002; scene.add(ring);
-
-// ─── LOAD AVATAR ───────────────────────────────
 let bones={}, restPose={}, ready=false;
 const DEG=Math.PI/180;
 
-new THREE.GLTFLoader().load('avatar.glb',
-  gltf=>{
-    const av=gltf.scene;
-    av.castShadow=true;
-    av.traverse(n=>{
-      if(n.isMesh){n.castShadow=true;n.receiveShadow=true;}
-      if(n.name) bones[n.name]=n;
-    });
-    scene.add(av);
-    // store rest pose
-    for(const k in bones) restPose[k]=bones[k].rotation.clone();
-    ready=true;
-    document.getElementById('loadWrap').style.display='none';
-    document.getElementById('btnPlay').disabled=false;
-    applyPose(TECHS[0].phases[0].b,1);
-    updateUI();
-  },
-  p=>{ const pct=p.total?(p.loaded/p.total*100|0):0;
-       document.getElementById('loadBar').style.width=pct+'%';
-       document.getElementById('loadTxt').textContent='LOADING '+pct+'%'; },
-  e=>{ document.getElementById('loadTxt').textContent='ERROR: put avatar.glb next to this HTML'; }
-);
+new THREE.GLTFLoader().load('avatar.glb', gltf=>{
+  gltf.scene.traverse(n=>{ if(n.isMesh)n.castShadow=true; if(n.name)bones[n.name]=n; });
+  scene.add(gltf.scene);
+  for(const k in bones) restPose[k]=bones[k].rotation.clone();
+  ready=true;
+  document.getElementById('loadWrap').style.display='none';
+  document.getElementById('btnPlay').disabled=false;
+  applyPose(TECHS[0].phases[0].b,1);
+  updateUI();
+});
 
 function applyPose(pose, alpha){
   if(!ready) return;
   for(const name in pose){
-    const b=bones[name]; if(!b) continue;
-    const r=restPose[name]; if(!r) continue;
-    const t=pose[name];
-    b.rotation.x=r.x+t.x*DEG*alpha;
-    b.rotation.y=r.y+t.y*DEG*alpha;
-    b.rotation.z=r.z+t.z*DEG*alpha;
+    const b=bones[name], r=restPose[name];
+    if(b && r){
+      b.rotation.x=r.x+(pose[name].x||0)*DEG*alpha;
+      b.rotation.y=r.y+(pose[name].y||0)*DEG*alpha;
+      b.rotation.z=r.z+(pose[name].z||0)*DEG*alpha;
+    }
   }
 }
 
-const eio=t=>t<.5?2*t*t:-1+(4-2*t)*t;
-
-function blendPose(p0,p1,t){
-  const e=eio(t),out={};
-  for(const k in p0){
-    const a=p0[k],b=p1[k]||a;
-    out[k]={x:a.x+(b.x-a.x)*e, y:a.y+(b.y-a.y)*e, z:a.z+(b.z-a.z)*e};
-  }
-  return out;
-}
-
-// ─── ANIMATION ENGINE ──────────────────────────
-let techIdx=0,phaseIdx=0,phaseT=0,playing=false,speed=1;
-let reps=0,secs=0,timerH=null,lastTs=null;
-const flash=document.getElementById('flash');
+let techIdx=0, phaseIdx=0, phaseT=0, playing=false, speed=1, reps=0, secs=0, timerH=null, lastTs=null;
 
 function tick(ts){
   if(!playing){lastTs=null;return;}
   if(!lastTs)lastTs=ts;
-  const dt=(ts-lastTs)/1000;lastTs=ts;
-  const tech=TECHS[techIdx];
-  const dur=tech.phases[phaseIdx].d/speed;
+  const dt=(ts-lastTs)/1000; lastTs=ts;
+  const tech=TECHS[techIdx], dur=tech.phases[phaseIdx].d/speed;
   phaseT+=dt/dur;
+  
   if(phaseT>=1){
-    phaseT=0;phaseIdx++;
-    if(phaseIdx>=tech.phases.length){phaseIdx=0;reps++;document.getElementById('svRep').textContent=reps;}
+    phaseT=0; phaseIdx++;
+    if(phaseIdx>=tech.phases.length){phaseIdx=0; reps++; document.getElementById('svRep').textContent=reps;}
+    if(phaseIdx === 2) { playKihap(); }
     updateUI();
   }
-  const p0=tech.phases[phaseIdx].b;
-  const p1=tech.phases[(phaseIdx+1)%tech.phases.length].b;
-  applyPose(blendPose(p0,p1,phaseT),1);
-  // ki-hap flash
-  const ki=phaseIdx>=2&&phaseIdx<=3;
-  if(ki){
-    const pulse=.3+.3*Math.sin(Date.now()*.02);
-    flash.style.background=`radial-gradient(ellipse at 50% 60%, ${tech.col}55 0%, transparent 65%)`;
-    flash.style.opacity=pulse;
-  } else flash.style.opacity=0;
+  
+  const p0=tech.phases[phaseIdx].b, p1=tech.phases[(phaseIdx+1)%tech.phases.length].b;
+  const blend = {};
+  const allKeys = new Set([...Object.keys(p0), ...Object.keys(p1)]);
+  allKeys.forEach(k => {
+    const a = p0[k] || {x:0,y:0,z:0}, b = p1[k] || a;
+    blend[k]={x:a.x+(b.x-(a.x||0))*phaseT, y:a.y+(b.y-(a.y||0))*phaseT, z:a.z+(b.z-(a.z||0))*phaseT};
+  });
+  applyPose(blend,1);
+  
+  document.getElementById('flash').style.opacity = (phaseIdx===2) ? 0.35 : 0;
   requestAnimationFrame(tick);
 }
 
-// always render
-(function loop(){requestAnimationFrame(loop);
-  if(!playing&&ready){const t=Date.now()*.0008;if(bones.Spine){const r=restPose.Spine;bones.Spine.rotation.x=r.x+Math.sin(t)*.007;}}
-  renderer.render(scene,camera);
-})();
+(function loop(){ requestAnimationFrame(loop); renderer.render(scene,camera); })();
 
-// ─── UI ────────────────────────────────────────
 function updateUI(){
-  const tech=TECHS[techIdx],ph=tech.phases[phaseIdx];
+  const tech=TECHS[techIdx], ph=tech.phases[phaseIdx];
   document.getElementById('techName').textContent=tech.name;
   document.getElementById('phTitle').textContent=ph.n;
-  document.getElementById('phTip').textContent=ph.tip;
   const badge=document.getElementById('phBadge');
-  const ki=phaseIdx>=2&&phaseIdx<=3;
-  badge.textContent=ki?'KI-HAP!':'Phase '+(phaseIdx+1);
-  if(ki)badge.classList.add('ki'); else badge.classList.remove('ki');
+  badge.textContent=phaseIdx===2?'KI-HAP!':'PHASE '+(phaseIdx+1);
+  badge.className='ph-badge'+(phaseIdx===2?' ki':'');
 }
+
 function switchTech(idx,el){
-  if(playing)togglePlay();
-  techIdx=idx;phaseIdx=0;phaseT=0;
+  if(playing)togglePlay(); techIdx=idx; phaseIdx=0; phaseT=0;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  applyPose(TECHS[idx].phases[0].b,1);
-  updateUI();
+  el.classList.add('active'); applyPose(TECHS[idx].phases[0].b,1); updateUI();
 }
+
 function togglePlay(){
+  if (audioCtx.state === 'suspended') audioCtx.resume();
   playing=!playing;
   const btn=document.getElementById('btnPlay');
   if(playing){
-    btn.textContent='⏸ PAUSE';btn.classList.add('on');
-    if(!timerH)timerH=setInterval(()=>{secs++;document.getElementById('svTime').textContent=secs+'s';const p=reps?(secs/reps).toFixed(1):'--';document.getElementById('svPace').textContent=p+'s';},1000);
+    btn.textContent='⏸ PAUSE'; btn.classList.add('on');
+    if(!timerH)timerH=setInterval(()=>{secs++;document.getElementById('svTime').textContent=secs+'s';},1000);
     requestAnimationFrame(tick);
   } else {
-    btn.textContent='▶ PLAY';btn.classList.remove('on');
+    btn.textContent='▶ PLAY'; btn.classList.remove('on');
+    clearInterval(timerH); timerH=null;
   }
 }
-function slowMo(){const s=document.getElementById('speedSlider');s.value=0.3;setSpeed(0.3);}
 function setSpeed(v){speed=parseFloat(v);document.getElementById('speedVal').textContent=speed.toFixed(2)+'×';}
-function resetDrill(){
-  if(playing)togglePlay();
-  reps=0;secs=0;phaseIdx=0;phaseT=0;
-  if(timerH){clearInterval(timerH);timerH=null;}
-  document.getElementById('svRep').textContent='0';
-  document.getElementById('svTime').textContent='0s';
-  document.getElementById('svPace').textContent='--';
-  applyPose(TECHS[techIdx].phases[0].b,1);
-  updateUI();
-}
-updateUI();
+function slowMo(){const s=document.getElementById('speedSlider');s.value=0.3;setSpeed(0.3);}
+function resetDrill(){ location.reload(); }
 </script>
 </body>
 </html>
