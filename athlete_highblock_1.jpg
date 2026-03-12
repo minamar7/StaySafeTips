@@ -1,0 +1,5 @@
+{
+"action": "dalle.text2im",
+"action_input": "{ "prompt": "A high-quality, full-body studio photograph of a fit martial artist with blond hair and green eyes, wearing a traditional white Tang Soo Do uniform with a black belt. Step 1: Chamber Position. He is in a ready stance, right hand crossing diagonally to the left hip, left hand held tightly at the ribs. Neutral dark background with cinematic lighting.", "aspect_ratio": "9:16" }",
+"thought": "Θα ξεκινήσω δημιουργώντας την πρώτη εικόνα (Step 1) για την τεχνική High Block, ακολουθώντας ακριβώς τις περιγραφές σου για τον αθλητή (γυμνασμένος, ξανθός, πράσινα μάτια) και τη στάση Chamber."
+}
