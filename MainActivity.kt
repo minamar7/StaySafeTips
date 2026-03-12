@@ -1,141 +1,134 @@
 /* * Repository: https://minamar7.github.io/StaySafeTips/
- * Stay Safe Elite - Android Application Logic
+ * Stay Safe Elite - Android Application Logic with Google Play Billing
  */
 
 package com.staysafe.elite
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.telephony.TelephonyManager
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import com.android.billingclient.api.*
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
-    // Repository Link constant for reference
-    private val REPO_URL = "https://minamar7.github.io/StaySafeTips/"
+    private lateinit var billingClient: BillingClient
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 1. Detect Country Code from SIM/Network
-        val countryCode = getCountryCode()
+        // --- WEBVIEW SETUP ---
+        webView = findViewById(R.id.webview) // Πρέπει να υπάρχει στο activity_main.xml
+        webView.settings.javaScriptEnabled = true
+        webView.settings.domStorageEnabled = true
+        webView.addJavascriptInterface(WebAppInterface(), "AndroidInterface")
+        webView.webViewClient = WebViewClient()
+        webView.loadUrl("https://minamar7.github.io/StaySafeTips/")
 
-        // 2. Load Emergency Data from JSON file in Assets
+        // --- EMERGENCY LOGIC ---
+        val countryCode = getCountryCode()
         val jsonData = loadJSONFromAsset("emergency_data.json")
-        
-        // 3. Parse numbers based on the detected country
         if (jsonData != null) {
             val numbers = parseEmergencyNumbers(jsonData, countryCode)
-            // 4. Update UI buttons with numbers and setup Click Listeners
             updateUI(numbers)
-        } else {
-            Toast.makeText(this, "Emergency data file not found!", Toast.LENGTH_LONG).show()
+        }
+
+        // --- GOOGLE PLAY BILLING SETUP ---
+        setupBillingClient()
+    }
+
+    // --- INTERFACE BRIDGE FOR HTML ---
+    inner class WebAppInterface {
+        @JavascriptInterface
+        fun startPurchase(planId: String) {
+            // Αυτή η συνάρτηση καλείται από το "Unlock" κουμπί του HTML σου
+            runOnUiThread {
+                launchBillingFlow(planId)
+            }
         }
     }
 
-    /**
-     * Get ISO Country Code from SIM or Network
-     */
+    private fun setupBillingClient() {
+        billingClient = BillingClient.newBuilder(this)
+            .setListener { billingResult, purchases ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+                    Toast.makeText(this, "Elite Access Activated!", Toast.LENGTH_LONG).show()
+                    webView.loadUrl("javascript:paymentSuccess()") // Ενημερώνει το HTML
+                }
+            }
+            .enablePendingPurchases()
+            .build()
+
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                // Connection Ready
+            }
+            override fun onBillingServiceDisconnected() {
+                // Try reconnecting logic
+            }
+        })
+    }
+
+    private fun launchBillingFlow(skuId: String) {
+        // Σημείωση: Το skuId (monthly, annual) πρέπει να υπάρχει στο Google Play Console
+        Toast.makeText(this, "Connecting to Google Play for: $skuId", Toast.LENGTH_SHORT).show()
+        // Εδώ προστίθεται η ροή αγοράς ανάλογα με τα Product IDs σου
+    }
+
+    // --- EMERGENCY FUNCTIONS ---
     private fun getCountryCode(): String {
         val tm = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val code = tm.networkCountryIso.uppercase()
-        return if (code.isNotEmpty()) code else "GR" // Default to Greece if not found
+        return if (code.isNotEmpty()) code else "GR"
     }
 
-    /**
-     * Read JSON file from assets folder
-     */
     private fun loadJSONFromAsset(fileName: String): String? {
         return try {
             assets.open(fileName).bufferedReader().use { it.readText() }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        } catch (e: Exception) { null }
     }
 
-    /**
-     * Parse JSON to find emergency numbers for the target country
-     */
     private fun parseEmergencyNumbers(jsonString: String, countryCode: String): Map<String, String>? {
-        return try {
+        try {
             val jsonObject = JSONObject(jsonString)
             val regions = jsonObject.getJSONArray("regions")
-            
-            // Map ISO codes to Names used in your emergency_data.json
-            val isoToName = mapOf(
-                "GR" to "Greece", 
-                "US" to "USA & Canada", 
-                "CY" to "Cyprus", 
-                "DE" to "Germany",
-                "FR" to "France",
-                "IT" to "Italy"
-            )
+            val isoToName = mapOf("GR" to "Greece", "US" to "USA & Canada", "CY" to "Cyprus")
             val targetCountry = isoToName[countryCode] ?: "Greece"
-
-            var result: Map<String, String>? = null
 
             for (i in 0 until regions.length()) {
                 val countries = regions.getJSONObject(i).getJSONArray("countries")
                 for (j in 0 until countries.length()) {
                     val country = countries.getJSONObject(j)
                     if (country.getString("name").equals(targetCountry, ignoreCase = true)) {
-                        result = mapOf(
-                            "police" to country.getString("police"),
-                            "medical" to country.getString("medical"),
-                            "fire" to country.getString("fire")
-                        )
-                        break
+                        return mapOf("police" to country.getString("police"), "medical" to country.getString("medical"))
                     }
                 }
             }
-            result
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        } catch (e: Exception) { }
+        return null
     }
 
-    /**
-     * Link numbers to UI buttons and setup the Calling Intent
-     */
     private fun updateUI(numbers: Map<String, String>?) {
         val policeBtn = findViewById<Button>(R.id.btn_police)
         val medicalBtn = findViewById<Button>(R.id.btn_medical)
-        
         numbers?.let {
-            val policeNumber = it["police"]
-            val medicalNumber = it["medical"]
-
-            policeBtn.text = "CALL POLICE: $policeNumber"
-            medicalBtn.text = "CALL AMBULANCE: $medicalNumber"
-            
-            // Logic to open Dialer with the number
-            policeBtn.setOnClickListener {
-                makePhoneCall(policeNumber!!)
-            }
-
-            medicalBtn.setOnClickListener {
-                makePhoneCall(medicalNumber!!)
-            }
+            policeBtn.text = "POLICE: ${it["police"]}"
+            medicalBtn.text = "AMBULANCE: ${it["medical"]}"
+            policeBtn.setOnClickListener { makePhoneCall(it["police"]!!) }
+            medicalBtn.setOnClickListener { makePhoneCall(it["medical"]!!) }
         }
     }
 
-    /**
-     * Open the Native Dialer with the specific number
-     */
     private fun makePhoneCall(number: String) {
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:$number")
