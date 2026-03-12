@@ -278,40 +278,45 @@
 
   function selectPlan(plan) {
     selected = plan;
+    // Οπτική ένδειξη επιλογής
+    const plans = document.querySelectorAll('.plan');
+    plans.forEach(p => p.style.borderColor = 'var(--glass-border)');
+    event.currentTarget.style.borderColor = 'var(--gold)';
+    
     navigator.vibrate?.(30);
   }
 
-  async function unlock() {
+  function unlock() {
     navigator.vibrate?.([40,60,40]);
 
     const btn = document.querySelector(".unlock-btn");
-    btn.textContent = "Redirecting to Stripe...";
+    btn.textContent = "Connecting to Google Play...";
     btn.disabled = true;
     btn.style.opacity = .7;
 
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: selected })
-      });
-
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Something went wrong. Please try again.");
+    // Έλεγχος αν υπάρχει η γέφυρα με την Kotlin (Android App)
+    if (window.AndroidInterface) {
+        // Καλούμε τη λειτουργία της Kotlin για το Google Play Billing
+        window.AndroidInterface.startPurchase(selected);
+        
+        // Επαναφορά κουμπιού μετά από 5 δευτερόλεπτα αν ο χρήστης δεν προχωρήσει
+        setTimeout(() => {
+            btn.textContent = "Unlock Elite Protection →";
+            btn.disabled = false;
+            btn.style.opacity = 1;
+        }, 5000);
+    } else {
+        alert("Payments are only available inside the Stay Safe Elite Android App.");
         btn.textContent = "Unlock Elite Protection →";
         btn.disabled = false;
         btn.style.opacity = 1;
-      }
-    } catch (err) {
-      alert("Connection error. Try again.");
-      btn.textContent = "Unlock Elite Protection →";
-      btn.disabled = false;
-      btn.style.opacity = 1;
     }
+  }
+
+  // Αυτή η συνάρτηση θα καλείται από την Kotlin μόλις επιβεβαιωθεί η πληρωμή
+  function paymentSuccess() {
+    alert("Elite Access Granted! Welcome to the circle.");
+    window.location.href = "index.html"; 
   }
 </script>
 
