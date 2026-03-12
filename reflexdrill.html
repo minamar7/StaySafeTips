@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,8 +103,8 @@
 </div>
 
 <script>
-    // Set to kiai1.mp3 for female audio
-    const kiaiSound = new Audio('kiai1.mp3');
+    // Reverted to kiai.mp3 for correct male audio
+    const kiaiSound = new Audio('kiai.mp3');
 
     const DRILLS = [
         { 
@@ -113,9 +112,9 @@
             subtitle: "JANG KWON • MASTER LEVEL",
             imgPrefix: "athlete_palm", 
             steps: [
-                { name: "Power Chamber", desc: "Open your striking palm at your ribs with fingers tight and wrist cocked back. Lead hand extended for focus. <span class='kiai-label'>READY!</span>" },
-                { name: "Impact Thrust", desc: "Explosive forward movement. Strike with the heel of the palm while pulling the opposite hand to the hip. <span class='kiai-label'>STRIKE!</span>" },
-                { name: "Final Lock", desc: "Arm fully extended at face height. Lock the stance, rotate hips, and release a sharp abdominal shout. <span class='kiai-label'>KIAI!</span>" }
+                { name: "Power Chamber", desc: "Open your striking palm at your ribs with fingers tight and wrist cocked back. Lead hand extended for focus." },
+                { name: "Impact Thrust", desc: "Explosive forward movement. Strike with the heel of the palm while pulling the opposite hand to the hip." },
+                { name: "Final Lock", desc: "Arm fully extended at face height. Lock the stance and rotate hips for maximum power." }
             ]
         },
         { 
@@ -191,7 +190,6 @@
 
         main.style.opacity = '0';
         setTimeout(() => {
-            // Updated to ensure .jpg files are called correctly
             main.src = `${drill.imgPrefix}_${currentStepIdx + 1}.jpg`;
             main.style.opacity = '1';
             document.getElementById('tag').innerText = `STEP ${currentStepIdx + 1}`;
@@ -200,8 +198,11 @@
     }
 
     function nextStep() {
-        kiaiSound.currentTime = 0; 
-        kiaiSound.play().catch(e => console.log("Audio requires user interaction first"));
+        // Only play sound if the current drill is NOT Palm Strike
+        if (DRILLS[currentDrillIdx].title !== "PALM STRIKE") {
+            kiaiSound.currentTime = 0; 
+            kiaiSound.play().catch(e => console.log("Audio waiting for user interaction"));
+        }
         currentStepIdx = (currentStepIdx + 1) % DRILLS[currentDrillIdx].steps.length; 
         updateUI(true); 
     }
