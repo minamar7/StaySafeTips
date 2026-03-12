@@ -16,7 +16,13 @@
         display: flex; justify-content: space-between; align-items: center;
     }
 
-    .back-btn { color: #aaa; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.1rem; letter-spacing: 1px; }
+    /* Animation για το Back Button */
+    .back-btn { 
+        color: #aaa; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.2rem; 
+        letter-spacing: 1px; transition: all 0.3s ease; padding: 10px;
+    }
+    .back-btn:hover { color: #fff; transform: scale(1.1); text-shadow: 0 0 10px var(--n-red); }
+
     .logo { font-family: 'Bebas Neue'; color: var(--n-red); font-size: 1.8rem; }
     
     .nav-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
@@ -40,13 +46,14 @@
     .s-desc { font-size: 1.3rem; color: #fff; margin-top: 10px; line-height: 1.4; font-weight: 500; }
 
     .action-bar { position: fixed; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(to top, #000, transparent); display: flex; justify-content: center; z-index: 100; }
-    .btn-next { background: white; color: black; border: none; padding: 18px; font-family: 'Bebas Neue'; font-size: 1.6rem; border-radius: 4px; width: 95%; cursor: pointer; }
+    .btn-next { background: white; color: black; border: none; padding: 18px; font-family: 'Bebas Neue'; font-size: 1.6rem; border-radius: 4px; width: 95%; cursor: pointer; transition: 0.3s; }
+    .btn-next:active { transform: scale(0.98); background: #eee; }
 </style>
 </head>
 <body>
 
 <header>
-    <a href="technique_library.html" class="back-btn">← BACK TO DOJO</a>
+    <a href="dojo.html" class="back-btn">← BACK TO DOJO</a>
     <div class="logo">ELITE DRILLS</div>
 </header>
 
@@ -68,37 +75,24 @@
 </div>
 
 <script>
-    // Φόρτωση ήχου κραυγής
     const kiaiSound = new Audio('kiai.mp3');
 
     const DRILLS = [
-        {
-            title: "HIGH BLOCK",
-            imgPrefix: "athlete_highblock",
-            steps: [
-                { name: "Chamber Position", desc: "Cross arms at chest level. Right hand to left hip, left hand at ribs." },
-                { name: "Rising Motion", desc: "Drive the blocking arm upward in a strong arc. Rotate hips." },
-                { name: "Final Lock", desc: "Arm at 45° above forehead. Solid front stance for power." }
-            ]
-        },
-        {
-            title: "LOW BLOCK",
-            imgPrefix: "athlete_lowblock",
-            steps: [
-                { name: "Shoulder Prep", desc: "Right fist to left shoulder. Left arm extended down." },
-                { name: "The Sweep", desc: "Forceful downward sweep across the body. Rotate the wrist." },
-                { name: "The Lock", desc: "Stop 2 inches above the thigh. Opposite hand chambered at ribs." }
-            ]
-        },
-        {
-            title: "PALM STRIKE",
-            imgPrefix: "athlete_palm",
-            steps: [
-                { name: "Power Chamber", desc: "Open palm at ribs, fingers curled. Deep stance for leverage." },
-                { name: "Impact Thrust", desc: "Explosive forward movement. Aim with base of the palm." },
-                { name: "Full Extension", desc: "Arm fully extended at head height. Back leg locked for power." }
-            ]
-        }
+        { title: "HIGH BLOCK", imgPrefix: "athlete_highblock", steps: [
+            { name: "Chamber Position", desc: "Cross arms at chest level. Right hand to left hip, left hand at ribs." },
+            { name: "Rising Motion", desc: "Drive the blocking arm upward in a strong arc. Rotate hips." },
+            { name: "Final Lock", desc: "Arm at 45° above forehead. Solid front stance for power." }
+        ]},
+        { title: "LOW BLOCK", imgPrefix: "athlete_lowblock", steps: [
+            { name: "Shoulder Prep", desc: "Right fist to left shoulder. Left arm extended down." },
+            { name: "The Sweep", desc: "Forceful downward sweep across the body. Rotate the wrist." },
+            { name: "The Lock", desc: "Stop 2 inches above the thigh. Opposite hand chambered at ribs." }
+        ]},
+        { title: "PALM STRIKE", imgPrefix: "athlete_palm", steps: [
+            { name: "Power Chamber", desc: "Open palm at ribs, fingers curled. Deep stance for leverage." },
+            { name: "Impact Thrust", desc: "Explosive forward movement. Aim with base of the palm." },
+            { name: "Full Extension", desc: "Arm fully extended at head height. Back leg locked for power." }
+        ]}
     ];
 
     let currentDrillIdx = 0; let currentStepIdx = 0;
@@ -153,4 +147,3 @@
 
 </body>
 </html>
- 
