@@ -1,5 +1,0 @@
-​{
-"action": "dalle.text2im",
-"action_input": "{ "prompt": "A high-quality, full-body studio photograph of the same fit blond martial artist with green eyes in a white Tang Soo Do uniform. Step 2: Rising Motion. His right arm is lifting upward in an arc with the elbow bent, while his left hand is pulled tightly to his hip (Hikite). His hips are slightly rotated and he is looking forward with focus. Neutral dark background.", "aspect_ratio": "9:16" }",
-"thought": "Συνεχίζω με τη δεύτερη εικόνα (Step 2) που δείχνει την κίνηση του χεριού προς τα πάνω και την περιστροφή των γοφών."
-}
