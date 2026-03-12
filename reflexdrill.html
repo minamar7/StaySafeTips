@@ -2,116 +2,259 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Reflex Elite – Visual Drills</title>
+<title>Tang Soo Do Elite – Reflex Drills</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-    :root { --n-red: #e50914; --gold: #facc15; --bg: #050505; --card: #181818; }
-    body { margin: 0; background: var(--bg); color: white; font-family: 'Barlow Condensed', sans-serif; overflow-x: hidden; }
-    header { padding: 50px 20px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+    :root { 
+        --n-red: #e50914; 
+        --gold: #facc15; 
+        --bg: #050505; 
+        --card: #181818;
+    }
+    
+    body { 
+        margin: 0; 
+        background: var(--bg); 
+        color: white; 
+        font-family: 'Barlow Condensed', sans-serif; 
+        overflow-x: hidden;
+    }
+
+    header {
+        padding: 50px 20px 10px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .logo { font-family: 'Bebas Neue'; color: var(--n-red); font-size: 2rem; letter-spacing: 1px; }
-    .hero-display { width: 100%; height: 55vh; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .hero-image { height: 90%; width: auto; object-fit: contain; transition: 0.4s; }
-    .step-tag { position: absolute; top: 20px; left: 20px; background: var(--n-red); padding: 5px 15px; font-family: 'Bebas Neue'; font-size: 1.2rem; }
-    .content-wrap { padding: 20px; background: linear-gradient(to top, var(--bg) 85%, transparent); margin-top: -40px; position: relative; z-index: 10; }
-    .tech-title { font-family: 'Bebas Neue'; font-size: 3rem; margin: 0; color: var(--gold); }
-    .steps-container { display: flex; overflow-x: auto; gap: 12px; padding: 10px 0 100px; scrollbar-width: none; }
-    .step-card { min-width: 220px; background: var(--card); border-radius: 4px; border: 2px solid transparent; cursor: pointer; transition: 0.3s; }
+    
+    .nav-tabs {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 10px 20px;
+        scrollbar-width: none;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    
+    .tab-btn {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-family: 'Bebas Neue';
+        font-size: 0.9rem;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: 0.3s;
+    }
+    .tab-btn.active { background: var(--n-red); }
+
+    .hero-display {
+        width: 100%;
+        height: 55vh;
+        background: radial-gradient(circle at center, #222 0%, #000 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .hero-image {
+        height: 95%;
+        width: auto;
+        object-fit: contain;
+        transition: opacity 0.3s ease;
+        filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+    }
+
+    .step-tag {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: var(--n-red);
+        padding: 5px 15px;
+        font-family: 'Bebas Neue';
+        font-size: 1.2rem;
+        border-radius: 2px;
+    }
+
+    .content { padding: 20px; margin-top: -30px; position: relative; z-index: 10; background: linear-gradient(to top, var(--bg) 90%, transparent); }
+    
+    .tech-title { font-family: 'Bebas Neue'; font-size: 3.2rem; margin: 0; color: var(--gold); line-height: 1; }
+    .tech-meta { color: #46d369; font-weight: 700; margin: 8px 0 20px; font-size: 0.85rem; }
+
+    .steps-wrapper { display: flex; overflow-x: auto; gap: 12px; padding: 10px 0 100px; scrollbar-width: none; }
+    .steps-wrapper::-webkit-scrollbar { display: none; }
+
+    .step-card {
+        min-width: 240px;
+        background: var(--card);
+        border-radius: 4px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
     .step-card.active { border-color: #fff; transform: scale(1.02); }
-    .step-thumb { width: 100%; height: 120px; object-fit: cover; opacity: 0.6; }
-    .step-card.active .step-thumb { opacity: 1; }
-    .step-info { padding: 10px; }
-    .s-title { font-family: 'Bebas Neue'; font-size: 1rem; color: #fff; }
-    .s-desc { font-size: 0.75rem; color: #999; line-height: 1.3; }
-    .menu { display: flex; gap: 10px; overflow-x: auto; padding: 10px 20px; scrollbar-width: none; }
-    .menu-btn { background: #333; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-family: 'Bebas Neue'; cursor: pointer; white-space: nowrap; }
-    .menu-btn.active { background: var(--n-red); }
-    .nav-btn { position: fixed; bottom: 30px; width: 90%; left: 5%; background: white; color: black; border: none; padding: 15px; border-radius: 4px; font-family: 'Bebas Neue'; font-size: 1.3rem; z-index: 200; cursor: pointer; }
+
+    .thumb-wrap { width: 100%; height: 130px; background: #333; overflow: hidden; }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    .step-card.active img { opacity: 1; }
+
+    .step-info { padding: 12px; }
+    .s-title { font-family: 'Bebas Neue'; font-size: 1.1rem; color: #fff; }
+    .s-desc { font-size: 0.75rem; color: #aaa; margin-top: 4px; line-height: 1.3; }
+
+    .action-bar { position: fixed; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(to top, #000 80%, transparent); display: flex; justify-content: center; z-index: 100; }
+    .btn-next { 
+        background: white; color: black; border: none; padding: 14px; 
+        font-family: 'Bebas Neue'; font-size: 1.3rem; border-radius: 4px; cursor: pointer;
+        width: 100%; max-width: 400px;
+    }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">STAY SAFE ELITE</div>
-    <div style="font-size: 0.8rem; font-weight: 700;">REFLEX DRILLS</div>
+    <div class="logo">ELITE DRILLS</div>
 </header>
 
-<div class="menu" id="techMenu"></div>
+<div class="nav-tabs" id="techTabs">
+    </div>
 
 <div class="hero-display">
     <div class="step-tag" id="tag">STEP 1</div>
-    <img src="athlete_highblock_1.jpg" id="mainVisual" class="hero-image">
+    <img src="" id="mainImg" class="hero-image">
 </div>
 
-<div class="content-wrap">
+<div class="content">
     <h1 class="tech-title" id="displayTitle">HIGH BLOCK</h1>
-    <div style="color: #46d369; font-weight: 900; margin: 5px 0 20px;">MASTER CLASS • 3 STEPS</div>
-    <div class="steps-container" id="stepsList"></div>
+    <div class="tech-meta" id="displayMeta">SANG DAN MAKGI • MASTER LEVEL</div>
+
+    <div style="font-family: 'Bebas Neue'; font-size: 1.1rem; margin-bottom: 12px; color: #eee; letter-spacing: 1px;">EPISODES / STEPS</div>
+    <div class="steps-wrapper" id="stepsWrapper"></div>
 </div>
 
-<button class="nav-btn" onclick="nextStep()">▶ NEXT STEP</button>
+<div class="action-bar">
+    <button class="btn-next" onclick="nextStep()">▶ NEXT STEP</button>
+</div>
 
 <script>
     const DRILLS = [
-        { title: "HIGH BLOCK", imgPrefix: "athlete_highblock", steps: [
-            { t: "The Chamber", d: "Cross arms at chest level. Prep for the rise." },
-            { t: "The Rise", d: "Lifting the arm in a powerful arc." },
-            { t: "The Lock", d: "Final block above the forehead." }
-        ]},
-        { title: "LOW BLOCK", imgPrefix: "athlete_lowblock", steps: [
-            { t: "Shoulder Prep", d: "Bring fist to opposite shoulder." },
-            { t: "The Sweep", d: "Forceful downward sweep across body." },
-            { t: "The Lock", d: "Stop 2 inches above the thigh." }
-        ]},
-        { title: "PALM STRIKE", imgPrefix: "athlete_palm", steps: [
-            { t: "Hip Chamber", d: "Open palm at ribs, ready to strike." },
-            { t: "The Thrust", d: "Explosive movement forward." },
-            { t: "Full Impact", d: "Target hit with base of the palm." }
-        ]}
+        {
+            title: "HIGH BLOCK",
+            meta: "SANG DAN MAKGI • 3 STEPS",
+            imgPrefix: "athlete_highblock",
+            steps: [
+                { name: "Chamber Position", desc: "Cross arms at chest level. Right hand to left hip, left hand at ribs." },
+                { name: "Rising Motion", desc: "Drive the blocking arm upward in an arc. Rotate hips forward." },
+                { name: "Final Lock", desc: "Arm at 45° above forehead. Solid front stance for maximum power." }
+            ]
+        },
+        {
+            title: "LOW BLOCK",
+            meta: "HA DAN MAKGI • 3 STEPS",
+            imgPrefix: "athlete_lowblock",
+            steps: [
+                { name: "Shoulder Prep", desc: "Right fist to left shoulder. Left arm extended down for balance." },
+                { name: "The Sweep", desc: "Forceful downward sweep across the body. Rotate the wrist." },
+                { name: "The Lock", desc: "Stop 2 inches above the thigh. Opposite hand chambered at ribs." }
+            ]
+        },
+        {
+            title: "PALM STRIKE",
+            meta: "JANG KWON • 3 STEPS",
+            imgPrefix: "athlete_palm",
+            steps: [
+                { name: "Power Chamber", desc: "Open palm at ribs, fingers curled. Deep stance for leverage." },
+                { name: "Impact Thrust", desc: "Explosive forward movement. Aim with the base of the palm." },
+                { name: "Full Extension", desc: "Arm fully extended at head height. Back leg locked for power." }
+            ]
+        }
     ];
 
-    let currentDrill = 0;
-    let currentStep = 0;
+    let currentDrillIdx = 0;
+    let currentStepIdx = 0;
 
     function init() {
-        const menu = document.getElementById('techMenu');
-        menu.innerHTML = DRILLS.map((d, i) => `
-            <button class="menu-btn ${i===0?'active':''}" onclick="changeDrill(${i})">${d.title}</button>
+        // Build Tabs
+        const tabs = document.getElementById('techTabs');
+        tabs.innerHTML = DRILLS.map((d, i) => `
+            <button class="tab-btn ${i===0?'active':''}" onclick="changeDrill(${i})">${d.title}</button>
         `).join('');
+        
+        loadDrill();
+    }
+
+    function changeDrill(idx) {
+        currentDrillIdx = idx;
+        currentStepIdx = 0;
+        document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === idx);
+        });
         loadDrill();
     }
 
     function loadDrill() {
-        const d = DRILLS[currentDrill];
-        currentStep = 0;
-        document.getElementById('displayTitle').innerText = d.title;
-        const list = document.getElementById('stepsList');
-        list.innerHTML = d.steps.map((s, i) => `
-            <div class="step-card ${i===0?'active':''}" id="s-${i}" onclick="jumpTo(${i})">
-                <img src="${d.imgPrefix}_${i+1}.jpg" class="step-thumb">
-                <div class="step-info"><div class="s-title">STEP ${i+1}: ${s.t}</div><div class="s-desc">${s.d}</div></div>
+        const drill = DRILLS[currentDrillIdx];
+        document.getElementById('displayTitle').innerText = drill.title;
+        document.getElementById('displayMeta').innerText = drill.meta;
+        
+        const wrapper = document.getElementById('stepsWrapper');
+        wrapper.innerHTML = drill.steps.map((s, i) => `
+            <div class="step-card ${i===0?'active':''}" id="card-${i}" onclick="goToStep(${i})">
+                <div class="thumb-wrap">
+                    <img src="${drill.imgPrefix}_${i+1}.jpg">
+                </div>
+                <div class="step-info">
+                    <div class="s-title">STEP ${i+1}: ${s.name}</div>
+                    <div class="s-desc">${s.desc}</div>
+                </div>
             </div>
         `).join('');
+        
         updateUI();
     }
 
     function updateUI() {
-        const d = DRILLS[currentDrill];
-        const main = document.getElementById('mainVisual');
-        main.src = `${d.imgPrefix}_${currentStep+1}.jpg`;
-        document.getElementById('tag').innerText = `STEP ${currentStep+1}`;
-        document.querySelectorAll('.step-card').forEach((c, i) => c.classList.toggle('active', i === currentStep));
+        const drill = DRILLS[currentDrillIdx];
+        const main = document.getElementById('mainImg');
+        
+        main.style.opacity = '0';
+        setTimeout(() => {
+            main.src = `${drill.imgPrefix}_${currentStepIdx + 1}.jpg`;
+            main.style.opacity = '1';
+            document.getElementById('tag').innerText = `STEP ${currentStepIdx + 1}`;
+            
+            document.querySelectorAll('.step-card').forEach((c, i) => {
+                c.classList.toggle('active', i === currentStepIdx);
+            });
+            
+            const activeCard = document.getElementById(`card-${currentStepIdx}`);
+            activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 200);
     }
 
-    function nextStep() { currentStep = (currentStep + 1) % 3; updateUI(); }
-    function jumpTo(i) { currentStep = i; updateUI(); }
-    function changeDrill(i) { 
-        currentDrill = i; 
-        document.querySelectorAll('.menu-btn').forEach((b, idx) => b.classList.toggle('active', idx === i));
-        loadDrill(); 
+    function nextStep() {
+        currentStepIdx = (currentStepIdx + 1) % DRILLS[currentDrillIdx].steps.length;
+        updateUI();
+    }
+
+    function goToStep(idx) {
+        currentStepIdx = idx;
+        updateUI();
     }
 
     window.onload = init;
 </script>
+
 </body>
 </html>
