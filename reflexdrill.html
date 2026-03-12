@@ -2,267 +2,259 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Reflex Drill – Tang Soo Do | Stay Safe Elite</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Tang Soo Do Elite – Reflex Drills</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <style>
-:root{--bg:#080808;--gold:#d4a53a;--gold2:#f0c865;--white:#f2ede4;--muted:#484848;--border:rgba(212,165,58,0.13);}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--white);font-family:'Barlow Condensed',sans-serif;min-height:100vh;overflow-x:hidden;}
-.page{max-width:440px;margin:0 auto;padding:20px 14px 90px;}
-.back-btn{color:var(--gold);text-decoration:none;font-size:0.7rem;letter-spacing:.22em;text-transform:uppercase;font-weight:700;display:inline-flex;align-items:center;gap:5px;margin-bottom:20px;opacity:.75;}
-.back-btn::before{content:'←';}
-.hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;}
-.eyebrow{font-size:0.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.04em;line-height:.88;}
-h1 span{color:var(--gold);}
-.badge{background:#111;border:1px solid var(--border);border-radius:3px;padding:6px 12px;text-align:center;}
-.badge-rank{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);line-height:1;}
-.badge-lbl{font-size:0.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:11px;}
-.tab{background:#0e0e0e;border:1px solid rgba(255,255,255,.05);border-radius:3px;padding:8px 2px 7px;text-align:center;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
-.tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:.18s;}
-.tab.active,.tab:hover{background:rgba(212,165,58,.05);border-color:var(--border);}
-.tab.active::after,.tab:hover::after{transform:scaleX(1);}
-.tab-icon{font-size:1.1rem;display:block;margin-bottom:2px;}
-.tab-lbl{font-size:0.57rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
-.tab.active .tab-lbl{color:var(--gold);}
-.stats{display:flex;gap:1px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden;margin-bottom:11px;}
-.stat{flex:1;background:#0e0e0e;padding:9px 4px;text-align:center;}
-.sv{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--gold);display:block;line-height:1;}
-.sl{font-size:0.57rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
-.canvas-card{background:#090909;border:1px solid var(--border);border-radius:5px;overflow:hidden;margin-bottom:10px;position:relative;}
-.canvas-top{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);}
-.tech-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.07em;color:var(--gold);}
-.ph-badge{font-size:0.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:2px 8px;border:1px solid rgba(255,255,255,.07);border-radius:2px;transition:all .3s;}
-.ph-badge.ki{color:var(--gold);border-color:rgba(212,165,58,.3);background:rgba(212,165,58,.08);}
-#c3d{display:block;width:100%;height:380px;}
-.load-wrap{position:absolute;top:40px;left:0;right:0;bottom:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#090909;z-index:10;}
-.load-txt{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.12em;color:var(--muted);}
-.load-bar-bg{width:160px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
-.load-bar{height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width .2s;}
-.flash{position:absolute;top:40px;left:0;right:0;bottom:0;pointer-events:none;opacity:0;transition:opacity .06s;}
-.phase-desc{padding:9px 14px;border-top:1px solid rgba(255,255,255,.04);min-height:52px;}
-.ph-title{font-weight:900;font-size:0.82rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;}
-.ph-tip{font-size:0.71rem;color:var(--muted);line-height:1.45;}
-.speed-row{padding:0 14px 10px;display:flex;align-items:center;gap:10px;}
-.sp-lbl{font-size:0.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
-input[type=range]{flex:1;height:3px;-webkit-appearance:none;background:rgba(255,255,255,.08);border-radius:2px;outline:none;}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;}
-.sp-val{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold);min-width:34px;text-align:right;}
-.btn-row{display:flex;gap:6px;}
-.btn{flex:1;padding:14px 4px;border:none;border-radius:3px;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.07em;cursor:pointer;transition:all .15s;}
-.btn:active{transform:scale(.97);}
-.btn-play{background:var(--gold);color:#080808;}
-.btn-play:hover{background:var(--gold2);}
-.btn-play.on{background:#141200;color:var(--gold);border:1px solid rgba(212,165,58,.3);}
-.btn-sec{background:#131313;color:var(--white);border:1px solid rgba(255,255,255,.08);}
-.btn-rst{background:#0e0e0e;color:var(--muted);border:1px solid rgba(255,255,255,.05);}
+    :root { 
+        --n-red: #e50914; 
+        --gold: #facc15; 
+        --bg: #050505; 
+        --card: #181818;
+    }
+    
+    body { 
+        margin: 0; 
+        background: var(--bg); 
+        color: white; 
+        font-family: 'Barlow Condensed', sans-serif; 
+        overflow-x: hidden;
+    }
+
+    header {
+        padding: 50px 20px 10px;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo { font-family: 'Bebas Neue'; color: var(--n-red); font-size: 2rem; letter-spacing: 1px; }
+    
+    .nav-tabs {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 10px 20px;
+        scrollbar-width: none;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    
+    .tab-btn {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-family: 'Bebas Neue';
+        font-size: 0.9rem;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: 0.3s;
+    }
+    .tab-btn.active { background: var(--n-red); }
+
+    .hero-display {
+        width: 100%;
+        height: 55vh;
+        background: radial-gradient(circle at center, #222 0%, #000 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .hero-image {
+        height: 95%;
+        width: auto;
+        object-fit: contain;
+        transition: opacity 0.3s ease;
+        filter: drop-shadow(0 0 20px rgba(0,0,0,0.8));
+    }
+
+    .step-tag {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: var(--n-red);
+        padding: 5px 15px;
+        font-family: 'Bebas Neue';
+        font-size: 1.2rem;
+        border-radius: 2px;
+    }
+
+    .content { padding: 20px; margin-top: -30px; position: relative; z-index: 10; background: linear-gradient(to top, var(--bg) 90%, transparent); }
+    
+    .tech-title { font-family: 'Bebas Neue'; font-size: 3.2rem; margin: 0; color: var(--gold); line-height: 1; }
+    .tech-meta { color: #46d369; font-weight: 700; margin: 8px 0 20px; font-size: 0.85rem; }
+
+    .steps-wrapper { display: flex; overflow-x: auto; gap: 12px; padding: 10px 0 100px; scrollbar-width: none; }
+    .steps-wrapper::-webkit-scrollbar { display: none; }
+
+    .step-card {
+        min-width: 240px;
+        background: var(--card);
+        border-radius: 4px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .step-card.active { border-color: #fff; transform: scale(1.02); }
+
+    .thumb-wrap { width: 100%; height: 130px; background: #333; overflow: hidden; }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    .step-card.active img { opacity: 1; }
+
+    .step-info { padding: 12px; }
+    .s-title { font-family: 'Bebas Neue'; font-size: 1.1rem; color: #fff; }
+    .s-desc { font-size: 0.75rem; color: #aaa; margin-top: 4px; line-height: 1.3; }
+
+    .action-bar { position: fixed; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(to top, #000 80%, transparent); display: flex; justify-content: center; z-index: 100; }
+    .btn-next { 
+        background: white; color: black; border: none; padding: 14px; 
+        font-family: 'Bebas Neue'; font-size: 1.3rem; border-radius: 4px; cursor: pointer;
+        width: 100%; max-width: 400px;
+    }
 </style>
 </head>
 <body>
-<div class="page">
-  <a href="https://minamar7.github.io/StaySafeTips/" class="back-btn">Back to App</a>
-  <div class="hdr">
-    <div><div class="eyebrow">Tang Soo Do · 당수도</div><h1>MASTER<br><span>DRILL</span></h1></div>
-    <div class="badge"><div class="badge-rank">2nd DAN</div><div class="badge-lbl">Black Belt</div></div>
-  </div>
-  <div class="tabs">
-    <div class="tab active" onclick="switchTech(0,this)"><span class="tab-icon">🛡️</span><div class="tab-lbl">High Block</div></div>
-    <div class="tab" onclick="switchTech(1,this)"><span class="tab-icon">🦵</span><div class="tab-lbl">Front Kick</div></div>
-    <div class="tab" onclick="switchTech(2,this)"><span class="tab-icon">👊</span><div class="tab-lbl">Punch</div></div>
-    <div class="tab" onclick="switchTech(3,this)"><span class="tab-icon">⬇️</span><div class="tab-lbl">Low Block</div></div>
-  </div>
-  <div class="stats">
-    <div class="stat"><span class="sv" id="svRep">0</span><div class="sl">Reps</div></div>
-    <div class="stat"><span class="sv" id="svTime">0s</span><div class="sl">Time</div></div>
-    <div class="stat"><span class="sv" id="svPace">--</span><div class="sl">Pace</div></div>
-  </div>
-  <div class="canvas-card">
-    <div class="canvas-top">
-      <div class="tech-name" id="techName">HIGH BLOCK</div>
-      <div class="ph-badge" id="phBadge">LOADING…</div>
+
+<header>
+    <div class="logo">ELITE DRILLS</div>
+</header>
+
+<div class="nav-tabs" id="techTabs">
     </div>
-    <canvas id="c3d"></canvas>
-    <div class="load-wrap" id="loadWrap">
-      <div class="load-txt" id="loadTxt">LOADING AVATAR</div>
-      <div class="load-bar-bg"><div class="load-bar" id="loadBar"></div></div>
-    </div>
-    <div class="flash" id="flash"></div>
-    <div class="phase-desc">
-      <div class="ph-title" id="phTitle">Loading…</div>
-      <div class="ph-tip" id="phTip">Please wait...</div>
-    </div>
-    <div class="speed-row">
-      <div class="sp-lbl">Speed</div>
-      <input type="range" id="speedSlider" min="0.25" max="2.5" step="0.05" value="1" oninput="setSpeed(this.value)">
-      <div class="sp-val" id="speedVal">1.0×</div>
-    </div>
-  </div>
-  <div class="btn-row">
-    <button class="btn btn-play" id="btnPlay" onclick="togglePlay()" disabled>▶ PLAY</button>
-    <button class="btn btn-sec" onclick="slowMo()">SLOW MO</button>
-    <button class="btn btn-rst" onclick="resetDrill()">RESET</button>
-  </div>
+
+<div class="hero-display">
+    <div class="step-tag" id="tag">STEP 1</div>
+    <img src="" id="mainImg" class="hero-image">
 </div>
+
+<div class="content">
+    <h1 class="tech-title" id="displayTitle">HIGH BLOCK</h1>
+    <div class="tech-meta" id="displayMeta">SANG DAN MAKGI • MASTER LEVEL</div>
+
+    <div style="font-family: 'Bebas Neue'; font-size: 1.1rem; margin-bottom: 12px; color: #eee; letter-spacing: 1px;">EPISODES / STEPS</div>
+    <div class="steps-wrapper" id="stepsWrapper"></div>
+</div>
+
+<div class="action-bar">
+    <button class="btn-next" onclick="nextStep()">▶ NEXT STEP</button>
+</div>
+
 <script>
-// ─── AUDIO ENGINE ──────────────────────────────
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-function playKihap() {
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(160, audioCtx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.12);
-  gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-  osc.connect(gain); gain.connect(audioCtx.destination);
-  osc.start(); osc.stop(audioCtx.currentTime + 0.12);
-}
+    const DRILLS = [
+        {
+            title: "HIGH BLOCK",
+            meta: "SANG DAN MAKGI • 3 STEPS",
+            imgPrefix: "athlete_highblock",
+            steps: [
+                { name: "Chamber Position", desc: "Cross arms at chest level. Right hand to left hip, left hand at ribs." },
+                { name: "Rising Motion", desc: "Drive the blocking arm upward in an arc. Rotate hips forward." },
+                { name: "Final Lock", desc: "Arm at 45° above forehead. Solid front stance for maximum power." }
+            ]
+        },
+        {
+            title: "LOW BLOCK",
+            meta: "HA DAN MAKGI • 3 STEPS",
+            imgPrefix: "athlete_lowblock",
+            steps: [
+                { name: "Shoulder Prep", desc: "Right fist to left shoulder. Left arm extended down for balance." },
+                { name: "The Sweep", desc: "Forceful downward sweep across the body. Rotate the wrist." },
+                { name: "The Lock", desc: "Stop 2 inches above the thigh. Opposite hand chambered at ribs." }
+            ]
+        },
+        {
+            title: "PALM STRIKE",
+            meta: "JANG KWON • 3 STEPS",
+            imgPrefix: "athlete_palm",
+            steps: [
+                { name: "Power Chamber", desc: "Open palm at ribs, fingers curled. Deep stance for leverage." },
+                { name: "Impact Thrust", desc: "Explosive forward movement. Aim with the base of the palm." },
+                { name: "Full Extension", desc: "Arm fully extended at head height. Back leg locked for power." }
+            ]
+        }
+    ];
 
-// ─── TANG SOO DO - REVISED POSES ───────────────────
-const TECHS = [
- {name:'HIGH BLOCK',col:'#d4a53a',phases:[
-  {n:'Fighting Stance', d:1.5, b:{Spine:{x:5},RightArm:{x:20,z:-20},RightForeArm:{y:-35},LeftArm:{x:20,z:20},LeftForeArm:{y:35}}},
-  {n:'Chamber Across', d:0.4, b:{Spine:{x:8,y:15},RightArm:{x:10,y:45,z:35},RightForeArm:{y:-95},LeftArm:{x:20,z:25}}},
-  {n:'SANG DAN MAKGI!', d:0.3, b:{Spine:{x:10,y:-15},RightArm:{x:-110,y:-5,z:-45},RightForeArm:{y:-105},LeftArm:{x:35,z:95},LeftForeArm:{y:-90}}},
-  {n:'Kime (Lock)', d:0.8, b:{Spine:{x:12},RightArm:{x:-115,z:-50},RightForeArm:{y:-110},LeftArm:{x:40,z:100},LeftForeArm:{y:-95}}},
-  {n:'Return', d:1.0, b:{Spine:{x:5},RightArm:{x:20,z:-20},LeftArm:{x:20,z:20}}}
- ]},
- {name:'FRONT KICK',col:'#38bdf8',phases:[
-  {n:'Fighting Stance', d:1.5, b:{Spine:{x:5},RightUpLeg:{x:0},RightLeg:{x:0}}},
-  {n:'High Chamber', d:0.4, b:{Spine:{x:10},RightUpLeg:{x:-105},RightLeg:{x:-115}}},
-  {n:'AP CHAGI!', d:0.3, b:{Spine:{x:-5},RightUpLeg:{x:-85},RightLeg:{x:15}}},
-  {n:'Snap Back', d:0.4, b:{Spine:{x:5},RightUpLeg:{x:-110},RightLeg:{x:-120}}},
-  {n:'Return', d:1.0, b:{Spine:{x:5},RightUpLeg:{x:0},RightLeg:{x:0}}}
- ]},
- {name:'REVERSE PUNCH',col:'#a855f7',phases:[
-  {n:'Forward Stance', d:1.5, b:{Spine:{x:5,y:20},RightArm:{x:25,z:-75},LeftArm:{x:-10,z:40}}},
-  {n:'Cocking', d:0.3, b:{Spine:{x:5,y:35},RightArm:{x:35,z:-55}}},
-  {n:'TSUKI!', d:0.3, b:{Spine:{x:12,y:-35},RightArm:{x:-85,y:0,z:5},LeftArm:{x:30,z:100},LeftForeArm:{y:-100}}},
-  {n:'Full Extension', d:0.7, b:{Spine:{x:15,y:-40},RightArm:{x:-90,z:10}}},
-  {n:'Return', d:1.0, b:{Spine:{x:5,y:20},RightArm:{x:25,z:-75}}}
- ]},
- {name:'LOW BLOCK',col:'#22c55e',phases:[
-  {n:'Ready Stance', d:1.5, b:{Spine:{x:0},RightArm:{x:20,z:-15},LeftArm:{x:20,z:15}}},
-  {n:'Prep Across', d:0.4, b:{Spine:{x:5},RightArm:{x:-35,y:35,z:-30},RightForeArm:{y:-85}}},
-  {n:'HA DAN MAKGI!', d:0.3, b:{Spine:{x:12},RightArm:{x:35,z:65},RightForeArm:{y:45},LeftArm:{x:35,z:100},LeftForeArm:{y:-100}}},
-  {n:'Focus', d:0.8, b:{Spine:{x:15},RightArm:{x:40,z:70}}},
-  {n:'Return', d:1.0, b:{Spine:{x:0},RightArm:{x:20,z:-15}}}
- ]}
-];
+    let currentDrillIdx = 0;
+    let currentStepIdx = 0;
 
-// ─── THREE.JS ENGINE ──────────────────────────────
-const c = document.getElementById('c3d');
-const renderer = new THREE.WebGLRenderer({canvas:c, antialias:true});
-renderer.setSize(c.parentElement.offsetWidth, 380);
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.shadowMap.enabled = true;
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x080c16);
-const camera = new THREE.PerspectiveCamera(40, c.width/380, 0.1, 100);
-camera.position.set(0, 1.35, 3.6);
-camera.lookAt(0, 1.0, 0);
-
-scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-const key = new THREE.DirectionalLight(0xffffff, 1.3);
-key.position.set(2,5,3); key.castShadow=true; scene.add(key);
-
-const floor = new THREE.Mesh(new THREE.PlaneGeometry(20,20), new THREE.MeshStandardMaterial({color:0x0a0e1a}));
-floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; scene.add(floor);
-scene.add(new THREE.GridHelper(20,30,0x1a2a40,0x0a1238));
-
-let bones={}, restPose={}, ready=false;
-const DEG=Math.PI/180;
-
-new THREE.GLTFLoader().load('avatar.glb', gltf=>{
-  gltf.scene.traverse(n=>{ if(n.isMesh)n.castShadow=true; if(n.name)bones[n.name]=n; });
-  scene.add(gltf.scene);
-  for(const k in bones) restPose[k]=bones[k].rotation.clone();
-  ready=true;
-  document.getElementById('loadWrap').style.display='none';
-  document.getElementById('btnPlay').disabled=false;
-  applyPose(TECHS[0].phases[0].b,1);
-  updateUI();
-});
-
-function applyPose(pose, alpha){
-  if(!ready) return;
-  for(const name in pose){
-    const b=bones[name], r=restPose[name];
-    if(b && r){
-      b.rotation.x=r.x+(pose[name].x||0)*DEG*alpha;
-      b.rotation.y=r.y+(pose[name].y||0)*DEG*alpha;
-      b.rotation.z=r.z+(pose[name].z||0)*DEG*alpha;
+    function init() {
+        // Build Tabs
+        const tabs = document.getElementById('techTabs');
+        tabs.innerHTML = DRILLS.map((d, i) => `
+            <button class="tab-btn ${i===0?'active':''}" onclick="changeDrill(${i})">${d.title}</button>
+        `).join('');
+        
+        loadDrill();
     }
-  }
-}
 
-let techIdx=0, phaseIdx=0, phaseT=0, playing=false, speed=1, reps=0, secs=0, timerH=null, lastTs=null;
+    function changeDrill(idx) {
+        currentDrillIdx = idx;
+        currentStepIdx = 0;
+        document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === idx);
+        });
+        loadDrill();
+    }
 
-function tick(ts){
-  if(!playing){lastTs=null;return;}
-  if(!lastTs)lastTs=ts;
-  const dt=(ts-lastTs)/1000; lastTs=ts;
-  const tech=TECHS[techIdx], dur=tech.phases[phaseIdx].d/speed;
-  phaseT+=dt/dur;
-  
-  if(phaseT>=1){
-    phaseT=0; phaseIdx++;
-    if(phaseIdx>=tech.phases.length){phaseIdx=0; reps++; document.getElementById('svRep').textContent=reps;}
-    if(phaseIdx === 2) { playKihap(); }
-    updateUI();
-  }
-  
-  const p0=tech.phases[phaseIdx].b, p1=tech.phases[(phaseIdx+1)%tech.phases.length].b;
-  const blend = {};
-  const allKeys = new Set([...Object.keys(p0), ...Object.keys(p1)]);
-  allKeys.forEach(k => {
-    const a = p0[k] || {x:0,y:0,z:0}, b = p1[k] || a;
-    blend[k]={x:a.x+(b.x-(a.x||0))*phaseT, y:a.y+(b.y-(a.y||0))*phaseT, z:a.z+(b.z-(a.z||0))*phaseT};
-  });
-  applyPose(blend,1);
-  
-  document.getElementById('flash').style.opacity = (phaseIdx===2) ? 0.35 : 0;
-  requestAnimationFrame(tick);
-}
+    function loadDrill() {
+        const drill = DRILLS[currentDrillIdx];
+        document.getElementById('displayTitle').innerText = drill.title;
+        document.getElementById('displayMeta').innerText = drill.meta;
+        
+        const wrapper = document.getElementById('stepsWrapper');
+        wrapper.innerHTML = drill.steps.map((s, i) => `
+            <div class="step-card ${i===0?'active':''}" id="card-${i}" onclick="goToStep(${i})">
+                <div class="thumb-wrap">
+                    <img src="${drill.imgPrefix}_${i+1}.jpg">
+                </div>
+                <div class="step-info">
+                    <div class="s-title">STEP ${i+1}: ${s.name}</div>
+                    <div class="s-desc">${s.desc}</div>
+                </div>
+            </div>
+        `).join('');
+        
+        updateUI();
+    }
 
-(function loop(){ requestAnimationFrame(loop); renderer.render(scene,camera); })();
+    function updateUI() {
+        const drill = DRILLS[currentDrillIdx];
+        const main = document.getElementById('mainImg');
+        
+        main.style.opacity = '0';
+        setTimeout(() => {
+            main.src = `${drill.imgPrefix}_${currentStepIdx + 1}.jpg`;
+            main.style.opacity = '1';
+            document.getElementById('tag').innerText = `STEP ${currentStepIdx + 1}`;
+            
+            document.querySelectorAll('.step-card').forEach((c, i) => {
+                c.classList.toggle('active', i === currentStepIdx);
+            });
+            
+            const activeCard = document.getElementById(`card-${currentStepIdx}`);
+            activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 200);
+    }
 
-function updateUI(){
-  const tech=TECHS[techIdx], ph=tech.phases[phaseIdx];
-  document.getElementById('techName').textContent=tech.name;
-  document.getElementById('phTitle').textContent=ph.n;
-  const badge=document.getElementById('phBadge');
-  badge.textContent=phaseIdx===2?'KI-HAP!':'PHASE '+(phaseIdx+1);
-  badge.className='ph-badge'+(phaseIdx===2?' ki':'');
-}
+    function nextStep() {
+        currentStepIdx = (currentStepIdx + 1) % DRILLS[currentDrillIdx].steps.length;
+        updateUI();
+    }
 
-function switchTech(idx,el){
-  if(playing)togglePlay(); techIdx=idx; phaseIdx=0; phaseT=0;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active'); applyPose(TECHS[idx].phases[0].b,1); updateUI();
-}
+    function goToStep(idx) {
+        currentStepIdx = idx;
+        updateUI();
+    }
 
-function togglePlay(){
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  playing=!playing;
-  const btn=document.getElementById('btnPlay');
-  if(playing){
-    btn.textContent='⏸ PAUSE'; btn.classList.add('on');
-    if(!timerH)timerH=setInterval(()=>{secs++;document.getElementById('svTime').textContent=secs+'s';},1000);
-    requestAnimationFrame(tick);
-  } else {
-    btn.textContent='▶ PLAY'; btn.classList.remove('on');
-    clearInterval(timerH); timerH=null;
-  }
-}
-function setSpeed(v){speed=parseFloat(v);document.getElementById('speedVal').textContent=speed.toFixed(2)+'×';}
-function slowMo(){const s=document.getElementById('speedSlider');s.value=0.3;setSpeed(0.3);}
-function resetDrill(){ location.reload(); }
+    window.onload = init;
 </script>
+
 </body>
 </html>
