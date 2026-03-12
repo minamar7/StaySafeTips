@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +49,6 @@
 
     .hero-display { width: 100%; height: 50vh; background: #000; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
     
-    /* Kiai Glow Effect on Image */
     .hero-image { 
         height: 95%; width: auto; object-fit: contain; 
         transition: opacity 0.2s ease, filter 0.2s ease;
@@ -94,8 +94,8 @@
 </div>
 
 <div class="content">
-    <h1 class="tech-title" id="displayTitle">HIGH BLOCK</h1>
-    <div class="tech-subtitle" id="displaySubtitle">SANG DAN MAKGI • MASTER LEVEL</div>
+    <h1 class="tech-title" id="displayTitle">PALM STRIKE</h1>
+    <div class="tech-subtitle" id="displaySubtitle">JANG KWON • MASTER LEVEL</div>
     <div class="steps-wrapper" id="stepsWrapper"></div>
 </div>
 
@@ -104,17 +104,28 @@
 </div>
 
 <script>
-    const kiaiSound = new Audio('kiai.mp3');
+    // Set to kiai1.mp3 for female audio
+    const kiaiSound = new Audio('kiai1.mp3');
 
     const DRILLS = [
+        { 
+            title: "PALM STRIKE", 
+            subtitle: "JANG KWON • MASTER LEVEL",
+            imgPrefix: "athlete_palm", 
+            steps: [
+                { name: "Power Chamber", desc: "Open your striking palm at your ribs with fingers tight and wrist cocked back. Lead hand extended for focus. <span class='kiai-label'>READY!</span>" },
+                { name: "Impact Thrust", desc: "Explosive forward movement. Strike with the heel of the palm while pulling the opposite hand to the hip. <span class='kiai-label'>STRIKE!</span>" },
+                { name: "Final Lock", desc: "Arm fully extended at face height. Lock the stance, rotate hips, and release a sharp abdominal shout. <span class='kiai-label'>KIAI!</span>" }
+            ]
+        },
         { 
             title: "LOW BLOCK", 
             subtitle: "HADAN MAHKEE • MASTER LEVEL",
             imgPrefix: "athlete_lowblock", 
             steps: [
-                { name: "Focus & Prep", desc: "Cross arms at chest level. Focus your gaze and gather explosive energy. <span class='kiai-label'>KIAI!</span>" },
-                { name: "The Block", desc: "Step into deep Front Stance. Execute a heavy downward sweep across the body. <span class='kiai-label'>KIAI!</span>" },
-                { name: "Center Punch", desc: "Deliver a devastating center punch to the solar plexus. Rotate hips for max power. <span class='kiai-label'>KIAI!</span>" }
+                { name: "Focus & Prep", desc: "Cross arms at chest level. Gather explosive energy and focus your gaze on the opponent's core. <span class='kiai-label'>PREP!</span>" },
+                { name: "The Block", desc: "Drop into a deep Front Stance. Execute a heavy downward sweep to deflect low attacks. <span class='kiai-label'>BLOCK!</span>" },
+                { name: "Center Punch", desc: "Immediately deliver a devastating punch to the solar plexus. Rotate hips for maximum force. <span class='kiai-label'>KIAI!</span>" }
             ]
         },
         { 
@@ -122,19 +133,9 @@
             subtitle: "SANG DAN MAKGI • MASTER LEVEL",
             imgPrefix: "athlete_highblock", 
             steps: [
-                { name: "Shoulder Chamber", desc: "Cross arms at chest level. Right hand to left hip, left hand at ribs. <span class='kiai-label'>KIAI!</span>" },
-                { name: "Rising Motion", desc: "Drive the blocking arm upward in a strong arc. Rotate hips into the stance. <span class='kiai-label'>KIAI!</span>" },
-                { name: "Final Lock", desc: "Lock the arm at 45° above forehead. Solidify the foundation. <span class='kiai-label'>KIAI!</span>" }
-            ]
-        },
-        { 
-            title: "PALM STRIKE", 
-            subtitle: "JANG KWON • MASTER LEVEL",
-            imgPrefix: "athlete_palm", 
-            steps: [
-                { name: "Power Chamber", desc: "Open palm at ribs, fingers curled. Deep stance for maximum leverage. <span class='kiai-label'>KIAI!</span>" },
-                { name: "Impact Thrust", desc: "Explosive forward movement. Aim with the base of the palm. <span class='kiai-label'>KIAI!</span>" },
-                { name: "Full Extension", desc: "Arm fully extended at head height. Lock the back leg. <span class='kiai-label'>KIAI!</span>" }
+                { name: "Shoulder Chamber", desc: "Cross arms: striking hand to opposite hip, secondary hand guarding the ribs. <span class='kiai-label'>SET!</span>" },
+                { name: "Rising Motion", desc: "Drive the blocking arm upward in a powerful arc, leading with the outer forearm. <span class='kiai-label'>RISE!</span>" },
+                { name: "Final Lock", desc: "Lock the arm at a 45° angle above the forehead. Solidify your base and focus. <span class='kiai-label'>KIAI!</span>" }
             ]
         }
     ];
@@ -168,17 +169,14 @@
     }
 
     function doEffects() {
-        // Flash
         const flash = document.getElementById('flash');
         flash.style.opacity = '0.4';
         setTimeout(() => flash.style.opacity = '0', 100);
 
-        // Kiai Glow
         const img = document.getElementById('mainImg');
         img.classList.add('kiai-active');
         setTimeout(() => img.classList.remove('kiai-active'), 400);
 
-        // Vibration
         if (navigator.vibrate) navigator.vibrate(50);
     }
 
@@ -188,12 +186,12 @@
         
         if(triggerEffects) doEffects();
 
-        // Progress Bar update
         const progress = ((currentStepIdx + 1) / drill.steps.length) * 100;
         document.getElementById('progress-bar').style.width = progress + '%';
 
         main.style.opacity = '0';
         setTimeout(() => {
+            // Updated to ensure .jpg files are called correctly
             main.src = `${drill.imgPrefix}_${currentStepIdx + 1}.jpg`;
             main.style.opacity = '1';
             document.getElementById('tag').innerText = `STEP ${currentStepIdx + 1}`;
@@ -203,7 +201,7 @@
 
     function nextStep() {
         kiaiSound.currentTime = 0; 
-        kiaiSound.play().catch(e => console.log("Audio waiting for user interaction"));
+        kiaiSound.play().catch(e => console.log("Audio requires user interaction first"));
         currentStepIdx = (currentStepIdx + 1) % DRILLS[currentDrillIdx].steps.length; 
         updateUI(true); 
     }
