@@ -2,7 +2,7 @@
  * Stay Safe Elite - Android Application Logic with Google Play Billing
  */
 
-package com.staysafe.elite
+package com.staysafetips.elite
 
 import android.content.Context
 import android.content.Intent
