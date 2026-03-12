@@ -1,0 +1,89 @@
+{
+  "regions": [
+    {
+      "name": "Europe",
+      "countries": [
+        {
+          "name": "Greece",
+          "police": "100",
+          "medical": "166",
+          "fire": "199",
+          "universal": "112"
+        },
+        {
+          "name": "Cyprus",
+          "police": "112",
+          "medical": "112",
+          "fire": "112",
+          "universal": "112"
+        },
+        {
+          "name": "Germany",
+          "police": "110",
+          "medical": "112",
+          "fire": "112",
+          "universal": "112"
+        },
+        {
+          "name": "France",
+          "police": "17",
+          "medical": "15",
+          "fire": "18",
+          "universal": "112"
+        },
+        {
+          "name": "Italy",
+          "police": "113",
+          "medical": "118",
+          "fire": "115",
+          "universal": "112"
+        },
+        {
+          "name": "United Kingdom",
+          "police": "999",
+          "medical": "999",
+          "fire": "999",
+          "universal": "112"
+        }
+      ]
+    },
+    {
+      "name": "Americas",
+      "countries": [
+        {
+          "name": "USA & Canada",
+          "police": "911",
+          "medical": "911",
+          "fire": "911",
+          "universal": "911"
+        },
+        {
+          "name": "Mexico",
+          "police": "911",
+          "medical": "911",
+          "fire": "911",
+          "universal": "911"
+        }
+      ]
+    },
+    {
+      "name": "Asia & Oceania",
+      "countries": [
+        {
+          "name": "Australia",
+          "police": "000",
+          "medical": "000",
+          "fire": "000",
+          "universal": "000"
+        },
+        {
+          "name": "Japan",
+          "police": "110",
+          "medical": "119",
+          "fire": "119",
+          "universal": "119"
+        }
+      ]
+    }
+  ]
+}
