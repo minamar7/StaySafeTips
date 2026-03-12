@@ -9,6 +9,22 @@
     :root { --n-red: #e50914; --gold: #facc15; --bg: #050505; --card: #181818; }
     body { margin: 0; background: var(--bg); color: white; font-family: 'Barlow Condensed', sans-serif; overflow-x: hidden; }
 
+    /* Flash Overlay */
+    #flash {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: white; opacity: 0; pointer-events: none; z-index: 2000;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+        position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+        background: rgba(255,255,255,0.1); z-index: 1100;
+    }
+    #progress-bar {
+        width: 0%; height: 100%; background: var(--n-red);
+        box-shadow: 0 0 10px var(--n-red); transition: width 0.3s ease;
+    }
+
     header {
         padding: 40px 20px 10px;
         background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
@@ -16,7 +32,6 @@
         display: flex; justify-content: space-between; align-items: center;
     }
 
-    /* Animation για το Back Button */
     .back-btn { 
         color: #aaa; text-decoration: none; font-family: 'Bebas Neue'; font-size: 1.2rem; 
         letter-spacing: 1px; transition: all 0.3s ease; padding: 10px;
@@ -31,26 +46,40 @@
     .tab-btn { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-family: 'Bebas Neue'; font-size: 1rem; cursor: pointer; transition: 0.3s; }
     .tab-btn.active { background: var(--n-red); }
 
-    .hero-display { width: 100%; height: 50vh; background: #000; display: flex; align-items: center; justify-content: center; position: relative; }
-    .hero-image { height: 95%; width: auto; object-fit: contain; transition: opacity 0.3s ease; }
-    .step-tag { position: absolute; top: 20px; left: 20px; background: var(--n-red); padding: 5px 15px; font-family: 'Bebas Neue'; font-size: 1.4rem; }
+    .hero-display { width: 100%; height: 50vh; background: #000; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    
+    /* Kiai Glow Effect on Image */
+    .hero-image { 
+        height: 95%; width: auto; object-fit: contain; 
+        transition: opacity 0.2s ease, filter 0.2s ease;
+    }
+    .hero-image.kiai-active {
+        filter: drop-shadow(0 0 15px var(--n-red));
+    }
+
+    .step-tag { position: absolute; top: 20px; left: 20px; background: var(--n-red); padding: 5px 15px; font-family: 'Bebas Neue'; font-size: 1.4rem; z-index: 5; }
 
     .content { padding: 20px; }
-    .tech-title { font-family: 'Bebas Neue'; font-size: 3.5rem; color: var(--gold); margin: 0; }
+    .tech-title { font-family: 'Bebas Neue'; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1; }
+    .tech-subtitle { font-family: 'Bebas Neue'; margin-bottom: 20px; color: #46d369; font-size: 1.2rem; }
     
     .steps-wrapper { display: flex; flex-direction: column; gap: 15px; padding-bottom: 120px; }
     .step-card { background: var(--card); padding: 25px; border-left: 6px solid #333; transition: 0.3s; cursor: pointer; }
-    .step-card.active { border-left-color: var(--n-red); background: #222; }
+    .step-card.active { border-left-color: var(--n-red); background: #222; transform: translateX(5px); }
     
     .s-title { font-family: 'Bebas Neue'; font-size: 1.6rem; color: var(--gold); }
     .s-desc { font-size: 1.3rem; color: #fff; margin-top: 10px; line-height: 1.4; font-weight: 500; }
+    .kiai-label { color: var(--n-red); font-weight: 900; letter-spacing: 1px; }
 
     .action-bar { position: fixed; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(to top, #000, transparent); display: flex; justify-content: center; z-index: 100; }
-    .btn-next { background: white; color: black; border: none; padding: 18px; font-family: 'Bebas Neue'; font-size: 1.6rem; border-radius: 4px; width: 95%; cursor: pointer; transition: 0.3s; }
-    .btn-next:active { transform: scale(0.98); background: #eee; }
+    .btn-next { background: white; color: black; border: none; padding: 18px; font-family: 'Bebas Neue'; font-size: 1.8rem; border-radius: 4px; width: 95%; cursor: pointer; transition: 0.2s; }
+    .btn-next:active { transform: scale(0.95); background: var(--n-red); color: white; }
 </style>
 </head>
 <body>
+
+<div id="flash"></div>
+<div class="progress-container"><div id="progress-bar"></div></div>
 
 <header>
     <a href="dojo.html" class="back-btn">← BACK TO DOJO</a>
@@ -66,33 +95,48 @@
 
 <div class="content">
     <h1 class="tech-title" id="displayTitle">HIGH BLOCK</h1>
-    <div style="font-family: 'Bebas Neue'; margin-bottom: 20px; color: #46d369; font-size: 1.1rem;">SANG DAN MAKGI • MASTER LEVEL</div>
+    <div class="tech-subtitle" id="displaySubtitle">SANG DAN MAKGI • MASTER LEVEL</div>
     <div class="steps-wrapper" id="stepsWrapper"></div>
 </div>
 
 <div class="action-bar">
-    <button class="btn-next" onclick="nextStep()">▶ NEXT STEP</button>
+    <button class="btn-next" onclick="nextStep()">▶ EXECUTE & KIAI</button>
 </div>
 
 <script>
     const kiaiSound = new Audio('kiai.mp3');
 
     const DRILLS = [
-        { title: "HIGH BLOCK", imgPrefix: "athlete_highblock", steps: [
-            { name: "Chamber Position", desc: "Cross arms at chest level. Right hand to left hip, left hand at ribs." },
-            { name: "Rising Motion", desc: "Drive the blocking arm upward in a strong arc. Rotate hips." },
-            { name: "Final Lock", desc: "Arm at 45° above forehead. Solid front stance for power." }
-        ]},
-        { title: "LOW BLOCK", imgPrefix: "athlete_lowblock", steps: [
-            { name: "Shoulder Prep", desc: "Right fist to left shoulder. Left arm extended down." },
-            { name: "The Sweep", desc: "Forceful downward sweep across the body. Rotate the wrist." },
-            { name: "The Lock", desc: "Stop 2 inches above the thigh. Opposite hand chambered at ribs." }
-        ]},
-        { title: "PALM STRIKE", imgPrefix: "athlete_palm", steps: [
-            { name: "Power Chamber", desc: "Open palm at ribs, fingers curled. Deep stance for leverage." },
-            { name: "Impact Thrust", desc: "Explosive forward movement. Aim with base of the palm." },
-            { name: "Full Extension", desc: "Arm fully extended at head height. Back leg locked for power." }
-        ]}
+        { 
+            title: "LOW BLOCK", 
+            subtitle: "HADAN MAHKEE • MASTER LEVEL",
+            imgPrefix: "athlete_lowblock", 
+            steps: [
+                { name: "Focus & Prep", desc: "Cross arms at chest level. Focus your gaze and gather explosive energy. <span class='kiai-label'>KIAI!</span>" },
+                { name: "The Block", desc: "Step into deep Front Stance. Execute a heavy downward sweep across the body. <span class='kiai-label'>KIAI!</span>" },
+                { name: "Center Punch", desc: "Deliver a devastating center punch to the solar plexus. Rotate hips for max power. <span class='kiai-label'>KIAI!</span>" }
+            ]
+        },
+        { 
+            title: "HIGH BLOCK", 
+            subtitle: "SANG DAN MAKGI • MASTER LEVEL",
+            imgPrefix: "athlete_highblock", 
+            steps: [
+                { name: "Shoulder Chamber", desc: "Cross arms at chest level. Right hand to left hip, left hand at ribs. <span class='kiai-label'>KIAI!</span>" },
+                { name: "Rising Motion", desc: "Drive the blocking arm upward in a strong arc. Rotate hips into the stance. <span class='kiai-label'>KIAI!</span>" },
+                { name: "Final Lock", desc: "Lock the arm at 45° above forehead. Solidify the foundation. <span class='kiai-label'>KIAI!</span>" }
+            ]
+        },
+        { 
+            title: "PALM STRIKE", 
+            subtitle: "JANG KWON • MASTER LEVEL",
+            imgPrefix: "athlete_palm", 
+            steps: [
+                { name: "Power Chamber", desc: "Open palm at ribs, fingers curled. Deep stance for maximum leverage. <span class='kiai-label'>KIAI!</span>" },
+                { name: "Impact Thrust", desc: "Explosive forward movement. Aim with the base of the palm. <span class='kiai-label'>KIAI!</span>" },
+                { name: "Full Extension", desc: "Arm fully extended at head height. Lock the back leg. <span class='kiai-label'>KIAI!</span>" }
+            ]
+        }
     ];
 
     let currentDrillIdx = 0; let currentStepIdx = 0;
@@ -112,6 +156,7 @@
     function loadDrill() {
         const drill = DRILLS[currentDrillIdx];
         document.getElementById('displayTitle').innerText = drill.title;
+        document.getElementById('displaySubtitle').innerText = drill.subtitle;
         const wrapper = document.getElementById('stepsWrapper');
         wrapper.innerHTML = drill.steps.map((s, i) => `
             <div class="step-card ${i===0?'active':''}" id="card-${i}" onclick="goToStep(${i})">
@@ -119,29 +164,55 @@
                 <div class="s-desc">${s.desc}</div>
             </div>
         `).join('');
-        updateUI();
+        updateUI(false);
     }
 
-    function updateUI() {
+    function doEffects() {
+        // Flash
+        const flash = document.getElementById('flash');
+        flash.style.opacity = '0.4';
+        setTimeout(() => flash.style.opacity = '0', 100);
+
+        // Kiai Glow
+        const img = document.getElementById('mainImg');
+        img.classList.add('kiai-active');
+        setTimeout(() => img.classList.remove('kiai-active'), 400);
+
+        // Vibration
+        if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    function updateUI(triggerEffects = true) {
         const drill = DRILLS[currentDrillIdx];
         const main = document.getElementById('mainImg');
+        
+        if(triggerEffects) doEffects();
+
+        // Progress Bar update
+        const progress = ((currentStepIdx + 1) / drill.steps.length) * 100;
+        document.getElementById('progress-bar').style.width = progress + '%';
+
         main.style.opacity = '0';
         setTimeout(() => {
             main.src = `${drill.imgPrefix}_${currentStepIdx + 1}.jpg`;
             main.style.opacity = '1';
             document.getElementById('tag').innerText = `STEP ${currentStepIdx + 1}`;
             document.querySelectorAll('.step-card').forEach((c, i) => c.classList.toggle('active', i === currentStepIdx));
-        }, 200);
+        }, 150);
     }
 
     function nextStep() {
         kiaiSound.currentTime = 0; 
         kiaiSound.play().catch(e => console.log("Audio waiting for user interaction"));
         currentStepIdx = (currentStepIdx + 1) % DRILLS[currentDrillIdx].steps.length; 
-        updateUI(); 
+        updateUI(true); 
     }
     
-    function goToStep(idx) { currentStepIdx = idx; updateUI(); }
+    function goToStep(idx) { 
+        currentStepIdx = idx; 
+        updateUI(true); 
+    }
+
     window.onload = init;
 </script>
 
