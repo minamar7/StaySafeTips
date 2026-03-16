@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>AI Threat Analyzer – Stay Safe Elite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+  <meta name="theme-color" content="#020617"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #020917;
+      --accent: #38bdf8;
+      --gold: #facc15;
+      --danger: #ef4444;
+      --safe: #22c55e;
+      --warn: #f59e0b;
+      --card: rgba(15,23,42,0.9);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ── BG EFFECTS ── */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridShift 20s linear infinite;
+    }
+    @keyframes gridShift { from{background-position:0 0} to{background-position:40px 40px} }
+
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(56,189,248,0.1) 0%, transparent 70%);
+    }
+    .scanline {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);
+    }
+
+    /* ── SHELL ── */
+    .shell {
+      position: relative; z-index: 2;
+      max-width: 480px; margin: 0 auto;
+      padding: 44px 20px 100px;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+
+    /* ── HEADER ── */
+    .header-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.25);
+      border-radius: 30px; padding: 5px 14px;
+      font-size: 0.68rem; letter-spacing: 2.5px;
+      color: var(--accent); text-transform: uppercase;
+      animation: fadeIn 0.5s ease;
+    }
+    .ai-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.6);opacity:0.5} }
+
+    h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem; letter-spacing: 2px;
+      color: #fff; line-height: 1.3;
+      animation: fadeInDown 0.6s ease;
+    }
+    h1 span { color: var(--accent); }
+    .subtitle {
+      color: #64748b; font-size: 0.85rem;
+      letter-spacing: 0.5px; line-height: 1.5;
+      animation: fadeInDown 0.7s ease;
+    }
+
+    /* ── THREAT LEVEL SELECTOR ── */
+    .section-label {
+      font-size: 0.65rem; letter-spacing: 3px;
+      color: #475569; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .scenario-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .scenario-btn {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 14px 12px;
+      cursor: pointer; transition: 0.2s;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      text-align: center;
+    }
+    .scenario-btn:active { transform: scale(0.96); }
+    .scenario-btn.active {
+      border-color: var(--accent);
+      background: rgba(56,189,248,0.08);
+      box-shadow: 0 0 16px rgba(56,189,248,0.15);
+    }
+    .scenario-icon { font-size: 1.6rem; }
+    .scenario-name {
+      font-size: 0.72rem; letter-spacing: 1.5px;
+      color: #94a3b8; text-transform: uppercase;
+      font-weight: 600;
+    }
+    .scenario-btn.active .scenario-name { color: var(--accent); }
+
+    /* ── INPUT AREA ── */
+    .input-wrap {
+      position: relative;
+    }
+    .input-label {
+      font-size: 0.65rem; letter-spacing: 3px;
+      color: #475569; text-transform: uppercase;
+      margin-bottom: 8px; display: block;
+    }
+    textarea {
+      width: 100%; min-height: 130px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 16px;
+      color: #e2e8f0; font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem; line-height: 1.5;
+      resize: none; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    textarea:focus {
+      border-color: rgba(56,189,248,0.4);
+      box-shadow: 0 0 20px rgba(56,189,248,0.08);
+    }
+    textarea::placeholder { color: #334155; }
+
+    .char-count {
+      position: absolute; bottom: 12px; right: 14px;
+      font-size: 0.65rem; color: #334155; letter-spacing: 1px;
+    }
+
+    /* ── ANALYZE BUTTON ── */
+    .btn-analyze {
+      width: 100%; padding: 18px;
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      border: none; border-radius: 16px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      letter-spacing: 2.5px; color: #fff;
+      text-transform: uppercase; cursor: pointer;
+      position: relative; overflow: hidden;
+      box-shadow: 0 0 28px rgba(14,165,233,0.35);
+      transition: 0.2s;
+    }
+    .btn-analyze::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    }
+    .btn-analyze:active { transform: scale(0.97); }
+    .btn-analyze:disabled {
+      opacity: 0.5; cursor: not-allowed; transform: none;
+    }
+    .btn-analyze.loading {
+      background: linear-gradient(135deg, #0c4a6e, #075985);
+      box-shadow: none;
+    }
+
+    /* scanning animation inside button */
+    .scan-line {
+      position: absolute; top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: scan 1.5s infinite;
+    }
+    @keyframes scan { to { left: 200%; } }
+
+    /* ── RESULT CARD ── */
+    .result-card {
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      animation: fadeInUp 0.5s ease;
+      display: none;
+    }
+    .result-card.visible { display: block; }
+
+    .result-header {
+      padding: 16px 20px;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .result-header.low    { background: rgba(34,197,94,0.1); }
+    .result-header.medium { background: rgba(245,158,11,0.1); }
+    .result-header.high   { background: rgba(239,68,68,0.1); }
+    .result-header.critical { background: rgba(239,68,68,0.18); }
+
+    .threat-badge {
+      padding: 4px 12px; border-radius: 20px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .threat-badge.low     { background: rgba(34,197,94,0.2);  color: #22c55e; border: 1px solid rgba(34,197,94,0.4); }
+    .threat-badge.medium  { background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid rgba(245,158,11,0.4); }
+    .threat-badge.high    { background: rgba(239,68,68,0.2);  color: #ef4444; border: 1px solid rgba(239,68,68,0.4); }
+    .threat-badge.critical{ background: rgba(239,68,68,0.3);  color: #fca5a5; border: 1px solid rgba(239,68,68,0.6); animation: blink-badge 0.8s infinite; }
+    @keyframes blink-badge { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    .threat-score {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.6rem; font-weight: 900;
+      margin-left: auto;
+    }
+    .threat-score.low     { color: #22c55e; text-shadow: 0 0 16px rgba(34,197,94,0.5); }
+    .threat-score.medium  { color: #f59e0b; text-shadow: 0 0 16px rgba(245,158,11,0.5); }
+    .threat-score.high    { color: #ef4444; text-shadow: 0 0 16px rgba(239,68,68,0.5); }
+    .threat-score.critical{ color: #fca5a5; text-shadow: 0 0 20px rgba(239,68,68,0.8); }
+
+    .result-body {
+      background: rgba(15,23,42,0.95);
+      padding: 20px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .result-section-title {
+      font-size: 0.6rem; letter-spacing: 3px;
+      color: #475569; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .result-text {
+      color: #cbd5e1; font-size: 0.95rem;
+      line-height: 1.6; letter-spacing: 0.3px;
+    }
+
+    /* action items */
+    .action-list {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .action-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; padding: 10px 12px;
+    }
+    .action-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      min-width: 20px; margin-top: 2px;
+    }
+    .action-text {
+      color: #94a3b8; font-size: 0.88rem; line-height: 1.5;
+    }
+
+    /* threat meter bar */
+    .meter-wrap { }
+    .meter-bar-bg {
+      height: 6px; background: rgba(255,255,255,0.06);
+      border-radius: 3px; overflow: hidden;
+    }
+    .meter-bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+      width: 0%;
+    }
+    .meter-bar-fill.low     { background: linear-gradient(90deg, #16a34a, #22c55e); }
+    .meter-bar-fill.medium  { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .meter-bar-fill.high    { background: linear-gradient(90deg, #dc2626, #ef4444); }
+    .meter-bar-fill.critical{ background: linear-gradient(90deg, #991b1b, #ef4444); animation: pulse-bar 0.8s infinite; }
+    @keyframes pulse-bar { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+    /* ── LOADING STATE ── */
+    .loading-overlay {
+      display: none; flex-direction: column;
+      align-items: center; gap: 16px;
+      padding: 32px 20px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    .loading-overlay.visible { display: flex; }
+
+    .radar-wrap {
+      position: relative; width: 80px; height: 80px;
+    }
+    .radar-ring {
+      position: absolute; inset: 0;
+      border: 2px solid rgba(56,189,248,0.2);
+      border-radius: 50%;
+    }
+    .radar-ring:nth-child(2) { inset: 10px; border-color: rgba(56,189,248,0.15); }
+    .radar-ring:nth-child(3) { inset: 20px; border-color: rgba(56,189,248,0.1); }
+    .radar-sweep {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(transparent 270deg, rgba(56,189,248,0.4) 360deg);
+      animation: radar-spin 1.5s linear infinite;
+    }
+    @keyframes radar-spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .radar-dot {
+      position: absolute; top: 50%; left: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); transform: translate(-50%,-50%);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .loading-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.75rem; letter-spacing: 2px;
+      color: var(--accent); text-transform: uppercase;
+      animation: blink-text 1.2s infinite;
+    }
+    @keyframes blink-text { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .loading-sub {
+      font-size: 0.78rem; color: #475569;
+      letter-spacing: 1px; text-align: center;
+    }
+
+    /* ── ERROR ── */
+    .error-box {
+      display: none;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 14px; padding: 16px;
+      color: #fca5a5; font-size: 0.88rem;
+      line-height: 1.5; letter-spacing: 0.3px;
+      animation: fadeIn 0.3s ease;
+    }
+    .error-box.visible { display: block; }
+
+    /* ── HISTORY ── */
+    .history-wrap {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .history-item {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; padding: 10px 14px;
+      cursor: pointer; transition: 0.2s;
+    }
+    .history-item:hover { background: rgba(255,255,255,0.05); }
+    .history-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .history-dot.low     { background: #22c55e; }
+    .history-dot.medium  { background: #f59e0b; }
+    .history-dot.high    { background: #ef4444; }
+    .history-dot.critical{ background: #fca5a5; }
+    .history-text { font-size: 0.82rem; color: #64748b; flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .history-level { font-family: 'Orbitron', monospace; font-size: 0.6rem; color: #475569; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes fadeInDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:none} }
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="scanline"></div>
+
+<div class="shell">
+
+  <!-- HEADER -->
+  <div>
+    <div class="header-badge">
+      <span class="ai-dot"></span>
+      AI THREAT ANALYSIS
+    </div>
+  </div>
+
+  <div>
+    <h1>🤖 <span>AI</span> THREAT<br>ANALYZER</h1>
+    <p class="subtitle" style="margin-top:8px">Describe your situation. The AI will assess threats and give you actionable safety advice.</p>
+  </div>
+
+  <!-- SCENARIO SELECTOR -->
+  <div>
+    <div class="section-label">Select scenario type</div>
+    <div class="scenario-grid">
+      <button class="scenario-btn active" data-scenario="personal" onclick="selectScenario(this)">
+        <span class="scenario-icon">🧍</span>
+        <span class="scenario-name">Personal</span>
+      </button>
+      <button class="scenario-btn" data-scenario="cyber" onclick="selectScenario(this)">
+        <span class="scenario-icon">💻</span>
+        <span class="scenario-name">Cyber</span>
+      </button>
+      <button class="scenario-btn" data-scenario="environment" onclick="selectScenario(this)">
+        <span class="scenario-icon">🌍</span>
+        <span class="scenario-name">Environment</span>
+      </button>
+      <button class="scenario-btn" data-scenario="emergency" onclick="selectScenario(this)">
+        <span class="scenario-icon">🚨</span>
+        <span class="scenario-name">Emergency</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-wrap">
+    <label class="input-label" for="situation">Describe your situation</label>
+    <textarea id="situation" maxlength="500"
+      placeholder="Example: I'm walking alone at night in an unfamiliar area. A man has been following me for 3 blocks..."></textarea>
+    <span class="char-count" id="charCount">0 / 500</span>
+  </div>
+
+  <!-- ANALYZE BUTTON -->
+  <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">
+    ⚡ ANALYZE THREAT
+  </button>
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loadingBox">
+    <div class="radar-wrap">
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-sweep"></div>
+      <div class="radar-dot"></div>
+    </div>
+    <div class="loading-text">SCANNING THREAT...</div>
+    <div class="loading-sub" id="loadingMsg">Analyzing situation parameters</div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-box" id="errorBox"></div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+    <div class="result-header" id="resultHeader">
+      <span class="threat-badge" id="threatBadge">—</span>
+      <span class="threat-score" id="threatScore">—</span>
+    </div>
+    <div class="result-body">
+      <div>
+        <div class="result-section-title">Threat Assessment</div>
+        <div class="meter-wrap" style="margin-bottom:10px">
+          <div class="meter-bar-bg">
+            <div class="meter-bar-fill" id="meterFill"></div>
+          </div>
+        </div>
+        <div class="result-text" id="assessmentText"></div>
+      </div>
+      <div>
+        <div class="result-section-title">Immediate Actions</div>
+        <div class="action-list" id="actionList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="historySection" style="display:none">
+    <div class="section-label" style="margin-bottom:8px">Recent Analyses</div>
+    <div class="history-wrap" id="historyList"></div>
+  </div>
+
+</div>
+
+<script>
+  let selectedScenario = 'personal';
+  let history = [];
+
+  // char count
+  document.getElementById('situation').addEventListener('input', function() {
+    document.getElementById('charCount').textContent = this.value.length + ' / 500';
+  });
+
+  function selectScenario(btn) {
+    document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedScenario = btn.dataset.scenario;
+  }
+
+  const loadingMessages = [
+    'Analyzing situation parameters...',
+    'Cross-referencing threat patterns...',
+    'Computing risk vectors...',
+    'Generating safety protocol...',
+    'Finalizing threat assessment...'
+  ];
+
+  async function analyze() {
+    const situation = document.getElementById('situation').value.trim();
+    if (!situation || situation.length < 10) {
+      showError('Please describe your situation in more detail (at least 10 characters).');
+      return;
+    }
+
+    // UI state
+    document.getElementById('analyzeBtn').disabled = true;
+    document.getElementById('analyzeBtn').classList.add('loading');
+    document.getElementById('analyzeBtn').innerHTML = '<div class="scan-line"></div>⚡ ANALYZING...';
+    document.getElementById('loadingBox').classList.add('visible');
+    document.getElementById('resultCard').classList.remove('visible');
+    document.getElementById('errorBox').classList.remove('visible');
+
+    // Cycle loading messages
+    let msgIdx = 0;
+    const msgInterval = setInterval(() => {
+      msgIdx = (msgIdx + 1) % loadingMessages.length;
+      document.getElementById('loadingMsg').textContent = loadingMessages[msgIdx];
+    }, 1800);
+
+    const systemPrompt = `You are an elite personal safety AI analyzer for the Stay Safe Elite app. 
+Your job is to analyze situations and assess threat levels quickly and accurately.
+
+Always respond with ONLY a JSON object in this exact format (no markdown, no explanation outside JSON):
+{
+  "level": "low" | "medium" | "high" | "critical",
+  "score": <number 1-100>,
+  "assessment": "<2-3 sentence threat assessment>",
+  "actions": ["<action 1>", "<action 2>", "<action 3>", "<action 4>"]
+}
+
+Threat levels:
+- low (1-25): Minimal risk, standard precautions
+- medium (26-55): Moderate risk, elevated awareness needed  
+- high (56-80): Significant danger, immediate action required
+- critical (81-100): Life-threatening, emergency response needed
+
+Scenario type: ${selectedScenario}
+Be direct, practical, and prioritize life safety. Actions must be specific and immediately actionable.`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: situation }]
+        })
+      });
+
+      clearInterval(msgInterval);
+
+      if (!response.ok) throw new Error('API error ' + response.status);
+
+      const data = await response.json();
+      const raw = data.content[0].text.replace(/```json|```/g, '').trim();
+      const result = JSON.parse(raw);
+
+      showResult(result, situation);
+
+    } catch (err) {
+      clearInterval(msgInterval);
+      showError('Analysis failed. Please check your connection and try again.');
+    } finally {
+      document.getElementById('loadingBox').classList.remove('visible');
+      document.getElementById('analyzeBtn').disabled = false;
+      document.getElementById('analyzeBtn').classList.remove('loading');
+      document.getElementById('analyzeBtn').innerHTML = '⚡ ANALYZE THREAT';
+    }
+  }
+
+  function showResult(result, situation) {
+    const level = result.level || 'medium';
+    const score = result.score || 50;
+    const levelLabels = { low: 'LOW THREAT', medium: 'MODERATE THREAT', high: 'HIGH THREAT', critical: 'CRITICAL' };
+    const scoreColors = { low: '#22c55e', medium: '#f59e0b', high: '#ef4444', critical: '#fca5a5' };
+
+    // Header
+    document.getElementById('resultHeader').className = 'result-header ' + level;
+    document.getElementById('threatBadge').className = 'threat-badge ' + level;
+    document.getElementById('threatBadge').textContent = levelLabels[level];
+    document.getElementById('threatScore').className = 'threat-score ' + level;
+    document.getElementById('threatScore').textContent = score + '/100';
+
+    // Meter
+    const fill = document.getElementById('meterFill');
+    fill.className = 'meter-bar-fill ' + level;
+    setTimeout(() => { fill.style.width = score + '%'; }, 100);
+
+    // Assessment
+    document.getElementById('assessmentText').textContent = result.assessment;
+
+    // Actions
+    const actionList = document.getElementById('actionList');
+    actionList.innerHTML = '';
+    (result.actions || []).forEach((action, i) => {
+      actionList.innerHTML += `
+        <div class="action-item">
+          <span class="action-num">0${i+1}</span>
+          <span class="action-text">${action}</span>
+        </div>`;
+    });
+
+    document.getElementById('resultCard').classList.add('visible');
+
+    // Add to history
+    addToHistory(situation, level, score);
+
+    // Scroll to result
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = '⚠ ' + msg;
+    box.classList.add('visible');
+  }
+
+  function addToHistory(situation, level, score) {
+    history.unshift({ text: situation.substring(0, 60) + '...', level, score });
+    if (history.length > 5) history.pop();
+
+    const section = document.getElementById('historySection');
+    const list = document.getElementById('historyList');
+    section.style.display = 'block';
+    list.innerHTML = '';
+
+    history.forEach(h => {
+      list.innerHTML += `
+        <div class="history-item">
+          <div class="history-dot ${h.level}"></div>
+          <div class="history-text">${h.text}</div>
+          <div class="history-level">${h.score}/100</div>
+        </div>`;
+    });
+  }
+</script>
+</body>
+</html>
