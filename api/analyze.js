@@ -1,70 +1,49 @@
+const https = require('https');
+
 module.exports = async (req, res) => {
-  // 1. CORS Headers για επικοινωνία με το GitHub Pages
-  res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Χειρισμός του OPTIONS (Preflight)
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).send('Use POST');
 
-  // Αποδοχή μόνο POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Use POST.' });
-  }
+  const { situation } = req.body;
+  const apiKey = process.env.GEMINI_API_KEY;
 
-  try {
-    const { situation, scenario } = req.body;
-    const apiKey = process.env.GEMINI_API_KEY;
+  const postData = JSON.stringify({
+    contents: [{ parts: [{ text: `Analyze this safety situation and return ONLY a JSON: {"level":"high","score":90,"assessment":"test"}. Situation: ${situation}` }] }]
+  });
 
-    if (!apiKey) {
-      return res.status(500).json({ error: 'Configuration Error', details: 'Missing GEMINI_API_KEY in Vercel settings.' });
+  const options = {
+    hostname: 'generativelanguage.googleapis.com',
+    path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData)
     }
+  };
 
-    // Χρήση της Native Fetch (Node.js 18+) - Χωρίς require('node-fetch')
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `Analyze this safety situation: "${situation}". Scenario type: ${scenario || 'general'}. 
-                  Respond ONLY with a valid JSON object. 
-                  Format: {"level":"low"|"medium"|"high"|"critical","score":0-100,"assessment":"2-3 sentences"}`
-          }]
-        }],
-        generationConfig: {
-          temperature: 0.3,
-          responseMimeType: "application/json"
-        }
-      })
+  const request = https.request(options, (response) => {
+    let data = '';
+    response.on('data', (chunk) => { data += chunk; });
+    response.on('end', () => {
+      try {
+        const jsonResponse = JSON.parse(data);
+        if (jsonResponse.error) return res.status(500).json(jsonResponse.error);
+        const text = jsonResponse.candidates[0].content.parts[0].text.replace(/```json/g, "").replace(/```/g, "").trim();
+        res.status(200).json(JSON.parse(text));
+      } catch (e) {
+        res.status(500).json({ error: "Parse Error", details: data });
+      }
     });
+  });
 
-    const data = await response.json();
+  request.on('error', (e) => {
+    res.status(500).json({ error: "Request Error", message: e.message });
+  });
 
-    // Έλεγχος αν η Google επέστρεψε σφάλμα
-    if (data.error) {
-      return res.status(500).json({ error: 'Google API Error', details: data.error.message });
-    }
-
-    // Έλεγχος αν υπάρχει απάντηση από το AI
-    if (!data.candidates || !data.candidates[0].content) {
-      return res.status(500).json({ error: 'AI Error', details: 'No content generated. Check safety filters.' });
-    }
-
-    let rawText = data.candidates[0].content.parts[0].text.trim();
-    
-    // Καθαρισμός από τυχόν markdown blocks
-    rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
-    
-    const result = JSON.parse(rawText);
-    return res.status(200).json(result);
-
-  } catch (err) {
-    return res.status(500).json({ error: 'Server Exception', details: err.message });
-  }
+  request.write(postData);
+  request.end();
 };
