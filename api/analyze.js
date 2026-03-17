@@ -1,84 +1,40 @@
-// Χρησιμοποιούμε την πιο συμβατή μορφή για Node.js στο Vercel
 module.exports = async (req, res) => {
-  // 1. Ρύθμιση CORS για να δέχεται αιτήματα από το GitHub Pages
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Χειρισμός του OPTIONS (Preflight)
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).send('Use POST');
 
-  // Μόνο POST επιτρέπεται
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Use POST.' });
+  const { situation } = req.body;
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    return res.status(500).json({ error: 'Config Error', details: 'Missing API Key' });
   }
 
   try {
-    const { situation, scenario } = req.body;
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    // ΕΛΕΓΧΟΣ 1: Υπάρχει το κλειδί;
-    if (!apiKey) {
-      return res.status(500).json({ 
-        error: 'Configuration Error', 
-        details: 'GEMINI_API_KEY is missing from Vercel Environment Variables.' 
-      });
-    }
-
-    // Κλήση στην Google
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-    
-    const response = await fetch(apiUrl, {
+    const fetch = require('node-fetch'); // Force import αν χρειάζεται
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text: `Analyze this safety situation: "${situation}". Scenario: ${scenario || 'general'}. 
-                  Return ONLY a JSON object: {"level":"low"|"medium"|"high"|"critical","score":0-100,"assessment":"2 sentences"}`
-          }]
-        }],
-        generationConfig: {
-          temperature: 0.3,
-          responseMimeType: "application/json"
-        }
+        contents: [{ parts: [{ text: `Analyze this: ${situation}. Return JSON: {"level":"low","score":10,"assessment":"test"}` }] }]
       })
     });
 
     const data = await response.json();
-
-    // ΕΛΕΓΧΟΣ 2: Μήπως η Google απέρριψε το κλειδί;
-    if (data.error) {
-      return res.status(500).json({ 
-        error: 'Google API Error', 
-        details: data.error.message 
-      });
-    }
-
-    // ΕΛΕΓΧΟΣ 3: Μήπως το AI μπλόκαρε το περιεχόμενο (Safety Filters);
-    if (!data.candidates || !data.candidates[0].content) {
-      return res.status(200).json({ 
-        level: 'unknown', 
-        score: 0, 
-        assessment: 'The AI could not analyze this specific situation due to safety filters.' 
-      });
-    }
-
-    // Καθαρισμός και επιστροφή του αποτελέσματος
-    let rawText = data.candidates[0].content.parts[0].text.trim();
-    rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
     
-    const result = JSON.parse(rawText);
-    return res.status(200).json(result);
+    if (data.error) {
+      return res.status(500).json({ error: 'Google Error', details: data.error.message });
+    }
+
+    // Επιστροφή της απάντησης αυτούσιας για test
+    const text = data.candidates[0].content.parts[0].text;
+    return res.status(200).send(text);
 
   } catch (err) {
-    // ΕΛΕΓΧΟΣ 4: Γενικό σφάλμα στον server
-    return res.status(500).json({ 
-      error: 'Server Exception', 
-      details: err.message 
-    });
+    return res.status(500).json({ error: 'Crash', details: err.message });
   }
 };
