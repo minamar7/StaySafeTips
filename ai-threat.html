@@ -14,129 +14,244 @@
   --danger: #ef4444;
   --safe: #22c55e;
   --warn: #f59e0b;
+  --panel: rgba(15, 23, 42, 0.8);
 }
+
 * { box-sizing:border-box; margin:0; padding:0; }
-body{background:var(--bg); color:#fff; font-family:'Rajdhani',sans-serif; min-height:100vh; overflow-x:hidden; position:relative;}
-.bg-grid{position:fixed; inset:0; z-index:0; background-image: linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px); background-size:40px 40px; animation:gridShift 20s linear infinite;}
-@keyframes gridShift{from{background-position:0 0}to{background-position:40px 40px}}
-.bg-glow{position:fixed; inset:0; z-index:0; background: radial-gradient(ellipse 70% 40% at 50% 0%, rgba(56,189,248,0.1) 0%, transparent 70%);}
-.scanline{position:fixed; inset:0; z-index:1; pointer-events:none; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);}
-.shell{position:relative; z-index:2; max-width:480px; margin:0 auto; padding:44px 20px 100px; display:flex; flex-direction:column; gap:18px;}
-.header-badge{display:inline-flex; align-items:center; gap:8px; background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25); border-radius:30px; padding:5px 14px; font-size:0.68rem; letter-spacing:2.5px; color:var(--accent); text-transform:uppercase; animation:fadeIn 0.5s ease;}
-.ai-dot{width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent); animation:pulse-dot 2s infinite;}
-@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:0.5}}
-h1{font-family:'Orbitron',monospace; font-size:1.4rem; letter-spacing:2px; color:#fff; line-height:1.3; animation:fadeInDown 0.6s ease;}
-h1 span{color:var(--accent);}
-.subtitle{color:#64748b;font-size:0.85rem;letter-spacing:0.5px;line-height:1.5;animation:fadeInDown 0.7s ease;margin-top:8px;}
-.section-label{font-size:0.65rem; letter-spacing:3px; color:#475569; text-transform:uppercase; margin-bottom:8px;}
-.scenario-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-.scenario-btn{background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 12px; cursor:pointer; transition:0.2s; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; position:relative;}
-.scenario-btn:active{transform:scale(0.96);}
-.scenario-btn.active{border-color:var(--accent); background:rgba(56,189,248,0.08); box-shadow:0 0 18px rgba(56,189,248,0.25);}
-.scenario-icon{width:36px; height:36px; display:inline-block; filter:drop-shadow(0 0 8px var(--accent)); transition: transform 0.3s, filter 0.3s; animation:pulseGlow 2.5s infinite alternate;}
-@keyframes pulseGlow{0%{transform:translateY(0) scale(1); filter:drop-shadow(0 0 8px var(--accent));}50%{transform:translateY(-2px) scale(1.08); filter:drop-shadow(0 0 16px var(--accent));}100%{transform:translateY(0) scale(1); filter:drop-shadow(0 0 12px var(--accent));}}
-.scenario-btn:hover .scenario-icon{transform:scale(1.3) translateY(-3px) rotate(-8deg); filter:drop-shadow(0 0 18px var(--accent));}
-.scenario-btn.active .scenario-icon{transform:scale(1.35) translateY(-2px); filter:drop-shadow(0 0 22px var(--accent));}
-.scenario-name{font-size:0.72rem; letter-spacing:1.5px; color:#94a3b8; text-transform:uppercase; font-weight:600;}
-.scenario-btn.active .scenario-name{color:var(--accent);}
-.input-wrap{position:relative;}
-.input-label{font-size:0.65rem;letter-spacing:3px;color:#475569;text-transform:uppercase;margin-bottom:8px;display:block;}
-textarea{width:100%; min-height:130px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:16px; color:#e2e8f0; font-family:'Rajdhani',sans-serif; font-size:1rem; line-height:1.5; resize:none; outline:none; transition:border-color 0.2s, box-shadow 0.2s;}
-textarea:focus{border-color:rgba(56,189,248,0.4); box-shadow:0 0 20px rgba(56,189,248,0.08);}
-textarea::placeholder{color:#334155;}
-.char-count{position:absolute; bottom:12px; right:14px; font-size:0.65rem; color:#334155; letter-spacing:1px;}
-.btn-analyze{width:100%; padding:18px; background: linear-gradient(135deg,#0ea5e9,#0284c7); border:none; border-radius:16px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:2.5px; color:#fff; text-transform:uppercase; cursor:pointer; position:relative; overflow:hidden; box-shadow:0 0 28px rgba(14,165,233,0.35); transition:0.2s;}
-.btn-analyze:active{transform:scale(0.97);}
-.btn-analyze:disabled{opacity:0.5; cursor:not-allowed; transform:none;}
-.btn-analyze.loading{background: linear-gradient(135deg,#0c4a6e,#075985); box-shadow:none;}
-.result-card{border-radius:20px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); display:none; margin-top:20px;}
-.result-card.visible{display:block;}
-.result-header{padding:16px 20px; display:flex; align-items:center; gap:12px; border-bottom:1px solid rgba(255,255,255,0.06);}
-.threat-badge{padding:4px 12px; border-radius:20px; font-family:'Orbitron',monospace; font-size:0.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase;}
-.threat-score{font-family:'Orbitron',monospace; font-size:1.6rem; font-weight:900; margin-left:auto;}
-.result-body{background:rgba(15,23,42,0.95); padding:20px; display:flex; flex-direction:column; gap:16px;}
-.result-section-title{font-size:0.6rem; letter-spacing:3px;color:#475569;text-transform:uppercase;margin-bottom:6px;}
-.result-text{color:#cbd5e1;font-size:0.95rem;line-height:1.6;letter-spacing:0.3px;}
+body {
+  background: var(--bg);
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background Effects */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image: linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), 
+                    linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.bg-glow {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(circle at 50% -20%, rgba(56,189,248,0.15), transparent 70%);
+}
+
+.shell {
+  position: relative; z-index: 2;
+  max-width: 480px; margin: 0 auto;
+  padding: 20px 20px 100px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* Back Button */
+.nav-header {
+  display: flex; justify-content: flex-start; margin-bottom: 5px;
+}
+.btn-back {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.btn-back:hover { background: rgba(56,189,248,0.1); color: var(--accent); }
+
+.header-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.25);
+  border-radius: 30px; padding: 5px 14px;
+  font-size: 0.68rem; letter-spacing: 2px; color: var(--accent);
+  text-transform: uppercase; width: fit-content;
+}
+
+h1 { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; letter-spacing: 2px; }
+h1 span { color: var(--accent); }
+
+/* Scenario Icons & Buttons */
+.scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.scenario-btn {
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px; padding: 20px 10px;
+  cursor: pointer; transition: 0.3s;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.scenario-btn.active {
+  border-color: var(--accent);
+  background: rgba(56,189,248,0.1);
+  box-shadow: 0 0 20px rgba(56,189,248,0.15);
+}
+
+.icon-box {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 5px rgba(56,189,248,0.3));
+  transition: 0.3s;
+}
+.scenario-btn.active .icon-box {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 15px var(--accent));
+}
+
+.scenario-name {
+  font-size: 0.75rem; letter-spacing: 1.5px;
+  color: #94a3b8; text-transform: uppercase; font-weight: 700;
+}
+.scenario-btn.active .scenario-name { color: #fff; }
+
+/* Input Area */
+textarea {
+  width: 100%; min-height: 120px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; padding: 16px;
+  color: #fff; font-family: inherit; font-size: 1rem;
+  outline: none; transition: 0.3s;
+}
+textarea:focus { border-color: var(--accent); background: rgba(255,255,255,0.05); }
+
+/* Main Button */
+.btn-analyze {
+  width: 100%; padding: 20px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  border: none; border-radius: 16px;
+  color: #fff; font-family: 'Orbitron', sans-serif;
+  font-weight: 700; letter-spacing: 2px;
+  cursor: pointer; box-shadow: 0 10px 25px rgba(14,165,233,0.3);
+  transition: 0.2s;
+}
+.btn-analyze:active { transform: scale(0.98); }
+.btn-analyze.loading { opacity: 0.6; pointer-events: none; }
+
+/* Result Card */
+.result-card {
+  background: var(--panel);
+  border-radius: 24px; border: 1px solid rgba(56,189,248,0.2);
+  display: none; margin-top: 10px; overflow: hidden;
+  animation: slideUp 0.4s ease-out;
+}
+.result-card.visible { display: block; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.result-header {
+  padding: 20px; display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.03);
+}
+.threat-badge {
+  padding: 6px 15px; border-radius: 10px;
+  font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: 900;
+}
+.threat-score { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 900; }
+
+.result-body { padding: 20px; }
+.result-label { font-size: 0.65rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+.result-text { color: #cbd5e1; line-height: 1.6; font-size: 0.95rem; }
+
 </style>
 </head>
 <body>
+
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
-<div class="scanline"></div>
 
 <div class="shell">
+  <nav class="nav-header">
+    <a href="https://minamar7.github.io/StaySafeTips/" class="btn-back">← BACK TO HUB</a>
+  </nav>
 
-<div class="header-badge"><span class="ai-dot"></span>AI THREAT ANALYSIS</div>
-<h1>🤖 <span>AI</span> THREAT<br>ANALYZER</h1>
-<p class="subtitle">Describe your situation. The AI will assess threats and give you actionable safety advice.</p>
+  <div class="header-badge">AI ANALYZER ONLINE</div>
+  <h1>🤖 <span>ELITE</span> THREAT<br>ANALYSIS</h1>
 
-<div class="section-label">Select scenario type</div>
-<div class="scenario-grid">
-  <button class="scenario-btn active" data-scenario="personal" onclick="selectScenario(this)">
-    <span class="scenario-icon">🧍‍♀️</span>
-    <span class="scenario-name">Personal</span>
-  </button>
-  <button class="scenario-btn" data-scenario="cyber" onclick="selectScenario(this)">
-    <span class="scenario-icon">💻</span>
-    <span class="scenario-name">Cyber</span>
-  </button>
-  <button class="scenario-btn" data-scenario="environment" onclick="selectScenario(this)">
-    <span class="scenario-icon">🌍</span>
-    <span class="scenario-name">Environment</span>
-  </button>
-  <button class="scenario-btn" data-scenario="emergency" onclick="selectScenario(this)">
-    <span class="scenario-icon">🚨</span>
-    <span class="scenario-name">Emergency</span>
-  </button>
-</div>
+  <div class="scenario-grid">
+    <button class="scenario-btn active" data-scenario="personal" onclick="selectScenario(this)">
+      <span class="icon-box">🛡️</span>
+      <span class="scenario-name">Personal</span>
+    </button>
+    <button class="scenario-btn" data-scenario="cyber" onclick="selectScenario(this)">
+      <span class="icon-box">🔐</span>
+      <span class="scenario-name">Cyber</span>
+    </button>
+    <button class="scenario-btn" data-scenario="environment" onclick="selectScenario(this)">
+      <span class="icon-box">🌪️</span>
+      <span class="scenario-name">Nature</span>
+    </button>
+    <button class="scenario-btn" data-scenario="emergency" onclick="selectScenario(this)">
+      <span class="icon-box">🆘</span>
+      <span class="scenario-name">Emergency</span>
+    </button>
+  </div>
 
-<div class="input-wrap">
-<label class="input-label" for="situation">Describe your situation</label>
-<textarea id="situation" maxlength="500" placeholder="Describe your scenario..."></textarea>
-<span class="char-count" id="charCount">0 / 500</span>
-</div>
+  <div style="margin-top:10px;">
+    <label class="result-label">Situation Details</label>
+    <textarea id="situation" placeholder="Explain what is happening..."></textarea>
+  </div>
 
-<button class="btn-analyze" id="analyzeBtn" onclick="analyze()">⚡ ANALYZE THREAT</button>
+  <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">START SCAN</button>
 
-<div class="result-card" id="resultCard">
-<div class="result-header" id="resultHeader">
-<span class="threat-badge" id="threatBadge">—</span>
-<span class="threat-score" id="threatScore">—</span>
-</div>
-<div class="result-body">
-<div>
-<div class="result-section-title">Threat Assessment</div>
-<div class="result-text" id="assessmentText"></div>
-</div>
-</div>
-</div>
-
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <span class="threat-badge" id="threatBadge">—</span>
+      <span class="threat-score" id="threatScore">—</span>
+    </div>
+    <div class="result-body">
+      <div class="result-label">AI Assessment</div>
+      <div class="result-text" id="assessmentText"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-let selectedScenario='personal';
-document.getElementById('situation').addEventListener('input',()=>{document.getElementById('charCount').textContent=document.getElementById('situation').value.length+' / 500';});
-function selectScenario(btn){document.querySelectorAll('.scenario-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedScenario=btn.dataset.scenario;}
-async function analyze(){
-const situation=document.getElementById('situation').value.trim();
-if(!situation||situation.length<10){alert('Describe your situation with at least 10 chars.');return;}
-const btn=document.getElementById('analyzeBtn');btn.disabled=true;btn.classList.add('loading');btn.textContent='⚡ ANALYZING...';
-try{
-const res=await fetch('https://stay-safe-tips.vercel.app/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({situation,scenario:selectedScenario})});
-const data=await res.json();
-document.getElementById('resultCard').classList.add('visible');
-document.getElementById('threatBadge').textContent=data.level.toUpperCase();
-document.getElementById('threatScore').textContent=(data.score||50)+'/100';
-document.getElementById('assessmentText').textContent=data.advice||'Stay alert and safe.';
-showAdMob();
-}catch(err){alert('API error.');}finally{btn.disabled=false;btn.classList.remove('loading');btn.textContent='⚡ ANALYZE THREAT';}
+let selectedScenario = 'personal';
+
+function selectScenario(btn) {
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedScenario = btn.dataset.scenario;
 }
 
-// AdMob Interstitial
-function showAdMob(){
-if(window.cordova && window.AdMob){
-  AdMob.showInterstitial({adId:'ca-app-pub-4000056160039274/6486964092', isTesting:false});
-}else{console.log('AdMob interstitial placeholder.');}
+async function analyze() {
+  const situation = document.getElementById('situation').value.trim();
+  if (situation.length < 10) { alert('Please provide more details (min 10 chars).'); return; }
+
+  const btn = document.getElementById('analyzeBtn');
+  btn.classList.add('loading');
+  btn.textContent = 'SCANNING...';
+
+  try {
+    const res = await fetch('https://stay-safe-tips.vercel.app/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ situation, scenario: selectedScenario })
+    });
+
+    const data = await res.json();
+    
+    document.getElementById('resultCard').classList.add('visible');
+    const badge = document.getElementById('threatBadge');
+    badge.textContent = data.level.toUpperCase();
+    
+    // Dynamic Colors
+    const colors = { low: '#22c55e', medium: '#f59e0b', high: '#ef4444', critical: '#7f1d1d' };
+    badge.style.background = colors[data.level.toLowerCase()] || colors.medium;
+    
+    document.getElementById('threatScore').textContent = (data.score || 0) + '%';
+    document.getElementById('assessmentText').textContent = data.assessment || data.advice;
+
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+  } catch (err) {
+    alert('Communication error with AI core.');
+  } finally {
+    btn.classList.remove('loading');
+    btn.textContent = 'START SCAN';
+  }
 }
 </script>
 </body>
