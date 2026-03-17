@@ -245,7 +245,6 @@ async function analyze() {
   btn.textContent = '⚡ SCANNING CORE...';
 
   try {
-    // Χρησιμοποιούμε POST με ρητό CORS mode
     const res = await fetch('https://stay-safe-tips.vercel.app/api/analyze', {
       method: 'POST',
       mode: 'cors',
@@ -265,15 +264,11 @@ async function analyze() {
 
     const data = await res.json();
     
-    // Εμφάνιση Card
     card.classList.add('visible');
-    
-    // Ενημέρωση Badge & Score
     const badge = document.getElementById('threatBadge');
     const level = (data.level || 'medium').toLowerCase();
     badge.textContent = level.toUpperCase();
     
-    // Χρώματα ανάλογα με το ρίσκο
     const colors = { 
       low: '#22c55e', 
       medium: '#f59e0b', 
@@ -283,19 +278,11 @@ async function analyze() {
     badge.style.background = colors[level] || colors.medium;
     
     document.getElementById('threatScore').textContent = (data.score || 0) + '%';
-    
-    // Εμφάνιση κειμένου (υποστήριξη για assessment ή advice)
-    document.getElementById('assessmentText').textContent = data.assessment || data.advice || 'Analysis complete. Stay vigilant.';
+    document.getElementById('assessmentText').textContent = data.assessment || data.advice || 'Analysis complete.';
 
-    // Smooth Scroll στο αποτέλεσμα
     setTimeout(() => {
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 200);
-
-    // Call AdMob αν υπάρχει
-    if(window.cordova && window.AdMob) {
-       AdMob.showInterstitial();
-    }
 
   } catch (err) {
     console.error('AI Scan Error:', err);
