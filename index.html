@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Stay Safe Elite</title>
 
+<link rel="manifest" href="manifest.webmanifest">
+
 <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -210,97 +212,31 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
                 <h2 id="txt_tools_title" style="color:var(--gold); margin:0;">Elite Tools 🔓</h2>
 
                 <div class="tools-grid">
-
-                    <!-- SAFE TIMER -->
                     <div class="tool-card tool-timer" onclick="window.location.href='timer.html'">
-                        <div class="tool-icon-wrap">
-                            <svg viewBox="0 0 32 32" fill="none">
-                                <circle cx="16" cy="17" r="10" stroke="#38bdf8" stroke-width="2"/>
-                                <path d="M16 11v6l4 2" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M13 4h6" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M16 4v3" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
+                        <div class="tool-icon-wrap"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="17" r="10" stroke="#38bdf8" stroke-width="2"/><path d="M16 11v6l4 2" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 4h6" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/><path d="M16 4v3" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/></svg></div>
                         <small id="t1">SAFE TIMER</small>
                     </div>
-
-                    <!-- SOS HUB -->
                     <div class="tool-card tool-sos" onclick="window.location.href='sos-hub.html'">
-                        <div class="tool-icon-wrap">
-                            <svg viewBox="0 0 32 32" fill="none">
-                                <circle cx="16" cy="16" r="11" stroke="#ef4444" stroke-width="2"/>
-                                <circle cx="16" cy="16" r="6" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.4"/>
-                                <path d="M16 9v3M16 20v3M9 16h3M20 16h3" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
-                                <circle cx="16" cy="16" r="2.5" fill="#ef4444"/>
-                            </svg>
-                        </div>
+                        <div class="tool-icon-wrap"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" stroke="#ef4444" stroke-width="2"/><circle cx="16" cy="16" r="6" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.4"/><path d="M16 9v3M16 20v3M9 16h3M20 16h3" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="2.5" fill="#ef4444"/></svg></div>
                         <small id="t2">SOS HUB</small>
                     </div>
-
-                    <!-- NATURE -->
                     <div class="tool-card tool-nature" onclick="window.location.href='weather-alerts.html'">
-                        <div class="tool-icon-wrap">
-                            <svg viewBox="0 0 32 32" fill="none">
-                                <circle cx="16" cy="16" r="11" stroke="#22c55e" stroke-width="2"/>
-                                <path d="M5 16h22" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.4"/>
-                                <path d="M16 5c-3 3-4 7-4 11s1 8 4 11" stroke="#22c55e" stroke-width="1.5"/>
-                                <path d="M16 5c3 3 4 7 4 11s-1 8-4 11" stroke="#22c55e" stroke-width="1.5"/>
-                            </svg>
-                        </div>
+                        <div class="tool-icon-wrap"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" stroke="#22c55e" stroke-width="2"/><path d="M5 16h22" stroke="#22c55e" stroke-width="1.5" stroke-opacity="0.4"/><path d="M16 5c-3 3-4 7-4 11s1 8 4 11" stroke="#22c55e" stroke-width="1.5"/><path d="M16 5c3 3 4 7 4 11s-1 8-4 11" stroke="#22c55e" stroke-width="1.5"/></svg></div>
                         <small id="t3">NATURE</small>
                     </div>
-
-                    <!-- SCAMS -->
                     <div class="tool-card tool-scams" onclick="window.location.href='scam-alerts.html'">
-                        <div class="tool-icon-wrap">
-                            <svg viewBox="0 0 32 32" fill="none">
-                                <path d="M16 4L28 26H4L16 4z" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
-                                <path d="M16 13v5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-                                <circle cx="16" cy="22" r="1.5" fill="#f59e0b"/>
-                            </svg>
-                        </div>
+                        <div class="tool-icon-wrap"><svg viewBox="0 0 32 32" fill="none"><path d="M16 4L28 26H4L16 4z" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/><path d="M16 13v5" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/><circle cx="16" cy="22" r="1.5" fill="#f59e0b"/></svg></div>
                         <small id="t4">SCAMS</small>
                     </div>
-
-                    <!-- CHECKUP -->
                     <div class="tool-card tool-checkup" onclick="window.location.href='checkup.html'">
-                        <div class="tool-icon-wrap">
-                            <svg viewBox="0 0 32 32" fill="none">
-                                <path d="M16 5L6 9v8c0 6 4.5 10.5 10 13 5.5-2.5 10-7 10-13V9L16 5z" stroke="#a78bfa" stroke-width="2" stroke-linejoin="round"/>
-                                <path d="M11 16l3.5 3.5L21 12" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
+                        <div class="tool-icon-wrap"><svg viewBox="0 0 32 32" fill="none"><path d="M16 5L6 9v8c0 6 4.5 10.5 10 13 5.5-2.5 10-7 10-13V9L16 5z" stroke="#a78bfa" stroke-width="2" stroke-linejoin="round"/><path d="M11 16l3.5 3.5L21 12" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                         <small id="t5">CHECKUP</small>
                     </div>
-
-                    <!-- AI THREAT ANALYZER -->
                     <div class="tool-card tool-ai" onclick="window.location.href='ai-threat.html'">
                         <div class="tool-new-badge">NEW</div>
-                        <div class="tool-icon-wrap">
-                            <svg viewBox="0 0 32 32" fill="none">
-                                <circle cx="16" cy="16" r="4.5" stroke="#38bdf8" stroke-width="1.8"/>
-                                <circle cx="16" cy="16" r="2" fill="#38bdf8" fill-opacity="0.7"/>
-                                <circle cx="16" cy="5"  r="1.8" stroke="#38bdf8" stroke-width="1.5"/>
-                                <circle cx="16" cy="27" r="1.8" stroke="#38bdf8" stroke-width="1.5"/>
-                                <circle cx="5"  cy="16" r="1.8" stroke="#38bdf8" stroke-width="1.5"/>
-                                <circle cx="27" cy="16" r="1.8" stroke="#38bdf8" stroke-width="1.5"/>
-                                <circle cx="8.5"  cy="8.5"  r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/>
-                                <circle cx="23.5" cy="8.5"  r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/>
-                                <circle cx="8.5"  cy="23.5" r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/>
-                                <circle cx="23.5" cy="23.5" r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/>
-                                <line x1="16" y1="6.8"  x2="16" y2="11.5" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/>
-                                <line x1="16" y1="20.5" x2="16" y2="25.2" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/>
-                                <line x1="6.8"  y1="16" x2="11.5" y2="16" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/>
-                                <line x1="20.5" y1="16" x2="25.2" y2="16" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/>
-                                <line x1="9.8"  y1="9.8"  x2="12.8" y2="12.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/>
-                                <line x1="22.2" y1="9.8"  x2="19.2" y2="12.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/>
-                                <line x1="9.8"  y1="22.2" x2="12.8" y2="19.2" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/>
-                                <line x1="22.2" y1="22.2" x2="19.2" y2="19.2" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/>
-                            </svg>
-                        </div>
+                        <div class="tool-icon-wrap"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="4.5" stroke="#38bdf8" stroke-width="1.8"/><circle cx="16" cy="16" r="2" fill="#38bdf8" fill-opacity="0.7"/><circle cx="16" cy="5" r="1.8" stroke="#38bdf8" stroke-width="1.5"/><circle cx="16" cy="27" r="1.8" stroke="#38bdf8" stroke-width="1.5"/><circle cx="5" cy="16" r="1.8" stroke="#38bdf8" stroke-width="1.5"/><circle cx="27" cy="16" r="1.8" stroke="#38bdf8" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="23.5" cy="8.5" r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="8.5" cy="23.5" r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/><circle cx="23.5" cy="23.5" r="1.3" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.6"/><line x1="16" y1="6.8" x2="16" y2="11.5" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/><line x1="16" y1="20.5" x2="16" y2="25.2" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/><line x1="6.8" y1="16" x2="11.5" y2="16" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/><line x1="20.5" y1="16" x2="25.2" y2="16" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.5"/><line x1="9.8" y1="9.8" x2="12.8" y2="12.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/><line x1="22.2" y1="9.8" x2="19.2" y2="12.8" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/><line x1="9.8" y1="22.2" x2="12.8" y2="19.2" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/><line x1="22.2" y1="22.2" x2="19.2" y2="19.2" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.4"/></svg></div>
                         <small id="t6">AI THREAT</small>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -329,10 +265,10 @@ const translations = {
     'en': { days: 'DAYS', training: 'Daily Training', start: 'START QUIZ', ach: '🏆 Achievements', dojo: 'Elite Defense Dojo', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Tools 🔓', t1: 'SAFE TIMER', t2: 'SOS HUB', t3: 'NATURE', t4: 'SCAMS', t5: 'CHECKUP', t6: 'AI THREAT', ready: 'Ready for today\'s safety challenge?' },
     'el': { days: 'ΗΜΕΡΕΣ', training: 'Καθημερινή Εκπαίδευση', start: 'ΕΝΑΡΞΗ ΤΕΣΤ', ach: '🏆 Επιτεύγματα', dojo: 'Elite Dojo Άμυνας', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Εργαλεία 🔓', t1: 'ΧΡΟΝΟΜΕΤΡΟ', t2: 'SOS HUB', t3: 'ΦΥΣΗ', t4: 'ΑΠΑΤΕΣ', t5: 'ΕΛΕΓΧΟΣ', t6: 'AI ΑΝΑΛΥΣΗ', ready: 'Έτοιμος για τη σημερινή πρόκληση;' },
     'de': { days: 'TAGE', training: 'Tägliches Training', start: 'QUIZ STARTEN', ach: '🏆 Erfolge', dojo: 'Elite-Verteidigungs-Dojo', dojo_sub: 'MEISTER TANG SOO DO', tools: 'Elite-Tools 🔓', t1: 'SICHERER TIMER', t2: 'SOS HUB', t3: 'NATUR', t4: 'BETRUG', t5: 'CHECKUP', t6: 'KI-ANALYSE', ready: 'Bereit für die heutige Herausforderung?' },
-    'fr': { days: 'JOURS', training: 'Entraϊnement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', t5: 'CHECKUP', t6: 'IA MENACE', ready: 'Prêt pour le défi du jour?' },
+    'fr': { days: 'JOURS', training: 'Entraînement Quotidien', start: 'DÉMARRER LE QUIZ', ach: '🏆 Succès', dojo: 'Dojo de Défense Elite', dojo_sub: 'MAÎTRE TANG SOO DO', tools: 'Outils Elite 🔓', t1: 'MINUTEUR', t2: 'SOS HUB', t3: 'NATURE', t4: 'ARNAQUES', t5: 'CHECKUP', t6: 'IA MENACE', ready: 'Prêt pour le défi du jour?' },
     'es': { days: 'DÍAS', training: 'Entrenamiento Diario', start: 'INICIAR QUIZ', ach: '🏆 Logros', dojo: 'Dojo de Defensa Élite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Herramientas Élite 🔓', t1: 'TEMPORIZADOR', t2: 'SOS HUB', t3: 'NATURALEZA', t4: 'ESTAFAS', t5: 'CHECKUP', t6: 'IA AMENAZA', ready: '¿Listo para el desafío de hoy?' },
     'it': { days: 'GIORNI', training: 'Allenamento Quotidiano', start: 'INIZIA QUIZ', ach: '🏆 Traguardi', dojo: 'Dojo di Difesa Elite', dojo_sub: 'MAESTRO TANG SOO DO', tools: 'Strumenti Elite 🔓', t1: 'TIMER SICURO', t2: 'SOS HUB', t3: 'NATURA', t4: 'TRUFFE', t5: 'CHECKUP', t6: 'IA MINACCIA', ready: 'Pronto per la sfida di oggi?' },
-    'ru': { days: 'ДНИ', training: 'Тренировка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙМЕР', t2: 'SOS HUB', t3: 'ПРИРОДА', t4: 'МОШЕННИКИ', t5: 'ПРОВЕРКА', t6: 'ИИ УГРОЗА', ready: 'Готовы к испытанию?' }
+    'ru': { days: 'ДНИ', training: 'Тренировка', start: 'НАЧАТЬ', ach: '🏆 Достижения', dojo: 'Элитное Додзё', dojo_sub: 'МАСТЕР TANG SOO DO', tools: 'Инструменты 🔓', t1: 'ТАЙΜЕР', t2: 'SOS HUB', t3: 'ПРИРОДА', t4: 'МОШЕННИКИ', t5: 'ПРОВЕРКА', t6: 'ИИ УГРОЗА', ready: 'Готовы к испытанию?' }
 };
 
 let currentLang = localStorage.getItem('user_lang') || 'en';
@@ -389,15 +325,22 @@ function startEngine() {
     if(window.QuizEngine) window.QuizEngine.start(currentLang, 'quiz');
 }
 
+// Service Worker Registration για PWA συμβατότητα
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed', err));
+    });
+}
+
 window.onload = () => { if(localStorage.getItem('app_init') === 'true') showMainApp(); };
 </script>
 
-    <footer style="margin-top: 50px; padding: 20px 20px 150px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
-        <a href="privacy.html" style="color: #64748b; text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: inline-block;">
-            Privacy Policy & Disclaimer
-        </a>
-        <p style="color: #334155; font-size: 0.6rem; margin-top: 10px;">&copy; 2026 Stay Safe Elite. All Rights Reserved.</p>
-    </footer>
+<footer style="margin-top: 50px; padding: 20px 20px 150px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05);">
+    <a href="privacy.html" style="color: #64748b; text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: inline-block;">
+        Privacy Policy & Disclaimer
+    </a>
+    <p style="color: #334155; font-size: 0.6rem; margin-top: 10px;">&copy; 2026 Stay Safe Elite. All Rights Reserved.</p>
+</footer>
 
-</div> </body>
+</body>
 </html>
