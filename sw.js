@@ -1,4 +1,4 @@
-const VERSION = "v14-elite-full"; 
+const VERSION = "v15-elite-full"; 
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 
 // Ορίζουμε το Base Path για το GitHub Pages
