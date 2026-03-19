@@ -27,13 +27,6 @@
       "type": "image/jpeg",
       "form_factor": "narrow",
       "label": "Security Training"
-    },
-    {
-      "src": "screenshot3.png",
-      "sizes": "1079x1981",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "Elite Tools"
     }
   ],
   "icons": [
