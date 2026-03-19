@@ -55,8 +55,15 @@ const STATIC_ASSETS = [
   BASE + "questions_premium_pt.json",
   BASE + "questions_premium_ru.json",
   BASE + "questions_premium_zh.json",
-  BASE + "icons/icon-192.png",
-  BASE + "icons/icon-512.png"
+  // Icons & Screenshots (Χύμα στον κεντρικό φάκελο)
+  BASE + "icon-192.png",
+  BASE + "icon-512.png",
+  BASE + "icon-maskable-192.png",
+  BASE + "icon-maskable-512.png",
+  BASE + "screenshot1.png",
+  BASE + "screenshot2.png",
+  BASE + "screenshot3.png",
+  BASE + "screenshot4.png"
 ];
 
 // 1. Εγκατάσταση: Shielding Assets
@@ -64,7 +71,6 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then(cache => {
       console.log("🛡️ SW: Shielding Elite Assets...");
-      // Χρησιμοποιούμε Promise.allSettled για να μην σταματήσει η εγκατάσταση αν λείπει κάποιο αρχείο
       return Promise.allSettled(
         STATIC_ASSETS.map(url => 
           cache.add(url).catch(err => console.warn(`⚠️ Failed to cache: ${url}`, err))
@@ -91,7 +97,6 @@ self.addEventListener("activate", event => {
 
 // 3. Fetch Strategy: Stale-While-Revalidate
 self.addEventListener("fetch", event => {
-  // Μόνο αιτήματα από το δικό μας origin
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
@@ -103,7 +108,6 @@ self.addEventListener("fetch", event => {
           }
           return networkResponse;
         }).catch(() => {
-          // Fallback αν είμαστε offline και πρόκειται για σελίδα (navigate)
           if (event.request.mode === 'navigate') {
             return caches.match(BASE + 'offline.html');
           }
