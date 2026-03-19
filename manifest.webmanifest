@@ -13,31 +13,51 @@
   "categories": ["education", "security", "lifestyle"],
   "screenshots": [
     {
-      "src": "icons/screenshot-mobile.png",
+      "src": "screenshot1.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Daily Security Training"
+      "label": "Daily Safety Training"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Elite Security Tools"
+    },
+    {
+      "src": "screenshot3.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Emergency SOS Hub"
     }
   ],
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-maskable-192.png",
+      "src": "icon-maskable-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "prefer_related_applications": false,
