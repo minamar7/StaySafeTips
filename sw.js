@@ -1,4 +1,4 @@
-const VERSION = "v15-elite-full"; 
+const VERSION = "v21-ultra-stable"; 
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 
 // Ορίζουμε το Base Path για το GitHub Pages
@@ -28,13 +28,18 @@ const STATIC_ASSETS = [
   BASE + "timer.html",
   BASE + "techniques.html",
   BASE + "weather-alerts.html",
-  BASE + "reflexdrill_glb.html",
+  BASE + "reflexdrill.html",
+  BASE + "focus-drill.html",
   BASE + "password-generator.html",
   BASE + "privacy.html",
   BASE + "premium-ml.html",
   BASE + "premium-paywall.html",
   BASE + "premium-suite.html",
   BASE + "emergency_hub.json",
+  // Ήχοι
+  BASE + "kiai.mp3",
+  BASE + "kiai1.mp3",
+  // Γλώσσες (Free & Premium)
   BASE + "questions_free_el.json",
   BASE + "questions_free_en.json",
   BASE + "questions_free_de.json",
@@ -55,13 +60,13 @@ const STATIC_ASSETS = [
   BASE + "questions_premium_pt.json",
   BASE + "questions_premium_ru.json",
   BASE + "questions_premium_zh.json",
-  // Icons & Screenshots (Χύμα στον κεντρικό φάκελο)
+  // Icons & Screenshots
   BASE + "icon-192.png",
   BASE + "icon-512.png",
   BASE + "icon-maskable-192.png",
   BASE + "icon-maskable-512.png",
   BASE + "screenshot1.png",
-  BASE + "screenshot2.png",
+  BASE + "screenshot2.jpg", // Διόρθωση κατάληξης βάσει του φακέλου σας
   BASE + "screenshot3.png",
   BASE + "screenshot4.png"
 ];
@@ -97,17 +102,20 @@ self.addEventListener("activate", event => {
 
 // 3. Fetch Strategy: Stale-While-Revalidate
 self.addEventListener("fetch", event => {
+  // Μόνο αιτήματα από την ίδια προέλευση
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
     caches.open(STATIC_CACHE).then(cache => {
       return cache.match(event.request).then(cachedResponse => {
         const fetchPromise = fetch(event.request).then(networkResponse => {
+          // Ενημέρωση της cache μόνο αν η απόκριση είναι έγκυρη
           if (networkResponse && networkResponse.ok) {
             cache.put(event.request, networkResponse.clone());
           }
           return networkResponse;
         }).catch(() => {
+          // Αν η συσκευή είναι offline και το αίτημα αφορά πλοήγηση σελίδας
           if (event.request.mode === 'navigate') {
             return caches.match(BASE + 'offline.html');
           }
