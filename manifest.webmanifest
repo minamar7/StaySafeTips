@@ -13,22 +13,6 @@
   "theme_color": "#020617",
   "dir": "ltr",
   "categories": ["education", "security", "lifestyle"],
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "sizes": "1079x1981",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "Home Screen"
-    },
-    {
-      "src": "screenshot2.jpg",
-      "sizes": "1079x1981",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "Security Training"
-    }
-  ],
   "icons": [
     {
       "src": "icon-192.png",
@@ -53,6 +37,22 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1079x1981",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Home Screen"
+    },
+    {
+      "src": "screenshot2.jpg",
+      "sizes": "1079x1981",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Security Training"
     }
   ],
   "prefer_related_applications": false,
