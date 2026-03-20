@@ -1,4 +1,4 @@
-const VERSION = "v22-elite-final"; 
+const VERSION = "v25-elite-final"; 
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 const BASE = '/StaySafeTips/';
 
@@ -6,7 +6,6 @@ const STATIC_ASSETS = [
   BASE,
   BASE + "index.html",
   BASE + "manifest.webmanifest",
-  BASE + "sw.js",
   BASE + "styles.css",
   BASE + "app.js",
   BASE + "quiz.js",
@@ -36,15 +35,12 @@ const STATIC_ASSETS = [
   BASE + "emergency_hub.json",
   BASE + "kiai.mp3",
   BASE + "kiai1.mp3",
-  // Icons & Screenshots
   BASE + "icon-192.png",
   BASE + "icon-512.png",
   BASE + "icon-maskable-192.png",
   BASE + "icon-maskable-512.png",
   BASE + "screenshot1.png",
-  BASE + "screenshot2.jpg",
-  BASE + "screenshot3.png",
-  BASE + "screenshot4.png"
+  BASE + "screenshot2.jpg"
 ];
 
 self.addEventListener("install", event => {
@@ -52,7 +48,7 @@ self.addEventListener("install", event => {
     caches.open(STATIC_CACHE).then(cache => {
       return Promise.allSettled(
         STATIC_ASSETS.map(url => 
-          cache.add(url).catch(err => console.warn(`Failed to cache: ${url}`, err))
+          cache.add(url).catch(err => console.warn(`Skipped: ${url}`))
         )
       );
     })
@@ -75,18 +71,15 @@ self.addEventListener("fetch", event => {
   if (!event.request.url.startsWith(self.location.origin)) return;
   event.respondWith(
     caches.match(event.request).then(cached => {
-      const networked = fetch(event.request)
-        .then(res => {
-          if (res && res.ok) {
-            const clone = res.clone();
-            caches.open(STATIC_CACHE).then(cache => cache.put(event.request, clone));
-          }
-          return res;
-        })
-        .catch(() => {
-          if (event.request.mode === 'navigate') return caches.match(BASE + 'offline.html');
-        });
-      return cached || networked;
+      return cached || fetch(event.request).then(res => {
+        if (res && res.ok) {
+          const clone = res.clone();
+          caches.open(STATIC_CACHE).then(cache => cache.put(event.request, clone));
+        }
+        return res;
+      }).catch(() => {
+        if (event.request.mode === 'navigate') return caches.match(BASE + 'offline.html');
+      });
     })
   );
 });
