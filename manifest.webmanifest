@@ -43,7 +43,7 @@
     {
       "src": "screenshot1.jpg",
       "sizes": "1079x1981",
-      "type": "image/png",
+      "type": "image/jpeg",
       "form_factor": "narrow",
       "label": "Home Screen"
     },
@@ -53,6 +53,20 @@
       "type": "image/jpeg",
       "form_factor": "narrow",
       "label": "Security Training"
+    },
+    {
+      "src": "screenshot3.jpg",
+      "sizes": "1079x1981",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Security Tips"
+    },
+    {
+      "src": "screenshot4.jpg",
+      "sizes": "1079x1981",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Privacy Settings"
     }
   ],
   "prefer_related_applications": false,
