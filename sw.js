@@ -35,19 +35,21 @@ const STATIC_ASSETS = [
   BASE + "emergency_hub.json",
   BASE + "kiai.mp3",
   BASE + "kiai1.mp3",
-  BASE + "icon-192.png",
-  BASE + "icon-512.png",
-  BASE + "icon_maskable_192.png",
-  BASE + "icon_maskable_512.png",
+  // Διόρθωση ονομάτων για να ταιριάζουν με το Manifest
+  BASE + "icon_192.png",
+  BASE + "icon_512.png",
+  BASE + "icon-maskable-192.png",
+  BASE + "icon-maskable-512.png",
   BASE + "screenshot1.jpg",
-  BASE + "screenshot2.jpg"
-  BASE + "screenshot3.jpg"
+  BASE + "screenshot2.jpg", // Προσθήκη κόμματος
+  BASE + "screenshot3.jpg", // Προσθήκη κόμματος
   BASE + "screenshot4.jpg"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then(cache => {
+      // Χρήση Promise.allSettled για να μην "κολλάει" το install αν λείπει ένα αρχείο
       return Promise.allSettled(
         STATIC_ASSETS.map(url => 
           cache.add(url).catch(err => console.warn(`Skipped: ${url}`))
@@ -74,13 +76,16 @@ self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(event.request).then(cached => {
       return cached || fetch(event.request).then(res => {
-        if (res && res.ok) {
+        // Cache dynamically (προαιρετικό αλλά βοηθητικό)
+        if (res && res.status === 200 && res.type === 'basic') {
           const clone = res.clone();
           caches.open(STATIC_CACHE).then(cache => cache.put(event.request, clone));
         }
         return res;
       }).catch(() => {
-        if (event.request.mode === 'navigate') return caches.match(BASE + 'offline.html');
+        if (event.request.mode === 'navigate') {
+          return caches.match(BASE + 'offline.html');
+        }
       });
     })
   );
