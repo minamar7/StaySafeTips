@@ -37,8 +37,8 @@ const STATIC_ASSETS = [
   BASE + "kiai1.mp3",
   BASE + "icon-192.png",
   BASE + "icon-512.png",
-  BASE + "icon-maskable-192.png",
-  BASE + "icon-maskable-512.png",
+  BASE + "icon_maskable_192.png",
+  BASE + "icon_maskable_512.png",
   BASE + "screenshot1.png",
   BASE + "screenshot2.jpg"
 ];
