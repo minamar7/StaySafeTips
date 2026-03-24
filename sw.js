@@ -39,8 +39,10 @@ const STATIC_ASSETS = [
   BASE + "icon-512.png",
   BASE + "icon_maskable_192.png",
   BASE + "icon_maskable_512.png",
-  BASE + "screenshot1.png",
+  BASE + "screenshot1.jpg",
   BASE + "screenshot2.jpg"
+  BASE + "screenshot3.jpg"
+  BASE + "screenshot4.jpg"
 ];
 
 self.addEventListener("install", event => {
