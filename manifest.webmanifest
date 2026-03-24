@@ -13,6 +13,7 @@
   "theme_color": "#020617",
   "dir": "ltr",
   "categories": ["education", "security", "lifestyle"],
+  "iarc_rating_id": "e58c6734-7a91-4977-8f55-73130456177a",
   "icons": [
     {
       "src": "icon_192.png",
@@ -82,6 +83,9 @@
       "url": "/StaySafeTips/index.html",
       "icons": [{ "src": "icon_192.png", "sizes": "192x192" }]
     }
+  ],
+  "scope_extensions": [
+    { "origin": "https://staysafetips.github.io" }
   ],
   "launch_handler": {
     "client_mode": "navigate-existing"
