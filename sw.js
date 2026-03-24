@@ -42,16 +42,18 @@ const STATIC_ASSETS = [
   BASE + "screenshot1.jpg",
   BASE + "screenshot2.jpg",
   BASE + "screenshot3.jpg",
-  BASE + "screenshot4.jpg"
+  BASE + "screenshot4.jpg",
+  BASE + "screenshot_wide.jpg" // Προστέθηκε για το 45/45 score
 ];
 
-// Εγκατάσταση και αποθήκευση των αρχείων στην προσωρινή μνήμη (Cache)
+// Εγκατάσταση και αποθήκευση στην Cache
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then(cache => {
+      console.log("Caching assets...");
       return Promise.allSettled(
         STATIC_ASSETS.map(url => 
-          cache.add(url).catch(err => console.warn(`Skipped: ${url}`))
+          cache.add(url).catch(err => console.warn(`Failed to cache: ${url}`, err))
         )
       );
     })
@@ -59,31 +61,47 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
-// Ενεργοποίηση και διαγραφή παλιών εκδόσεων Cache
+// Ενεργοποίηση και καθαρισμός παλιάς Cache
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(key => key !== STATIC_CACHE).map(key => caches.delete(key))
+        keys.map(key => {
+          if (key !== STATIC_CACHE) {
+            console.log("Deleting old cache:", key);
+            return caches.delete(key);
+          }
+        })
       )
     )
   );
   self.clients.claim();
 });
 
-// Διαχείριση αιτημάτων (Network vs Cache)
+// Διαχείριση αιτημάτων (Network with Cache Fallback)
 self.addEventListener("fetch", event => {
+  // Μόνο για αιτήματα στο ίδιο origin
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request).then(res => {
-        if (res && res.status === 200 && res.type === 'basic') {
-          const clone = res.clone();
-          caches.open(STATIC_CACHE).then(cache => cache.put(event.request, clone));
+    caches.match(event.request).then(cachedResponse => {
+      // Αν υπάρχει στην cache, το δίνουμε αμέσως
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      // Αλλιώς πάμε στο δίκτυο
+      return fetch(event.request).then(networkResponse => {
+        // Αποθήκευση νέων αρχείων στην cache (αν είναι έγκυρα)
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(STATIC_CACHE).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
         }
-        return res;
+        return networkResponse;
       }).catch(() => {
+        // Αν αποτύχει το δίκτυο (offline) και είναι σελίδα, δείξε το offline.html
         if (event.request.mode === 'navigate') {
           return caches.match(BASE + 'offline.html');
         }
