@@ -35,21 +35,20 @@ const STATIC_ASSETS = [
   BASE + "emergency_hub.json",
   BASE + "kiai.mp3",
   BASE + "kiai1.mp3",
-  // Διόρθωση ονομάτων για να ταιριάζουν με το Manifest
   BASE + "icon_192.png",
   BASE + "icon_512.png",
   BASE + "icon-maskable-192.png",
   BASE + "icon-maskable-512.png",
   BASE + "screenshot1.jpg",
-  BASE + "screenshot2.jpg", // Προσθήκη κόμματος
-  BASE + "screenshot3.jpg", // Προσθήκη κόμματος
+  BASE + "screenshot2.jpg",
+  BASE + "screenshot3.jpg",
   BASE + "screenshot4.jpg"
 ];
 
+// Εγκατάσταση και αποθήκευση των αρχείων στην προσωρινή μνήμη (Cache)
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then(cache => {
-      // Χρήση Promise.allSettled για να μην "κολλάει" το install αν λείπει ένα αρχείο
       return Promise.allSettled(
         STATIC_ASSETS.map(url => 
           cache.add(url).catch(err => console.warn(`Skipped: ${url}`))
@@ -60,6 +59,7 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
+// Ενεργοποίηση και διαγραφή παλιών εκδόσεων Cache
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -71,12 +71,13 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
+// Διαχείριση αιτημάτων (Network vs Cache)
 self.addEventListener("fetch", event => {
   if (!event.request.url.startsWith(self.location.origin)) return;
+
   event.respondWith(
     caches.match(event.request).then(cached => {
       return cached || fetch(event.request).then(res => {
-        // Cache dynamically (προαιρετικό αλλά βοηθητικό)
         if (res && res.status === 200 && res.type === 'basic') {
           const clone = res.clone();
           caches.open(STATIC_CACHE).then(cache => cache.put(event.request, clone));
