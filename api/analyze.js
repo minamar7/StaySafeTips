@@ -9,20 +9,26 @@ module.exports = async (req, res) => {
   const { situation } = req.body;
 
   try {
-    // ΕΔΩ ΕΙΝΑΙ ΤΟ ΔΙΟΡΘΩΜΕΝΟ URL ΠΟΥ ΔΕΝ ΒΓΑΖΕΙ 404
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // ΠΡΟΣΟΧΗ: Το μοντέλο πλέον ονομάζεται gemini-3-flash-preview
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `Analyze this: ${situation}. Return JSON: {"level":"High","score":85,"assessment":"text"}` }] }]
+        contents: [{
+          parts: [{
+            text: `Analyze this safety threat: "${situation}". 
+            Return ONLY a valid JSON: {"level":"High","score":85,"assessment":"expert advice"}`
+          }]
+        }]
       })
     });
 
     const data = await response.json();
 
     if (data.error) {
+      // Εδώ θα δούμε αν φταίει το κλειδί ή το όνομα του μοντέλου
       return res.status(data.error.code || 500).json({ error: data.error.message });
     }
 
@@ -30,6 +36,6 @@ module.exports = async (req, res) => {
     res.status(200).json(JSON.parse(aiText));
 
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch AI", message: error.message });
+    res.status(500).json({ error: "API connection failed", message: error.message });
   }
 };
