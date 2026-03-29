@@ -254,7 +254,7 @@
 
   <div class="plan" onclick="selectPlan('annual')">
     <div class="plan-title">€44.90 / year</div>
-    <small>Best value • Save 25%</small>
+    <small>Best value • Save 25% • 3 days free trial</small>
   </div>
 
   <div class="plan" onclick="selectPlan('lifetime')">
@@ -283,6 +283,14 @@
     plans.forEach(p => p.style.borderColor = 'var(--glass-border)');
     event.currentTarget.style.borderColor = 'var(--gold)';
     
+    // Αλλαγή κειμένου κουμπιού αν επιλεγεί η δωρεάν δοκιμή
+    const btn = document.querySelector(".unlock-btn");
+    if(plan === 'annual') {
+      btn.innerHTML = "Start 3-Day Free Trial →";
+    } else {
+      btn.innerHTML = "Unlock Elite Protection →";
+    }
+
     navigator.vibrate?.(30);
   }
 
@@ -290,6 +298,9 @@
     navigator.vibrate?.([40,60,40]);
 
     const btn = document.querySelector(".unlock-btn");
+    
+    // Αποθήκευση του αρχικού κειμένου για επαναφορά
+    const originalText = btn.innerHTML;
     btn.textContent = "Connecting to Google Play...";
     btn.disabled = true;
     btn.style.opacity = .7;
@@ -301,13 +312,13 @@
         
         // Επαναφορά κουμπιού μετά από 5 δευτερόλεπτα αν ο χρήστης δεν προχωρήσει
         setTimeout(() => {
-            btn.textContent = "Unlock Elite Protection →";
+            btn.innerHTML = originalText;
             btn.disabled = false;
             btn.style.opacity = 1;
         }, 5000);
     } else {
         alert("Payments are only available inside the Stay Safe Elite Android App.");
-        btn.textContent = "Unlock Elite Protection →";
+        btn.innerHTML = originalText;
         btn.disabled = false;
         btn.style.opacity = 1;
     }
