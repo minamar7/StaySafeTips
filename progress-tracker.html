@@ -26,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* ── BG ── */
         .bg-grid {
             position: fixed; inset: 0; z-index: 0;
             background-image:
@@ -39,14 +38,12 @@
             background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%);
         }
 
-        /* ── SHELL ── */
         .shell {
             position: relative; z-index: 2;
             max-width: 420px; margin: 0 auto;
             padding: 20px 16px 100px;
         }
 
-        /* ── HEADER ── */
         .top-nav {
             display: flex; align-items: center; gap: 12px;
             margin-bottom: 20px;
@@ -68,7 +65,6 @@
             letter-spacing: 2px;
         }
 
-        /* ── BELT PROGRESSION ── */
         .belt-section {
             background: var(--panel);
             border: 1px solid rgba(250,204,21,0.2);
@@ -104,614 +100,281 @@
             width: 36px; height: 36px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             font-size: 1rem; border: 2px solid rgba(255,255,255,0.1);
+            background: var(--bg);
             transition: 0.3s;
         }
-        .belt-circle.done {
-            border-color: var(--gold);
-            box-shadow: 0 0 12px rgba(250,204,21,0.4);
-        }
-        .belt-circle.active {
-            border-color: var(--neon);
-            box-shadow: 0 0 16px rgba(56,189,248,0.5);
-            animation: belt-pulse 2s infinite;
-        }
+        .belt-circle.done { border-color: var(--gold); box-shadow: 0 0 12px rgba(250,204,21,0.4); }
+        .belt-circle.active { border-color: var(--neon); box-shadow: 0 0 16px rgba(56,189,248,0.5); animation: belt-pulse 2s infinite; }
+        
         @keyframes belt-pulse {
             0%,100% { box-shadow: 0 0 16px rgba(56,189,248,0.5); }
             50% { box-shadow: 0 0 28px rgba(56,189,248,0.8); }
         }
-        .belt-name {
-            font-size: 0.5rem; letter-spacing: 1px;
-            color: #475569; text-transform: uppercase;
-            font-weight: 700;
-        }
+
+        .belt-name { font-size: 0.5rem; letter-spacing: 1px; color: #475569; text-transform: uppercase; font-weight: 700; }
         .belt-node.done .belt-name { color: var(--gold); }
         .belt-node.active .belt-name { color: var(--neon); }
 
-        /* XP Bar */
-        .xp-row {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 8px;
-        }
+        .xp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .xp-label { font-size: 0.72rem; color: #64748b; letter-spacing: 1px; }
         .xp-value { font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--neon); }
-        .xp-bar-bg {
-            height: 8px; background: rgba(255,255,255,0.05);
-            border-radius: 4px; overflow: hidden;
-        }
-        .xp-bar-fill {
-            height: 100%; width: 35%;
-            background: linear-gradient(90deg, var(--neon), #0ea5e9);
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(56,189,248,0.4);
-            transition: width 1s ease;
-        }
+        .xp-bar-bg { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+        .xp-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), #0ea5e9); transition: width 1s ease; }
 
-        /* ── STATS ROW ── */
-        .stats-row {
-            display: grid; grid-template-columns: repeat(3,1fr);
-            gap: 10px; margin-bottom: 18px;
-        }
-        .stat-card {
-            background: var(--panel);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 16px; padding: 14px 10px;
-            text-align: center;
-        }
-        .stat-value {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.3rem; font-weight: 900;
-            color: var(--gold); display: block;
-        }
-        .stat-label {
-            font-size: 0.55rem; letter-spacing: 1.5px;
-            color: #475569; text-transform: uppercase;
-            margin-top: 4px; display: block;
-        }
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
+        .stat-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 14px 10px; text-align: center; }
+        .stat-value { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900; color: var(--gold); display: block; }
+        .stat-label { font-size: 0.55rem; letter-spacing: 1.5px; color: #475569; text-transform: uppercase; margin-top: 4px; display: block; }
 
-        /* ── VIDEO LIBRARY ── */
-        .video-section {
-            background: var(--panel);
-            border: 1px solid rgba(56,189,248,0.15);
-            border-radius: 24px; padding: 20px;
-            margin-bottom: 18px;
-        }
+        .video-section { background: var(--panel); border: 1px solid rgba(56,189,248,0.15); border-radius: 24px; padding: 20px; margin-bottom: 18px; }
+        .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
+        .cat-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #64748b; text-transform: uppercase; }
+        .cat-tab.active { background: rgba(250,204,21,0.1); border-color: rgba(250,204,21,0.4); color: var(--gold); }
 
-        /* Category tabs */
-        .cat-tabs {
-            display: flex; gap: 8px;
-            overflow-x: auto; padding-bottom: 4px;
-            margin-bottom: 16px; scrollbar-width: none;
-        }
-        .cat-tabs::-webkit-scrollbar { display: none; }
-        .cat-tab {
-            flex-shrink: 0; padding: 6px 14px;
-            border-radius: 20px; font-size: 0.68rem;
-            font-weight: 700; letter-spacing: 1px;
-            cursor: pointer; transition: 0.2s;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: transparent; color: #64748b;
-            text-transform: uppercase;
-        }
-        .cat-tab.active {
-            background: rgba(250,204,21,0.1);
-            border-color: rgba(250,204,21,0.4);
-            color: var(--gold);
-        }
-
-        /* Video cards */
-        .video-grid {
-            display: flex; flex-direction: column; gap: 12px;
-        }
-
-        .video-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 16px; overflow: hidden;
-            cursor: pointer; transition: 0.2s;
-            display: flex; align-items: stretch;
-        }
-        .video-card:active { transform: scale(0.98); }
-        .video-card:hover { border-color: rgba(250,204,21,0.3); }
-        .video-card.locked { opacity: 0.6; cursor: default; }
+        .video-grid { display: flex; flex-direction: column; gap: 12px; }
+        .video-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; cursor: pointer; display: flex; transition: 0.2s; }
+        .video-card.locked { opacity: 0.5; }
         .video-card.completed { border-color: rgba(34,197,94,0.3); }
 
-        .video-thumb {
-            width: 90px; flex-shrink: 0;
-            background: rgba(250,204,21,0.05);
-            display: flex; align-items: center;
-            justify-content: center; position: relative;
-            border-right: 1px solid rgba(255,255,255,0.06);
-        }
-        .video-thumb .thumb-icon { font-size: 2rem; }
-        .play-btn {
-            position: absolute; inset: 0;
-            display: flex; align-items: center;
-            justify-content: center;
-            background: rgba(250,204,21,0.1);
-        }
-        .play-btn svg {
-            width: 28px; height: 28px;
-            filter: drop-shadow(0 0 6px var(--gold));
-        }
-        .lock-icon { font-size: 1.4rem; }
-        .check-icon {
-            position: absolute; top: 6px; right: 6px;
-            width: 18px; height: 18px; border-radius: 50%;
-            background: var(--safe);
-            display: flex; align-items: center;
-            justify-content: center; font-size: 0.6rem;
-        }
+        .video-thumb { width: 90px; flex-shrink: 0; background: rgba(250,204,21,0.05); display: flex; align-items: center; justify-content: center; position: relative; border-right: 1px solid rgba(255,255,255,0.06); }
+        .play-btn svg { width: 24px; height: 24px; fill: var(--gold); }
+        .check-icon { position: absolute; top: 5px; right: 5px; background: var(--safe); border-radius: 50%; width: 16px; height: 16px; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; }
 
-        .video-info { padding: 12px 14px; flex: 1; }
-        .video-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.9rem; font-weight: 700;
-            color: #e2e8f0; letter-spacing: 0.5px;
-            margin-bottom: 4px; line-height: 1.2;
-        }
-        .video-meta {
-            display: flex; gap: 10px; align-items: center;
-        }
-        .video-dur {
-            font-size: 0.65rem; color: #475569;
-            letter-spacing: 1px;
-        }
-        .video-level {
-            font-size: 0.58rem; padding: 2px 8px;
-            border-radius: 6px; font-weight: 700;
-            letter-spacing: 1px; text-transform: uppercase;
-        }
-        .level-beg { background: rgba(34,197,94,0.15); color: var(--safe); }
-        .level-int { background: rgba(250,204,21,0.15); color: var(--gold); }
-        .level-adv { background: rgba(239,68,68,0.15); color: var(--danger); }
-        .video-xp {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.6rem; color: var(--gold);
-            margin-left: auto;
-        }
+        .video-info { padding: 12px; flex: 1; }
+        .video-title { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+        .video-meta { display: flex; gap: 8px; align-items: center; font-size: 0.6rem; }
+        .level-tag { padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        .level-beg { background: rgba(34,197,94,0.1); color: var(--safe); }
+        .level-int { background: rgba(250,204,21,0.1); color: var(--gold); }
 
-        /* ── VIDEO MODAL ── */
-        .modal-overlay {
-            position: fixed; inset: 0; z-index: 1000;
-            background: rgba(2,6,23,0.96);
-            display: flex; align-items: center;
-            justify-content: center; padding: 20px;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .modal-overlay.open {
-            opacity: 1; pointer-events: all;
-        }
-        .modal {
-            width: 100%; max-width: 420px;
-            background: var(--panel);
-            border: 1px solid rgba(250,204,21,0.3);
-            border-radius: 24px; overflow: hidden;
-            transform: translateY(30px);
-            transition: transform 0.3s;
-        }
-        .modal-overlay.open .modal { transform: translateY(0); }
-
-        .modal-video {
-            width: 100%; aspect-ratio: 16/9;
-            background: #000;
-        }
-        .modal-video iframe {
-            width: 100%; height: 100%; border: none;
-        }
+        .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--gold); }
+        .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; }
+        .modal-video iframe { width: 100%; height: 100%; border: none; }
         .modal-body { padding: 20px; }
-        .modal-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1rem; color: var(--gold);
-            letter-spacing: 1px; margin-bottom: 8px;
-        }
-        .modal-desc {
-            color: #94a3b8; font-size: 0.88rem;
-            line-height: 1.6; margin-bottom: 16px;
-        }
+        .modal-title { font-family: 'Orbitron', monospace; color: var(--gold); margin-bottom: 10px; font-size: 1rem; }
+        .modal-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
         .modal-actions { display: flex; gap: 10px; }
-        .btn-complete {
-            flex: 1; padding: 14px;
-            background: linear-gradient(135deg, var(--safe), #16a34a);
-            border: none; border-radius: 12px;
-            color: #fff; font-family: 'Rajdhani', sans-serif;
-            font-size: 0.85rem; font-weight: 700;
-            letter-spacing: 1.5px; cursor: pointer;
-            text-transform: uppercase;
-        }
-        .btn-close-modal {
-            padding: 14px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; color: #64748b;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.85rem; font-weight: 700;
-            cursor: pointer; letter-spacing: 1px;
-        }
+        .btn-action { flex: 1; padding: 12px; border-radius: 10px; border: none; font-family: 'Rajdhani'; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .btn-complete { background: var(--safe); color: #fff; }
+        .btn-close { background: rgba(255,255,255,0.1); color: #fff; }
 
-        /* ── ACHIEVEMENTS ── */
-        .achievements-section {
-            background: var(--panel);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 24px; padding: 20px;
-            margin-bottom: 18px;
-        }
-        .badge-grid {
-            display: grid; grid-template-columns: repeat(4,1fr);
-            gap: 10px;
-        }
-        .badge-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 14px; padding: 12px 8px;
-            text-align: center; transition: 0.2s;
-        }
-        .badge-item.earned {
-            border-color: rgba(250,204,21,0.4);
-            background: rgba(250,204,21,0.06);
-            box-shadow: 0 0 12px rgba(250,204,21,0.1);
-        }
-        .badge-item.locked-b { filter: grayscale(1); opacity: 0.4; }
-        .badge-emoji { font-size: 1.6rem; display: block; margin-bottom: 4px; }
-        .badge-name {
-            font-size: 0.5rem; letter-spacing: 1px;
-            color: #475569; text-transform: uppercase;
-            font-weight: 700;
-        }
-        .badge-item.earned .badge-name { color: var(--gold); }
-
-        @keyframes fadeInUp {
-            from { opacity:0; transform:translateY(16px); }
-            to { opacity:1; transform:translateY(0); }
-        }
-        .shell > * { animation: fadeInUp 0.4s ease both; }
-        .shell > *:nth-child(2) { animation-delay: 0.05s; }
-        .shell > *:nth-child(3) { animation-delay: 0.1s; }
-        .shell > *:nth-child(4) { animation-delay: 0.15s; }
-        .shell > *:nth-child(5) { animation-delay: 0.2s; }
+        .achievements-section { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; padding: 20px; margin-bottom: 100px; }
+        .badge-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+        .badge-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 5px; text-align: center; opacity: 0.4; filter: grayscale(1); }
+        .badge-item.earned { opacity: 1; filter: grayscale(0); border-color: var(--gold); }
+        .badge-emoji { font-size: 1.4rem; display: block; }
+        .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; }
     </style>
 </head>
 <body>
-<div class="bg-grid"></div>
-<div class="bg-glow"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
 
-<!-- VIDEO MODAL -->
-<div class="modal-overlay" id="videoModal">
-    <div class="modal">
-        <div class="modal-video" id="modalVideoWrap">
-            <iframe id="modalIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-        <div class="modal-body">
-            <div class="modal-title" id="modalTitle">—</div>
-            <div class="modal-desc" id="modalDesc">—</div>
-            <div class="modal-actions">
-                <button class="btn-complete" onclick="markComplete()">✅ MARK COMPLETE +XP</button>
-                <button class="btn-close-modal" onclick="closeModal()">CLOSE</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="shell">
-    <!-- HEADER -->
-    <div class="top-nav">
-        <a href="dojo.html" class="btn-back">← DOJO</a>
-        <span class="page-title">PROGRESS TRACKER</span>
-    </div>
-
-    <!-- BELT PROGRESSION -->
-    <div class="belt-section">
-        <div class="section-label">🥋 Belt Progression</div>
-        <div class="belt-track">
-            <div class="belt-node done">
-                <div class="belt-circle done">⬜</div>
-                <span class="belt-name">White</span>
-            </div>
-            <div class="belt-node active">
-                <div class="belt-circle active">🟡</div>
-                <span class="belt-name">Yellow</span>
-            </div>
-            <div class="belt-node">
-                <div class="belt-circle">🟢</div>
-                <span class="belt-name">Green</span>
-            </div>
-            <div class="belt-node">
-                <div class="belt-circle">🔵</div>
-                <span class="belt-name">Blue</span>
-            </div>
-            <div class="belt-node">
-                <div class="belt-circle">🔴</div>
-                <span class="belt-name">Red</span>
-            </div>
-            <div class="belt-node">
-                <div class="belt-circle">⬛</div>
-                <span class="belt-name">Black</span>
-            </div>
-        </div>
-        <div class="xp-row">
-            <span class="xp-label">XP TO YELLOW BELT</span>
-            <span class="xp-value" id="xpDisplay">350 / 1000</span>
-        </div>
-        <div class="xp-bar-bg">
-            <div class="xp-bar-fill" id="xpBar"></div>
-        </div>
-    </div>
-
-    <!-- STATS -->
-    <div class="stats-row">
-        <div class="stat-card">
-            <span class="stat-value" id="statVideos">0</span>
-            <span class="stat-label">Videos Done</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-value" id="statStreak">1</span>
-            <span class="stat-label">Day Streak</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-value" id="statXP">350</span>
-            <span class="stat-label">Total XP</span>
-        </div>
-    </div>
-
-    <!-- VIDEO LIBRARY -->
-    <div class="video-section">
-        <div class="section-label">🎬 Video Library</div>
-
-        <!-- Category Tabs -->
-        <div class="cat-tabs">
-            <button class="cat-tab active" onclick="filterCat('all', this)">All</button>
-            <button class="cat-tab" onclick="filterCat('strikes', this)">Strikes</button>
-            <button class="cat-tab" onclick="filterCat('kicks', this)">Kicks</button>
-            <button class="cat-tab" onclick="filterCat('defense', this)">Defense</button>
-            <button class="cat-tab" onclick="filterCat('selfdefense', this)">Self-Defense</button>
-            <button class="cat-tab" onclick="filterCat('security', this)">Security</button>
-        </div>
-
-        <!-- Video Cards -->
-        <div class="video-grid" id="videoGrid"></div>
-    </div>
-
-    <!-- ACHIEVEMENTS -->
-    <div class="achievements-section">
-        <div class="section-label">🏆 Achievements</div>
-        <div class="badge-grid">
-            <div class="badge-item earned">
-                <span class="badge-emoji">🥋</span>
-                <span class="badge-name">First Strike</span>
-            </div>
-            <div class="badge-item earned">
-                <span class="badge-emoji">🔥</span>
-                <span class="badge-name">7 Day Streak</span>
-            </div>
-            <div class="badge-item locked-b">
-                <span class="badge-emoji">⚡</span>
-                <span class="badge-name">Speed Drill</span>
-            </div>
-            <div class="badge-item locked-b">
-                <span class="badge-emoji">🛡️</span>
-                <span class="badge-name">Defender</span>
-            </div>
-            <div class="badge-item locked-b">
-                <span class="badge-emoji">💎</span>
-                <span class="badge-name">Elite Level</span>
-            </div>
-            <div class="badge-item locked-b">
-                <span class="badge-emoji">🎯</span>
-                <span class="badge-name">10 Videos</span>
-            </div>
-            <div class="badge-item locked-b">
-                <span class="badge-emoji">⬛</span>
-                <span class="badge-name">Black Belt</span>
-            </div>
-            <div class="badge-item locked-b">
-                <span class="badge-emoji">👊</span>
-                <span class="badge-name">100 Strikes</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-// ══════════════════════════════════════════
-//  VIDEO DATABASE
-//  Πρόσθεσε τα YouTube Unlisted links εδώ!
-//  youtube_id: το ID μετά το ?v= στο YouTube URL
-// ══════════════════════════════════════════
-const videos = [
-    {
-        id: 1, cat: 'strikes',
-        title: 'Front Punch — Chung Kwon',
-        desc: 'Basic front punch technique. Core strike in Tang Soo Do, focusing on hip rotation and proper fist formation.',
-        dur: '4:30', level: 'beg', xp: 50,
-        youtube_id: 'YOUTUBE_ID_HERE',  // ← Βάλε το YouTube ID
-        locked: false
-    },
-    {
-        id: 2, cat: 'kicks',
-        title: 'Front Kick — Ahp Chagi',
-        desc: 'The fundamental front kick. Learn chambering, extension and snap for maximum power.',
-        dur: '5:15', level: 'beg', xp: 50,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: false
-    },
-    {
-        id: 3, cat: 'defense',
-        title: 'Low Block — Ha Dan Makgi',
-        desc: 'Essential low block defending against kicks and low attacks.',
-        dur: '3:45', level: 'beg', xp: 50,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: false
-    },
-    {
-        id: 4, cat: 'strikes',
-        title: 'Reverse Punch — Bandae Chung Kwon',
-        desc: 'Advanced reverse punch with full body rotation. High-power counter-attack technique.',
-        dur: '6:00', level: 'int', xp: 75,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: true
-    },
-    {
-        id: 5, cat: 'kicks',
-        title: 'Roundhouse Kick — Dollyo Chagi',
-        desc: 'The classic roundhouse kick. Learn the circular path and hip-drive for maximum impact.',
-        dur: '7:20', level: 'int', xp: 75,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: true
-    },
-    {
-        id: 6, cat: 'selfdefense',
-        title: 'Wrist Grab Escape',
-        desc: 'Real-world self-defense: escape from a wrist grab using leverage and body rotation. Works against larger attackers.',
-        dur: '5:50', level: 'beg', xp: 100,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: false
-    },
-    {
-        id: 7, cat: 'security',
-        title: 'Situational Awareness Drill',
-        desc: 'Professional security technique: 360° threat assessment, identifying exit routes and threat indicators.',
-        dur: '8:00', level: 'int', xp: 100,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: true
-    },
-    {
-        id: 8, cat: 'defense',
-        title: 'Bear Hug Escape',
-        desc: 'Escape from rear bear hug — from above and below the arms. Essential real-world defense.',
-        dur: '6:30', level: 'int', xp: 75,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: true
-    },
-    {
-        id: 9, cat: 'security',
-        title: 'Crowd Control Positioning',
-        desc: 'Professional security positioning in crowds. Threat recognition, body positioning and safe extraction.',
-        dur: '10:00', level: 'adv', xp: 150,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: true
-    },
-    {
-        id: 10, cat: 'kicks',
-        title: 'Side Kick — Yop Chagi',
-        desc: 'The powerful side kick. Perfect for creating distance or stopping an oncoming attacker.',
-        dur: '6:45', level: 'int', xp: 75,
-        youtube_id: 'YOUTUBE_ID_HERE',
-        locked: true
-    }
-];
-
-let currentCat = 'all';
-let currentVideo = null;
-let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
-let totalXP = parseInt(localStorage.getItem('dojo_xp') || '350');
-
-// Render
-function renderVideos() {
-    const grid = document.getElementById('videoGrid');
-    const filtered = currentCat === 'all' ? videos : videos.filter(v => v.cat === currentCat);
-    const levelLabel = { beg: 'Beginner', int: 'Intermediate', adv: 'Advanced' };
-
-    grid.innerHTML = filtered.map(v => {
-        const isDone = completed.includes(v.id);
-        const isLocked = v.locked;
-        return `
-        <div class="video-card ${isLocked ? 'locked' : ''} ${isDone ? 'completed' : ''}"
-             onclick="${isLocked ? "showLocked()" : `openVideo(${v.id})`}">
-            <div class="video-thumb">
-                <span class="thumb-icon">🥋</span>
-                ${isLocked
-                    ? `<div class="play-btn"><span class="lock-icon">🔒</span></div>`
-                    : `<div class="play-btn">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="11" stroke="#facc15" stroke-width="1.5"/>
-                            <path d="M10 8l6 4-6 4V8z" fill="#facc15"/>
-                        </svg>
-                       </div>`
-                }
-                ${isDone ? `<div class="check-icon">✓</div>` : ''}
-            </div>
-            <div class="video-info">
-                <div class="video-title">${v.title}</div>
-                <div class="video-meta">
-                    <span class="video-dur">⏱ ${v.dur}</span>
-                    <span class="video-level level-${v.level}">${levelLabel[v.level]}</span>
-                    <span class="video-xp">+${v.xp}XP</span>
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal">
+            <div class="modal-video"><iframe id="modalIframe" src="" allowfullscreen></iframe></div>
+            <div class="modal-body">
+                <div class="modal-title" id="modalTitle">TITLE</div>
+                <div class="modal-desc" id="modalDesc">DESCRIPTION</div>
+                <div class="modal-actions">
+                    <button class="btn-action btn-complete" onclick="markComplete()">Complete +XP</button>
+                    <button class="btn-action btn-close" onclick="closeModal()">Close</button>
                 </div>
             </div>
-        </div>`;
-    }).join('');
-}
+        </div>
+    </div>
 
-function filterCat(cat, btn) {
-    currentCat = cat;
-    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    renderVideos();
-}
+    <div class="shell">
+        <div class="top-nav">
+            <a href="dojo.html" class="btn-back">← DOJO</a>
+            <span class="page-title">PROGRESS TRACKER</span>
+        </div>
 
-function openVideo(id) {
-    const v = videos.find(x => x.id === id);
-    if (!v) return;
-    currentVideo = v;
+        <div class="belt-section">
+            <div class="section-label">🥋 Belt Progression</div>
+            <div class="belt-track">
+                <div class="belt-node" id="belt-0"><div class="belt-circle">⬜</div><span class="belt-name">White</span></div>
+                <div class="belt-node" id="belt-1"><div class="belt-circle">🟡</div><span class="belt-name">Yellow</span></div>
+                <div class="belt-node" id="belt-2"><div class="belt-circle">🟢</div><span class="belt-name">Green</span></div>
+                <div class="belt-node" id="belt-3"><div class="belt-circle">🔵</div><span class="belt-name">Blue</span></div>
+                <div class="belt-node" id="belt-4"><div class="belt-circle">🔴</div><span class="belt-name">Red</span></div>
+                <div class="belt-node" id="belt-5"><div class="belt-circle">⬛</div><span class="belt-name">Black</span></div>
+            </div>
+            <div class="xp-row">
+                <span class="xp-label" id="lblNextBelt">XP TO NEXT BELT</span>
+                <span class="xp-value" id="xpDisplay">0 / 200</span>
+            </div>
+            <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
+        </div>
 
-    document.getElementById('modalTitle').textContent = v.title;
-    document.getElementById('modalDesc').textContent = v.desc;
+        <div class="stats-row">
+            <div class="stat-card"><span class="stat-value" id="statVideos">0</span><span class="stat-label">Videos</span></div>
+            <div class="stat-card"><span class="stat-value" id="statStreak">1</span><span class="stat-label">Day Streak</span></div>
+            <div class="stat-card"><span class="stat-value" id="statXP">0</span><span class="stat-label">Total XP</span></div>
+        </div>
 
-    // YouTube embed
-    // Αν δεν έχεις βάλει ακόμα το YouTube ID, δείχνει placeholder
-    const ytId = v.youtube_id === 'YOUTUBE_ID_HERE' ? null : v.youtube_id;
-    const iframeSrc = ytId
-        ? `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`
-        : '';
-    document.getElementById('modalIframe').src = iframeSrc;
+        <div class="video-section">
+            <div class="section-label">🎬 Video Library</div>
+            <div class="cat-tabs" id="catTabs"></div>
+            <div class="video-grid" id="videoGrid"></div>
+        </div>
 
-    if (!ytId) {
-        document.getElementById('modalVideoWrap').innerHTML =
-            `<div style="width:100%;aspect-ratio:16/9;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
-                <span style="font-size:2.5rem">🎬</span>
-                <span style="font-family:'Orbitron',monospace;font-size:0.7rem;color:#facc15;letter-spacing:2px;">VIDEO COMING SOON</span>
-                <span style="font-size:0.75rem;color:#475569">Add YouTube ID to activate</span>
-            </div>`;
-    }
+        <div class="achievements-section">
+            <div class="section-label">🏆 Achievements</div>
+            <div class="badge-grid" id="badgeGrid"></div>
+        </div>
+    </div>
 
-    document.getElementById('videoModal').classList.add('open');
-}
+    <script>
+        // CONFIG
+        const isElite = localStorage.getItem('isElite') === 'true';
+        let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
+        let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
-function closeModal() {
-    document.getElementById('videoModal').classList.remove('open');
-    document.getElementById('modalIframe').src = '';
-    const wrap = document.getElementById('modalVideoWrap');
-    wrap.innerHTML = `<iframe id="modalIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-}
+        const videos = [
+            {
+                id: 1, cat: 'kicks',
+                title: 'Front Kick (Ahp Chagi) - Part 1',
+                desc: 'Master the fundamental lead leg front kick. Learn proper chambering and striking with the ball of the foot.',
+                dur: '0:26', level: 'beg', xp: 50,
+                drive_id: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt',
+                locked: false
+            },
+            {
+                id: 2, cat: 'kicks',
+                title: 'Front Kick Technical Breakdown',
+                desc: 'Advanced look at weight distribution and balance during the execution of the Ahp Chagi.',
+                dur: '0:26', level: 'int', xp: 60,
+                drive_id: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk',
+                locked: false
+            },
+            {
+                id: 3, cat: 'strikes',
+                title: 'Front Punch (Chung Kwon)',
+                desc: 'The core punch of Tang Soo Do. Focus on rotation and power generation from the hips.',
+                dur: '3:20', level: 'beg', xp: 40,
+                drive_id: '', locked: true
+            }
+        ];
 
-function markComplete() {
-    if (!currentVideo) return;
-    if (!completed.includes(currentVideo.id)) {
-        completed.push(currentVideo.id);
-        totalXP += currentVideo.xp;
-        localStorage.setItem('dojo_completed', JSON.stringify(completed));
-        localStorage.setItem('dojo_xp', totalXP);
-        updateStats();
-        renderVideos();
-    }
-    closeModal();
-}
+        const belts = [
+            { name: 'White', min: 0 }, { name: 'Yellow', min: 200 }, { name: 'Green', min: 500 },
+            { name: 'Blue', min: 1000 }, { name: 'Red', min: 2500 }, { name: 'Black', min: 5000 }
+        ];
 
-function showLocked() {
-    alert('🔒 Unlock with Elite Premium to access all videos!');
-}
+        let currentCat = 'all';
+        let activeVideo = null;
 
-function updateStats() {
-    document.getElementById('statVideos').textContent = completed.length;
-    document.getElementById('statXP').textContent = totalXP;
-    document.getElementById('xpDisplay').textContent = totalXP + ' / 1000';
-    const pct = Math.min((totalXP / 1000) * 100, 100);
-    document.getElementById('xpBar').style.width = pct + '%';
-}
+        function init() {
+            renderTabs();
+            renderVideos();
+            renderBadges();
+            updateUI();
+        }
 
-// Init
-updateStats();
-renderVideos();
-</script>
+        function renderTabs() {
+            const cats = ['all', 'strikes', 'kicks', 'defense', 'self-defense'];
+            document.getElementById('catTabs').innerHTML = cats.map(c => `
+                <button class="cat-tab ${currentCat === c ? 'active' : ''}" onclick="setCat('${c}')">${c}</button>
+            `).join('');
+        }
+
+        function setCat(c) { currentCat = c; renderTabs(); renderVideos(); }
+
+        function renderVideos() {
+            const filtered = currentCat === 'all' ? videos : videos.filter(v => v.cat === currentCat);
+            document.getElementById('videoGrid').innerHTML = filtered.map(v => {
+                const isDone = completed.includes(v.id);
+                const isLocked = v.locked && !isElite;
+                return `
+                    <div class="video-card ${isDone ? 'completed' : ''} ${isLocked ? 'locked' : ''}" onclick="handleVideoClick(${v.id}, ${isLocked})">
+                        <div class="video-thumb">
+                            ${isLocked ? '🔒' : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'}
+                            ${isDone ? '<div class="check-icon">✓</div>' : ''}
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${v.title}</div>
+                            <div class="video-meta">
+                                <span class="level-tag level-${v.level}">${v.level}</span>
+                                <span>⏱ ${v.dur}</span>
+                                <span style="color:var(--gold)">+${v.xp}XP</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleVideoClick(id, locked) {
+            if(locked) return alert("🔒 This content requires Elite Membership.");
+            const v = videos.find(x => x.id === id);
+            if(!v.drive_id) return alert("Video coming soon!");
+            activeVideo = v;
+            document.getElementById('modalTitle').textContent = v.title;
+            document.getElementById('modalDesc').textContent = v.desc;
+            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${v.drive_id}/preview`;
+            document.getElementById('videoModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('videoModal').classList.remove('open');
+            document.getElementById('modalIframe').src = "";
+        }
+
+        function markComplete() {
+            if(!activeVideo || completed.includes(activeVideo.id)) return closeModal();
+            completed.push(activeVideo.id);
+            totalXP += activeVideo.xp;
+            localStorage.setItem('dojo_completed', JSON.stringify(completed));
+            localStorage.setItem('dojo_xp', totalXP);
+            updateUI();
+            renderVideos();
+            closeModal();
+        }
+
+        function updateUI() {
+            document.getElementById('statVideos').textContent = completed.length;
+            document.getElementById('statXP').textContent = totalXP;
+            
+            let currentBeltIdx = 0;
+            for(let i=belts.length-1; i>=0; i--) {
+                if(totalXP >= belts[i].min) { currentBeltIdx = i; break; }
+            }
+
+            const next = belts[currentBeltIdx + 1] || belts[currentBeltIdx];
+            const diff = next.min - belts[currentBeltIdx].min || 1;
+            const progress = ((totalXP - belts[currentBeltIdx].min) / diff) * 100;
+
+            document.getElementById('xpDisplay').textContent = `${totalXP} / ${next.min} XP`;
+            document.getElementById('xpBar').style.width = Math.min(progress, 100) + "%";
+            document.getElementById('lblNextBelt').textContent = `XP TO ${next.name.toUpperCase()} BELT`;
+
+            for(let i=0; i<6; i++) {
+                const el = document.getElementById(`belt-${i}`);
+                el.classList.remove('done', 'active');
+                if(i < currentBeltIdx) el.classList.add('done');
+                if(i === currentBeltIdx) el.classList.add('active');
+            }
+        }
+
+        function renderBadges() {
+            const badges = [
+                { e: '🥋', n: 'First Step', req: 1 },
+                { e: '🔥', n: 'Fast Learner', req: 3 },
+                { e: '🛡️', n: 'Defender', req: 10 },
+                { e: '⬛', n: 'Master', req: 50 }
+            ];
+            document.getElementById('badgeGrid').innerHTML = badges.map(b => `
+                <div class="badge-item ${completed.length >= b.req ? 'earned' : ''}">
+                    <span class="badge-emoji">${b.e}</span>
+                    <span class="badge-name">${b.n}</span>
+                </div>
+            `).join('');
+        }
+
+        init();
+    </script>
 </body>
 </html>
