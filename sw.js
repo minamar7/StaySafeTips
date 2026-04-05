@@ -15,6 +15,7 @@ const STATIC_ASSETS = [
   BASE + "api.js",
   BASE + "checkup.html",
   BASE + "dojo.html",
+  BASE + "progress-tracker.html",
   BASE + "sos-hub.html",
   BASE + "scam-alerts.html",
   BASE + "scam-alerts2.html",
