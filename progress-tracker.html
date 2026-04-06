@@ -260,9 +260,20 @@
             },
             {
                 id: 4, 
+                cat: 'defense',
+                title: 'Middle Block Mechanics',
+                desc: 'The shield technique. Keep arms parallel and elbows vertical, aligned right above the knee for maximum protection.',
+                dur: '1:10', 
+                level: 'beg', 
+                xp: 45,
+                drive_id: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I',
+                locked: false
+            },
+            {
+                id: 5, 
                 cat: 'self-defense',
                 title: 'Middle Block: Catch & Break',
-                desc: 'Precision defense. Keep arms parallel and elbows vertical, aligned right above the knee. Master the "Catch and Break" application to neutralize any punch.',
+                desc: 'Advanced application. Deflect the punch, catch the limb, and execute a precise joint break using structural leverage.',
                 dur: '1:10', 
                 level: 'int', 
                 xp: 75,
@@ -387,18 +398,4 @@
             const badges = [
                 { e: '🥋', n: 'First Step', req: 1 },
                 { e: '🔥', n: 'Fast Learner', req: 3 },
-                { e: '🛡️', n: 'Defender', req: 10 },
-                { e: '⬛', n: 'Master', req: 50 }
-            ];
-            document.getElementById('badgeGrid').innerHTML = badges.map(b => `
-                <div class="badge-item ${completed.length >= b.req ? 'earned' : ''}">
-                    <span class="badge-emoji">${b.e}</span>
-                    <span class="badge-name">${b.n}</span>
-                </div>
-            `).join('');
-        }
-
-        init();
-    </script>
-</body>
-</html>
+                { e: '🛡️', n: 'Defender
