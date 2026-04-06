@@ -257,6 +257,17 @@
                 dur: '0:45', level: 'beg', xp: 50,
                 drive_id: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv',
                 locked: false
+            },
+            {
+                id: 4, 
+                cat: 'self-defense',
+                title: 'Middle Block: Catch & Break',
+                desc: 'Precision defense. Keep arms parallel and elbows vertical, aligned right above the knee. Master the "Catch and Break" application to neutralize any punch.',
+                dur: '1:10', 
+                level: 'int', 
+                xp: 75,
+                drive_id: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I',
+                locked: false
             }
         ];
 
@@ -317,7 +328,6 @@
             document.getElementById('modalDesc').textContent = v.desc;
             document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${v.drive_id}/preview`;
             
-            // Disable button if already completed
             const btn = document.getElementById('completeBtn');
             if(completed.includes(v.id)) {
                 btn.style.opacity = "0.5";
