@@ -226,7 +226,6 @@
             <div class="badge-grid" id="badgeGrid"></div>
         </div>
     </div>
-
     <script>
         // CONFIG
         const isElite = localStorage.getItem('isElite') === 'true';
@@ -398,4 +397,18 @@
             const badges = [
                 { e: '🥋', n: 'First Step', req: 1 },
                 { e: '🔥', n: 'Fast Learner', req: 3 },
-                { e: '🛡️', n: 'Defender
+                { e: '🛡️', n: 'Defender', req: 10 },
+                { e: '⬛', n: 'Master', req: 50 }
+            ];
+            document.getElementById('badgeGrid').innerHTML = badges.map(b => `
+                <div class="badge-item ${completed.length >= b.req ? 'earned' : ''}">
+                    <span class="badge-emoji">${b.e}</span>
+                    <span class="badge-name">${b.n}</span>
+                </div>
+            `).join('');
+        }
+
+        init();
+    </script>
+</body>
+</html>
