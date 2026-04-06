@@ -195,16 +195,16 @@
         <div class="belt-section">
             <div class="section-label" id="beltSectionLabel">🥋 Belt Progression</div>
             <div class="belt-track">
-                <div class="belt-node" id="belt-0"><div class="belt-circle">⬜</div><span class="belt-name" id="beltName0">White</span></div>
-                <div class="belt-node" id="belt-1"><div class="belt-circle">🟡</div><span class="belt-name" id="beltName1">Yellow</span></div>
-                <div class="belt-node" id="belt-2"><div class="belt-circle">🟢</div><span class="belt-name" id="beltName2">Green</span></div>
-                <div class="belt-node" id="belt-3"><div class="belt-circle">🔵</div><span class="belt-name" id="beltName3">Blue</span></div>
-                <div class="belt-node" id="belt-4"><div class="belt-circle">🔴</div><span class="belt-name" id="beltName4">Red</span></div>
-                <div class="belt-node" id="belt-5"><div class="belt-circle">⬛</div><span class="belt-name" id="beltName5">Black</span></div>
+                <div class="belt-node" id="belt-0"><div class="belt-circle">⬜</div><span class="belt-name">White</span></div>
+                <div class="belt-node" id="belt-1"><div class="belt-circle">🟡</div><span class="belt-name">Yellow</span></div>
+                <div class="belt-node" id="belt-2"><div class="belt-circle">🟢</div><span class="belt-name">Green</span></div>
+                <div class="belt-node" id="belt-3"><div class="belt-circle">🔵</div><span class="belt-name">Blue</span></div>
+                <div class="belt-node" id="belt-4"><div class="belt-circle">🔴</div><span class="belt-name">Red</span></div>
+                <div class="belt-node" id="belt-5"><div class="belt-circle">⬛</div><span class="belt-name">Black</span></div>
             </div>
             <div class="xp-row">
                 <span class="xp-label" id="lblNextBelt">XP TO NEXT BELT</span>
-                <span class="xp-value" id="xpDisplay">0 / 200</span>
+                <span class="xp-value" id="xpDisplay">0 / 500</span>
             </div>
             <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
         </div>
@@ -227,8 +227,7 @@
         </div>
     </div>
     <script>
-        // CONFIG & LANGUAGE
-        const userLang = localStorage.getItem('dojo_lang') || 'en'; // Παίρνει τη γλώσσα από την αρχή
+        const userLang = localStorage.getItem('dojo_lang') || 'en';
         const isElite = localStorage.getItem('isElite') === 'true';
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
@@ -245,36 +244,32 @@
             {
                 id: 3, cat: 'strikes',
                 title: userLang === 'gr' ? 'Υψηλή Γροθιά (Sang Dan)' : 'High Punch (Sang Dan)',
-                desc: userLang === 'gr' ? 'Κρατήστε τον αγκώνα μέσα για μέγιστη ισχύ χωρίς να προειδοποιείτε τον αντίπαλο.' : 'Master the trajectory. Keep the elbow tucked in to maximize power.',
+                desc: userLang === 'gr' ? 'Κρατήστε τον αγκώνα μέσα για μέγιστη ισχύ.' : 'Keep the elbow tucked in for maximum power.',
                 dur: '0:45', level: 'beg', xp: 50,
-                drive_id: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv',
+                drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', 
+                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', // New English Link
                 locked: false
             },
             {
                 id: 4, 
                 cat: 'defense',
                 title: userLang === 'gr' ? 'Άμυνα: Middle Block Mechanics' : 'Middle Block Mechanics',
-                desc: userLang === 'gr' ? 'Η τεχνική της ασπίδας. Χέρια παράλληλα και αγκώνες κάθετοι πάνω από το γόνατο.' : 'The shield technique. Keep arms parallel and elbows vertical.',
-                dur: '1:10', level: 'beg', xp: 45,
-                drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', // Ελληνικό
-                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', // Αγγλικό (Νέο Link)
-                locked: false
-            },
-            {
-                id: 5, 
-                cat: 'self-defense',
-                title: userLang === 'gr' ? 'Middle Block: Catch & Break' : 'Middle Block: Catch & Break',
-                desc: userLang === 'gr' ? 'Προχωρημένη εφαρμογή. Εκτρέψτε τη γροθιά, πιάστε το μέλος και σπάστε την άρθρωση.' : 'Advanced application. Deflect, catch the limb, and execute a joint break.',
-                dur: '1:10', level: 'int', xp: 75,
-                drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', // Ελληνικό
-                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', // Αγγλικό (Νέο Link)
+                desc: userLang === 'gr' ? 'Η τεχνική της ασπίδας. Χέρια παράλληλα και αγκώνες κάθετοι.' : 'The shield technique. Keep arms parallel and elbows vertical.',
+                dur: '1:10', level: 'beg', xp: 50,
+                drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', 
+                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', // English Link
                 locked: false
             }
         ];
 
+        // ΑΝΑΒΑΘΜΙΣΜΕΝΟ XP SYSTEM (10+ μαθήματα ανά ζώνη)
         const belts = [
-            { name: 'White', min: 0 }, { name: 'Yellow', min: 200 }, { name: 'Green', min: 500 },
-            { name: 'Blue', min: 1000 }, { name: 'Red', min: 2500 }, { name: 'Black', min: 5000 }
+            { name: 'White', min: 0 }, 
+            { name: 'Yellow', min: 500 }, 
+            { name: 'Green', min: 1200 },
+            { name: 'Blue', min: 2000 }, 
+            { name: 'Red', min: 3500 }, 
+            { name: 'Black', min: 5500 }
         ];
 
         let currentCat = 'all';
@@ -338,18 +333,15 @@
             if(locked) return alert(userLang === 'gr' ? "🔒 Απαιτείται Elite Membership." : "🔒 Requires Elite Membership.");
             const v = videos.find(x => x.id === id);
             
-            // Επιλογή σωστού link ανάλογα με τη γλώσσα
-            let finalDriveId = v.drive_id; // Για τα βίντεο που έχουν μόνο ένα link
+            let finalId = v.drive_id;
             if(v.drive_id_gr && v.drive_id_en) {
-                finalDriveId = (userLang === 'gr') ? v.drive_id_gr : v.drive_id_en;
+                finalId = (userLang === 'gr') ? v.drive_id_gr : v.drive_id_en;
             }
 
-            if(!finalDriveId) return alert("Coming soon!");
-            
             activeVideo = v;
             document.getElementById('modalTitle').textContent = v.title;
             document.getElementById('modalDesc').textContent = v.desc;
-            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${finalDriveId}/preview`;
+            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${finalId}/preview`;
             
             const btn = document.getElementById('completeBtn');
             if(completed.includes(v.id)) {
@@ -385,33 +377,33 @@
             document.getElementById('statVideos').textContent = completed.length;
             document.getElementById('statXP').textContent = totalXP;
             
-            let currentBeltIdx = 0;
+            let currentIdx = 0;
             for(let i=belts.length-1; i>=0; i--) {
-                if(totalXP >= belts[i].min) { currentBeltIdx = i; break; }
+                if(totalXP >= belts[i].min) { currentIdx = i; break; }
             }
 
-            const next = belts[currentBeltIdx + 1] || belts[currentBeltIdx];
-            const diff = next.min - belts[currentBeltIdx].min || 1;
-            const progress = ((totalXP - belts[currentBeltIdx].min) / diff) * 100;
+            const next = belts[currentIdx + 1] || belts[currentIdx];
+            const diff = next.min - belts[currentIdx].min || 1;
+            const progress = ((totalXP - belts[currentIdx].min) / diff) * 100;
 
             document.getElementById('xpDisplay').textContent = `${totalXP} / ${next.min} XP`;
             document.getElementById('xpBar').style.width = Math.min(progress, 100) + "%";
-            document.getElementById('lblNextBelt').textContent = (userLang === 'gr' ? "XP ΓΙΑ ΤΗΝ " : "XP TO ") + next.name.toUpperCase() + " BELT";
+            document.getElementById('lblNextBelt').textContent = (userLang === 'gr' ? "XP ΓΙΑ " : "XP TO ") + next.name.toUpperCase() + " BELT";
 
             for(let i=0; i<6; i++) {
                 const el = document.getElementById(`belt-${i}`);
-                el.classList.remove('done', 'active');
-                if(i < currentBeltIdx) el.classList.add('done');
-                if(i === currentBeltIdx) el.classList.add('active');
+                el.className = 'belt-node';
+                if(i < currentIdx) el.classList.add('done');
+                if(i === currentIdx) el.classList.add('active');
             }
         }
 
         function renderBadges() {
             const badges = [
                 { e: '🥋', n: userLang === 'gr' ? 'Πρώτο Βήμα' : 'First Step', req: 1 },
-                { e: '🔥', n: userLang === 'gr' ? 'Γρήγορος Μαθητής' : 'Fast Learner', req: 3 },
-                { e: '🛡️', n: userLang === 'gr' ? 'Αμυνόμενος' : 'Defender', req: 10 },
-                { e: '⬛', n: userLang === 'gr' ? 'Master' : 'Master', req: 50 }
+                { e: '🔥', n: userLang === 'gr' ? 'Γρήγορος' : 'Fast Learner', req: 5 },
+                { e: '🛡️', n: userLang === 'gr' ? 'Φύλακας' : 'Guardian', req: 15 },
+                { e: '⬛', n: 'Master', req: 40 }
             ];
             document.getElementById('badgeGrid').innerHTML = badges.map(b => `
                 <div class="badge-item ${completed.length >= b.req ? 'earned' : ''}">
