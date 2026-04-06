@@ -179,7 +179,7 @@
                 <div class="modal-title" id="modalTitle">TITLE</div>
                 <div class="modal-desc" id="modalDesc">DESCRIPTION</div>
                 <div class="modal-actions">
-                    <button class="btn-action btn-complete" onclick="markComplete()">Complete +XP</button>
+                    <button class="btn-action btn-complete" id="completeBtn" onclick="markComplete()">Complete +XP</button>
                     <button class="btn-action btn-close" onclick="closeModal()">Close</button>
                 </div>
             </div>
@@ -252,10 +252,11 @@
             },
             {
                 id: 3, cat: 'strikes',
-                title: 'Front Punch (Chung Kwon)',
-                desc: 'The core punch of Tang Soo Do. Focus on rotation and power generation from the hips.',
-                dur: '3:20', level: 'beg', xp: 40,
-                drive_id: '', locked: true
+                title: 'High Punch (Sang Dan)',
+                desc: 'Master the trajectory. Keep the elbow tucked in and move straight to maximize power without telegraphing your move to the opponent.',
+                dur: '0:45', level: 'beg', xp: 50,
+                drive_id: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv',
+                locked: false
             }
         ];
 
@@ -315,6 +316,19 @@
             document.getElementById('modalTitle').textContent = v.title;
             document.getElementById('modalDesc').textContent = v.desc;
             document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${v.drive_id}/preview`;
+            
+            // Disable button if already completed
+            const btn = document.getElementById('completeBtn');
+            if(completed.includes(v.id)) {
+                btn.style.opacity = "0.5";
+                btn.textContent = "Completed";
+                btn.onclick = null;
+            } else {
+                btn.style.opacity = "1";
+                btn.textContent = `Complete +${v.xp}XP`;
+                btn.onclick = markComplete;
+            }
+
             document.getElementById('videoModal').classList.add('open');
         }
 
