@@ -13,72 +13,158 @@
             --danger: #ef4444;
             --safe: #22c55e;
             --panel: rgba(15,23,42,0.9);
-            --glass: rgba(255, 255, 255, 0.03);
+            --shadow-gold: rgba(250,204,21,0.3);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; min-height: 100vh; }
 
-        /* Background Effects */
-        .bg-grid { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px); background-size: 36px 36px; }
-        .bg-glow { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%); }
-
-        .shell { position: relative; z-index: 2; max-width: 420px; margin: 0 auto; padding: 20px 16px 100px; }
-
-        /* Header */
-        .top-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
-        .btn-back { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: #64748b; padding: 10px 16px; border-radius: 12px; text-decoration: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; }
-        .page-title { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--gold); letter-spacing: 2px; }
-
-        /* 1. FOCUS AREAS (Circular Tabs) */
-        .focus-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 30px; }
-        .focus-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s; }
-        .focus-circle { 
-            width: 65px; height: 65px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; justify-content: center; background: var(--panel); 
-            font-size: 1.5rem; transition: 0.3s;
+        body {
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-        .focus-item.active .focus-circle { border-color: var(--danger); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
-        .focus-item.active .focus-label { color: #fff; }
-        .focus-label { font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 2. LEVEL CARDS (Big Gradients) */
-        .level-card { 
-            border-radius: 24px; padding: 20px; margin-bottom: 15px; position: relative; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s;
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 0;
+            background-image:
+                linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px);
+            background-size: 36px 36px;
         }
-        .level-beg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-left: 4px solid var(--neon); }
-        .level-int { background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%); border-left: 4px solid #818cf8; }
-        .level-adv { background: linear-gradient(135deg, #450a0a 0%, #020617 100%); border-left: 4px solid var(--danger); }
-
-        .level-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .level-name { font-family: 'Orbitron'; font-size: 1.1rem; letter-spacing: 1px; }
-        .level-icon { font-size: 1.2rem; }
-        .level-stats { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
-
-        /* Video List (Nested in Level Cards) */
-        .video-list { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; gap: 10px; flex-direction: column; }
-        .level-card.open .video-list { display: flex; }
-        .video-item { 
-            display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.2); 
-            padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+        .bg-glow {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%);
         }
-        .v-mini-thumb { width: 40px; height: 40px; border-radius: 8px; background: var(--glass); display: flex; align-items: center; justify-content: center; color: var(--gold); }
-        .v-info { flex: 1; }
-        .v-title { font-size: 0.85rem; font-weight: 700; }
-        .v-xp { font-size: 0.7rem; color: var(--neon); font-family: 'Orbitron'; }
 
-        /* Modal & UI Elements */
-        .section-label { font-size: 0.65rem; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; font-weight: 700; }
+        .shell {
+            position: relative; z-index: 2;
+            max-width: 420px; margin: 0 auto;
+            padding: 20px 16px 100px;
+        }
+
+        .top-nav {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 20px;
+        }
+        .btn-back {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #64748b; padding: 10px 16px;
+            border-radius: 12px; text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            letter-spacing: 1px; transition: 0.2s;
+        }
+        .btn-back:hover { color: var(--gold); border-color: rgba(250,204,21,0.3); }
+
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem; color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .belt-section {
+            background: var(--panel);
+            border: 1px solid rgba(250,204,21,0.2);
+            border-radius: 24px; padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 0 30px rgba(250,204,21,0.05);
+        }
+
+        .section-label {
+            font-size: 0.6rem; letter-spacing: 3px;
+            color: var(--gold); text-transform: uppercase;
+            margin-bottom: 16px; font-weight: 700;
+        }
+
+        .belt-track {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px; position: relative;
+        }
+        .belt-track::before {
+            content: '';
+            position: absolute; top: 50%; left: 0; right: 0;
+            height: 2px; background: rgba(255,255,255,0.06);
+            transform: translateY(-50%); z-index: 0;
+        }
+
+        .belt-node {
+            display: flex; flex-direction: column;
+            align-items: center; gap: 6px;
+            position: relative; z-index: 1;
+        }
+        .belt-circle {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; border: 2px solid rgba(255,255,255,0.1);
+            background: var(--bg);
+            transition: 0.3s;
+        }
+        .belt-circle.done { border-color: var(--gold); box-shadow: 0 0 12px rgba(250,204,21,0.4); }
+        .belt-circle.active { border-color: var(--neon); box-shadow: 0 0 16px rgba(56,189,248,0.5); animation: belt-pulse 2s infinite; }
+        
+        @keyframes belt-pulse {
+            0%,100% { box-shadow: 0 0 16px rgba(56,189,248,0.5); }
+            50% { box-shadow: 0 0 28px rgba(56,189,248,0.8); }
+        }
+
+        .belt-name { font-size: 0.5rem; letter-spacing: 1px; color: #475569; text-transform: uppercase; font-weight: 700; }
+        .belt-node.done .belt-name { color: var(--gold); }
+        .belt-node.active .belt-name { color: var(--neon); }
+
+        .xp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .xp-label { font-size: 0.72rem; color: #64748b; letter-spacing: 1px; }
+        .xp-value { font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--neon); }
+        .xp-bar-bg { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+        .xp-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), #0ea5e9); transition: width 1s ease; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
+        .stat-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 14px 10px; text-align: center; }
+        .stat-value { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900; color: var(--gold); display: block; }
+        .stat-label { font-size: 0.55rem; letter-spacing: 1.5px; color: #475569; text-transform: uppercase; margin-top: 4px; display: block; }
+
+        .video-section { background: var(--panel); border: 1px solid rgba(56,189,248,0.15); border-radius: 24px; padding: 20px; margin-bottom: 18px; }
+        .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
+        .cat-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #64748b; text-transform: uppercase; }
+        .cat-tab.active { background: rgba(250,204,21,0.1); border-color: rgba(250,204,21,0.4); color: var(--gold); }
+
+        .video-grid { display: flex; flex-direction: column; gap: 12px; }
+        .video-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; cursor: pointer; display: flex; transition: 0.2s; position: relative; }
+        .video-card.locked { opacity: 0.5; }
+        .video-card.completed { border-color: rgba(34,197,94,0.3); }
+
+        .video-thumb { width: 90px; flex-shrink: 0; background: rgba(250,204,21,0.05); display: flex; align-items: center; justify-content: center; position: relative; border-right: 1px solid rgba(255,255,255,0.06); }
+        .play-btn svg { width: 24px; height: 24px; fill: var(--gold); }
+        .check-icon { position: absolute; top: 5px; right: 5px; background: var(--safe); border-radius: 50%; width: 16px; height: 16px; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; z-index: 5; }
+
+        .video-info { padding: 12px; flex: 1; }
+        .video-title { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+        .video-meta { display: flex; gap: 8px; align-items: center; font-size: 0.6rem; }
+        .level-tag { padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        .level-beg { background: rgba(34,197,94,0.1); color: var(--safe); }
+
         .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.open { display: flex; }
-        .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--danger); }
+        .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--gold); }
         .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; }
         .modal-video iframe { width: 100%; height: 100%; border: none; }
         .modal-body { padding: 20px; }
-        .btn-action { width: 100%; padding: 12px; border-radius: 10px; border: none; font-family: 'Rajdhani'; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .modal-title { font-family: 'Orbitron', monospace; color: var(--gold); margin-bottom: 10px; font-size: 1rem; }
+        .modal-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
+        .modal-actions { display: flex; gap: 10px; }
+        .btn-action { flex: 1; padding: 12px; border-radius: 10px; border: none; font-family: 'Rajdhani'; font-weight: 700; cursor: pointer; text-transform: uppercase; }
         .btn-complete { background: var(--safe); color: #fff; }
-        .btn-close { background: var(--glass); color: #fff; }
+        .btn-close { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .achievements-section { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; padding: 20px; margin-bottom: 100px; }
+        .badge-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+        .badge-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 5px; text-align: center; opacity: 0.4; filter: grayscale(1); }
+        .badge-item.earned { opacity: 1; filter: grayscale(0); border-color: var(--gold); }
+        .badge-emoji { font-size: 1.4rem; display: block; }
+        .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -89,121 +175,197 @@
         <div class="modal">
             <div class="modal-video"><iframe id="modalIframe" src="" allowfullscreen></iframe></div>
             <div class="modal-body">
-                <div id="modalTitle" style="font-family: 'Orbitron'; color: var(--gold); margin-bottom: 5px;">TITLE</div>
-                <p id="modalDesc" style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Description</p>
-                <button class="btn-action btn-complete" id="completeBtn">Complete +XP</button>
-                <button class="btn-action btn-close" onclick="closeModal()">Close</button>
+                <div class="modal-title" id="modalTitle">TITLE</div>
+                <div class="modal-desc" id="modalDesc">DESCRIPTION</div>
+                <div class="modal-actions">
+                    <button class="btn-action btn-complete" id="completeBtn" onclick="markComplete()">Complete +XP</button>
+                    <button class="btn-action btn-close" onclick="closeModal()">Close</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="shell">
         <div class="top-nav">
-            <a href="dojo.html" class="btn-back">← BACK</a>
-            <span class="page-title">PROGRESS CENTER</span>
+            <a href="dojo.html" class="btn-back">← DOJO</a>
+            <span class="page-title">PROGRESS TRACKER</span>
         </div>
 
-        <div class="section-label">🎯 Focus Areas</div>
-        <div class="focus-grid">
-            <div class="focus-item active" onclick="setCat('all', this)">
-                <div class="focus-circle">🥋</div>
-                <div class="focus-label">All</div>
+        <div class="belt-section">
+            <div class="section-label" id="beltSectionLabel">🥋 Belt Progression</div>
+            <div class="belt-track">
+                <div class="belt-node" id="belt-0"><div class="belt-circle">⬜</div><span class="belt-name">White</span></div>
+                <div class="belt-node" id="belt-1"><div class="belt-circle">🟡</div><span class="belt-name">Yellow</span></div>
+                <div class="belt-node" id="belt-2"><div class="belt-circle">🟢</div><span class="belt-name">Green</span></div>
+                <div class="belt-node" id="belt-3"><div class="belt-circle">🔵</div><span class="belt-name">Blue</span></div>
+                <div class="belt-node" id="belt-4"><div class="belt-circle">🔴</div><span class="belt-name">Red</span></div>
+                <div class="belt-node" id="belt-5"><div class="belt-circle">⬛</div><span class="belt-name">Black</span></div>
             </div>
-            <div class="focus-item" onclick="setCat('strikes', this)">
-                <div class="focus-circle">👊</div>
-                <div class="focus-label">Strikes</div>
+            <div class="xp-row">
+                <span class="xp-label" id="lblNextBelt">XP TO NEXT BELT</span>
+                <span class="xp-value" id="xpDisplay">0 / 500</span>
             </div>
-            <div class="focus-item" onclick="setCat('kicks', this)">
-                <div class="focus-circle">🦵</div>
-                <div class="focus-label">Kicks</div>
-            </div>
-            <div class="focus-item" onclick="setCat('defense', this)">
-                <div class="focus-circle">🛡️</div>
-                <div class="focus-label">Defense</div>
-            </div>
+            <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
         </div>
 
-        <div class="section-label">📚 Training Paths</div>
-        <div id="pathContainer">
-            <div class="level-card level-beg" onclick="this.classList.toggle('open')">
-                <div class="level-header">
-                    <div>
-                        <div class="level-name">BEGINNER</div>
-                        <div class="level-stats" id="stats-beg">0/4 Videos Completed</div>
-                    </div>
-                    <div class="level-icon">🔥</div>
-                </div>
-                <div class="video-list" id="list-beg"></div>
-            </div>
+        <div class="stats-row">
+            <div class="stat-card"><span class="stat-value" id="statVideos">0</span><span class="stat-label" id="statLabelVideos">Videos</span></div>
+            <div class="stat-card"><span class="stat-value" id="statStreak">1</span><span class="stat-label" id="statLabelStreak">Day Streak</span></div>
+            <div class="stat-card"><span class="stat-value" id="statXP">0</span><span class="stat-label" id="statLabelXP">Total XP</span></div>
+        </div>
 
-            <div class="level-card level-int">
-                <div class="level-header">
-                    <div>
-                        <div class="level-name">INTERMEDIATE</div>
-                        <div class="level-stats">Locked (Need 500 XP)</div>
-                    </div>
-                    <div class="level-icon">🔥🔥</div>
-                </div>
-            </div>
+        <div class="video-section">
+            <div class="section-label" id="videoLibraryLabel">🎬 Video Library</div>
+            <div class="cat-tabs" id="catTabs"></div>
+            <div class="video-grid" id="videoGrid"></div>
+        </div>
+
+        <div class="achievements-section">
+            <div class="section-label" id="achievementsLabel">🏆 Achievements</div>
+            <div class="badge-grid" id="badgeGrid"></div>
         </div>
     </div>
 
     <script>
         const userLang = localStorage.getItem('dojo_lang') || 'en';
+        const isElite = localStorage.getItem('isElite') === 'true';
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
         const videos = [
-            { id: 1, cat: 'kicks', level: 'beg', title: 'Front Kick', xp: 50, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk' },
-            { id: 2, cat: 'defense', level: 'beg', title: 'Front Block', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' },
-            { id: 3, cat: 'strikes', level: 'beg', title: 'High Punch', xp: 50, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv' },
-            { id: 4, cat: 'defense', level: 'beg', title: 'Outside Block', xp: 50, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I' }
+            {
+                id: 1, cat: 'kicks',
+                title: userLang === 'gr' ? 'Front Kick (Ahp Chagi)' : 'Front Kick (Ahp Chagi)',
+                desc: userLang === 'gr' ? 'Μάθετε το βασικό λάκτισμα. Σωστό λύγισμα και χτύπημα με το μετατάρσιο.' : 'Master the fundamental lead leg front kick.',
+                dur: '0:30', level: 'beg', xp: 50,
+                drive_id_gr: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', 
+                drive_id_en: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt'
+            },
+            {
+                id: 2, cat: 'defense',
+                title: userLang === 'gr' ? 'Front Block Mechanics' : 'Front Block Mechanics',
+                desc: userLang === 'gr' ? 'Μηχανική της μπροστινής άμυνας.' : 'Detailed mechanics of the front block.',
+                dur: '0:40', level: 'beg', xp: 50,
+                drive_id_gr: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', 
+                drive_id_en: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl'
+            },
+            {
+                id: 3, cat: 'strikes',
+                title: userLang === 'gr' ? 'High Punch (Sang Dan)' : 'High Punch (Sang Dan)',
+                desc: userLang === 'gr' ? 'Υψηλή γροθιά με σωστή περιστροφή.' : 'High punch with proper rotation.',
+                dur: '0:45', level: 'beg', xp: 50,
+                drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', 
+                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi'
+            },
+            {
+                id: 4, cat: 'defense',
+                title: userLang === 'gr' ? 'Outside Block' : 'Outside Block',
+                desc: userLang === 'gr' ? 'Άμυνα από έξω προς τα μέσα.' : 'Blocking from outside to inside.',
+                dur: '0:35', level: 'beg', xp: 50,
+                drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', 
+                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1'
+            },
+            {
+                id: 5, cat: 'kicks',
+                title: userLang === 'gr' ? 'Roundhouse Kick' : 'Roundhouse Kick',
+                desc: userLang === 'gr' ? 'Κυκλικό λάκτισμα με το κουντεπιέ.' : 'Powerful roundhouse kick technique.',
+                dur: '0:38', level: 'beg', xp: 60,
+                drive_id_gr: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', 
+                drive_id_en: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG'
+            },
+            {
+                id: 6, cat: 'self-defense',
+                title: userLang === 'gr' ? 'Defense Against Grab' : 'Defense Against Grab',
+                desc: userLang === 'gr' ? 'Απελευθέρωση από πιάσιμο.' : 'Techniques to escape a grab.',
+                dur: '0:50', level: 'beg', xp: 70,
+                drive_id_gr: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', 
+                drive_id_en: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD'
+            }
+        ];
+
+        const belts = [
+            { name: 'White', min: 0 }, { name: 'Yellow', min: 500 }, 
+            { name: 'Green', min: 1200 }, { name: 'Blue', min: 2000 }, 
+            { name: 'Red', min: 3500 }, { name: 'Black', min: 5500 }
         ];
 
         let currentCat = 'all';
+        let activeVideo = null;
 
-        function setCat(cat, el) {
-            currentCat = cat;
-            document.querySelectorAll('.focus-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
+        function init() {
+            translateUI();
+            renderTabs();
             renderVideos();
+            renderBadges();
+            updateUI();
         }
+
+        function translateUI() {
+            if(userLang === 'gr') {
+                document.getElementById('beltSectionLabel').textContent = "🥋 Πρόοδος Ζώνης";
+                document.getElementById('statLabelVideos').textContent = "Βίντεο";
+                document.getElementById('statLabelStreak').textContent = "Σερί Ημερών";
+                document.getElementById('statLabelXP').textContent = "Συνολικά XP";
+                document.getElementById('videoLibraryLabel').textContent = "🎬 Βιβλιοθήκη Βίντεο";
+                document.getElementById('achievementsLabel').textContent = "🏆 Επιτεύγματα";
+                document.querySelector('.btn-back').textContent = "← ΠΙΣΩ";
+                document.querySelector('.page-title').textContent = "ΠΡΟΟΔΟΣ";
+                document.getElementById('lblNextBelt').textContent = "XP ΓΙΑ ΕΠΟΜΕΝΗ ΖΩΝΗ";
+            }
+        }
+
+        function renderTabs() {
+            const cats = ['all', 'strikes', 'kicks', 'defense', 'self-defense'];
+            document.getElementById('catTabs').innerHTML = cats.map(c => `
+                <button class="cat-tab ${currentCat === c ? 'active' : ''}" onclick="setCat('${c}')">${c.toUpperCase()}</button>
+            `).join('');
+        }
+
+        function setCat(c) { currentCat = c; renderTabs(); renderVideos(); }
 
         function renderVideos() {
-            const list = document.getElementById('list-beg');
             const filtered = currentCat === 'all' ? videos : videos.filter(v => v.cat === currentCat);
-            
-            list.innerHTML = filtered.map(v => `
-                <div class="video-item" onclick="openVideo(${v.id}); event.stopPropagation();">
-                    <div class="v-mini-thumb">▶</div>
-                    <div class="v-info">
-                        <div class="v-title">${v.title} ${completed.includes(v.id) ? '✅' : ''}</div>
-                        <div class="v-xp">+${v.xp} XP</div>
+            document.getElementById('videoGrid').innerHTML = filtered.map(v => {
+                const isDone = completed.includes(v.id);
+                return `
+                    <div class="video-card ${isDone ? 'completed' : ''}" onclick="handleVideoClick(${v.id})">
+                        <div class="video-thumb">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+                            ${isDone ? '<div class="check-icon">✓</div>' : ''}
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${v.title}</div>
+                            <div class="video-meta">
+                                <span class="level-tag level-beg">beg</span>
+                                <span>⏱ ${v.dur}</span>
+                                <span style="color:var(--gold)">+${v.xp}XP</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            `).join('');
-
-            const compCount = videos.filter(v => completed.includes(v.id)).length;
-            document.getElementById('stats-beg').textContent = `${compCount}/${videos.length} Videos Completed`;
+                `;
+            }).join('');
         }
 
-        function openVideo(id) {
+        function handleVideoClick(id) {
             const v = videos.find(x => x.id === id);
+            activeVideo = v;
+            const finalId = (userLang === 'gr') ? v.drive_id_gr : v.drive_id_en;
+
             document.getElementById('modalTitle').textContent = v.title;
-            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${v.drive}/preview`;
-            document.getElementById('videoModal').classList.add('open');
+            document.getElementById('modalDesc').textContent = v.desc;
+            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${finalId}/preview`;
             
             const btn = document.getElementById('completeBtn');
-            btn.onclick = () => {
-                if(!completed.includes(v.id)) {
-                    completed.push(v.id);
-                    totalXP += v.xp;
-                    localStorage.setItem('dojo_completed', JSON.stringify(completed));
-                    localStorage.setItem('dojo_xp', totalXP);
-                    renderVideos();
-                }
-                closeModal();
-            };
+            if(completed.includes(v.id)) {
+                btn.style.opacity = "0.5";
+                btn.textContent = userLang === 'gr' ? "Ολοκληρώθηκε" : "Completed";
+                btn.onclick = null;
+            } else {
+                btn.style.opacity = "1";
+                btn.textContent = `+${v.xp}XP`;
+                btn.onclick = markComplete;
+            }
+            document.getElementById('videoModal').classList.add('open');
         }
 
         function closeModal() {
@@ -211,7 +373,55 @@
             document.getElementById('modalIframe').src = "";
         }
 
-        renderVideos();
+        function markComplete() {
+            if(!activeVideo || completed.includes(activeVideo.id)) return;
+            completed.push(activeVideo.id);
+            totalXP += activeVideo.xp;
+            localStorage.setItem('dojo_completed', JSON.stringify(completed));
+            localStorage.setItem('dojo_xp', totalXP);
+            updateUI();
+            renderVideos();
+            closeModal();
+        }
+
+        function updateUI() {
+            document.getElementById('statVideos').textContent = completed.length;
+            document.getElementById('statXP').textContent = totalXP;
+            
+            let currentIdx = 0;
+            for(let i=belts.length-1; i>=0; i--) {
+                if(totalXP >= belts[i].min) { currentIdx = i; break; }
+            }
+
+            const next = belts[currentIdx + 1] || belts[currentIdx];
+            const diff = (next.min - belts[currentIdx].min) || 1;
+            const progress = ((totalXP - belts[currentIdx].min) / diff) * 100;
+            
+            document.getElementById('xpBar').style.width = `${Math.min(progress, 100)}%`;
+            document.getElementById('xpDisplay').textContent = `${totalXP} / ${next.min}`;
+            
+            document.querySelectorAll('.belt-node').forEach((node, i) => {
+                const circle = node.querySelector('.belt-circle');
+                circle.className = 'belt-circle';
+                if(i < currentIdx) circle.classList.add('done');
+                if(i === currentIdx) circle.classList.add('active');
+            });
+        }
+
+        function renderBadges() {
+            const badges = [
+                { emoji: '🔥', name: 'Hot Streak' }, { emoji: '👊', name: 'Striker' },
+                { emoji: '🦵', name: 'Kicker' }, { emoji: '🛡️', name: 'Defender' }
+            ];
+            document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => `
+                <div class="badge-item ${i === 0 ? 'earned' : ''}">
+                    <span class="badge-emoji">${b.emoji}</span>
+                    <span class="badge-name">${b.name}</span>
+                </div>
+            `).join('');
+        }
+
+        init();
     </script>
 </body>
 </html>
