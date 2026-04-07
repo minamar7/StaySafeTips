@@ -17,206 +17,98 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-        body {
-            background: var(--bg);
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        .bg-grid { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px); background-size: 36px 36px; }
+        .bg-glow { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%); }
 
-        .bg-grid {
-            position: fixed; inset: 0; z-index: 0;
-            background-image:
-                linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px);
-            background-size: 36px 36px;
-        }
-        .bg-glow {
-            position: fixed; inset: 0; z-index: 0;
-            background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%);
-        }
+        .shell { position: relative; z-index: 2; max-width: 420px; margin: 0 auto; padding: 20px 16px 100px; }
 
-        .shell {
-            position: relative; z-index: 2;
-            max-width: 420px; margin: 0 auto;
-            padding: 20px 16px 100px;
-        }
-
-        .top-nav {
-            display: flex; align-items: center; gap: 12px;
-            margin-bottom: 20px;
-        }
-        .btn-back {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #64748b; padding: 10px 16px;
-            border-radius: 12px; text-decoration: none;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.8rem; font-weight: 700;
-            letter-spacing: 1px; transition: 0.2s;
-        }
-
-        .page-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.9rem; color: var(--gold);
-            letter-spacing: 2px;
-        }
+        /* Top Nav & Stats */
+        .top-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .btn-back { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #64748b; padding: 10px 16px; border-radius: 12px; text-decoration: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; }
+        .page-title { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--gold); letter-spacing: 2px; }
 
         /* Belt Section */
-        .belt-section {
-            background: var(--panel);
-            border: 1px solid rgba(250,204,21,0.2);
-            border-radius: 24px; padding: 20px;
-            margin-bottom: 18px;
-            box-shadow: 0 0 30px rgba(250,204,21,0.05);
-        }
-
-        .section-label {
-            font-size: 0.6rem; letter-spacing: 3px;
-            color: var(--gold); text-transform: uppercase;
-            margin-bottom: 16px; font-weight: 700;
-        }
-
-        .belt-track {
-            display: flex; align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px; position: relative;
-        }
-        .belt-track::before {
-            content: '';
-            position: absolute; top: 50%; left: 0; right: 0;
-            height: 2px; background: rgba(255,255,255,0.06);
-            transform: translateY(-50%); z-index: 0;
-        }
-
-        .belt-node {
-            display: flex; flex-direction: column;
-            align-items: center; gap: 6px;
-            position: relative; z-index: 1;
-        }
-        .belt-circle {
-            width: 36px; height: 36px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1rem; border: 2px solid rgba(255,255,255,0.1);
-            background: var(--bg);
-            transition: 0.3s;
-        }
-        .belt-circle.done { border-color: var(--gold); box-shadow: 0 0 12px rgba(250,204,21,0.4); }
-        .belt-circle.active { border-color: var(--neon); box-shadow: 0 0 16px rgba(56,189,248,0.5); animation: belt-pulse 2s infinite; }
-        
-        @keyframes belt-pulse {
-            0%,100% { box-shadow: 0 0 16px rgba(56,189,248,0.5); }
-            50% { box-shadow: 0 0 28px rgba(56,189,248,0.8); }
-        }
-
-        .belt-name { font-size: 0.5rem; letter-spacing: 1px; color: #475569; text-transform: uppercase; font-weight: 700; }
+        .belt-section { background: var(--panel); border: 1px solid rgba(250,204,21,0.2); border-radius: 24px; padding: 20px; margin-bottom: 18px; box-shadow: 0 0 30px rgba(250,204,21,0.05); }
+        .section-label { font-size: 0.65rem; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .belt-track { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; position: relative; }
+        .belt-track::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); transform: translateY(-50%); }
+        .belt-node { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; z-index: 1; }
+        .belt-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border: 2px solid rgba(255,255,255,0.1); background: var(--bg); transition: 0.3s; }
+        .belt-circle.done { border-color: var(--gold); box-shadow: 0 0 10px var(--shadow-gold); }
+        .belt-circle.active { border-color: var(--neon); box-shadow: 0 0 15px var(--neon); }
+        .belt-name { font-size: 0.5rem; letter-spacing: 1px; color: #475569; text-transform: uppercase; }
 
         .xp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .xp-label { font-size: 0.72rem; color: #64748b; letter-spacing: 1px; }
-        .xp-value { font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--neon); }
-        .xp-bar-bg { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
-        .xp-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), #0ea5e9); transition: width 1s ease; }
+        .xp-value { font-family: 'Orbitron'; font-size: 0.8rem; color: var(--neon); }
+        .xp-bar-bg { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+        .xp-bar-fill { height: 100%; width: 0%; background: var(--neon); transition: width 1s; }
 
-        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
-        .stat-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 14px 10px; text-align: center; }
-        .stat-value { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900; color: var(--gold); display: block; }
-        .stat-label { font-size: 0.55rem; letter-spacing: 1.5px; color: #475569; text-transform: uppercase; margin-top: 4px; display: block; }
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 25px; }
+        .stat-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 12px; text-align: center; }
+        .stat-value { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--gold); }
+        .stat-label { font-size: 0.5rem; color: #475569; text-transform: uppercase; margin-top: 4px; }
 
-        /* --- CINEMATIC VIDEO LIBRARY SECTION --- */
-        .video-section {
-            margin-bottom: 30px;
-        }
-        .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; }
-        .cat-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #64748b; text-transform: uppercase; }
-        .cat-tab.active { background: rgba(250,204,21,0.1); border-color: rgba(250,204,21,0.4); color: var(--gold); }
-
-        .video-grid { 
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 20px;
-            padding: 10px 5px 30px 5px;
-            scrollbar-width: none;
-        }
+        /* CINEMATIC VIDEO LIBRARY */
+        .video-library-container { margin-bottom: 30px; }
+        .video-row-wrapper { margin-bottom: 30px; }
+        .video-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding: 10px 0 20px; scrollbar-width: none; }
         .video-grid::-webkit-scrollbar { display: none; }
 
         .video-card { 
-            flex: 0 0 85%;
-            scroll-snap-align: center;
-            background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(2, 6, 23, 1) 100%);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 32px;
-            height: 300px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            transition: 0.3s;
+            flex: 0 0 80%; scroll-snap-align: center; 
+            background: linear-gradient(180deg, rgba(15,23,42,0.4) 0%, rgba(2,6,23,1) 100%);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+            height: 260px; position: relative; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
+        /* Mockup Backgrounds based on category */
         .video-thumb { 
-            width: 100%; height: 180px;
-            background: linear-gradient(45deg, #0f172a, #1e293b);
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
+            width: 100%; height: 160px; position: relative;
+            background-size: cover; background-position: center;
         }
-        .play-btn-cinematic {
-            width: 54px; height: 54px;
-            background: rgba(250, 204, 21, 0.15);
-            border: 1px solid var(--gold);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(8px);
-        }
-        .play-btn-cinematic svg { width: 28px; height: 28px; fill: var(--gold); margin-left: 3px; }
+        /* Category Specific Mockups (Using Gradients as Fallback) */
+        .thumb-kicks { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&q=80&w=400'); }
+        .thumb-strikes { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1552072805-2a9039d00e57?auto=format&fit=crop&q=80&w=400'); }
+        .thumb-defense { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1599411036035-1f91b5c4900a?auto=format&fit=crop&q=80&w=400'); }
+        .thumb-self-defense { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1517438476312-10d79c67750d?auto=format&fit=crop&q=80&w=400'); }
 
-        .check-icon { 
-            position: absolute; top: 15px; right: 15px; 
-            background: var(--safe); border-radius: 50%; 
-            width: 24px; height: 24px; font-size: 0.8rem; 
-            display: flex; align-items: center; justify-content: center; z-index: 5; 
+        .play-btn { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 50px; height: 50px; background: rgba(250,204,21,0.2);
+            border: 1px solid var(--gold); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);
         }
+        .play-btn svg { width: 24px; height: 24px; fill: var(--gold); }
 
-        .video-info { 
-            padding: 20px; 
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: linear-gradient(to top, rgba(2,6,23,1) 40%, transparent);
-        }
-        .video-title { 
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem; font-weight: 700; color: var(--gold); 
-            margin-bottom: 8px; 
-        }
-        .video-meta { display: flex; gap: 12px; align-items: center; font-size: 0.7rem; }
-        .level-tag { 
-            background: rgba(56,189,248,0.15); color: var(--neon); 
-            padding: 4px 10px; border-radius: 8px; font-weight: 700; text-transform: uppercase; 
-        }
+        .video-info { padding: 15px; position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #020617 60%, transparent); }
+        .video-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--gold); margin-bottom: 5px; }
+        .video-meta { display: flex; align-items: center; gap: 10px; font-size: 0.65rem; color: #94a3b8; }
+        .lang-flag { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; z-index: 10; border: 1px solid rgba(255,255,255,0.1); }
+        .check-icon { position: absolute; top: 15px; right: 15px; background: var(--safe); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; z-index: 10; font-size: 0.7rem; }
 
         /* Modal */
-        .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.95); display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
         .modal-overlay.open { display: flex; }
         .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--gold); }
-        .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; }
+        .modal-video { width: 100%; aspect-ratio: 16/9; }
         .modal-video iframe { width: 100%; height: 100%; border: none; }
         .modal-body { padding: 20px; }
-        .modal-title { font-family: 'Orbitron', monospace; color: var(--gold); margin-bottom: 10px; font-size: 1rem; }
-        .modal-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
+        .modal-title { font-family: 'Orbitron'; color: var(--gold); font-size: 1rem; margin-bottom: 10px; }
+        .modal-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 20px; }
         .modal-actions { display: flex; gap: 10px; }
-        .btn-action { flex: 1; padding: 12px; border-radius: 10px; border: none; font-family: 'Rajdhani'; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .btn-action { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 700; font-family: 'Rajdhani'; cursor: pointer; text-transform: uppercase; }
         .btn-complete { background: var(--safe); color: #fff; }
         .btn-close { background: rgba(255,255,255,0.1); color: #fff; }
 
-        /* Achievements */
-        .achievements-section { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; padding: 20px; margin-bottom: 100px; }
-        .badge-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-        .badge-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 5px; text-align: center; opacity: 0.4; filter: grayscale(1); }
-        .badge-item.earned { opacity: 1; filter: grayscale(0); border-color: var(--gold); }
+        .achievements-section { background: var(--panel); border-radius: 24px; padding: 20px; margin-bottom: 100px; border: 1px solid rgba(255,255,255,0.05); }
+        .badge-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+        .badge-item { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px 5px; text-align: center; opacity: 0.3; filter: grayscale(1); border: 1px solid transparent; }
+        .badge-item.earned { opacity: 1; filter: grayscale(0); border-color: var(--gold); background: rgba(250,204,21,0.05); }
         .badge-emoji { font-size: 1.4rem; display: block; }
-        .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; }
+        .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; margin-top: 5px; display: block; }
     </style>
 </head>
 <body>
@@ -230,7 +122,7 @@
                 <div class="modal-title" id="modalTitle">TITLE</div>
                 <div class="modal-desc" id="modalDesc">DESCRIPTION</div>
                 <div class="modal-actions">
-                    <button class="btn-action btn-complete" id="completeBtn">Complete +XP</button>
+                    <button class="btn-action btn-complete" id="completeBtn" onclick="markComplete()">Complete +XP</button>
                     <button class="btn-action btn-close" onclick="closeModal()">Close</button>
                 </div>
             </div>
@@ -266,10 +158,16 @@
             <div class="stat-card"><span class="stat-value" id="statXP">0</span><span class="stat-label" id="statLabelXP">Total XP</span></div>
         </div>
 
-        <div class="video-section">
-            <div class="section-label" id="videoLibraryLabel">🎬 Training Sessions</div>
-            <div class="cat-tabs" id="catTabs"></div>
-            <div class="video-grid" id="videoGrid"></div>
+        <div class="video-library-container">
+            <div class="video-row-wrapper">
+                <div class="section-label">🇬🇧 English Training Sessions</div>
+                <div class="video-grid" id="gridEnglish"></div>
+            </div>
+
+            <div class="video-row-wrapper">
+                <div class="section-label">🇬🇷 Ελληνικές Συνεδρίες</div>
+                <div class="video-grid" id="gridGreek"></div>
+            </div>
         </div>
 
         <div class="achievements-section">
@@ -279,101 +177,89 @@
     </div>
 
     <script>
-        const userLang = localStorage.getItem('dojo_lang') || 'en';
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
-        const videos = [
-            { id: 1, cat: 'kicks', title: 'Front Kick (Ahp Chagi)', dur: '0:30', level: 'beg', xp: 50, drive_id_gr: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', drive_id_en: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt', desc: 'Master the fundamental lead leg front kick.' },
-            { id: 2, cat: 'defense', title: 'Front Block Mechanics', dur: '0:40', level: 'beg', xp: 50, drive_id_gr: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', drive_id_en: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl', desc: 'Detailed mechanics of the front block.' },
-            { id: 3, cat: 'strikes', title: 'High Punch (Sang Dan)', dur: '0:45', level: 'beg', xp: 50, drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', desc: 'High punch with proper rotation.' },
-            { id: 4, cat: 'defense', title: 'Outside Block', dur: '0:35', level: 'beg', xp: 50, drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', desc: 'Blocking from outside to inside.' },
-            { id: 5, cat: 'kicks', title: 'Roundhouse Kick', dur: '0:38', level: 'beg', xp: 60, drive_id_gr: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', drive_id_en: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG', desc: 'Powerful roundhouse kick technique.' },
-            { id: 6, cat: 'self-defense', title: 'Defense Against Grab', dur: '0:50', level: 'beg', xp: 70, drive_id_gr: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', drive_id_en: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD', desc: 'Techniques to escape a grab.' }
+        // Unified video list with specific flags for rendering
+        const videoData = [
+            // ENGLISH VIDEOS
+            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block Mechanics', dur: '0:43', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl', desc: 'Master the core mechanics of the front block.' },
+            { id: "e2", lang: 'en', cat: 'defense', title: 'Outside Block', dur: '0:33', xp: 50, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', desc: 'Defend against outside attacks with precision.' },
+            { id: "e3", lang: 'en', cat: 'strikes', title: 'High Punch', dur: '0:45', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', desc: 'The fundamental high punch strike.' },
+            { id: "e4", lang: 'en', cat: 'kicks', title: 'Front Kick (Ahp Chagi)', dur: '0:26', xp: 50, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt', desc: 'The most basic but powerful kick.' },
+            { id: "e5", lang: 'en', cat: 'kicks', title: 'Roundhouse Kick', dur: '0:38', xp: 50, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', desc: 'The signature circular kick.' },
+            { id: "e6", lang: 'en', cat: 'self-defense', title: 'Grab Escape', dur: '0:50', xp: 70, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', desc: 'Basic self-defense escape mechanics.' },
+
+            // GREEK VIDEOS
+            { id: "g1", lang: 'gr', cat: 'kicks', title: 'Front Kick (Ahp Chagi)', dur: '0:26', xp: 50, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', desc: 'Μάθετε το βασικό λάκτισμα Ahp Chagi.' },
+            { id: "g2", lang: 'gr', cat: 'defense', title: 'Front Block Mechanics', dur: '0:43', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', desc: 'Μηχανική της μπροστινής άμυνας.' },
+            { id: "g3", lang: 'gr', cat: 'strikes', title: 'High Punch (Sang Dan)', dur: '0:45', xp: 50, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', desc: 'Υψηλή γροθιά με σωστή περιστροφή.' },
+            { id: "g4", lang: 'gr', cat: 'defense', title: 'Outside Block', dur: '0:33', xp: 50, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', desc: 'Άμυνα Outside Block.' },
+            { id: "g5", lang: 'gr', cat: 'kicks', title: 'Roundhouse Kick', dur: '0:38', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG', desc: 'Κυκλικό λάκτισμα με το κουντεπιέ.' },
+            { id: "g6", lang: 'gr', cat: 'self-defense', title: 'Άμυνα σε Πιάσιμο', dur: '0:50', xp: 70, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD', desc: 'Τεχνικές απελευθέρωσης από πιάσιμο.' }
         ];
 
         const belts = [
-            { name: 'White', min: 0 }, { name: 'Yellow', min: 500 }, 
-            { name: 'Green', min: 1200 }, { name: 'Blue', min: 2000 }, 
-            { name: 'Red', min: 3500 }, { name: 'Black', min: 5500 }
+            { name: 'White', min: 0 }, { name: 'Yellow', min: 500 }, { name: 'Green', min: 1200 },
+            { name: 'Blue', min: 2000 }, { name: 'Red', min: 3500 }, { name: 'Black', min: 5500 }
         ];
 
-        let currentCat = 'all';
         let activeVideo = null;
 
         function init() {
-            translateUI();
-            renderTabs();
-            renderVideos();
+            renderGrids();
             renderBadges();
             updateUI();
         }
 
-        function translateUI() {
-            if(userLang === 'gr') {
-                document.getElementById('beltSectionLabel').textContent = "🥋 Πρόοδος Ζώνης";
-                document.getElementById('statLabelVideos').textContent = "Βίντεο";
-                document.getElementById('statLabelStreak').textContent = "Σερί Ημερών";
-                document.getElementById('statLabelXP').textContent = "Συνολικά XP";
-                document.getElementById('videoLibraryLabel').textContent = "🎬 Συνεδρίες Προπόνησης";
-                document.getElementById('achievementsLabel').textContent = "🏆 Επιτεύγματα";
-                document.querySelector('.btn-back').textContent = "← ΠΙΣΩ";
-                document.querySelector('.page-title').textContent = "ΠΡΟΟΔΟΣ";
-                document.getElementById('lblNextBelt').textContent = "XP ΓΙΑ ΕΠΟΜΕΝΗ ΖΩΝΗ";
-            }
+        function renderGrids() {
+            const englishVideos = videoData.filter(v => v.lang === 'en');
+            const greekVideos = videoData.filter(v => v.lang === 'gr');
+
+            document.getElementById('gridEnglish').innerHTML = englishVideos.map(v => createCard(v)).join('');
+            document.getElementById('gridGreek').innerHTML = greekVideos.map(v => createCard(v)).join('');
         }
 
-        function renderTabs() {
-            const cats = ['all', 'strikes', 'kicks', 'defense', 'self-defense'];
-            document.getElementById('catTabs').innerHTML = cats.map(c => `
-                <button class="cat-tab ${currentCat === c ? 'active' : ''}" onclick="setCat('${c}')">${c.toUpperCase()}</button>
-            `).join('');
-        }
+        function createCard(v) {
+            const isDone = completed.includes(v.id);
+            // Dynamic Mockup Class based on category
+            const thumbClass = `thumb-${v.cat}`;
+            const flag = v.lang === 'en' ? '🇬🇧' : '🇬🇷';
 
-        function setCat(c) { currentCat = c; renderTabs(); renderVideos(); }
-
-        function renderVideos() {
-            const filtered = currentCat === 'all' ? videos : videos.filter(v => v.cat === currentCat);
-            document.getElementById('videoGrid').innerHTML = filtered.map(v => {
-                const isDone = completed.includes(v.id);
-                return `
-                    <div class="video-card" onclick="handleVideoClick(${v.id})">
-                        <div class="video-thumb">
-                            <div class="play-btn-cinematic">
-                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
-                            ${isDone ? '<div class="check-icon">✓</div>' : ''}
-                        </div>
-                        <div class="video-info">
-                            <div class="video-title">${v.title}</div>
-                            <div class="video-meta">
-                                <span class="level-tag">${v.level}</span>
-                                <span style="color:#94a3b8">⏱ ${v.dur}</span>
-                                <span style="color:var(--gold); font-weight:bold; margin-left:auto;">+${v.xp}XP</span>
-                            </div>
+            return `
+                <div class="video-card" onclick="handleVideoClick('${v.id}')">
+                    <div class="lang-flag">${flag}</div>
+                    <div class="video-thumb ${thumbClass}">
+                        <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                        ${isDone ? '<div class="check-icon">✓</div>' : ''}
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${v.title}</div>
+                        <div class="video-meta">
+                            <span style="color:var(--neon); text-transform:uppercase; font-weight:700;">${v.cat}</span>
+                            <span>⏱ ${v.dur}</span>
+                            <span style="color:var(--gold); font-weight:700; margin-left:auto;">+${v.xp} XP</span>
                         </div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `;
         }
 
         function handleVideoClick(id) {
-            const v = videos.find(x => x.id === id);
+            const v = videoData.find(x => x.id === id);
             activeVideo = v;
-            const finalId = (userLang === 'gr') ? v.drive_id_gr : v.drive_id_en;
-
             document.getElementById('modalTitle').textContent = v.title;
             document.getElementById('modalDesc').textContent = v.desc;
-            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${finalId}/preview`;
+            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${v.drive}/preview`;
             
             const btn = document.getElementById('completeBtn');
             if(completed.includes(v.id)) {
                 btn.style.opacity = "0.5";
-                btn.textContent = userLang === 'gr' ? "Ολοκληρώθηκε" : "Completed";
+                btn.textContent = "Completed";
                 btn.onclick = null;
             } else {
                 btn.style.opacity = "1";
-                btn.textContent = `+${v.xp}XP`;
+                btn.textContent = `+${v.xp} XP`;
                 btn.onclick = markComplete;
             }
             document.getElementById('videoModal').classList.add('open');
@@ -391,7 +277,7 @@
             localStorage.setItem('dojo_completed', JSON.stringify(completed));
             localStorage.setItem('dojo_xp', totalXP);
             updateUI();
-            renderVideos();
+            renderGrids();
             closeModal();
         }
 
@@ -422,14 +308,4 @@
         function renderBadges() {
             const badges = [{ emoji: '🔥', name: 'Streak' }, { emoji: '👊', name: 'Striker' }, { emoji: '🦵', name: 'Kicker' }, { emoji: '🛡️', name: 'Defender' }];
             document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => `
-                <div class="badge-item ${i === 0 ? 'earned' : ''}">
-                    <span class="badge-emoji">${b.emoji}</span>
-                    <span class="badge-name">${b.name}</span>
-                </div>
-            `).join('');
-        }
-
-        init();
-    </script>
-</body>
-</html>
+                <div class="badge-item ${i === 0 ? 'earned' 
