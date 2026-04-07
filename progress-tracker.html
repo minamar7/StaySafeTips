@@ -242,27 +242,41 @@
                 locked: false
             },
             {
+                id: 2, cat: 'defense',
+                title: userLang === 'gr' ? 'Front Block Mechanics' : 'Front Block Mechanics',
+                desc: userLang === 'gr' ? 'Το χέρι έρχεται από κάτω και μπροστά. Το άλλο χέρι τραβιέται πίσω.' : 'The blocking arm comes from below and moves forward as the other pulls back.',
+                dur: '0:43', level: 'beg', xp: 50,
+                drive_id: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl',
+                locked: false
+            },
+            {
                 id: 3, cat: 'strikes',
                 title: userLang === 'gr' ? 'Υψηλή Γροθιά (Sang Dan)' : 'High Punch (Sang Dan)',
                 desc: userLang === 'gr' ? 'Κρατήστε τον αγκώνα μέσα για μέγιστη ισχύ.' : 'Keep the elbow tucked in for maximum power.',
                 dur: '0:45', level: 'beg', xp: 50,
                 drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', 
-                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', // New English Link
+                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi',
                 locked: false
             },
             {
-                id: 4, 
-                cat: 'defense',
-                title: userLang === 'gr' ? 'Άμυνα: Middle Block Mechanics' : 'Middle Block Mechanics',
-                desc: userLang === 'gr' ? 'Η τεχνική της ασπίδας. Χέρια παράλληλα και αγκώνες κάθετοι.' : 'The shield technique. Keep arms parallel and elbows vertical.',
-                dur: '1:10', level: 'beg', xp: 50,
+                id: 4, cat: 'defense',
+                title: userLang === 'gr' ? 'Outside Block Mechanics' : 'Outside Block Mechanics',
+                desc: userLang === 'gr' ? 'Το χέρι έρχεται από το αυτί ευθεία μπροστά. Αγκώνας κάθετος.' : 'The arm comes from the ear straight forward. Keep the elbow vertical.',
+                dur: '0:33', level: 'beg', xp: 50,
                 drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', 
-                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', // English Link
+                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1',
+                locked: false
+            },
+            {
+                id: 5, cat: 'kicks',
+                title: userLang === 'gr' ? 'Roundhouse Kick' : 'Roundhouse Kick',
+                desc: userLang === 'gr' ? 'Περιστροφή του ποδιού στήριξης και χτύπημα με το κουντεπιέ.' : 'Pivot the supporting foot and strike with the instep.',
+                dur: '0:38', level: 'beg', xp: 50,
+                drive_id: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG',
                 locked: false
             }
         ];
 
-        // ΑΝΑΒΑΘΜΙΣΜΕΝΟ XP SYSTEM (10+ μαθήματα ανά ζώνη)
         const belts = [
             { name: 'White', min: 0 }, 
             { name: 'Yellow', min: 500 }, 
@@ -385,30 +399,29 @@
             const next = belts[currentIdx + 1] || belts[currentIdx];
             const diff = next.min - belts[currentIdx].min || 1;
             const progress = ((totalXP - belts[currentIdx].min) / diff) * 100;
-
-            document.getElementById('xpDisplay').textContent = `${totalXP} / ${next.min} XP`;
-            document.getElementById('xpBar').style.width = Math.min(progress, 100) + "%";
-            document.getElementById('lblNextBelt').textContent = (userLang === 'gr' ? "XP ΓΙΑ " : "XP TO ") + next.name.toUpperCase() + " BELT";
-
-            for(let i=0; i<6; i++) {
-                const el = document.getElementById(`belt-${i}`);
-                el.className = 'belt-node';
-                if(i < currentIdx) el.classList.add('done');
-                if(i === currentIdx) el.classList.add('active');
-            }
+            
+            document.getElementById('xpBar').style.width = `${Math.min(progress, 100)}%`;
+            document.getElementById('xpDisplay').textContent = `${totalXP} / ${next.min}`;
+            
+            document.querySelectorAll('.belt-node').forEach((node, i) => {
+                const circle = node.querySelector('.belt-circle');
+                circle.className = 'belt-circle';
+                if(i < currentIdx) circle.classList.add('done');
+                if(i === currentIdx) circle.classList.add('active');
+            });
         }
 
         function renderBadges() {
             const badges = [
-                { e: '🥋', n: userLang === 'gr' ? 'Πρώτο Βήμα' : 'First Step', req: 1 },
-                { e: '🔥', n: userLang === 'gr' ? 'Γρήγορος' : 'Fast Learner', req: 5 },
-                { e: '🛡️', n: userLang === 'gr' ? 'Φύλακας' : 'Guardian', req: 15 },
-                { e: '⬛', n: 'Master', req: 40 }
+                { emoji: '🔥', name: 'Hot Streak' },
+                { emoji: '👊', name: 'Striker' },
+                { emoji: '🦵', name: 'Kicker' },
+                { emoji: '🛡️', name: 'Defender' }
             ];
-            document.getElementById('badgeGrid').innerHTML = badges.map(b => `
-                <div class="badge-item ${completed.length >= b.req ? 'earned' : ''}">
-                    <span class="badge-emoji">${b.e}</span>
-                    <span class="badge-name">${b.n}</span>
+            document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => `
+                <div class="badge-item ${i === 0 ? 'earned' : ''}">
+                    <span class="badge-emoji">${b.emoji}</span>
+                    <span class="badge-name">${b.name}</span>
                 </div>
             `).join('');
         }
