@@ -1,78 +1,217 @@
-<div id="pathContainer">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Progress Tracker – Elite Defense Dojo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020617;
+            --gold: #facc15;
+            --neon: #38bdf8;
+            --danger: #ef4444;
+            --safe: #22c55e;
+            --panel: rgba(15,23,42,0.9);
+            --glass: rgba(255, 255, 255, 0.03);
+        }
 
-    <div class="level-card level-beg" onclick="this.classList.toggle('open')">
-        <div class="level-header">
-            <div>
-                <div class="level-name">BEGINNER PATH</div>
-                <div class="level-stats">White & Yellow Belts • 🥋</div>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; min-height: 100vh; }
+
+        /* Background Effects */
+        .bg-grid { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px); background-size: 36px 36px; }
+        .bg-glow { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%); }
+
+        .shell { position: relative; z-index: 2; max-width: 420px; margin: 0 auto; padding: 20px 16px 100px; }
+
+        /* Header */
+        .top-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
+        .btn-back { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: #64748b; padding: 10px 16px; border-radius: 12px; text-decoration: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; }
+        .page-title { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--gold); letter-spacing: 2px; }
+
+        /* 1. FOCUS AREAS (Circular Tabs) */
+        .focus-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 30px; }
+        .focus-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s; }
+        .focus-circle { 
+            width: 65px; height: 65px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center; background: var(--panel); 
+            font-size: 1.5rem; transition: 0.3s;
+        }
+        .focus-item.active .focus-circle { border-color: var(--danger); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); transform: scale(1.05); }
+        .focus-item.active .focus-label { color: #fff; }
+        .focus-label { font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* 2. LEVEL CARDS (Big Gradients) */
+        .level-card { 
+            border-radius: 24px; padding: 20px; margin-bottom: 15px; position: relative; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s;
+        }
+        .level-beg { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-left: 4px solid var(--neon); }
+        .level-int { background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%); border-left: 4px solid #818cf8; }
+        .level-adv { background: linear-gradient(135deg, #450a0a 0%, #020617 100%); border-left: 4px solid var(--danger); }
+
+        .level-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .level-name { font-family: 'Orbitron'; font-size: 1.1rem; letter-spacing: 1px; }
+        .level-icon { font-size: 1.2rem; }
+        .level-stats { font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+
+        /* Video List (Nested in Level Cards) */
+        .video-list { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; gap: 10px; flex-direction: column; }
+        .level-card.open .video-list { display: flex; }
+        .video-item { 
+            display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.2); 
+            padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .v-mini-thumb { width: 40px; height: 40px; border-radius: 8px; background: var(--glass); display: flex; align-items: center; justify-content: center; color: var(--gold); }
+        .v-info { flex: 1; }
+        .v-title { font-size: 0.85rem; font-weight: 700; }
+        .v-xp { font-size: 0.7rem; color: var(--neon); font-family: 'Orbitron'; }
+
+        /* Modal & UI Elements */
+        .section-label { font-size: 0.65rem; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; font-weight: 700; }
+        .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--danger); }
+        .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; }
+        .modal-video iframe { width: 100%; height: 100%; border: none; }
+        .modal-body { padding: 20px; }
+        .btn-action { width: 100%; padding: 12px; border-radius: 10px; border: none; font-family: 'Rajdhani'; font-weight: 700; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .btn-complete { background: var(--safe); color: #fff; }
+        .btn-close { background: var(--glass); color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal">
+            <div class="modal-video"><iframe id="modalIframe" src="" allowfullscreen></iframe></div>
+            <div class="modal-body">
+                <div id="modalTitle" style="font-family: 'Orbitron'; color: var(--gold); margin-bottom: 5px;">TITLE</div>
+                <p id="modalDesc" style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Description</p>
+                <button class="btn-action btn-complete" id="completeBtn">Complete +XP</button>
+                <button class="btn-action btn-close" onclick="closeModal()">Close</button>
             </div>
-            <div class="level-icon">⚪🟡</div>
         </div>
-        <div class="video-list">
-            <div class="section-label" style="margin-top:10px; font-size:0.5rem;">White Belt Basics</div>
-            <div class="video-item" onclick="openVideo(1); event.stopPropagation();">
-                <div class="v-mini-thumb">▶</div>
-                <div class="v-info">
-                    <div class="v-title">Front Kick (Ahp Chagi)</div>
-                    <div class="v-xp">50 XP</div>
+    </div>
+
+    <div class="shell">
+        <div class="top-nav">
+            <a href="dojo.html" class="btn-back">← BACK</a>
+            <span class="page-title">PROGRESS CENTER</span>
+        </div>
+
+        <div class="section-label">🎯 Focus Areas</div>
+        <div class="focus-grid">
+            <div class="focus-item active" onclick="setCat('all', this)">
+                <div class="focus-circle">🥋</div>
+                <div class="focus-label">All</div>
+            </div>
+            <div class="focus-item" onclick="setCat('strikes', this)">
+                <div class="focus-circle">👊</div>
+                <div class="focus-label">Strikes</div>
+            </div>
+            <div class="focus-item" onclick="setCat('kicks', this)">
+                <div class="focus-circle">🦵</div>
+                <div class="focus-label">Kicks</div>
+            </div>
+            <div class="focus-item" onclick="setCat('defense', this)">
+                <div class="focus-circle">🛡️</div>
+                <div class="focus-label">Defense</div>
+            </div>
+        </div>
+
+        <div class="section-label">📚 Training Paths</div>
+        <div id="pathContainer">
+            <div class="level-card level-beg" onclick="this.classList.toggle('open')">
+                <div class="level-header">
+                    <div>
+                        <div class="level-name">BEGINNER</div>
+                        <div class="level-stats" id="stats-beg">0/4 Videos Completed</div>
+                    </div>
+                    <div class="level-icon">🔥</div>
+                </div>
+                <div class="video-list" id="list-beg"></div>
+            </div>
+
+            <div class="level-card level-int">
+                <div class="level-header">
+                    <div>
+                        <div class="level-name">INTERMEDIATE</div>
+                        <div class="level-stats">Locked (Need 500 XP)</div>
+                    </div>
+                    <div class="level-icon">🔥🔥</div>
                 </div>
             </div>
-            <div class="video-item" onclick="openVideo(3); event.stopPropagation();">
-                <div class="v-mini-thumb">▶</div>
-                <div class="v-info">
-                    <div class="v-title">High Punch</div>
-                    <div class="v-xp">50 XP</div>
-                </div>
-            </div>
+        </div>
+    </div>
+
+    <script>
+        const userLang = localStorage.getItem('dojo_lang') || 'en';
+        let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
+        let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
+
+        const videos = [
+            { id: 1, cat: 'kicks', level: 'beg', title: 'Front Kick', xp: 50, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk' },
+            { id: 2, cat: 'defense', level: 'beg', title: 'Front Block', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' },
+            { id: 3, cat: 'strikes', level: 'beg', title: 'High Punch', xp: 50, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv' },
+            { id: 4, cat: 'defense', level: 'beg', title: 'Outside Block', xp: 50, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I' }
+        ];
+
+        let currentCat = 'all';
+
+        function setCat(cat, el) {
+            currentCat = cat;
+            document.querySelectorAll('.focus-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            renderVideos();
+        }
+
+        function renderVideos() {
+            const list = document.getElementById('list-beg');
+            const filtered = currentCat === 'all' ? videos : videos.filter(v => v.cat === currentCat);
             
-            <div class="section-label" style="margin-top:10px; font-size:0.5rem;">Yellow Belt Defense</div>
-            <div class="video-item" onclick="openVideo(2); event.stopPropagation();">
-                <div class="v-mini-thumb">▶</div>
-                <div class="v-info">
-                    <div class="v-title">Front Block</div>
-                    <div class="v-xp">50 XP</div>
+            list.innerHTML = filtered.map(v => `
+                <div class="video-item" onclick="openVideo(${v.id}); event.stopPropagation();">
+                    <div class="v-mini-thumb">▶</div>
+                    <div class="v-info">
+                        <div class="v-title">${v.title} ${completed.includes(v.id) ? '✅' : ''}</div>
+                        <div class="v-xp">+${v.xp} XP</div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            `).join('');
 
-    <div class="level-card level-int" onclick="this.classList.toggle('open')">
-        <div class="level-header">
-            <div>
-                <div class="level-name">INTERMEDIATE PATH</div>
-                <div class="level-stats">Green & Blue Belts • 🔥</div>
-            </div>
-            <div class="level-icon">🟢🔵</div>
-        </div>
-        <div class="video-list">
-            <div class="video-item">
-                <div class="v-mini-thumb">🔒</div>
-                <div class="v-info">
-                    <div class="v-title">Roundhouse Kick (Advanced)</div>
-                    <div class="v-xp">100 XP</div>
-                </div>
-            </div>
-            <div class="video-item">
-                <div class="v-mini-thumb">🔒</div>
-                <div class="v-info">
-                    <div class="v-title">Knife Hand Strike</div>
-                    <div class="v-xp">100 XP</div>
-                </div>
-            </div>
-        </div>
-    </div>
+            const compCount = videos.filter(v => completed.includes(v.id)).length;
+            document.getElementById('stats-beg').textContent = `${compCount}/${videos.length} Videos Completed`;
+        }
 
-    <div class="level-card level-adv" onclick="this.classList.toggle('open')">
-        <div class="level-header">
-            <div>
-                <div class="level-name">ELITE PATH</div>
-                <div class="level-stats">Red & Black Belts • 💀</div>
-            </div>
-            <div class="level-icon">🔴⚫</div>
-        </div>
-        <div class="video-list">
-            <p style="font-size: 0.7rem; color: #94a3b8; text-align: center;">Reach 3500 XP to unlock Master Classes</p>
-        </div>
-    </div>
+        function openVideo(id) {
+            const v = videos.find(x => x.id === id);
+            document.getElementById('modalTitle').textContent = v.title;
+            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${v.drive}/preview`;
+            document.getElementById('videoModal').classList.add('open');
+            
+            const btn = document.getElementById('completeBtn');
+            btn.onclick = () => {
+                if(!completed.includes(v.id)) {
+                    completed.push(v.id);
+                    totalXP += v.xp;
+                    localStorage.setItem('dojo_completed', JSON.stringify(completed));
+                    localStorage.setItem('dojo_xp', totalXP);
+                    renderVideos();
+                }
+                closeModal();
+            };
+        }
 
-</div>
+        function closeModal() {
+            document.getElementById('videoModal').classList.remove('open');
+            document.getElementById('modalIframe').src = "";
+        }
+
+        renderVideos();
+    </script>
+</body>
+</html>
