@@ -308,4 +308,14 @@
         function renderBadges() {
             const badges = [{ emoji: '🔥', name: 'Streak' }, { emoji: '👊', name: 'Striker' }, { emoji: '🦵', name: 'Kicker' }, { emoji: '🛡️', name: 'Defender' }];
             document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => `
-                <div class="badge-item ${i === 0 ? 'earned' 
+                <div class="badge-item ${i === 0 ? 'earned' : ''}">
+                    <span class="badge-emoji">${b.emoji}</span>
+                    <span class="badge-name">${b.name}</span>
+                </div>
+            `).join('');
+        }
+
+        init();
+    </script>
+</body>
+</html>
