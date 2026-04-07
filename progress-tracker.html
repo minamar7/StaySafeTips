@@ -132,20 +132,19 @@
         .cat-tab.active { background: rgba(250,204,21,0.1); border-color: rgba(250,204,21,0.4); color: var(--gold); }
 
         .video-grid { display: flex; flex-direction: column; gap: 12px; }
-        .video-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; cursor: pointer; display: flex; transition: 0.2s; }
+        .video-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; cursor: pointer; display: flex; transition: 0.2s; position: relative; }
         .video-card.locked { opacity: 0.5; }
         .video-card.completed { border-color: rgba(34,197,94,0.3); }
 
         .video-thumb { width: 90px; flex-shrink: 0; background: rgba(250,204,21,0.05); display: flex; align-items: center; justify-content: center; position: relative; border-right: 1px solid rgba(255,255,255,0.06); }
         .play-btn svg { width: 24px; height: 24px; fill: var(--gold); }
-        .check-icon { position: absolute; top: 5px; right: 5px; background: var(--safe); border-radius: 50%; width: 16px; height: 16px; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; }
+        .check-icon { position: absolute; top: 5px; right: 5px; background: var(--safe); border-radius: 50%; width: 16px; height: 16px; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; z-index: 5; }
 
         .video-info { padding: 12px; flex: 1; }
         .video-title { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
         .video-meta { display: flex; gap: 8px; align-items: center; font-size: 0.6rem; }
         .level-tag { padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
         .level-beg { background: rgba(34,197,94,0.1); color: var(--safe); }
-        .level-int { background: rgba(250,204,21,0.1); color: var(--gold); }
 
         .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.open { display: flex; }
@@ -226,6 +225,7 @@
             <div class="badge-grid" id="badgeGrid"></div>
         </div>
     </div>
+
     <script>
         const userLang = localStorage.getItem('dojo_lang') || 'en';
         const isElite = localStorage.getItem('isElite') === 'true';
@@ -235,55 +235,58 @@
         const videos = [
             {
                 id: 1, cat: 'kicks',
-                title: userLang === 'gr' ? 'Front Kick (Ahp Chagi) - Μέρος 1' : 'Front Kick (Ahp Chagi) - Part 1',
-                desc: userLang === 'gr' ? 'Μάθετε το βασικό λάκτισμα. Σωστό λύγισμα και χτύπημα με το μετατάρσιο.' : 'Master the fundamental lead leg front kick. Learn proper chambering.',
-                dur: '0:26', level: 'beg', xp: 50,
-                drive_id: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt',
-                locked: false
+                title: userLang === 'gr' ? 'Front Kick (Ahp Chagi)' : 'Front Kick (Ahp Chagi)',
+                desc: userLang === 'gr' ? 'Μάθετε το βασικό λάκτισμα. Σωστό λύγισμα και χτύπημα με το μετατάρσιο.' : 'Master the fundamental lead leg front kick.',
+                dur: '0:30', level: 'beg', xp: 50,
+                drive_id_gr: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', 
+                drive_id_en: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt'
             },
             {
                 id: 2, cat: 'defense',
                 title: userLang === 'gr' ? 'Front Block Mechanics' : 'Front Block Mechanics',
-                desc: userLang === 'gr' ? 'Το χέρι έρχεται από κάτω και μπροστά. Το άλλο χέρι τραβιέται πίσω.' : 'The blocking arm comes from below and moves forward as the other pulls back.',
-                dur: '0:43', level: 'beg', xp: 50,
-                drive_id: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl',
-                locked: false
+                desc: userLang === 'gr' ? 'Μηχανική της μπροστινής άμυνας.' : 'Detailed mechanics of the front block.',
+                dur: '0:40', level: 'beg', xp: 50,
+                drive_id_gr: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', 
+                drive_id_en: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl'
             },
             {
                 id: 3, cat: 'strikes',
-                title: userLang === 'gr' ? 'Υψηλή Γροθιά (Sang Dan)' : 'High Punch (Sang Dan)',
-                desc: userLang === 'gr' ? 'Κρατήστε τον αγκώνα μέσα για μέγιστη ισχύ.' : 'Keep the elbow tucked in for maximum power.',
+                title: userLang === 'gr' ? 'High Punch (Sang Dan)' : 'High Punch (Sang Dan)',
+                desc: userLang === 'gr' ? 'Υψηλή γροθιά με σωστή περιστροφή.' : 'High punch with proper rotation.',
                 dur: '0:45', level: 'beg', xp: 50,
                 drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', 
-                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi',
-                locked: false
+                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi'
             },
             {
                 id: 4, cat: 'defense',
-                title: userLang === 'gr' ? 'Outside Block Mechanics' : 'Outside Block Mechanics',
-                desc: userLang === 'gr' ? 'Το χέρι έρχεται από το αυτί ευθεία μπροστά. Αγκώνας κάθετος.' : 'The arm comes from the ear straight forward. Keep the elbow vertical.',
-                dur: '0:33', level: 'beg', xp: 50,
+                title: userLang === 'gr' ? 'Outside Block' : 'Outside Block',
+                desc: userLang === 'gr' ? 'Άμυνα από έξω προς τα μέσα.' : 'Blocking from outside to inside.',
+                dur: '0:35', level: 'beg', xp: 50,
                 drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', 
-                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1',
-                locked: false
+                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1'
             },
             {
                 id: 5, cat: 'kicks',
                 title: userLang === 'gr' ? 'Roundhouse Kick' : 'Roundhouse Kick',
-                desc: userLang === 'gr' ? 'Περιστροφή του ποδιού στήριξης και χτύπημα με το κουντεπιέ.' : 'Pivot the supporting foot and strike with the instep.',
-                dur: '0:38', level: 'beg', xp: 50,
-                drive_id: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG',
-                locked: false
+                desc: userLang === 'gr' ? 'Κυκλικό λάκτισμα με το κουντεπιέ.' : 'Powerful roundhouse kick technique.',
+                dur: '0:38', level: 'beg', xp: 60,
+                drive_id_gr: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', 
+                drive_id_en: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG'
+            },
+            {
+                id: 6, cat: 'self-defense',
+                title: userLang === 'gr' ? 'Defense Against Grab' : 'Defense Against Grab',
+                desc: userLang === 'gr' ? 'Απελευθέρωση από πιάσιμο.' : 'Techniques to escape a grab.',
+                dur: '0:50', level: 'beg', xp: 70,
+                drive_id_gr: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', 
+                drive_id_en: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD'
             }
         ];
 
         const belts = [
-            { name: 'White', min: 0 }, 
-            { name: 'Yellow', min: 500 }, 
-            { name: 'Green', min: 1200 },
-            { name: 'Blue', min: 2000 }, 
-            { name: 'Red', min: 3500 }, 
-            { name: 'Black', min: 5500 }
+            { name: 'White', min: 0 }, { name: 'Yellow', min: 500 }, 
+            { name: 'Green', min: 1200 }, { name: 'Blue', min: 2000 }, 
+            { name: 'Red', min: 3500 }, { name: 'Black', min: 5500 }
         ];
 
         let currentCat = 'all';
@@ -307,6 +310,7 @@
                 document.getElementById('achievementsLabel').textContent = "🏆 Επιτεύγματα";
                 document.querySelector('.btn-back').textContent = "← ΠΙΣΩ";
                 document.querySelector('.page-title').textContent = "ΠΡΟΟΔΟΣ";
+                document.getElementById('lblNextBelt').textContent = "XP ΓΙΑ ΕΠΟΜΕΝΗ ΖΩΝΗ";
             }
         }
 
@@ -323,17 +327,16 @@
             const filtered = currentCat === 'all' ? videos : videos.filter(v => v.cat === currentCat);
             document.getElementById('videoGrid').innerHTML = filtered.map(v => {
                 const isDone = completed.includes(v.id);
-                const isLocked = v.locked && !isElite;
                 return `
-                    <div class="video-card ${isDone ? 'completed' : ''} ${isLocked ? 'locked' : ''}" onclick="handleVideoClick(${v.id}, ${isLocked})">
+                    <div class="video-card ${isDone ? 'completed' : ''}" onclick="handleVideoClick(${v.id})">
                         <div class="video-thumb">
-                            ${isLocked ? '🔒' : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'}
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
                             ${isDone ? '<div class="check-icon">✓</div>' : ''}
                         </div>
                         <div class="video-info">
                             <div class="video-title">${v.title}</div>
                             <div class="video-meta">
-                                <span class="level-tag level-${v.level}">${v.level}</span>
+                                <span class="level-tag level-beg">beg</span>
                                 <span>⏱ ${v.dur}</span>
                                 <span style="color:var(--gold)">+${v.xp}XP</span>
                             </div>
@@ -343,16 +346,11 @@
             }).join('');
         }
 
-        function handleVideoClick(id, locked) {
-            if(locked) return alert(userLang === 'gr' ? "🔒 Απαιτείται Elite Membership." : "🔒 Requires Elite Membership.");
+        function handleVideoClick(id) {
             const v = videos.find(x => x.id === id);
-            
-            let finalId = v.drive_id;
-            if(v.drive_id_gr && v.drive_id_en) {
-                finalId = (userLang === 'gr') ? v.drive_id_gr : v.drive_id_en;
-            }
-
             activeVideo = v;
+            const finalId = (userLang === 'gr') ? v.drive_id_gr : v.drive_id_en;
+
             document.getElementById('modalTitle').textContent = v.title;
             document.getElementById('modalDesc').textContent = v.desc;
             document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${finalId}/preview`;
@@ -367,7 +365,6 @@
                 btn.textContent = `+${v.xp}XP`;
                 btn.onclick = markComplete;
             }
-
             document.getElementById('videoModal').classList.add('open');
         }
 
@@ -377,7 +374,7 @@
         }
 
         function markComplete() {
-            if(!activeVideo || completed.includes(activeVideo.id)) return closeModal();
+            if(!activeVideo || completed.includes(activeVideo.id)) return;
             completed.push(activeVideo.id);
             totalXP += activeVideo.xp;
             localStorage.setItem('dojo_completed', JSON.stringify(completed));
@@ -397,7 +394,7 @@
             }
 
             const next = belts[currentIdx + 1] || belts[currentIdx];
-            const diff = next.min - belts[currentIdx].min || 1;
+            const diff = (next.min - belts[currentIdx].min) || 1;
             const progress = ((totalXP - belts[currentIdx].min) / diff) * 100;
             
             document.getElementById('xpBar').style.width = `${Math.min(progress, 100)}%`;
@@ -413,10 +410,8 @@
 
         function renderBadges() {
             const badges = [
-                { emoji: '🔥', name: 'Hot Streak' },
-                { emoji: '👊', name: 'Striker' },
-                { emoji: '🦵', name: 'Kicker' },
-                { emoji: '🛡️', name: 'Defender' }
+                { emoji: '🔥', name: 'Hot Streak' }, { emoji: '👊', name: 'Striker' },
+                { emoji: '🦵', name: 'Kicker' }, { emoji: '🛡️', name: 'Defender' }
             ];
             document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => `
                 <div class="badge-item ${i === 0 ? 'earned' : ''}">
