@@ -1,204 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Progress Tracker – Elite Defense Dojo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Progress Tracker – Elite Defense Dojo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020617;
+            --gold: #facc15;
+            --neon: #38bdf8;
+            --danger: #ef4444;
+            --safe: #22c55e;
+            --panel: rgba(15,23,42,0.9);
+            --shadow-gold: rgba(250,204,21,0.3);
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<style>
-:root {
-    --bg:#141414;
-    --red:#E50914;
-    --gold:#facc15;
-}
+        body {
+            background: var(--bg);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-body {background:var(--bg);color:#fff;font-family:'Rajdhani';margin:0;}
-.shell {max-width:500px;margin:auto;padding:20px 16px 120px;}
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 0;
+            background-image:
+                linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px);
+            background-size: 36px 36px;
+        }
+        .bg-glow {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%);
+        }
 
-.header {display:flex;justify-content:space-between;margin-bottom:20px;}
-.btn-back {color:#fff;text-decoration:none;font-weight:700;}
+        .shell {
+            position: relative; z-index: 2;
+            max-width: 420px; margin: 0 auto;
+            padding: 20px 16px 100px;
+        }
 
-.belt-section {background:#1f1f1f;padding:15px;border-radius:8px;margin-bottom:25px;border-bottom:3px solid var(--gold);}
-.belt-track {display:flex;justify-content:space-between;}
-.belt-circle {width:30px;height:30px;border-radius:50%;border:2px solid #333;display:flex;align-items:center;justify-content:center;}
-.active .belt-circle {border-color:var(--gold);box-shadow:0 0 10px var(--gold);}
+        .top-nav {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 20px;
+        }
+        .btn-back {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #64748b; padding: 10px 16px;
+            border-radius: 12px; text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            letter-spacing: 1px; transition: 0.2s;
+        }
+        .btn-back:hover { color: var(--gold); border-color: rgba(250,204,21,0.3); }
 
-.stats-row {display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:25px;}
-.stat-card {background:#1f1f1f;padding:10px;text-align:center;}
-.stat-val {color:var(--gold);font-family:'Orbitron';}
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem; color: var(--gold);
+            letter-spacing: 2px;
+        }
 
-.video-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.video-card {background:#1f1f1f;border-radius:4px;overflow:hidden;position:relative;}
-.video-card.completed {box-shadow:0 0 10px var(--gold);}
-.card-img {width:100%;height:100%;opacity:.7;}
+        .belt-section {
+            background: var(--panel);
+            border: 1px solid rgba(250,204,21,0.2);
+            border-radius: 24px; padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 0 30px rgba(250,204,21,0.05);
+        }
 
-.flag-box {position:absolute;top:5px;right:5px;display:flex;gap:5px;}
-.flag-btn {background:#0008;color:#fff;border:none;padding:2px 5px;}
-.flag-btn.active {background:var(--red);}
+        .section-label {
+            font-size: 0.6rem; letter-spacing: 3px;
+            color: var(--gold); text-transform: uppercase;
+            margin-bottom: 16px; font-weight: 700;
+        }
 
-.modal {position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;}
-.modal.open {display:flex;}
-iframe {width:100%;height:250px;border:none;}
+        .belt-track {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px; position: relative;
+        }
+        .belt-track::before {
+            content: '';
+            position: absolute; top: 50%; left: 0; right: 0;
+            height: 2px; background: rgba(255,255,255,0.06);
+            transform: translateY(-50%); z-index: 0;
+        }
 
-.reward {
-position:fixed;inset:0;display:none;
-background:#000d;align-items:center;justify-content:center;
-font-family:'Orbitron';flex-direction:column;
-}
-</style>
+        .belt-node {
+            display: flex; flex-direction: column;
+            align-items: center; gap: 6px;
+            position: relative; z-index: 1;
+        }
+        .belt-circle {
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; border: 2px solid rgba(255,255,255,0.1);
+            background: var(--bg);
+            transition: 0.3s;
+        }
+        .belt-circle.done { border-color: var(--gold); box-shadow: 0 0 12px rgba(250,204,21,0.4); }
+        .belt-circle.active { border-color: var(--neon); box-shadow: 0 0 16px rgba(56,189,248,0.5); animation: belt-pulse 2s infinite; }
+        
+        @keyframes belt-pulse {
+            0%,100% { box-shadow: 0 0 16px rgba(56,189,248,0.5); }
+            50% { box-shadow: 0 0 28px rgba(56,189,248,0.8); }
+        }
+
+        .belt-name { font-size: 0.5rem; letter-spacing: 1px; color: #475569; text-transform: uppercase; font-weight: 700; }
+        .belt-node.done .belt-name { color: var(--gold); }
+        .belt-node.active .belt-name { color: var(--neon); }
+
+        .xp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .xp-label { font-size: 0.72rem; color: #64748b; letter-spacing: 1px; }
+        .xp-value { font-family: 'Orbitron', monospace; font-size: 0.8rem; color: var(--neon); }
+        .xp-bar-bg { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+        .xp-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), #0ea5e9); transition: width 1s ease; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
+        .stat-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 14px 10px; text-align: center; }
+        .stat-value { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900; color: var(--gold); display: block; }
+        .stat-label { font-size: 0.55rem; letter-spacing: 1.5px; color: #475569; text-transform: uppercase; margin-top: 4px; display: block; }
+
+        .video-section { background: var(--panel); border: 1px solid rgba(56,189,248,0.15); border-radius: 24px; padding: 20px; margin-bottom: 18px; }
+        .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
+        .cat-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #64748b; text-transform: uppercase; }
+        .cat-tab.active { background: rgba(250,204,21,0.1); border-color: rgba(250,204,21,0.4); color: var(--gold); }
+
+        .video-grid { display: flex; flex-direction: column; gap: 12px; }
+        .video-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; cursor: pointer; display: flex; transition: 0.2s; }
+        .video-card.locked { opacity: 0.5; }
+        .video-card.completed { border-color: rgba(34,197,94,0.3); }
+
+        .video-thumb { width: 90px; flex-shrink: 0; background: rgba(250,204,21,0.05); display: flex; align-items: center; justify-content: center; position: relative; border-right: 1px solid rgba(255,255,255,0.06); }
+        .play-btn svg { width: 24px; height: 24px; fill: var(--gold); }
+        .check-icon { position: absolute; top: 5px; right: 5px; background: var(--safe); border-radius: 50%; width: 16px; height: 16px; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; }
+
+        .video-info { padding: 12px; flex: 1; }
+        .video-title { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+        .video-meta { display: flex; gap: 8px; align-items: center; font-size: 0.6rem; }
+        .level-tag { padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        .level-beg { background: rgba(34,197,94,0.1); color: var(--safe); }
+        .level-int { background: rgba(250,204,21,0.1); color: var(--gold); }
+
+        .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--gold); }
+        .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; }
+        .modal-video iframe { width: 100%; height: 100%; border: none; }
+        .modal-body { padding: 20px; }
+        .modal-title { font-family: 'Orbitron', monospace; color: var(--gold); margin-bottom: 10px; font-size: 1rem; }
+        .modal-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
+        .modal-actions { display: flex; gap: 10px; }
+        .btn-action { flex: 1; padding: 12px; border-radius: 10px; border: none; font-family: 'Rajdhani'; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .btn-complete { background: var(--safe); color: #fff; }
+        .btn-close { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .achievements-section { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; padding: 20px; margin-bottom: 100px; }
+        .badge-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+        .badge-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 5px; text-align: center; opacity: 0.4; filter: grayscale(1); }
+        .badge-item.earned { opacity: 1; filter: grayscale(0); border-color: var(--gold); }
+        .badge-emoji { font-size: 1.4rem; display: block; }
+        .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; }
+    </style>
 </head>
-
 <body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
 
-<div class="shell">
+    <div class="modal-overlay" id="videoModal">
+        <div class="modal">
+            <div class="modal-video"><iframe id="modalIframe" src="" allowfullscreen></iframe></div>
+            <div class="modal-body">
+                <div class="modal-title" id="modalTitle">TITLE</div>
+                <div class="modal-desc" id="modalDesc">DESCRIPTION</div>
+                <div class="modal-actions">
+                    <button class="btn-action btn-complete" id="completeBtn" onclick="markComplete()">Complete +XP</button>
+                    <button class="btn-action btn-close" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<header class="header">
-<a href="#" class="btn-back">✕ CLOSE</a>
-<div style="color:var(--red);font-family:Orbitron">DOJO STREAM</div>
-</header>
+    <div class="shell">
+        <div class="top-nav">
+            <a href="dojo.html" class="btn-back">← DOJO</a>
+            <span class="page-title">PROGRESS TRACKER</span>
+        </div>
 
-<div class="belt-section">
-<div class="belt-track" id="beltTrack"></div>
-<div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--gold)">
-<span id="progressText">PROGRESS</span>
-<span id="xpValue">0 XP</span>
-</div>
-</div>
+        <div class="belt-section">
+            <div class="section-label" id="beltSectionLabel">🥋 Belt Progression</div>
+            <div class="belt-track">
+                <div class="belt-node" id="belt-0"><div class="belt-circle">⬜</div><span class="belt-name">White</span></div>
+                <div class="belt-node" id="belt-1"><div class="belt-circle">🟡</div><span class="belt-name">Yellow</span></div>
+                <div class="belt-node" id="belt-2"><div class="belt-circle">🟢</div><span class="belt-name">Green</span></div>
+                <div class="belt-node" id="belt-3"><div class="belt-circle">🔵</div><span class="belt-name">Blue</span></div>
+                <div class="belt-node" id="belt-4"><div class="belt-circle">🔴</div><span class="belt-name">Red</span></div>
+                <div class="belt-node" id="belt-5"><div class="belt-circle">⬛</div><span class="belt-name">Black</span></div>
+            </div>
+            <div class="xp-row">
+                <span class="xp-label" id="lblNextBelt">XP TO NEXT BELT</span>
+                <span class="xp-value" id="xpDisplay">0 / 500</span>
+            </div>
+            <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
+        </div>
 
-<div class="stats-row">
-<div class="stat-card"><span class="stat-val" id="statVids">0</span><br>Videos</div>
-<div class="stat-card"><span class="stat-val" id="statXP">0</span><br>XP</div>
-<div class="stat-card"><span class="stat-val" id="statStreak">1</span><br>Streak</div>
-</div>
+        <div class="stats-row">
+            <div class="stat-card"><span class="stat-value" id="statVideos">0</span><span class="stat-label" id="statLabelVideos">Videos</span></div>
+            <div class="stat-card"><span class="stat-value" id="statStreak">1</span><span class="stat-label" id="statLabelStreak">Day Streak</span></div>
+            <div class="stat-card"><span class="stat-value" id="statXP">0</span><span class="stat-label" id="statLabelXP">Total XP</span></div>
+        </div>
 
-<h3 id="libraryTitle">Training Library</h3>
-<div class="video-grid" id="grid"></div>
+        <div class="video-section">
+            <div class="section-label" id="videoLibraryLabel">🎬 Video Library</div>
+            <div class="cat-tabs" id="catTabs"></div>
+            <div class="video-grid" id="videoGrid"></div>
+        </div>
 
-</div>
+        <div class="achievements-section">
+            <div class="section-label" id="achievementsLabel">🏆 Achievements</div>
+            <div class="badge-grid" id="badgeGrid"></div>
+        </div>
+    </div>
+    <script>
+        const userLang = localStorage.getItem('dojo_lang') || 'en';
+        const isElite = localStorage.getItem('isElite') === 'true';
+        let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
+        let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-<div style="background:#181818;padding:10px;">
-<iframe id="player"></iframe>
-<button onclick="complete()">COMPLETE</button>
-<button onclick="closeModal()">Close</button>
-</div>
-</div>
+        const videos = [
+            {
+                id: 1, cat: 'kicks',
+                title: userLang === 'gr' ? 'Front Kick (Ahp Chagi) - Μέρος 1' : 'Front Kick (Ahp Chagi) - Part 1',
+                desc: userLang === 'gr' ? 'Μάθετε το βασικό λάκτισμα. Σωστό λύγισμα και χτύπημα με το μετατάρσιο.' : 'Master the fundamental lead leg front kick. Learn proper chambering.',
+                dur: '0:26', level: 'beg', xp: 50,
+                drive_id: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt',
+                locked: false
+            },
+            {
+                id: 2, cat: 'defense',
+                title: userLang === 'gr' ? 'Front Block Mechanics' : 'Front Block Mechanics',
+                desc: userLang === 'gr' ? 'Το χέρι έρχεται από κάτω και μπροστά. Το άλλο χέρι τραβιέται πίσω.' : 'The blocking arm comes from below and moves forward as the other pulls back.',
+                dur: '0:43', level: 'beg', xp: 50,
+                drive_id: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl',
+                locked: false
+            },
+            {
+                id: 3, cat: 'strikes',
+                title: userLang === 'gr' ? 'Υψηλή Γροθιά (Sang Dan)' : 'High Punch (Sang Dan)',
+                desc: userLang === 'gr' ? 'Κρατήστε τον αγκώνα μέσα για μέγιστη ισχύ.' : 'Keep the elbow tucked in for maximum power.',
+                dur: '0:45', level: 'beg', xp: 50,
+                drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', 
+                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi',
+                locked: false
+            },
+            {
+                id: 4, cat: 'defense',
+                title: userLang === 'gr' ? 'Outside Block Mechanics' : 'Outside Block Mechanics',
+                desc: userLang === 'gr' ? 'Το χέρι έρχεται από το αυτί ευθεία μπροστά. Αγκώνας κάθετος.' : 'The arm comes from the ear straight forward. Keep the elbow vertical.',
+                dur: '0:33', level: 'beg', xp: 50,
+                drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', 
+                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1',
+                locked: false
+            },
+            {
+                id: 5, cat: 'kicks',
+                title: userLang === 'gr' ? 'Roundhouse Kick' : 'Roundhouse Kick',
+                desc: userLang === 'gr' ? 'Περιστροφή του ποδιού στήριξης και χτύπημα με το κουντεπιέ.' : 'Pivot the supporting foot and strike with the instep.',
+                dur: '0:38', level: 'beg', xp: 50,
+                drive_id: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG',
+                locked: false
+            }
+        ];
 
-<!-- REWARD -->
-<div class="reward" id="reward">
-<div style="font-size:2rem;color:#facc15">+XP</div>
-<div id="rewardText"></div>
-</div>
+        const belts = [
+            { name: 'White', min: 0 }, 
+            { name: 'Yellow', min: 500 }, 
+            { name: 'Green', min: 1200 },
+            { name: 'Blue', min: 2000 }, 
+            { name: 'Red', min: 3500 }, 
+            { name: 'Black', min: 5500 }
+        ];
 
-<script>
+        let currentCat = 'all';
+        let activeVideo = null;
 
-let lang = localStorage.getItem('lang') || 'en';
-let done = JSON.parse(localStorage.getItem('done')||'[]');
-let xp = parseInt(localStorage.getItem('xp')||'0');
-let current=null;
+        function init() {
+            translateUI();
+            renderTabs();
+            renderVideos();
+            renderBadges();
+            updateUI();
+        }
 
-const translations = {
-en:{lib:"Training Library",prog:"PROGRESS",done:"COMPLETED ✓"},
-gr:{lib:"Βιβλιοθήκη",prog:"ΠΡΟΟΔΟΣ",done:"ΟΛΟΚΛΗΡΩΘΗΚΕ ✓"}
-};
+        function translateUI() {
+            if(userLang === 'gr') {
+                document.getElementById('beltSectionLabel').textContent = "🥋 Πρόοδος Ζώνης";
+                document.getElementById('statLabelVideos').textContent = "Βίντεο";
+                document.getElementById('statLabelStreak').textContent = "Σερί Ημερών";
+                document.getElementById('statLabelXP').textContent = "Συνολικά XP";
+                document.getElementById('videoLibraryLabel').textContent = "🎬 Βιβλιοθήκη Βίντεο";
+                document.getElementById('achievementsLabel').textContent = "🏆 Επιτεύγματα";
+                document.querySelector('.btn-back').textContent = "← ΠΙΣΩ";
+                document.querySelector('.page-title').textContent = "ΠΡΟΟΔΟΣ";
+            }
+        }
 
-const videos = [
-{id:1,xp:50,links:{en:"1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt",gr:"1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI"}},
-{id:2,xp:50,links:{en:"1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl",gr:"1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo"}},
-{id:3,xp:60,links:{en:"1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi",gr:"1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv"}},
-{id:4,xp:50,links:{en:"1frv_G2vUTpssDva7fYPrVgipdxyDYGd1",gr:"1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I"}},
-{id:5,xp:70,links:{en:"1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG",gr:"1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l"}},
-{id:6,xp:80,links:{en:"1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk",gr:"1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD"}}
-];
+        function renderTabs() {
+            const cats = ['all', 'strikes', 'kicks', 'defense', 'self-defense'];
+            document.getElementById('catTabs').innerHTML = cats.map(c => `
+                <button class="cat-tab ${currentCat === c ? 'active' : ''}" onclick="setCat('${c}')">${c.toUpperCase()}</button>
+            `).join('');
+        }
 
-function init(){
-document.getElementById('libraryTitle').textContent=translations[lang].lib;
-document.getElementById('progressText').textContent=translations[lang].prog;
-render();
-update();
-}
+        function setCat(c) { currentCat = c; renderTabs(); renderVideos(); }
 
-function render(){
-const g=document.getElementById('grid');
+        function renderVideos() {
+            const filtered = currentCat === 'all' ? videos : videos.filter(v => v.cat === currentCat);
+            document.getElementById('videoGrid').innerHTML = filtered.map(v => {
+                const isDone = completed.includes(v.id);
+                const isLocked = v.locked && !isElite;
+                return `
+                    <div class="video-card ${isDone ? 'completed' : ''} ${isLocked ? 'locked' : ''}" onclick="handleVideoClick(${v.id}, ${isLocked})">
+                        <div class="video-thumb">
+                            ${isLocked ? '🔒' : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'}
+                            ${isDone ? '<div class="check-icon">✓</div>' : ''}
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${v.title}</div>
+                            <div class="video-meta">
+                                <span class="level-tag level-${v.level}">${v.level}</span>
+                                <span>⏱ ${v.dur}</span>
+                                <span style="color:var(--gold)">+${v.xp}XP</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-g.innerHTML=videos.map(v=>{
-const isDone=done.includes(v.id);
+        function handleVideoClick(id, locked) {
+            if(locked) return alert(userLang === 'gr' ? "🔒 Απαιτείται Elite Membership." : "🔒 Requires Elite Membership.");
+            const v = videos.find(x => x.id === id);
+            
+            let finalId = v.drive_id;
+            if(v.drive_id_gr && v.drive_id_en) {
+                finalId = (userLang === 'gr') ? v.drive_id_gr : v.drive_id_en;
+            }
 
-return `
-<div class="video-card ${isDone?'completed':''}">
-<div class="flag-box">
-<button class="flag-btn ${lang==='en'?'active':''}" onclick="setLang('en',${v.id})">EN</button>
-<button class="flag-btn ${lang==='gr'?'active':''}" onclick="setLang('gr',${v.id})">GR</button>
-</div>
+            activeVideo = v;
+            document.getElementById('modalTitle').textContent = v.title;
+            document.getElementById('modalDesc').textContent = v.desc;
+            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${finalId}/preview`;
+            
+            const btn = document.getElementById('completeBtn');
+            if(completed.includes(v.id)) {
+                btn.style.opacity = "0.5";
+                btn.textContent = userLang === 'gr' ? "Ολοκληρώθηκε" : "Completed";
+                btn.onclick = null;
+            } else {
+                btn.style.opacity = "1";
+                btn.textContent = `+${v.xp}XP`;
+                btn.onclick = markComplete;
+            }
 
-<div onclick="openVideo(${v.id})">
-<img class="card-img" src="https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400">
-<div style="position:absolute;bottom:5px;left:5px;font-size:.7rem;">
-${isDone?translations[lang].done:`+${v.xp} XP`}
-</div>
-</div>
-</div>
-`;
-}).join('');
-}
+            document.getElementById('videoModal').classList.add('open');
+        }
 
-function setLang(l,id){
-lang=l;
-localStorage.setItem('lang',l);
-init();
-openVideo(id);
-}
+        function closeModal() {
+            document.getElementById('videoModal').classList.remove('open');
+            document.getElementById('modalIframe').src = "";
+        }
 
-function openVideo(id){
-const v=videos.find(x=>x.id===id);
-current=v;
-document.getElementById('player').src=
-`https://drive.google.com/file/d/${v.links[lang]}/preview?autoplay=1`;
-document.getElementById('modal').classList.add('open');
-}
+        function markComplete() {
+            if(!activeVideo || completed.includes(activeVideo.id)) return closeModal();
+            completed.push(activeVideo.id);
+            totalXP += activeVideo.xp;
+            localStorage.setItem('dojo_completed', JSON.stringify(completed));
+            localStorage.setItem('dojo_xp', totalXP);
+            updateUI();
+            renderVideos();
+            closeModal();
+        }
 
-function closeModal(){
-document.getElementById('modal').classList.remove('open');
-document.getElementById('player').src="";
-}
+        function updateUI() {
+            document.getElementById('statVideos').textContent = completed.length;
+            document.getElementById('statXP').textContent = totalXP;
+            
+            let currentIdx = 0;
+            for(let i=belts.length-1; i>=0; i--) {
+                if(totalXP >= belts[i].min) { currentIdx = i; break; }
+            }
 
-function complete(){
-if(current && !done.includes(current.id)){
-done.push(current.id);
-xp+=current.xp;
+            const next = belts[currentIdx + 1] || belts[currentIdx];
+            const diff = next.min - belts[currentIdx].min || 1;
+            const progress = ((totalXP - belts[currentIdx].min) / diff) * 100;
+            
+            document.getElementById('xpBar').style.width = `${Math.min(progress, 100)}%`;
+            document.getElementById('xpDisplay').textContent = `${totalXP} / ${next.min}`;
+            
+            document.querySelectorAll('.belt-node').forEach((node, i) => {
+                const circle = node.querySelector('.belt-circle');
+                circle.className = 'belt-circle';
+                if(i < currentIdx) circle.classList.add('done');
+                if(i === currentIdx) circle.classList.add('active');
+            });
+        }
 
-localStorage.setItem('done',JSON.stringify(done));
-localStorage.setItem('xp',xp);
+        function renderBadges() {
+            const badges = [
+                { emoji: '🔥', name: 'Hot Streak' },
+                { emoji: '👊', name: 'Striker' },
+                { emoji: '🦵', name: 'Kicker' },
+                { emoji: '🛡️', name: 'Defender' }
+            ];
+            document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => `
+                <div class="badge-item ${i === 0 ? 'earned' : ''}">
+                    <span class="badge-emoji">${b.emoji}</span>
+                    <span class="badge-name">${b.name}</span>
+                </div>
+            `).join('');
+        }
 
-reward(current.xp);
-update();
-render();
-}
-closeModal();
-}
-
-function reward(val){
-const r=document.getElementById('reward');
-document.getElementById('rewardText').textContent="+"+val+" XP";
-
-r.style.display="flex";
-new Audio("https://www.myinstants.com/media/sounds/coin.mp3").play();
-
-setTimeout(()=>r.style.display="none",2000);
-}
-
-function update(){
-document.getElementById('statVids').textContent=done.length;
-document.getElementById('statXP').textContent=xp;
-document.getElementById('xpValue').textContent=xp+" XP";
-}
-
-init();
-
-</script>
-
+        init();
+    </script>
 </body>
 </html>
