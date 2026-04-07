@@ -57,7 +57,6 @@
             font-size: 0.8rem; font-weight: 700;
             letter-spacing: 1px; transition: 0.2s;
         }
-        .btn-back:hover { color: var(--gold); border-color: rgba(250,204,21,0.3); }
 
         .page-title {
             font-family: 'Orbitron', monospace;
@@ -65,6 +64,7 @@
             letter-spacing: 2px;
         }
 
+        /* Belt Section */
         .belt-section {
             background: var(--panel);
             border: 1px solid rgba(250,204,21,0.2);
@@ -112,8 +112,6 @@
         }
 
         .belt-name { font-size: 0.5rem; letter-spacing: 1px; color: #475569; text-transform: uppercase; font-weight: 700; }
-        .belt-node.done .belt-name { color: var(--gold); }
-        .belt-node.active .belt-name { color: var(--neon); }
 
         .xp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .xp-label { font-size: 0.72rem; color: #64748b; letter-spacing: 1px; }
@@ -126,26 +124,79 @@
         .stat-value { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900; color: var(--gold); display: block; }
         .stat-label { font-size: 0.55rem; letter-spacing: 1.5px; color: #475569; text-transform: uppercase; margin-top: 4px; display: block; }
 
-        .video-section { background: var(--panel); border: 1px solid rgba(56,189,248,0.15); border-radius: 24px; padding: 20px; margin-bottom: 18px; }
-        .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: none; }
-        .cat-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #64748b; text-transform: uppercase; }
+        /* --- CINEMATIC VIDEO LIBRARY SECTION --- */
+        .video-section {
+            margin-bottom: 30px;
+        }
+        .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; }
+        .cat-tab { flex-shrink: 0; padding: 6px 14px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #64748b; text-transform: uppercase; }
         .cat-tab.active { background: rgba(250,204,21,0.1); border-color: rgba(250,204,21,0.4); color: var(--gold); }
 
-        .video-grid { display: flex; flex-direction: column; gap: 12px; }
-        .video-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; cursor: pointer; display: flex; transition: 0.2s; position: relative; }
-        .video-card.locked { opacity: 0.5; }
-        .video-card.completed { border-color: rgba(34,197,94,0.3); }
+        .video-grid { 
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
+            padding: 10px 5px 30px 5px;
+            scrollbar-width: none;
+        }
+        .video-grid::-webkit-scrollbar { display: none; }
 
-        .video-thumb { width: 90px; flex-shrink: 0; background: rgba(250,204,21,0.05); display: flex; align-items: center; justify-content: center; position: relative; border-right: 1px solid rgba(255,255,255,0.06); }
-        .play-btn svg { width: 24px; height: 24px; fill: var(--gold); }
-        .check-icon { position: absolute; top: 5px; right: 5px; background: var(--safe); border-radius: 50%; width: 16px; height: 16px; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; z-index: 5; }
+        .video-card { 
+            flex: 0 0 85%;
+            scroll-snap-align: center;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(2, 6, 23, 1) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 32px;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            transition: 0.3s;
+        }
 
-        .video-info { padding: 12px; flex: 1; }
-        .video-title { font-size: 0.85rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
-        .video-meta { display: flex; gap: 8px; align-items: center; font-size: 0.6rem; }
-        .level-tag { padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
-        .level-beg { background: rgba(34,197,94,0.1); color: var(--safe); }
+        .video-thumb { 
+            width: 100%; height: 180px;
+            background: linear-gradient(45deg, #0f172a, #1e293b);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .play-btn-cinematic {
+            width: 54px; height: 54px;
+            background: rgba(250, 204, 21, 0.15);
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .play-btn-cinematic svg { width: 28px; height: 28px; fill: var(--gold); margin-left: 3px; }
 
+        .check-icon { 
+            position: absolute; top: 15px; right: 15px; 
+            background: var(--safe); border-radius: 50%; 
+            width: 24px; height: 24px; font-size: 0.8rem; 
+            display: flex; align-items: center; justify-content: center; z-index: 5; 
+        }
+
+        .video-info { 
+            padding: 20px; 
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(to top, rgba(2,6,23,1) 40%, transparent);
+        }
+        .video-title { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem; font-weight: 700; color: var(--gold); 
+            margin-bottom: 8px; 
+        }
+        .video-meta { display: flex; gap: 12px; align-items: center; font-size: 0.7rem; }
+        .level-tag { 
+            background: rgba(56,189,248,0.15); color: var(--neon); 
+            padding: 4px 10px; border-radius: 8px; font-weight: 700; text-transform: uppercase; 
+        }
+
+        /* Modal */
         .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.98); display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.open { display: flex; }
         .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--gold); }
@@ -159,6 +210,7 @@
         .btn-complete { background: var(--safe); color: #fff; }
         .btn-close { background: rgba(255,255,255,0.1); color: #fff; }
 
+        /* Achievements */
         .achievements-section { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; padding: 20px; margin-bottom: 100px; }
         .badge-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
         .badge-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 10px 5px; text-align: center; opacity: 0.4; filter: grayscale(1); }
@@ -178,7 +230,7 @@
                 <div class="modal-title" id="modalTitle">TITLE</div>
                 <div class="modal-desc" id="modalDesc">DESCRIPTION</div>
                 <div class="modal-actions">
-                    <button class="btn-action btn-complete" id="completeBtn" onclick="markComplete()">Complete +XP</button>
+                    <button class="btn-action btn-complete" id="completeBtn">Complete +XP</button>
                     <button class="btn-action btn-close" onclick="closeModal()">Close</button>
                 </div>
             </div>
@@ -215,7 +267,7 @@
         </div>
 
         <div class="video-section">
-            <div class="section-label" id="videoLibraryLabel">🎬 Video Library</div>
+            <div class="section-label" id="videoLibraryLabel">🎬 Training Sessions</div>
             <div class="cat-tabs" id="catTabs"></div>
             <div class="video-grid" id="videoGrid"></div>
         </div>
@@ -228,59 +280,16 @@
 
     <script>
         const userLang = localStorage.getItem('dojo_lang') || 'en';
-        const isElite = localStorage.getItem('isElite') === 'true';
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
         const videos = [
-            {
-                id: 1, cat: 'kicks',
-                title: userLang === 'gr' ? 'Front Kick (Ahp Chagi)' : 'Front Kick (Ahp Chagi)',
-                desc: userLang === 'gr' ? 'Μάθετε το βασικό λάκτισμα. Σωστό λύγισμα και χτύπημα με το μετατάρσιο.' : 'Master the fundamental lead leg front kick.',
-                dur: '0:30', level: 'beg', xp: 50,
-                drive_id_gr: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', 
-                drive_id_en: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt'
-            },
-            {
-                id: 2, cat: 'defense',
-                title: userLang === 'gr' ? 'Front Block Mechanics' : 'Front Block Mechanics',
-                desc: userLang === 'gr' ? 'Μηχανική της μπροστινής άμυνας.' : 'Detailed mechanics of the front block.',
-                dur: '0:40', level: 'beg', xp: 50,
-                drive_id_gr: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', 
-                drive_id_en: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl'
-            },
-            {
-                id: 3, cat: 'strikes',
-                title: userLang === 'gr' ? 'High Punch (Sang Dan)' : 'High Punch (Sang Dan)',
-                desc: userLang === 'gr' ? 'Υψηλή γροθιά με σωστή περιστροφή.' : 'High punch with proper rotation.',
-                dur: '0:45', level: 'beg', xp: 50,
-                drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', 
-                drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi'
-            },
-            {
-                id: 4, cat: 'defense',
-                title: userLang === 'gr' ? 'Outside Block' : 'Outside Block',
-                desc: userLang === 'gr' ? 'Άμυνα από έξω προς τα μέσα.' : 'Blocking from outside to inside.',
-                dur: '0:35', level: 'beg', xp: 50,
-                drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', 
-                drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1'
-            },
-            {
-                id: 5, cat: 'kicks',
-                title: userLang === 'gr' ? 'Roundhouse Kick' : 'Roundhouse Kick',
-                desc: userLang === 'gr' ? 'Κυκλικό λάκτισμα με το κουντεπιέ.' : 'Powerful roundhouse kick technique.',
-                dur: '0:38', level: 'beg', xp: 60,
-                drive_id_gr: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', 
-                drive_id_en: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG'
-            },
-            {
-                id: 6, cat: 'self-defense',
-                title: userLang === 'gr' ? 'Defense Against Grab' : 'Defense Against Grab',
-                desc: userLang === 'gr' ? 'Απελευθέρωση από πιάσιμο.' : 'Techniques to escape a grab.',
-                dur: '0:50', level: 'beg', xp: 70,
-                drive_id_gr: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', 
-                drive_id_en: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD'
-            }
+            { id: 1, cat: 'kicks', title: 'Front Kick (Ahp Chagi)', dur: '0:30', level: 'beg', xp: 50, drive_id_gr: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', drive_id_en: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt', desc: 'Master the fundamental lead leg front kick.' },
+            { id: 2, cat: 'defense', title: 'Front Block Mechanics', dur: '0:40', level: 'beg', xp: 50, drive_id_gr: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', drive_id_en: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl', desc: 'Detailed mechanics of the front block.' },
+            { id: 3, cat: 'strikes', title: 'High Punch (Sang Dan)', dur: '0:45', level: 'beg', xp: 50, drive_id_gr: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', drive_id_en: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', desc: 'High punch with proper rotation.' },
+            { id: 4, cat: 'defense', title: 'Outside Block', dur: '0:35', level: 'beg', xp: 50, drive_id_gr: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', drive_id_en: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', desc: 'Blocking from outside to inside.' },
+            { id: 5, cat: 'kicks', title: 'Roundhouse Kick', dur: '0:38', level: 'beg', xp: 60, drive_id_gr: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', drive_id_en: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG', desc: 'Powerful roundhouse kick technique.' },
+            { id: 6, cat: 'self-defense', title: 'Defense Against Grab', dur: '0:50', level: 'beg', xp: 70, drive_id_gr: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', drive_id_en: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD', desc: 'Techniques to escape a grab.' }
         ];
 
         const belts = [
@@ -306,7 +315,7 @@
                 document.getElementById('statLabelVideos').textContent = "Βίντεο";
                 document.getElementById('statLabelStreak').textContent = "Σερί Ημερών";
                 document.getElementById('statLabelXP').textContent = "Συνολικά XP";
-                document.getElementById('videoLibraryLabel').textContent = "🎬 Βιβλιοθήκη Βίντεο";
+                document.getElementById('videoLibraryLabel').textContent = "🎬 Συνεδρίες Προπόνησης";
                 document.getElementById('achievementsLabel').textContent = "🏆 Επιτεύγματα";
                 document.querySelector('.btn-back').textContent = "← ΠΙΣΩ";
                 document.querySelector('.page-title').textContent = "ΠΡΟΟΔΟΣ";
@@ -328,17 +337,19 @@
             document.getElementById('videoGrid').innerHTML = filtered.map(v => {
                 const isDone = completed.includes(v.id);
                 return `
-                    <div class="video-card ${isDone ? 'completed' : ''}" onclick="handleVideoClick(${v.id})">
+                    <div class="video-card" onclick="handleVideoClick(${v.id})">
                         <div class="video-thumb">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--gold)"><path d="M8 5v14l11-7z"/></svg>
+                            <div class="play-btn-cinematic">
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
                             ${isDone ? '<div class="check-icon">✓</div>' : ''}
                         </div>
                         <div class="video-info">
                             <div class="video-title">${v.title}</div>
                             <div class="video-meta">
-                                <span class="level-tag level-beg">beg</span>
-                                <span>⏱ ${v.dur}</span>
-                                <span style="color:var(--gold)">+${v.xp}XP</span>
+                                <span class="level-tag">${v.level}</span>
+                                <span style="color:#94a3b8">⏱ ${v.dur}</span>
+                                <span style="color:var(--gold); font-weight:bold; margin-left:auto;">+${v.xp}XP</span>
                             </div>
                         </div>
                     </div>
@@ -409,10 +420,7 @@
         }
 
         function renderBadges() {
-            const badges = [
-                { emoji: '🔥', name: 'Hot Streak' }, { emoji: '👊', name: 'Striker' },
-                { emoji: '🦵', name: 'Kicker' }, { emoji: '🛡️', name: 'Defender' }
-            ];
+            const badges = [{ emoji: '🔥', name: 'Streak' }, { emoji: '👊', name: 'Striker' }, { emoji: '🦵', name: 'Kicker' }, { emoji: '🛡️', name: 'Defender' }];
             document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => `
                 <div class="badge-item ${i === 0 ? 'earned' : ''}">
                     <span class="badge-emoji">${b.emoji}</span>
