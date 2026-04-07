@@ -1,285 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Progress Tracker – Elite Defense Dojo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #141414;
-            --netflix-red: #E50914;
-            --gold: #facc15;
-            --card-bg: #1f1f1f;
-            --panel: rgba(20, 20, 20, 0.95);
-        }
+<meta charset="UTF-8">
+<title>Progress Tracker – Elite Defense Dojo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
-        body {
-            background-color: var(--bg);
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
-        }
+<style>
+:root {
+    --bg:#141414;
+    --red:#E50914;
+    --gold:#facc15;
+}
 
-        .shell {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px 16px 120px;
-        }
+body {background:var(--bg);color:#fff;font-family:'Rajdhani';margin:0;}
+.shell {max-width:500px;margin:auto;padding:20px 16px 120px;}
 
-        /* Top Navigation */
-        .header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 25px;
-        }
-        .btn-back {
-            color: #fff; text-decoration: none; font-weight: 700; font-size: 0.9rem;
-            display: flex; align-items: center; gap: 5px;
-        }
+.header {display:flex;justify-content:space-between;margin-bottom:20px;}
+.btn-back {color:#fff;text-decoration:none;font-weight:700;}
 
-        /* Belt Progression Section (Ίδια Λογική) */
-        .belt-section {
-            background: #1f1f1f;
-            border-radius: 8px; padding: 15px;
-            margin-bottom: 25px; border-bottom: 3px solid var(--gold);
-        }
-        .belt-track {
-            display: flex; justify-content: space-between; margin-bottom: 15px;
-            position: relative; padding: 10px 0;
-        }
-        .belt-node { text-align: center; z-index: 1; }
-        .belt-circle { 
-            width: 30px; height: 30px; border-radius: 50%; background: #000;
-            border: 2px solid #333; display: flex; align-items: center; justify-content: center;
-            margin-bottom: 5px; transition: 0.3s;
-        }
-        .belt-node.active .belt-circle { border-color: var(--gold); box-shadow: 0 0 10px var(--gold); }
-        .belt-name { font-size: 0.55rem; text-transform: uppercase; color: #808080; }
+.belt-section {background:#1f1f1f;padding:15px;border-radius:8px;margin-bottom:25px;border-bottom:3px solid var(--gold);}
+.belt-track {display:flex;justify-content:space-between;}
+.belt-circle {width:30px;height:30px;border-radius:50%;border:2px solid #333;display:flex;align-items:center;justify-content:center;}
+.active .belt-circle {border-color:var(--gold);box-shadow:0 0 10px var(--gold);}
 
-        /* Stats Netflix Style */
-        .stats-row {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            margin-bottom: 30px;
-        }
-        .stat-card {
-            background: #1f1f1f; padding: 12px; border-radius: 4px; text-align: center;
-        }
-        .stat-val { font-family: 'Orbitron'; color: var(--gold); font-size: 1.1rem; display: block; }
-        .stat-lab { font-size: 0.6rem; color: #808080; text-transform: uppercase; margin-top: 4px; }
+.stats-row {display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:25px;}
+.stat-card {background:#1f1f1f;padding:10px;text-align:center;}
+.stat-val {color:var(--gold);font-family:'Orbitron';}
 
-        /* Video Grid (Netflix Style) */
-        .row-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; color: #fff; }
-        .video-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        
-        .video-card {
-            background: var(--card-bg);
-            border-radius: 4px; overflow: hidden;
-            position: relative; aspect-ratio: 16/9;
-            cursor: pointer; transition: transform 0.3s;
-        }
-        .video-card:active { transform: scale(0.95); }
-        
-        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
-        .card-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 70%);
-            padding: 8px; display: flex; flex-direction: column; justify-content: flex-end;
-        }
-        .v-title { font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; }
-        
-        /* Language Flags Toggle */
-        .flag-box {
-            position: absolute; top: 5px; right: 5px;
-            display: flex; gap: 5px; z-index: 10;
-        }
-        .flag-btn {
-            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2);
-            padding: 2px 4px; border-radius: 3px; font-size: 0.7rem; color: #fff;
-        }
-        .flag-btn.active { background: var(--netflix-red); border-color: var(--netflix-red); }
+.video-grid {display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.video-card {background:#1f1f1f;border-radius:4px;overflow:hidden;position:relative;}
+.video-card.completed {box-shadow:0 0 10px var(--gold);}
+.card-img {width:100%;height:100%;opacity:.7;}
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed; inset: 0; z-index: 2000;
-            background: rgba(0,0,0,0.95);
-            display: none; align-items: center; justify-content: center;
-        }
-        .modal-overlay.open { display: flex; }
-        .modal-content { width: 100%; max-width: 450px; background: #181818; overflow: hidden; position: relative; }
-        .video-box { width: 100%; aspect-ratio: 16/9; background: #000; }
-        .video-box iframe { width: 100%; height: 100%; border: none; }
-        .modal-body { padding: 20px; }
-        .btn-complete {
-            width: 100%; background: #fff; color: #000; border: none;
-            padding: 12px; font-weight: 700; border-radius: 4px; cursor: pointer;
-        }
-    </style>
+.flag-box {position:absolute;top:5px;right:5px;display:flex;gap:5px;}
+.flag-btn {background:#0008;color:#fff;border:none;padding:2px 5px;}
+.flag-btn.active {background:var(--red);}
+
+.modal {position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;}
+.modal.open {display:flex;}
+iframe {width:100%;height:250px;border:none;}
+
+.reward {
+position:fixed;inset:0;display:none;
+background:#000d;align-items:center;justify-content:center;
+font-family:'Orbitron';flex-direction:column;
+}
+</style>
 </head>
+
 <body>
-    <div class="shell">
-        <header class="header">
-            <a href="index.html" class="btn-back">✕ CLOSE</a>
-            <div style="font-family:'Orbitron'; color:var(--netflix-red); font-size:0.9rem">DOJO STREAM</div>
-        </header>
 
-        <div class="belt-section">
-            <div class="belt-track" id="beltTrack">
-                </div>
-            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--gold)">
-                <span id="beltProgressLabel">PROGRESS</span>
-                <span id="xpValue">0 / 500</span>
-            </div>
-        </div>
+<div class="shell">
 
-        <div class="stats-row">
-            <div class="stat-card"><span class="stat-val" id="statVids">0</span><span class="stat-lab">Videos</span></div>
-            <div class="stat-card"><span class="stat-val" id="statXP">0</span><span class="stat-lab">Total XP</span></div>
-            <div class="stat-card"><span class="stat-val">1</span><span class="stat-lab">Streak</span></div>
-        </div>
+<header class="header">
+<a href="#" class="btn-back">✕ CLOSE</a>
+<div style="color:var(--red);font-family:Orbitron">DOJO STREAM</div>
+</header>
 
-        <h3 class="row-title" id="rowTitle">Training Library</h3>
-        <div class="video-grid" id="videoGrid"></div>
-    </div>
+<div class="belt-section">
+<div class="belt-track" id="beltTrack"></div>
+<div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--gold)">
+<span id="progressText">PROGRESS</span>
+<span id="xpValue">0 XP</span>
+</div>
+</div>
 
-    <div class="modal-overlay" id="videoModal">
-        <div class="modal-content">
-            <div class="video-box"><iframe id="videoIframe" src="" allowfullscreen></iframe></div>
-            <div class="modal-body">
-                <h2 id="modalVideoTitle" style="margin-bottom:15px; font-size:1.2rem"></h2>
-                <button class="btn-complete" onclick="markComplete()">COMPLETE & SAVE</button>
-                <button onclick="closeModal()" style="width:100%; background:none; border:none; color:#808080; margin-top:15px">Not now</button>
-            </div>
-        </div>
-    </div>
+<div class="stats-row">
+<div class="stat-card"><span class="stat-val" id="statVids">0</span><br>Videos</div>
+<div class="stat-card"><span class="stat-val" id="statXP">0</span><br>XP</div>
+<div class="stat-card"><span class="stat-val" id="statStreak">1</span><br>Streak</div>
+</div>
+
+<h3 id="libraryTitle">Training Library</h3>
+<div class="video-grid" id="grid"></div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div style="background:#181818;padding:10px;">
+<iframe id="player"></iframe>
+<button onclick="complete()">COMPLETE</button>
+<button onclick="closeModal()">Close</button>
+</div>
+</div>
+
+<!-- REWARD -->
+<div class="reward" id="reward">
+<div style="font-size:2rem;color:#facc15">+XP</div>
+<div id="rewardText"></div>
+</div>
+
 <script>
-    const userLang = localStorage.getItem('dojo_lang') || 'en';
-    let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
-    let currentVideo = null;
 
-    // Η Βάση Δεδομένων με τα 12 Links (6 ζευγάρια)
-    const videos = [
-        {
-            id: 1, title: "Front Kick (Ahp Chagi)", xp: 50,
-            links: { en: "1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt", gr: "1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt" }
-        },
-        {
-            id: 2, title: "Front Block Mechanics", xp: 50,
-            links: { en: "1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl", gr: "1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl" }
-        },
-        {
-            id: 3, title: "High Punch (Sang Dan)", xp: 60,
-            links: { en: "1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi", gr: "1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv" }
-        },
-        {
-            id: 4, title: "Outside Block Mechanics", xp: 50,
-            links: { en: "1frv_G2vUTpssDva7fYPrVgipdxyDYGd1", gr: "1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I" }
-        },
-        {
-            id: 5, title: "Roundhouse Kick", xp: 70,
-            links: { en: "1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG", gr: "1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG" }
-        },
-        {
-            id: 6, title: "Side Kick Power", xp: 80,
-            links: { en: "ID_ENGLISH_6", gr: "ID_GREEK_6" }
-        }
-    ];
+let lang = localStorage.getItem('lang') || 'en';
+let done = JSON.parse(localStorage.getItem('done')||'[]');
+let xp = parseInt(localStorage.getItem('xp')||'0');
+let current=null;
 
-    const belts = [
-        { name: 'White', min: 0, emoji: '⬜' },
-        { name: 'Yellow', min: 500, emoji: '🟡' },
-        { name: 'Green', min: 1200, emoji: '🟢' },
-        { name: 'Blue', min: 2000, emoji: '🔵' },
-        { name: 'Red', min: 3500, emoji: '🔴' },
-        { name: 'Black', min: 5500, emoji: '⬛' }
-    ];
+const translations = {
+en:{lib:"Training Library",prog:"PROGRESS",done:"COMPLETED ✓"},
+gr:{lib:"Βιβλιοθήκη",prog:"ΠΡΟΟΔΟΣ",done:"ΟΛΟΚΛΗΡΩΘΗΚΕ ✓"}
+};
 
-    function init() {
-        if(userLang === 'gr') {
-            document.getElementById('rowTitle').textContent = "Βιβλιοθήκη Προπόνησης";
-            document.getElementById('beltProgressLabel').textContent = "ΠΡΟΟΔΟΣ ΖΩΝΗΣ";
-        }
-        renderBelts();
-        renderVideos();
-        updateStats();
-    }
+const videos = [
+{id:1,xp:50,links:{en:"1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt",gr:"1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI"}},
+{id:2,xp:50,links:{en:"1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl",gr:"1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo"}},
+{id:3,xp:60,links:{en:"1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi",gr:"1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv"}},
+{id:4,xp:50,links:{en:"1frv_G2vUTpssDva7fYPrVgipdxyDYGd1",gr:"1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I"}},
+{id:5,xp:70,links:{en:"1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG",gr:"1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l"}},
+{id:6,xp:80,links:{en:"1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk",gr:"1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD"}}
+];
 
-    function renderBelts() {
-        const totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
-        const track = document.getElementById('beltTrack');
-        track.innerHTML = belts.map((b, i) => {
-            const isActive = totalXP >= b.min;
-            return `
-                <div class="belt-node ${isActive ? 'active' : ''}">
-                    <div class="belt-circle">${b.emoji}</div>
-                    <div class="belt-name">${b.name}</div>
-                </div>
-            `;
-        }).join('');
-    }
+function init(){
+document.getElementById('libraryTitle').textContent=translations[lang].lib;
+document.getElementById('progressText').textContent=translations[lang].prog;
+render();
+update();
+}
 
-    function renderVideos() {
-        const grid = document.getElementById('videoGrid');
-        grid.innerHTML = videos.map(v => {
-            const isDone = completed.includes(v.id);
-            return `
-                <div class="video-card">
-                    <div class="flag-box">
-                        <button class="flag-btn ${userLang === 'en' ? 'active' : ''}" onclick="openVideo(${v.id}, 'en')">EN</button>
-                        <button class="flag-btn ${userLang === 'gr' ? 'active' : ''}" onclick="openVideo(${v.id}, 'gr')">GR</button>
-                    </div>
-                    <div onclick="openVideo(${v.id}, null)" style="height:100%">
-                        <img src="https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400" class="card-img">
-                        <div class="card-overlay">
-                            <div class="v-title">${v.title}</div>
-                            <div style="font-size:0.5rem; color:var(--gold)">${isDone ? 'COMPLETED ✓' : '+ ' + v.xp + ' XP'}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
+function render(){
+const g=document.getElementById('grid');
 
-    function openVideo(id, forcedLang) {
-        const video = videos.find(v => v.id === id);
-        currentVideo = video;
-        const lang = forcedLang || userLang || 'en';
-        const driveId = video.links[lang] || video.links['en'];
+g.innerHTML=videos.map(v=>{
+const isDone=done.includes(v.id);
 
-        document.getElementById('modalVideoTitle').textContent = video.title;
-        document.getElementById('videoIframe').src = `https://drive.google.com/file/d/${driveId}/preview`;
-        document.getElementById('videoModal').classList.add('open');
-    }
+return `
+<div class="video-card ${isDone?'completed':''}">
+<div class="flag-box">
+<button class="flag-btn ${lang==='en'?'active':''}" onclick="setLang('en',${v.id})">EN</button>
+<button class="flag-btn ${lang==='gr'?'active':''}" onclick="setLang('gr',${v.id})">GR</button>
+</div>
 
-    function closeModal() {
-        document.getElementById('videoModal').classList.remove('open');
-        document.getElementById('videoIframe').src = "";
-    }
+<div onclick="openVideo(${v.id})">
+<img class="card-img" src="https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400">
+<div style="position:absolute;bottom:5px;left:5px;font-size:.7rem;">
+${isDone?translations[lang].done:`+${v.xp} XP`}
+</div>
+</div>
+</div>
+`;
+}).join('');
+}
 
-    function markComplete() {
-        if(currentVideo && !completed.includes(currentVideo.id)) {
-            completed.push(currentVideo.id);
-            localStorage.setItem('dojo_completed', JSON.stringify(completed));
-            
-            let xp = parseInt(localStorage.getItem('dojo_xp') || '0');
-            localStorage.setItem('dojo_xp', xp + currentVideo.xp);
-            
-            updateStats();
-            renderVideos();
-            renderBelts();
-        }
-        closeModal();
-    }
+function setLang(l,id){
+lang=l;
+localStorage.setItem('lang',l);
+init();
+openVideo(id);
+}
 
-    function updateStats() {
-        const xp = localStorage.getItem('dojo_xp') || '0';
-        document.getElementById('statVids').textContent = completed.length;
-        document.getElementById('statXP').textContent = xp;
-        document.getElementById('xpValue').textContent = xp + " XP";
-    }
+function openVideo(id){
+const v=videos.find(x=>x.id===id);
+current=v;
+document.getElementById('player').src=
+`https://drive.google.com/file/d/${v.links[lang]}/preview?autoplay=1`;
+document.getElementById('modal').classList.add('open');
+}
 
-    init();
+function closeModal(){
+document.getElementById('modal').classList.remove('open');
+document.getElementById('player').src="";
+}
+
+function complete(){
+if(current && !done.includes(current.id)){
+done.push(current.id);
+xp+=current.xp;
+
+localStorage.setItem('done',JSON.stringify(done));
+localStorage.setItem('xp',xp);
+
+reward(current.xp);
+update();
+render();
+}
+closeModal();
+}
+
+function reward(val){
+const r=document.getElementById('reward');
+document.getElementById('rewardText').textContent="+"+val+" XP";
+
+r.style.display="flex";
+new Audio("https://www.myinstants.com/media/sounds/coin.mp3").play();
+
+setTimeout(()=>r.style.display="none",2000);
+}
+
+function update(){
+document.getElementById('statVids').textContent=done.length;
+document.getElementById('statXP').textContent=xp;
+document.getElementById('xpValue').textContent=xp+" XP";
+}
+
+init();
+
 </script>
+
 </body>
 </html>
