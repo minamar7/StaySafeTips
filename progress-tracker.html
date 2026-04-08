@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
     <meta charset="UTF-8">
     <title>Progress Tracker – Elite Defense Dojo</title>
@@ -10,7 +10,6 @@
             --bg: #020617;
             --gold: #facc15;
             --neon: #38bdf8;
-            --danger: #ef4444;
             --safe: #22c55e;
             --panel: rgba(15,23,42,0.9);
             --shadow-gold: rgba(250,204,21,0.3);
@@ -20,163 +19,85 @@
         body { background: var(--bg); color: #fff; font-family: 'Rajdhani', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
         .bg-grid { position: fixed; inset: 0; z-index: 0; background-image: linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px); background-size: 36px 36px; }
-        .bg-glow { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(250,204,21,0.08) 0%, transparent 70%); }
-
         .shell { position: relative; z-index: 2; max-width: 420px; margin: 0 auto; padding: 20px 16px 100px; }
 
-        /* Top Nav & Stats */
+        /* Top Nav */
         .top-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        .btn-back { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #64748b; padding: 10px 16px; border-radius: 12px; text-decoration: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; transition: 0.2s; }
-        .btn-back:hover { color: var(--gold); border-color: var(--shadow-gold); }
-        .page-title { font-family: 'Orbitron', monospace; font-size: 0.9rem; color: var(--gold); letter-spacing: 2px; }
+        .btn-back { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #64748b; padding: 10px 16px; border-radius: 12px; text-decoration: none; font-size: 0.8rem; font-weight: 700; }
+        .page-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--gold); letter-spacing: 2px; }
 
         /* Belt Section */
-        .belt-section { background: var(--panel); border: 1px solid rgba(250,204,21,0.2); border-radius: 24px; padding: 20px; margin-bottom: 18px; box-shadow: 0 0 30px rgba(250,204,21,0.05); }
-        .section-label { font-size: 0.65rem; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .belt-section { background: var(--panel); border: 1px solid rgba(250,204,21,0.2); border-radius: 24px; padding: 20px; margin-bottom: 18px; }
+        .section-label { font-size: 0.65rem; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin: 20px 0 10px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .belt-track { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; position: relative; }
         .belt-track::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); transform: translateY(-50%); }
         .belt-node { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; z-index: 1; }
         .belt-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; border: 2px solid rgba(255,255,255,0.1); background: var(--bg); transition: 0.3s; }
         .belt-circle.done { border-color: var(--gold); box-shadow: 0 0 10px var(--shadow-gold); }
         .belt-circle.active { border-color: var(--neon); box-shadow: 0 0 15px var(--neon); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 15px var(--neon); } 50% { box-shadow: 0 0 25px var(--neon); } }
+        .belt-name { font-size: 0.5rem; color: #475569; text-transform: uppercase; }
         
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 15px var(--neon); }
-            50% { box-shadow: 0 0 25px var(--neon); }
-        }
-        
-        .belt-name { font-size: 0.5rem; letter-spacing: 1px; color: #475569; text-transform: uppercase; }
-        .belt-node.done .belt-name { color: var(--gold); }
-        .belt-node.active .belt-name { color: var(--neon); }
-
         .xp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .xp-label { font-size: 0.65rem; color: #64748b; }
         .xp-value { font-family: 'Orbitron'; font-size: 0.8rem; color: var(--neon); }
         .xp-bar-bg { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
-        .xp-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), #0ea5e9); transition: width 1s; }
+        .xp-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon), #0ea5e9); transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
+        /* Stats */
         .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 25px; }
         .stat-card { background: var(--panel); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 12px; text-align: center; }
-        .stat-value { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--gold); display: block; }
-        .stat-label { font-size: 0.5rem; color: #475569; text-transform: uppercase; margin-top: 4px; display: block; }
+        .stat-value { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--gold); }
+        .stat-label { font-size: 0.5rem; color: #475569; text-transform: uppercase; }
 
-        /* CINEMATIC VIDEO LIBRARY */
-        .video-library-container { margin-bottom: 30px; }
-        .video-row-wrapper { margin-bottom: 30px; }
-        .video-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding: 10px 0 20px; scrollbar-width: none; }
-        .video-grid::-webkit-scrollbar { display: none; }
-
-        .video-card { 
-            flex: 0 0 80%; scroll-snap-align: center; 
-            background: linear-gradient(180deg, rgba(15,23,42,0.4) 0%, rgba(2,6,23,1) 100%);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
-            height: 260px; position: relative; overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 20px var(--shadow-gold);
-        }
-
-        .video-card.completed {
-            border-color: var(--safe);
-            box-shadow: 0 10px 25px rgba(34,197,94,0.2);
-        }
-
-        /* Mockup Backgrounds based on category */
-        .video-thumb { 
-            width: 100%; height: 160px; position: relative;
-            background-size: cover; background-position: center;
-            filter: brightness(0.7);
-            transition: filter 0.3s ease;
-        }
-
-        .video-card:hover .video-thumb {
-            filter: brightness(1);
-        }
-
-        /* Category Specific Mockups */
-        .thumb-kicks { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&q=80&w=400'); }
-        .thumb-strikes { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1552072805-2a9039d00e57?auto=format&fit=crop&q=80&w=400'); }
-        .thumb-defense { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1599411036035-1f91b5c4900a?auto=format&fit=crop&q=80&w=400'); }
-        .thumb-self-defense { background-image: linear-gradient(rgba(2,6,23,0.3), rgba(2,6,23,0.3)), url('https://images.unsplash.com/photo-1517438476312-10d79c67750d?auto=format&fit=crop&q=80&w=400'); }
-
-        .play-btn { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 50px; height: 50px; background: rgba(250,204,21,0.2);
-            border: 2px solid var(--gold); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        .video-card:hover .play-btn {
-            transform: translate(-50%, -50%) scale(1.1);
-            background: rgba(250,204,21,0.3);
-            box-shadow: 0 0 20px var(--shadow-gold);
-        }
-        
-        .play-btn svg { width: 24px; height: 24px; fill: var(--gold); margin-left: 3px; }
-
+        /* Video Grid (Horizontal) */
+        .video-grid { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+        .video-card { flex: 0 0 80%; scroll-snap-align: center; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; height: 260px; position: relative; overflow: hidden; }
+        .video-thumb { width: 100%; height: 160px; background-image: url('1000043232.jpg'); background-size: cover; background-position: center; filter: brightness(0.7); }
+        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(250,204,21,0.2); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .video-info { padding: 15px; position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #020617 60%, transparent); }
-        .video-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--gold); margin-bottom: 5px; }
-        .video-meta { display: flex; align-items: center; gap: 10px; font-size: 0.65rem; color: #94a3b8; }
-        .lang-flag { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.8rem; z-index: 10; border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(5px); }
-        .check-icon { position: absolute; top: 15px; right: 15px; background: var(--safe); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; z-index: 10; font-size: 0.7rem; box-shadow: 0 0 10px var(--safe); }
+        .video-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--gold); }
+        .check-icon { position: absolute; top: 15px; right: 15px; background: var(--safe); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; }
 
-        /* Modal */
+        /* Badges */
+        .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .badge-item { background: rgba(255,255,255,0.03); border-radius: 16px; padding: 12px 5px; text-align: center; opacity: 0.2; filter: grayscale(1); border: 1px solid transparent; transition: 0.5s ease; }
+        .badge-item.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--gold); background: rgba(250,204,21,0.05); transform: scale(1.05); box-shadow: 0 0 15px rgba(250,204,21,0.2); }
+        .badge-emoji { font-size: 1.6rem; display: block; }
+        .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; margin-top: 5px; display: block; }
+        .badge-item.unlocked .badge-name { color: var(--gold); }
+
+        /* Modal & Slow-down Loader */
         .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.95); display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
-        .modal-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; overflow: hidden; border: 1px solid var(--gold); animation: slideUp 0.3s ease; }
-        
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .modal-video { width: 100%; aspect-ratio: 16/9; background: #000; }
+        .modal-overlay.open { display: flex; }
+        .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; border: 1px solid var(--gold); overflow: hidden; }
+        .modal-video { width: 100%; aspect-ratio: 16/9; }
         .modal-video iframe { width: 100%; height: 100%; border: none; }
         .modal-body { padding: 20px; }
-        .modal-title { font-family: 'Orbitron'; color: var(--gold); font-size: 1rem; margin-bottom: 10px; }
-        .modal-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 20px; }
-        .modal-actions { display: flex; gap: 10px; }
-        .btn-action { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 700; font-family: 'Rajdhani'; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-size: 0.85rem; }
-        .btn-complete { background: var(--safe); color: #fff; }
-        .btn-complete:hover { background: #16a34a; transform: translateY(-2px); }
-        .btn-close { background: rgba(255,255,255,0.1); color: #fff; }
-        .btn-close:hover { background: rgba(255,255,255,0.15); }
+        .btn-action { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; margin-bottom: 8px; cursor: pointer; text-transform: uppercase; font-family: 'Rajdhani'; }
+        .btn-complete { background: var(--safe); color: white; transition: 0.3s; }
+        .btn-complete:disabled { background: #1e293b; cursor: not-allowed; opacity: 0.6; }
 
-        .achievements-section { background: var(--panel); border-radius: 24px; padding: 20px; margin-bottom: 100px; border: 1px solid rgba(255,255,255,0.05); }
-        .badge-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
-        .badge-item { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px 5px; text-align: center; opacity: 0.3; filter: grayscale(1); border: 1px solid transparent; transition: all 0.3s ease; }
-        .badge-item.earned { opacity: 1; filter: grayscale(0); border-color: var(--gold); background: rgba(250,204,21,0.05); }
-        .badge-item.earned:hover { transform: scale(1.05); }
-        .badge-emoji { font-size: 1.4rem; display: block; }
-        .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; margin-top: 5px; display: block; }
+        /* XP Processing Overlay (The "Slow Down" effect) */
+        #xpLoader { position: fixed; inset: 0; z-index: 2000; background: rgba(2,6,23,0.8); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .loader-circle { width: 40px; height: 40px; border: 3px solid rgba(250,204,21,0.1); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin-bottom: 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
+    
+    <div id="xpLoader">
+        <div class="loader-circle"></div>
+        <div style="font-family:'Orbitron'; color:var(--gold); font-size:0.8rem; letter-spacing:2px;">PROCESSING XP...</div>
+    </div>
 
     <div class="modal-overlay" id="videoModal">
         <div class="modal">
             <div class="modal-video"><iframe id="modalIframe" src="" allowfullscreen></iframe></div>
             <div class="modal-body">
-                <div class="modal-title" id="modalTitle">TITLE</div>
-                <div class="modal-desc" id="modalDesc">DESCRIPTION</div>
-                <div class="modal-actions">
-                    <button class="btn-action btn-complete" id="completeBtn" onclick="markComplete()">Complete +XP</button>
-                    <button class="btn-action btn-close" onclick="closeModal()">Close</button>
-                </div>
+                <div id="modalTitle" style="color:var(--gold); font-family:'Orbitron'; margin-bottom:15px;">TITLE</div>
+                <button class="btn-action btn-complete" id="completeBtn">Complete Session</button>
+                <button class="btn-action" style="background:rgba(255,255,255,0.1); color:white;" onclick="closeModal()">Close</button>
             </div>
         </div>
     </div>
@@ -188,7 +109,7 @@
         </div>
 
         <div class="belt-section">
-            <div class="section-label" id="beltSectionLabel">🥋 Belt Progression</div>
+            <div class="section-label">🥋 Belt Progression</div>
             <div class="belt-track">
                 <div class="belt-node" id="belt-0"><div class="belt-circle">⬜</div><span class="belt-name">White</span></div>
                 <div class="belt-node" id="belt-1"><div class="belt-circle">🟡</div><span class="belt-name">Yellow</span></div>
@@ -198,34 +119,26 @@
                 <div class="belt-node" id="belt-5"><div class="belt-circle">⬛</div><span class="belt-name">Black</span></div>
             </div>
             <div class="xp-row">
-                <span class="xp-label" id="lblNextBelt">XP TO NEXT BELT</span>
+                <span style="font-size:0.6rem; color:#64748b;">TOTAL XP PROGRESS</span>
                 <span class="xp-value" id="xpDisplay">0 / 500</span>
             </div>
             <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
         </div>
 
         <div class="stats-row">
-            <div class="stat-card"><span class="stat-value" id="statVideos">0</span><span class="stat-label" id="statLabelVideos">Videos</span></div>
-            <div class="stat-card"><span class="stat-value" id="statStreak">1</span><span class="stat-label" id="statLabelStreak">Day Streak</span></div>
-            <div class="stat-card"><span class="stat-value" id="statXP">0</span><span class="stat-label" id="statLabelXP">Total XP</span></div>
+            <div class="stat-card"><span class="stat-value" id="statVideos">0</span><span class="stat-label">Videos</span></div>
+            <div class="stat-card"><span class="stat-value">1</span><span class="stat-label">Streak</span></div>
+            <div class="stat-card"><span class="stat-value" id="statXP">0</span><span class="stat-label">Total XP</span></div>
         </div>
 
-        <div class="video-library-container">
-            <div class="video-row-wrapper">
-                <div class="section-label">🇬🇧 English Training Sessions</div>
-                <div class="video-grid" id="gridEnglish"></div>
-            </div>
+        <div class="section-label">🇬🇧 English Sessions</div>
+        <div class="video-grid" id="gridEnglish"></div>
 
-            <div class="video-row-wrapper">
-                <div class="section-label">🇬🇷 Ελληνικές Συνεδρίες</div>
-                <div class="video-grid" id="gridGreek"></div>
-            </div>
-        </div>
+        <div class="section-label">🇬🇷 Ελληνικές Συνεδρίες</div>
+        <div class="video-grid" id="gridGreek"></div>
 
-        <div class="achievements-section">
-            <div class="section-label" id="achievementsLabel">🏆 Achievements</div>
-            <div class="badge-grid" id="badgeGrid"></div>
-        </div>
+        <div class="section-label">🏆 Achievements</div>
+        <div class="badge-grid" id="badgeGrid"></div>
     </div>
 
     <script>
@@ -233,88 +146,90 @@
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
         const videoData = [
-            // ENGLISH VIDEOS
-            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block Mechanics', dur: '0:43', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl', desc: 'Master the core mechanics of the front block.' },
-            { id: "e2", lang: 'en', cat: 'defense', title: 'Outside Block', dur: '0:33', xp: 50, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', desc: 'Defend against outside attacks with precision.' },
-            { id: "e3", lang: 'en', cat: 'strikes', title: 'High Punch', dur: '0:45', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', desc: 'The fundamental high punch strike.' },
-            { id: "e4", lang: 'en', cat: 'kicks', title: 'Front Kick (Ahp Chagi)', dur: '0:26', xp: 50, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt', desc: 'The most basic but powerful kick.' },
-            { id: "e5", lang: 'en', cat: 'kicks', title: 'Roundhouse Kick', dur: '0:38', xp: 50, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', desc: 'The signature circular kick.' },
-            { id: "e6", lang: 'en', cat: 'self-defense', title: 'Grab Escape', dur: '0:50', xp: 70, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', desc: 'Basic self-defense escape mechanics.' },
+            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block Mechanics', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl' },
+            { id: "e2", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 50, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1' },
+            { id: "e3", lang: 'en', cat: 'strikes', title: 'High Punch', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi' },
+            { id: "e4", lang: 'en', cat: 'defense', title: 'Front Block (Alt)', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' },
+            { id: "e5", lang: 'en', cat: 'kicks', title: 'Roundhouse Kick', xp: 50, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l' },
+            { id: "e6", lang: 'en', cat: 'self-defense', title: 'Grab Escape', xp: 70, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo' },
+            { id: "g1", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk' },
+            { id: "g2", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' }
+        ];
 
-            // GREEK VIDEOS
-            { id: "g1", lang: 'gr', cat: 'kicks', title: 'Front Kick (Ahp Chagi)', dur: '0:26', xp: 50, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', desc: 'Μάθετε το βασικό λάκτισμα Ahp Chagi.' },
-            { id: "g2", lang: 'gr', cat: 'defense', title: 'Front Block Mechanics', dur: '0:43', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', desc: 'Μηχανική της μπροστινής άμυνας.' },
-            { id: "g3", lang: 'gr', cat: 'strikes', title: 'High Punch (Sang Dan)', dur: '0:45', xp: 50, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', desc: 'Υψηλή γροθιά με σωστή περιστροφή.' },
-            { id: "g4", lang: 'gr', cat: 'defense', title: 'Outside Block', dur: '0:33', xp: 50, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', desc: 'Άμυνα Outside Block.' },
-            { id: "g5", lang: 'gr', cat: 'kicks', title: 'Roundhouse Kick', dur: '0:38', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG', desc: 'Κυκλικό λάκτισμα με το κουντεπιέ.' },
-            { id: "g6", lang: 'gr', cat: 'self-defense', title: 'Άμυνα σε Πιάσιμο', dur: '0:50', xp: 70, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD', desc: 'Τεχνικές απελευθέρωσης από πιάσιμο.' }
+        const badgeData = [
+            { id: 'b1', emoji: '👊', name: 'Novice', threshold: 1000 },
+            { id: 'b2', emoji: '🔥', name: 'Warrior', threshold: 2500 },
+            { id: 'b3', emoji: '🛡️', name: 'Guardian', threshold: 4000 },
+            { id: 'b4', emoji: '🏆', name: 'Master', threshold: 5500 }
         ];
 
         const belts = [
-            { name: 'White', min: 0 }, { name: 'Yellow', min: 500 }, { name: 'Green', min: 1200 },
-            { name: 'Blue', min: 2000 }, { name: 'Red', min: 3500 }, { name: 'Black', min: 5500 }
+            { min: 0 }, { min: 500 }, { min: 1200 }, { min: 2000 }, { min: 3500 }, { min: 5500 }
         ];
 
         let activeVideo = null;
 
-        function init() {
-            renderGrids();
-            renderBadges();
-            updateUI();
-        }
-
         function renderGrids() {
-            const englishVideos = videoData.filter(v => v.lang === 'en');
-            const greekVideos = videoData.filter(v => v.lang === 'gr');
-
-            document.getElementById('gridEnglish').innerHTML = englishVideos.map(v => createCard(v)).join('');
-            document.getElementById('gridGreek').innerHTML = greekVideos.map(v => createCard(v)).join('');
-        }
-
-        function createCard(v) {
-            const isDone = completed.includes(v.id);
-            const thumbClass = `thumb-${v.cat}`;
-            const flag = v.lang === 'en' ? '🇬🇧' : '🇬🇷';
-
-            return `
-                <div class="video-card ${isDone ? 'completed' : ''}" onclick="handleVideoClick('${v.id}')">
-                    <div class="lang-flag">${flag}</div>
-                    <div class="video-thumb ${thumbClass}">
-                        <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-                        ${isDone ? '<div class="check-icon">✓</div>' : ''}
+            const draw = (lang) => videoData.filter(v => v.lang === lang).map(v => `
+                <div class="video-card" onclick="openVideo('${v.id}')">
+                    <div class="video-thumb">
+                        <div class="play-btn"><svg viewBox="0 0 24 24" width="24"><path d="M8 5v14l11-7z" fill="var(--gold)"/></svg></div>
+                        ${completed.includes(v.id) ? '<div class="check-icon">✓</div>' : ''}
                     </div>
                     <div class="video-info">
                         <div class="video-title">${v.title}</div>
-                        <div class="video-meta">
-                            <span style="color:var(--neon); text-transform:uppercase; font-weight:700;">${v.cat}</span>
-                            <span>⏱ ${v.dur}</span>
-                            <span style="color:var(--gold); font-weight:700; margin-left:auto;">+${v.xp} XP</span>
-                        </div>
+                        <div style="font-size:0.6rem; color:var(--neon);">+${v.xp} XP • ${v.cat.toUpperCase()}</div>
                     </div>
                 </div>
-            `;
+            `).join('');
+            document.getElementById('gridEnglish').innerHTML = draw('en');
+            document.getElementById('gridGreek').innerHTML = draw('gr');
         }
 
-        function handleVideoClick(id) {
-            const v = videoData.find(x => x.id === id);
-            activeVideo = v;
-            document.getElementById('modalTitle').textContent = v.title;
-            document.getElementById('modalDesc').textContent = v.desc;
-            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${v.drive}/preview`;
-            
+        function renderBadges() {
+            document.getElementById('badgeGrid').innerHTML = badgeData.map(b => `
+                <div class="badge-item ${totalXP >= b.threshold ? 'unlocked' : ''}">
+                    <span class="badge-emoji">${totalXP >= b.threshold ? b.emoji : '🔒'}</span>
+                    <span class="badge-name">${b.name}</span>
+                    <span style="font-size:0.4rem; color:#475569;">${b.threshold} XP</span>
+                </div>
+            `).join('');
+        }
+
+        function openVideo(id) {
+            activeVideo = videoData.find(v => v.id === id);
+            document.getElementById('modalTitle').textContent = activeVideo.title;
+            document.getElementById('modalIframe').src = `https://drive.google.com/file/d/${activeVideo.drive}/preview`;
             const btn = document.getElementById('completeBtn');
-            if(completed.includes(v.id)) {
-                btn.style.opacity = "0.5";
-                btn.textContent = "Completed ✓";
-                btn.onclick = null;
-                btn.style.cursor = "not-allowed";
+            if(completed.includes(id)) {
+                btn.textContent = "ALREADY DONE";
+                btn.disabled = true;
             } else {
-                btn.style.opacity = "1";
-                btn.textContent = `Complete +${v.xp} XP`;
-                btn.onclick = markComplete;
-                btn.style.cursor = "pointer";
+                btn.textContent = `MARK COMPLETE +${activeVideo.xp}XP`;
+                btn.disabled = false;
+                btn.onclick = processCompletion;
             }
             document.getElementById('videoModal').classList.add('open');
+        }
+
+        // Η "επιβράδυνση" και το XP Animation
+        function processCompletion() {
+            closeModal();
+            document.getElementById('xpLoader').style.display = 'flex';
+            
+            // Επιβράδυνση 1.5 δευτερόλεπτο για "επεξεργασία"
+            setTimeout(() => {
+                document.getElementById('xpLoader').style.display = 'none';
+                if(!completed.includes(activeVideo.id)) {
+                    completed.push(activeVideo.id);
+                    totalXP += activeVideo.xp;
+                    localStorage.setItem('dojo_completed', JSON.stringify(completed));
+                    localStorage.setItem('dojo_xp', totalXP);
+                    updateUI();
+                    renderGrids();
+                    renderBadges();
+                }
+            }, 1500);
         }
 
         function closeModal() {
@@ -322,20 +237,9 @@
             document.getElementById('modalIframe').src = "";
         }
 
-        function markComplete() {
-            if(!activeVideo || completed.includes(activeVideo.id)) return;
-            completed.push(activeVideo.id);
-            totalXP += activeVideo.xp;
-            localStorage.setItem('dojo_completed', JSON.stringify(completed));
-            localStorage.setItem('dojo_xp', totalXP);
-            updateUI();
-            renderGrids();
-            closeModal();
-        }
-
         function updateUI() {
-            document.getElementById('statVideos').textContent = completed.length;
             document.getElementById('statXP').textContent = totalXP;
+            document.getElementById('statVideos').textContent = completed.length;
             
             let currentIdx = 0;
             for(let i=belts.length-1; i>=0; i--) {
@@ -343,52 +247,22 @@
             }
 
             const next = belts[currentIdx + 1] || belts[currentIdx];
-            const diff = (next.min - belts[currentIdx].min) || 1;
-            const progress = ((totalXP - belts[currentIdx].min) / diff) * 100;
+            const progress = ((totalXP - belts[currentIdx].min) / (next.min - belts[currentIdx].min || 1)) * 100;
             
             document.getElementById('xpBar').style.width = `${Math.min(progress, 100)}%`;
             document.getElementById('xpDisplay').textContent = `${totalXP} / ${next.min}`;
             
             document.querySelectorAll('.belt-node').forEach((node, i) => {
-                node.className = 'belt-node';
-                if(i < currentIdx) node.classList.add('done');
-                if(i === currentIdx) node.classList.add('active');
+                const circle = node.querySelector('.belt-circle');
+                circle.className = 'belt-circle';
+                if(i < currentIdx) circle.classList.add('done');
+                if(i === currentIdx) circle.classList.add('active');
             });
         }
 
-        function renderBadges() {
-            const badges = [
-                { emoji: '🔥', name: 'Streak' }, 
-                { emoji: '👊', name: 'Striker' }, 
-                { emoji: '🦵', name: 'Kicker' }, 
-                { emoji: '🛡️', name: 'Defender' },
-                { emoji: '⚡', name: 'Speed' }, 
-                { emoji: '💪', name: 'Power' }, 
-                { emoji: '🎯', name: 'Precision' }, 
-                { emoji: '🏆', name: 'Master' }
-            ];
-            
-            document.getElementById('badgeGrid').innerHTML = badges.map((b, i) => {
-                // Unlock badges based on XP/videos completed
-                const earned = (i === 0 && completed.length > 0) || 
-                               (i === 1 && completed.length >= 3) || 
-                               (i === 2 && completed.length >= 5) || 
-                               (i === 3 && completed.length >= 8) ||
-                               (i === 4 && totalXP >= 500) ||
-                               (i === 5 && totalXP >= 1200) ||
-                               (i === 6 && totalXP >= 2000) ||
-                               (i === 7 && totalXP >= 5500);
-                
-                return `
-                    <div class="badge-item ${earned ? 'earned' : ''}">
-                        <span class="badge-emoji">${b.emoji}</span>
-                        <span class="badge-name">${b.name}</span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        init();
+        renderGrids();
+        renderBadges();
+        updateUI();
     </script>
 </body>
 </html>
