@@ -52,11 +52,12 @@
         /* Video Grid (Horizontal) */
         .video-grid { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }
         .video-card { flex: 0 0 80%; scroll-snap-align: center; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; height: 260px; position: relative; overflow: hidden; }
-        .video-thumb { width: 100%; height: 160px; background-image: url('1000043165.jpg'); background-size: cover; background-position: center; filter: brightness(0.7); }
-        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(250,204,21,0.2); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .video-info { padding: 15px; position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #020617 60%, transparent); }
+        .video-thumb { width: 100%; height: 160px; background-size: cover; background-position: center; filter: brightness(0.8); transition: 0.3s; }
+        .video-card:active .video-thumb { filter: brightness(1) scale(1.05); }
+        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(2, 6, 23, 0.6); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .video-info { padding: 15px; position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #020617 70%, transparent); }
         .video-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--gold); }
-        .check-icon { position: absolute; top: 15px; right: 15px; background: var(--safe); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; }
+        .check-icon { position: absolute; top: 15px; right: 15px; background: var(--safe); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; box-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
 
         /* Badges */
         .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -64,9 +65,8 @@
         .badge-item.unlocked { opacity: 1; filter: grayscale(0); border-color: var(--gold); background: rgba(250,204,21,0.05); transform: scale(1.05); box-shadow: 0 0 15px rgba(250,204,21,0.2); }
         .badge-emoji { font-size: 1.6rem; display: block; }
         .badge-name { font-size: 0.5rem; color: #475569; font-weight: 700; text-transform: uppercase; margin-top: 5px; display: block; }
-        .badge-item.unlocked .badge-name { color: var(--gold); }
 
-        /* Modal & Slow-down Loader */
+        /* Modal & Loader */
         .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(2,6,23,0.95); display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
         .modal-overlay.open { display: flex; }
         .modal { width: 100%; max-width: 400px; background: var(--panel); border-radius: 24px; border: 1px solid var(--gold); overflow: hidden; }
@@ -144,21 +144,21 @@
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
-        // Video Data με τα σωστά links και XP διαβάθμιση
+        // Αντιστοίχιση εικόνων με βάση τους τίτλους (Mockups)
         const videoData = [
-            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl' },
-            { id: "e2", lang: 'en', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' },
-            { id: "e3", lang: 'en', cat: 'kicks', title: 'Front Side Kick', xp: 100, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l' },
-            { id: "e4", lang: 'en', cat: 'strikes', title: 'Front Punch', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi' },
-            { id: "e5", lang: 'en', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1' },
-            { id: "e6", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo' },
+            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl', thumb: '1000043165.jpg' },
+            { id: "e2", lang: 'en', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', thumb: '1000043222.jpg' },
+            { id: "e3", lang: 'en', cat: 'kicks', title: 'Front Side Kick', xp: 100, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', thumb: '1000043232.jpg' },
+            { id: "e4", lang: 'en', cat: 'strikes', title: 'Front Punch', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', thumb: '1000043221.jpg' },
+            { id: "e5", lang: 'en', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', thumb: '1000043223.jpg' },
+            { id: "e6", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', thumb: '1000043165.jpg' },
             
-            { id: "g1", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG' },
-            { id: "g2", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt' },
-            { id: "g3", lang: 'gr', cat: 'kicks', title: 'Front Side Kick', xp: 150, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk' },
-            { id: "g4", lang: 'gr', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv' },
-            { id: "g5", lang: 'gr', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I' },
-            { id: "g6", lang: 'gr', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD' }
+            { id: "g1", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG', thumb: '1000043165.jpg' },
+            { id: "g2", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt', thumb: '1000043222.jpg' },
+            { id: "g3", lang: 'gr', cat: 'kicks', title: 'Front Side Kick', xp: 150, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', thumb: '1000043232.jpg' },
+            { id: "g4", lang: 'gr', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', thumb: '1000043221.jpg' },
+            { id: "g5", lang: 'gr', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', thumb: '1000043223.jpg' },
+            { id: "g6", lang: 'gr', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD', thumb: '1000043165.jpg' }
         ];
 
         const badgeData = [
@@ -168,7 +168,6 @@
             { id: 'b4', emoji: '🏆', name: 'Master', threshold: 10000 }
         ];
 
-        // Η πρώτη ζώνη ξεκλειδώνει στα 1000 XP
         const belts = [
             { min: 0 }, { min: 1000 }, { min: 2500 }, { min: 5000 }, { min: 8000 }, { min: 12000 }
         ];
@@ -178,13 +177,13 @@
         function renderGrids() {
             const draw = (lang) => videoData.filter(v => v.lang === lang).map(v => `
                 <div class="video-card" onclick="openVideo('${v.id}')">
-                    <div class="video-thumb">
-                        <div class="play-btn"><svg viewBox="0 0 24 24" width="24"><path d="M8 5v14l11-7z" fill="var(--gold)"/></svg></div>
+                    <div class="video-thumb" style="background-image: url('${v.thumb}')">
+                        <div class="play-btn"><svg viewBox="0 0 24 24" width="20"><path d="M8 5v14l11-7z" fill="var(--gold)"/></svg></div>
                         ${completed.includes(v.id) ? '<div class="check-icon">✓</div>' : ''}
                     </div>
                     <div class="video-info">
                         <div class="video-title">${v.title}</div>
-                        <div style="font-size:0.6rem; color:var(--neon);">+${v.xp} XP • ${v.cat.toUpperCase()}</div>
+                        <div style="font-size:0.6rem; color:var(--neon); font-weight:700;">+${v.xp} XP • ${v.cat.toUpperCase()}</div>
                     </div>
                 </div>
             `).join('');
