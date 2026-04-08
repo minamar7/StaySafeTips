@@ -144,14 +144,18 @@
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
-        // Διαβάθμιση XP ανάλογα με τη δυσκολία
+        // Video Data με τα σωστά links και XP διαβάθμιση
         const videoData = [
-            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block Mechanics', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl' },
-            { id: "e2", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 100, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1' },
-            { id: "e3", lang: 'en', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi' },
+            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl' },
+            { id: "e2", lang: 'en', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' },
+            { id: "e3", lang: 'en', cat: 'kicks', title: 'Front Side Kick', xp: 100, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l' },
+            { id: "e4", lang: 'en', cat: 'strikes', title: 'Front Punch', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi' },
+            { id: "e5", lang: 'en', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1' },
+            { id: "e6", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo' },
+            
             { id: "g1", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG' },
-            { id: "g2", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 100, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt' },
-            { id: "g3", lang: 'gr', cat: 'kicks', title: 'Front Side Kick', xp: 150, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt' },
+            { id: "g2", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt' },
+            { id: "g3", lang: 'gr', cat: 'kicks', title: 'Front Side Kick', xp: 150, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk' },
             { id: "g4", lang: 'gr', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv' },
             { id: "g5", lang: 'gr', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I' },
             { id: "g6", lang: 'gr', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD' }
