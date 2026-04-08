@@ -144,21 +144,22 @@
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
-        // Αντιστοίχιση εικόνων με βάση τους τίτλους (Mockups)
         const videoData = [
-            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl', thumb: '1000043165.jpg' },
-            { id: "e2", lang: 'en', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', thumb: '1000043222.jpg' },
-            { id: "e3", lang: 'en', cat: 'kicks', title: 'Front Side Kick', xp: 100, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', thumb: '1000043232.jpg' },
-            { id: "e4", lang: 'en', cat: 'strikes', title: 'Front Punch', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', thumb: '1000043221.jpg' },
-            { id: "e5", lang: 'en', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', thumb: '1000043223.jpg' },
-            { id: "e6", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', thumb: '1000043165.jpg' },
+            // English Sessions
+            { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl', thumb: 'Front Block.png' },
+            { id: "e2", lang: 'en', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI', thumb: 'Front Kick.png' },
+            { id: "e3", lang: 'en', cat: 'kicks', title: 'Front Side Kick', xp: 100, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l', thumb: 'Front Side Kick.png' },
+            { id: "e4", lang: 'en', cat: 'strikes', title: 'Front Punch', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi', thumb: 'FrontPunch.png' },
+            { id: "e5", lang: 'en', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1', thumb: 'Middle Block.png' },
+            { id: "e6", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo', thumb: 'Outside Block.png' },
             
-            { id: "g1", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG', thumb: '1000043165.jpg' },
-            { id: "g2", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt', thumb: '1000043222.jpg' },
-            { id: "g3", lang: 'gr', cat: 'kicks', title: 'Front Side Kick', xp: 150, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', thumb: '1000043232.jpg' },
-            { id: "g4", lang: 'gr', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', thumb: '1000043221.jpg' },
-            { id: "g5", lang: 'gr', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', thumb: '1000043223.jpg' },
-            { id: "g6", lang: 'gr', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD', thumb: '1000043165.jpg' }
+            // Greek Sessions
+            { id: "g1", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG', thumb: 'Front Block.png' },
+            { id: "g2", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt', thumb: 'Front Kick 1.png' },
+            { id: "g3", lang: 'gr', cat: 'kicks', title: 'Front Side Kick', xp: 150, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk', thumb: 'Front Side Kick 1.png' },
+            { id: "g4", lang: 'gr', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv', thumb: 'High Punch 1.png' },
+            { id: "g5", lang: 'gr', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I', thumb: 'Middle Block 1.png' },
+            { id: "g6", lang: 'gr', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD', thumb: 'Outside Block 1.png' }
         ];
 
         const badgeData = [
