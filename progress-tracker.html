@@ -52,7 +52,7 @@
         /* Video Grid (Horizontal) */
         .video-grid { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }
         .video-card { flex: 0 0 80%; scroll-snap-align: center; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; height: 260px; position: relative; overflow: hidden; }
-        .video-thumb { width: 100%; height: 160px; background-image: url('1000043232.jpg'); background-size: cover; background-position: center; filter: brightness(0.7); }
+        .video-thumb { width: 100%; height: 160px; background-image: url('1000043165.jpg'); background-size: cover; background-position: center; filter: brightness(0.7); }
         .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(250,204,21,0.2); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .video-info { padding: 15px; position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #020617 60%, transparent); }
         .video-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--gold); }
@@ -77,7 +77,6 @@
         .btn-complete { background: var(--safe); color: white; transition: 0.3s; }
         .btn-complete:disabled { background: #1e293b; cursor: not-allowed; opacity: 0.6; }
 
-        /* XP Processing Overlay (The "Slow Down" effect) */
         #xpLoader { position: fixed; inset: 0; z-index: 2000; background: rgba(2,6,23,0.8); display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .loader-circle { width: 40px; height: 40px; border: 3px solid rgba(250,204,21,0.1); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s infinite linear; margin-bottom: 15px; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -120,7 +119,7 @@
             </div>
             <div class="xp-row">
                 <span style="font-size:0.6rem; color:#64748b;">TOTAL XP PROGRESS</span>
-                <span class="xp-value" id="xpDisplay">0 / 500</span>
+                <span class="xp-value" id="xpDisplay">0 / 1000</span>
             </div>
             <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
         </div>
@@ -145,26 +144,29 @@
         let totalXP = parseInt(localStorage.getItem('dojo_xp') || '0');
         let completed = JSON.parse(localStorage.getItem('dojo_completed') || '[]');
 
+        // Διαβάθμιση XP ανάλογα με τη δυσκολία
         const videoData = [
             { id: "e1", lang: 'en', cat: 'defense', title: 'Front Block Mechanics', xp: 50, drive: '1EHZzH4ye46Zv6PFCBHUc9SGbRivtwIsl' },
-            { id: "e2", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 50, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1' },
-            { id: "e3", lang: 'en', cat: 'strikes', title: 'High Punch', xp: 50, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi' },
-            { id: "e4", lang: 'en', cat: 'defense', title: 'Front Block (Alt)', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' },
-            { id: "e5", lang: 'en', cat: 'kicks', title: 'Roundhouse Kick', xp: 50, drive: '1nCvJ1WxHi6Jmnhs5V7u2g_VlFeEe5T7l' },
-            { id: "e6", lang: 'en', cat: 'self-defense', title: 'Grab Escape', xp: 70, drive: '1eiNMQ7wemQhfChLyYhIRbL29Btk0YpLo' },
-            { id: "g1", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 50, drive: '1fy8fmRHvVWGH6tMT4d5siJfOKabBeUdk' },
-            { id: "g2", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Fslem8kIbjTcYhOBsnPx7qt1n8cBHSQI' }
+            { id: "e2", lang: 'en', cat: 'defense', title: 'Outside Block', xp: 100, drive: '1frv_G2vUTpssDva7fYPrVgipdxyDYGd1' },
+            { id: "e3", lang: 'en', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1Gw01IyW8bQPzC5lhQAOXmauhfP6kOKUi' },
+            { id: "g1", lang: 'gr', cat: 'defense', title: 'Front Block', xp: 50, drive: '1Kci4vsm-vev74IgA-8Nl0bX_N1OuETxG' },
+            { id: "g2", lang: 'gr', cat: 'kicks', title: 'Front Kick', xp: 100, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt' },
+            { id: "g3", lang: 'gr', cat: 'kicks', title: 'Front Side Kick', xp: 150, drive: '1ZCMq052vmFF1yEPfNkTEdyQgcouK2SJt' },
+            { id: "g4", lang: 'gr', cat: 'strikes', title: 'High Punch', xp: 100, drive: '1r0asELekaTfN3ijRr-IWG6RK7zwWEtmv' },
+            { id: "g5", lang: 'gr', cat: 'defense', title: 'Middle Block', xp: 100, drive: '1k5wZeYbY-YvVINi-IaYNzhQf41s10V5I' },
+            { id: "g6", lang: 'gr', cat: 'defense', title: 'Outside Block', xp: 150, drive: '1_EPPWWGSeq5z5VMld2GWBGvUQ3-WcjxD' }
         ];
 
         const badgeData = [
             { id: 'b1', emoji: '👊', name: 'Novice', threshold: 1000 },
-            { id: 'b2', emoji: '🔥', name: 'Warrior', threshold: 2500 },
-            { id: 'b3', emoji: '🛡️', name: 'Guardian', threshold: 4000 },
-            { id: 'b4', emoji: '🏆', name: 'Master', threshold: 5500 }
+            { id: 'b2', emoji: '🔥', name: 'Warrior', threshold: 3000 },
+            { id: 'b3', emoji: '🛡️', name: 'Guardian', threshold: 6000 },
+            { id: 'b4', emoji: '🏆', name: 'Master', threshold: 10000 }
         ];
 
+        // Η πρώτη ζώνη ξεκλειδώνει στα 1000 XP
         const belts = [
-            { min: 0 }, { min: 500 }, { min: 1200 }, { min: 2000 }, { min: 3500 }, { min: 5500 }
+            { min: 0 }, { min: 1000 }, { min: 2500 }, { min: 5000 }, { min: 8000 }, { min: 12000 }
         ];
 
         let activeVideo = null;
@@ -212,12 +214,9 @@
             document.getElementById('videoModal').classList.add('open');
         }
 
-        // Η "επιβράδυνση" και το XP Animation
         function processCompletion() {
             closeModal();
             document.getElementById('xpLoader').style.display = 'flex';
-            
-            // Επιβράδυνση 1.5 δευτερόλεπτο για "επεξεργασία"
             setTimeout(() => {
                 document.getElementById('xpLoader').style.display = 'none';
                 if(!completed.includes(activeVideo.id)) {
