@@ -19,50 +19,66 @@
 body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 .hidden { display: none !important; }
 
-/* UI Elements */
+/* Header & XP */
 .app-header { padding: 45px 20px 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; }
 .xp-bar { background: rgba(255,255,255,0.1); border-radius: 10px; height: 10px; overflow: hidden; margin-top: 8px; }
 .xp-fill { background: linear-gradient(90deg, var(--gold), #fbbf24); height: 100%; width: 0%; transition: 0.8s; }
+
+/* Panic Button */
 .panic-btn { position: fixed; right: 20px; bottom: 210px; width: 70px; height: 70px; background: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(239, 68, 68, 0.6); z-index: 999; border: 4px solid rgba(255,255,255,0.2); cursor: pointer; animation: panic-pulse 1.5s infinite; }
 @keyframes panic-pulse { 0% { transform: scale(1); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-/* Quiz Answer Styling (The "Super" Look) */
+/* Cards & Layout */
+.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
+.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
+.upgrade-btn { background: var(--gold) !important; color: #000 !important; margin-top: 10px; }
+
+/* QUIZ STYLING - ANSWERS DESIGN */
 #quiz-options button {
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text);
-    padding: 18px;
+    padding: 16px;
     margin-bottom: 12px;
-    border-radius: 20px;
+    border-radius: 18px;
     text-align: left;
     font-size: 1rem;
     font-weight: 600;
-    transition: 0.3s;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 }
-#quiz-options button:active { background: rgba(56, 189, 248, 0.2); border-color: var(--accent); transform: scale(0.98); }
+#quiz-options button:active { transform: scale(0.97); }
 
-/* Dojo Gateway (Locked Style) */
-.dojo-gateway { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), #020617); border: 2px solid rgba(250, 204, 21, 0.2); border-radius: 28px; padding: 15px; margin: 20px 0; position: relative; overflow: hidden; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s; }
-.dojo-gateway.unlocked { border: 3px solid var(--gold); box-shadow: 0 0 20px rgba(250, 204, 21, 0.4); }
+/* Correct/Wrong States */
+#quiz-options button.correct {
+    background: rgba(34, 197, 94, 0.2) !important;
+    border-color: var(--success) !important;
+    color: var(--success) !important;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+}
+#quiz-options button.wrong {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: var(--danger) !important;
+    color: var(--danger) !important;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+}
+
+/* Dojo Entry */
+.dojo-gateway { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), #020617); border: 2px solid rgba(250, 204, 21, 0.1); border-radius: 28px; padding: 15px; margin: 20px 0; position: relative; overflow: hidden; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.3s; }
+.dojo-gateway.unlocked { border: 3px solid var(--gold); box-shadow: 0 0 20px rgba(250, 204, 21, 0.3); }
 .dojo-avatar-circle { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; background: #000; flex-shrink: 0; }
 .dojo-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 .gate-info h3 { margin: 0; font-size: 1.1rem; color: #fff; text-transform: uppercase; }
 .gate-info p { margin: 4px 0 0; font-size: 0.65rem; color: var(--gold); font-weight: bold; }
 .premium-tag { position: absolute; top: 12px; right: 15px; background: var(--gold); color: #000; font-size: 0.55rem; padding: 3px 8px; border-radius: 6px; font-weight: 900; }
 
-/* General Components */
-.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
-.main-cta { background: linear-gradient(135deg, var(--accent), #0ea5e9); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 15px; }
-.upgrade-btn { background: var(--gold) !important; color: #000 !important; margin-top: 10px; }
-
-/* Grid & Tools */
+/* Tools Grid */
 .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 14px; }
 .tool-card { background: rgba(255,255,255,0.03); border-radius: 22px; padding: 22px 12px 18px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; align-items: center; gap: 10px; transition: 0.15s; }
 .tool-card small { font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 2px; color: #94a3b8; text-transform: uppercase; }
 
-/* Nav Tabs */
+/* Navigation */
 .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(2, 6, 23, 0.98); display: flex; border-top: 1px solid rgba(255,255,255,0.05); z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
 .nav-tab { flex: 1; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .nav-tab.active { color: var(--accent); }
@@ -166,7 +182,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <script>
 const translations = {
     'en': { days: 'DAYS', training: 'Daily Training', start: 'START QUIZ', ach: '🏆 Achievements', dojo: 'Elite Defense Dojo', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Tools 🔓', t1: 'SAFE TIMER', t2: 'SOS HUB', t3: 'NATURE', t4: 'SCAMS', t5: 'CHECKUP', t6: 'AI THREAT', ready: 'Ready for today\'s safety challenge?', upgrade: '💎 UPGRADE NOW' },
-    'el': { days: 'ΗΜΕΡΕΣ', training: 'Καθημερινή Εκπαίδευση', start: 'ΕΝΑΡΞΗ ΤΕΣΤ', ach: '🏆 Επιτεύγματα', dojo: 'Elite Dojo Άμυνας', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Εργαλεία 🔓', t1: 'ΧΡΟΝΟΜΕΤΡΟ', t2: 'SOS HUB', t3: 'ΦΥΣΗ', t4: 'ΑΠΑΤΕΣ', t5: 'ΕΛΕΓΧΟΣ', t6: 'AI ΑΝΑΛΥΣΗ', ready: 'Έτοιμος για τη πρόκληση;', upgrade: '💎 ΑΝΑΒΑΘΜΙΣΗ' }
+    'el': { days: 'ΗΜΕΡΕΣ', training: 'Καθημερινή Εκπαίδευση', start: 'ΕΝΑΡΞΗ ΤΕΣΤ', ach: '🏆 Επιτεύγματα', dojo: 'Elite Dojo Άμυνας', dojo_sub: 'MASTER TANG SOO DO', tools: 'Elite Εργαλεία 🔓', t1: 'ΧΡΟΝΟΜΕΤΡΟ', t2: 'SOS HUB', t3: 'ΦΥΣΗ', t4: 'ΑΠΑΤΕΣ', t5: 'ΕΛΕΓΧΟΣ', t6: 'AI ΑΝΑΛΥΣΗ', ready: 'Έτοιμος για τη σημερινή πρόκληση;', upgrade: '💎 ΑΝΑΒΑΘΜΙΣΗ' }
 };
 
 function initApp(lang = 'en') {
@@ -215,25 +231,29 @@ function handleUpgradeTaps() {
 }
 
 function checkAccess(url) {
-    if (localStorage.getItem('isPremiumUser') === 'true') { window.location.href = url; }
-    else { window.location.href = 'premium-paywall.html'; }
+    if (localStorage.getItem('isPremiumUser') === 'true') { 
+        window.location.href = url; 
+    } else { 
+        window.location.href = 'premium-paywall.html'; 
+    }
 }
 
 function resetApp() {
-    localStorage.clear();
+    localStorage.removeItem('userLang');
+    localStorage.removeItem('isPremiumUser');
     location.reload();
 }
 
 function startEngine() {
     const lang = localStorage.getItem('userLang') || 'en';
     document.getElementById('quiz_btn').classList.add('hidden');
-    // We target the 'quiz-options' div as defined in the HTML above
     if(window.QuizEngine) window.QuizEngine.start(lang, 'quiz-options');
 }
 
 window.onload = () => {
     const savedLang = localStorage.getItem('userLang');
     if(savedLang) { initApp(savedLang); }
+    
     if (localStorage.getItem('isPremiumUser') === 'true') {
         document.getElementById('upgrade_trigger').classList.add('hidden');
         document.getElementById('dojo_entry').classList.add('unlocked');
