@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Stay Safe Tips Elite – Premium Protection</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Premium Access | Stay Safe Tips Elite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 
   <style>
     :root {
@@ -14,283 +14,153 @@
       --glass-border: rgba(255,255,255,.08);
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
-      font-family: Inter, system-ui, sans-serif;
+      font-family: -apple-system, system-ui, sans-serif;
       background: radial-gradient(circle at top, #1e1b4b, var(--bg-dark));
       color: #f1f5f9;
-      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
 
     .paywall-container {
       max-width: 520px;
       margin: auto;
-      padding: 42px 18px 160px;
-      animation: enter .8s ease;
+      padding: 40px 20px 180px;
     }
 
-    @keyframes enter {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .paywall-header {
-      text-align: center;
-      margin-bottom: 36px;
-    }
+    .paywall-header { text-align: center; margin-bottom: 40px; }
 
     .premium-badge {
       display: inline-block;
       padding: 6px 16px;
       border-radius: 999px;
-      background: linear-gradient(135deg,var(--gold),var(--gold-dark));
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
       color: #422006;
       font-weight: 800;
-      font-size: .75rem;
-      letter-spacing: 1.8px;
+      font-size: .7rem;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin-bottom: 14px;
-      box-shadow: 0 6px 20px rgba(234,179,8,.35);
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(234,179,8,0.3);
     }
 
     h1 {
-      font-size: 2.3rem;
+      font-size: 2.2rem;
       font-weight: 900;
-      background: linear-gradient(#fff,#94a3b8);
+      margin: 0;
+      background: linear-gradient(#fff, #94a3b8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0 0 10px;
-      cursor: pointer; /* Για τον ελεγκτή */
     }
 
-    .subtitle {
-      font-size: .95rem;
-      color: #cbd5f5;
-      max-width: 360px;
-      margin: auto;
-      line-height: 1.5;
-    }
-
-    .benefits-grid {
-      display: grid;
-      gap: 14px;
-      margin-top: 36px;
-    }
+    .benefits-grid { display: grid; gap: 12px; margin-top: 30px; }
 
     .benefit-card {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      padding: 18px 20px;
-      border-radius: 22px;
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(12px);
-      transition: .3s ease;
+      display: flex; gap: 15px; align-items: center;
+      padding: 16px; border-radius: 20px;
+      background: var(--glass); border: 1px solid var(--glass-border);
     }
 
-    .benefit-card:hover {
-      transform: translateY(-2px) scale(1.02);
-      border-color: rgba(250,204,21,.35);
-      background: rgba(255,255,255,.07);
+    .icon { font-size: 1.8rem; width: 40px; text-align: center; }
+    h3 { margin: 0; font-size: 1rem; }
+    .benefit-card p { margin: 4px 0 0; font-size: 0.85rem; color: #94a3b8; }
+
+    .cta-fixed {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(20px);
+      padding: 20px; border-top: 1px solid var(--glass-border);
+      display: flex; flex-direction: column; align-items: center;
     }
 
-    .icon {
-      font-size: 1.9rem;
-      width: 46px;
-      text-align: center;
+    .plan-selector {
+      width: 100%; max-width: 480px;
+      display: flex; gap: 10px; margin-bottom: 15px;
     }
 
-    .benefit-card h3 {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 700;
+    .plan-option {
+      flex: 1; padding: 12px; border-radius: 15px;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      text-align: center; cursor: pointer; transition: 0.2s;
     }
 
-    .benefit-card p {
-      margin: 4px 0 0;
-      font-size: .85rem;
-      color: #94a3b8;
-      line-height: 1.4;
-    }
-
-    .cta {
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 520px;
-      background: rgba(2,6,23,.85);
-      backdrop-filter: blur(22px);
-      border-radius: 26px;
-      padding: 20px;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 -10px 40px rgba(0,0,0,.55);
-    }
-
-    .plan {
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      padding: 14px;
-      border-radius: 18px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: .25s ease;
-    }
-
-    .plan:hover {
-      border-color: var(--gold);
-      background: rgba(255,255,255,.07);
-    }
-
-    .plan-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 2px;
-    }
-
-    .plan small {
-      font-size: .75rem;
-      color: #94a3b8;
-    }
+    .plan-option.active { border-color: var(--gold); background: rgba(250,204,21,0.1); }
 
     .unlock-btn {
-      width: 100%;
-      padding: 18px;
-      border-radius: 18px;
-      border: none;
-      background: linear-gradient(135deg,var(--gold),var(--gold-dark));
-      font-size: 1.1rem;
-      font-weight: 900;
-      cursor: pointer;
-      color: #422006;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      align-items: center;
-      transition: .2s ease;
-      box-shadow: 0 10px 25px rgba(234,179,8,.3);
-    }
-
-    .unlock-btn:active { transform: scale(.96); }
-
-    .trust {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      font-size: .72rem;
-      color: #64748b;
-      margin-top: 12px;
+      width: 100%; max-width: 480px; padding: 18px;
+      border-radius: 18px; border: none;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #422006; font-weight: 900; font-size: 1.1rem; cursor: pointer;
     }
   </style>
 </head>
 <body>
 
 <div class="paywall-container">
-  <header class="paywall-header">
-    <span class="premium-badge">Premium Access</span>
-    <h1 id="paywall-title">Stay Safe Tips Elite</h1>
-    <p class="subtitle">Advanced protection against real‑world threats, scams & AI fraud.</p>
-  </header>
+  <div class="paywall-header">
+    <span class="premium-badge">Elite Membership</span>
+    <h1 id="secret-trigger">Stay Safe Tips Elite</h1>
+    <p style="color: #94a3b8; margin-top: 10px;">Unlock professional security protocols and full Dojo access.</p>
+  </div>
 
   <div class="benefits-grid">
     <div class="benefit-card">
-      <div class="icon">🚨</div>
-      <div>
-        <h3>Emergency Intelligence</h3>
-        <p>Instant SOS, live location & crisis‑ready protocols.</p>
-      </div>
+      <div class="icon">🥋</div>
+      <div><h3>Elite Dojo</h3><p>Full Tang Soo Do video library access.</p></div>
     </div>
     <div class="benefit-card">
-      <div class="icon">🛡️</div>
-      <div>
-        <h3>Security Deep Scan</h3>
-        <p>Detect weak points in your device & social accounts.</p>
-      </div>
+      <div class="icon">🔓</div>
+      <div><h3>Master Quizzes</h3><p>Unlock all levels from Level 7 and above.</p></div>
     </div>
     <div class="benefit-card">
-      <div class="icon">✨</div>
-      <div>
-        <h3>No Ads • Dojo Access</h3>
-        <p>Master Tang Soo Do techniques & enjoy an ad‑free experience.</p>
-      </div>
+      <div class="icon">🚫</div>
+      <div><h3>No Advertisements</h3><p>Pure focus on your safety training.</p></div>
     </div>
   </div>
 </div>
 
-<div class="cta">
-  <div class="plan" onclick="selectPlan('monthly')">
-    <div class="plan-title">€4.90 / month</div>
-    <small>Full access • Cancel anytime</small>
-  </div>
-  <div class="plan" onclick="selectPlan('annual')">
-    <div class="plan-title">€44.90 / year</div>
-    <small>Save 25% • 3 days free trial</small>
+<div class="cta-fixed">
+  <div class="plan-selector">
+    <div class="plan-option active" onclick="selectPlan(this, 'monthly')">
+      <strong>€4.90</strong><br><small>Monthly</small>
+    </div>
+    <div class="plan-option" onclick="selectPlan(this, 'annual')">
+      <strong>€44.90</strong><br><small>Annual</small>
+    </div>
   </div>
 
-  <button class="unlock-btn" onclick="unlock()">
-    Unlock Elite Protection →
-  </button>
-
-  <div class="trust">
-    <span>🔒 Secure</span>
-    <span>⚡ Instant</span>
-    <span>⭐ Official Store Purchase</span>
-  </div>
+  <button class="unlock-btn" onclick="handlePurchase()">UNLOCK ELITE NOW</button>
+  
+  <p style="font-size: 0.7rem; color: #64748b; margin-top: 10px;">Cancel anytime via Google Play Store</p>
 </div>
 
 <script>
-  let selected = "monthly";
-  let secretTaps = 0;
+  let currentPlan = 'monthly';
+  let tapCount = 0;
 
-  // ΜΥΣΤΙΚΟ ΞΕΚΛΕΙΔΩΜΑ ΓΙΑ ΤΟΝ ΕΛΕΓΚΤΗ ΤΗΣ GOOGLE
-  document.getElementById('paywall-title').addEventListener('click', () => {
-    secretTaps++;
-    if (secretTaps === 5) {
+  // Μυστικό ξεκλείδωμα για τους ελεγκτές (5 taps στον τίτλο)
+  document.getElementById('secret-trigger').addEventListener('click', () => {
+    tapCount++;
+    if (tapCount === 5) {
       localStorage.setItem('isPremiumUser', 'true');
-      alert("Reviewer Access Granted: Application Unlocked.");
+      alert("Reviewer Access: All features unlocked.");
       window.location.href = "index.html";
     }
   });
 
-  function selectPlan(plan) {
-    selected = plan;
-    const plans = document.querySelectorAll('.plan');
-    plans.forEach(p => p.style.borderColor = 'var(--glass-border)');
-    event.currentTarget.style.borderColor = 'var(--gold)';
-    
-    const btn = document.querySelector(".unlock-btn");
-    btn.innerHTML = (plan === 'annual') ? "Start 3-Day Free Trial →" : "Unlock Elite Protection →";
-    navigator.vibrate?.(30);
+  function selectPlan(el, plan) {
+    currentPlan = plan;
+    document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('active'));
+    el.classList.add('active');
   }
 
-  function unlock() {
-    navigator.vibrate?.([40,60,40]);
-    const btn = document.querySelector(".unlock-btn");
-    const originalText = btn.innerHTML;
-    
-    btn.textContent = "Connecting to Google Play...";
-    btn.disabled = true;
-
+  function handlePurchase() {
     if (window.AndroidInterface) {
-        window.AndroidInterface.startPurchase(selected);
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }, 5000);
+      window.AndroidInterface.startPurchase(currentPlan);
     } else {
-        alert("Payments are only available inside the Android App.");
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+      alert("Please open this page inside the Stay Safe Tips Elite app.");
     }
-  }
-
-  function paymentSuccess() {
-    localStorage.setItem('isPremiumUser', 'true');
-    window.location.href = "index.html"; 
   }
 </script>
 
