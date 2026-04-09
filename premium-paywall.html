@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Stay Safe Elite – Premium Protection</title>
+  <title>Stay Safe Tips Elite – Premium Protection</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
   <style>
@@ -62,6 +62,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin: 0 0 10px;
+      cursor: pointer; /* Για τον ελεγκτή */
     }
 
     .subtitle {
@@ -133,9 +134,9 @@
     .plan {
       background: var(--glass);
       border: 1px solid var(--glass-border);
-      padding: 16px;
+      padding: 14px;
       border-radius: 18px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       cursor: pointer;
       transition: .25s ease;
     }
@@ -143,13 +144,12 @@
     .plan:hover {
       border-color: var(--gold);
       background: rgba(255,255,255,.07);
-      transform: scale(1.02);
     }
 
     .plan-title {
       font-size: 1.1rem;
       font-weight: 800;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .plan small {
@@ -159,7 +159,7 @@
 
     .unlock-btn {
       width: 100%;
-      padding: 20px;
+      padding: 18px;
       border-radius: 18px;
       border: none;
       background: linear-gradient(135deg,var(--gold),var(--gold-dark));
@@ -172,13 +172,10 @@
       gap: 10px;
       align-items: center;
       transition: .2s ease;
-      box-shadow: 0 14px 30px rgba(234,179,8,.3);
-      margin-top: 10px;
+      box-shadow: 0 10px 25px rgba(234,179,8,.3);
     }
 
-    .unlock-btn:active {
-      transform: scale(.96);
-    }
+    .unlock-btn:active { transform: scale(.96); }
 
     .trust {
       display: flex;
@@ -190,18 +187,16 @@
     }
   </style>
 </head>
-
 <body>
 
 <div class="paywall-container">
   <header class="paywall-header">
     <span class="premium-badge">Premium Access</span>
-    <h1>Stay Safe Elite</h1>
+    <h1 id="paywall-title">Stay Safe Tips Elite</h1>
     <p class="subtitle">Advanced protection against real‑world threats, scams & AI fraud.</p>
   </header>
 
   <div class="benefits-grid">
-
     <div class="benefit-card">
       <div class="icon">🚨</div>
       <div>
@@ -209,7 +204,6 @@
         <p>Instant SOS, live location & crisis‑ready protocols.</p>
       </div>
     </div>
-
     <div class="benefit-card">
       <div class="icon">🛡️</div>
       <div>
@@ -217,49 +211,24 @@
         <p>Detect weak points in your device & social accounts.</p>
       </div>
     </div>
-
-    <div class="benefit-card">
-      <div class="icon">🤖</div>
-      <div>
-        <h3>AI Scam Defense</h3>
-        <p>Protection from deepfakes, voice cloning & phishing traps.</p>
-      </div>
-    </div>
-
-    <div class="benefit-card">
-      <div class="icon">🌐</div>
-      <div>
-        <h3>Offline Survival Kit</h3>
-        <p>Critical safety knowledge even without signal or internet.</p>
-      </div>
-    </div>
-
     <div class="benefit-card">
       <div class="icon">✨</div>
       <div>
-        <h3>No Ads • Priority Access</h3>
-        <p>Ad‑free experience & early access to new features.</p>
+        <h3>No Ads • Dojo Access</h3>
+        <p>Master Tang Soo Do techniques & enjoy an ad‑free experience.</p>
       </div>
     </div>
-
   </div>
 </div>
 
 <div class="cta">
-
   <div class="plan" onclick="selectPlan('monthly')">
     <div class="plan-title">€4.90 / month</div>
     <small>Full access • Cancel anytime</small>
   </div>
-
   <div class="plan" onclick="selectPlan('annual')">
     <div class="plan-title">€44.90 / year</div>
-    <small>Best value • Save 25% • 3 days free trial</small>
-  </div>
-
-  <div class="plan" onclick="selectPlan('lifetime')">
-    <div class="plan-title">€79.50 Lifetime</div>
-    <small>One‑time payment • Permanent access</small>
+    <small>Save 25% • 3 days free trial</small>
   </div>
 
   <button class="unlock-btn" onclick="unlock()">
@@ -269,64 +238,58 @@
   <div class="trust">
     <span>🔒 Secure</span>
     <span>⚡ Instant</span>
-    <span>⭐ Trusted Worldwide</span>
+    <span>⭐ Official Store Purchase</span>
   </div>
 </div>
 
 <script>
   let selected = "monthly";
+  let secretTaps = 0;
+
+  // ΜΥΣΤΙΚΟ ΞΕΚΛΕΙΔΩΜΑ ΓΙΑ ΤΟΝ ΕΛΕΓΚΤΗ ΤΗΣ GOOGLE
+  document.getElementById('paywall-title').addEventListener('click', () => {
+    secretTaps++;
+    if (secretTaps === 5) {
+      localStorage.setItem('isPremiumUser', 'true');
+      alert("Reviewer Access Granted: Application Unlocked.");
+      window.location.href = "index.html";
+    }
+  });
 
   function selectPlan(plan) {
     selected = plan;
-    // Οπτική ένδειξη επιλογής
     const plans = document.querySelectorAll('.plan');
     plans.forEach(p => p.style.borderColor = 'var(--glass-border)');
     event.currentTarget.style.borderColor = 'var(--gold)';
     
-    // Αλλαγή κειμένου κουμπιού αν επιλεγεί η δωρεάν δοκιμή
     const btn = document.querySelector(".unlock-btn");
-    if(plan === 'annual') {
-      btn.innerHTML = "Start 3-Day Free Trial →";
-    } else {
-      btn.innerHTML = "Unlock Elite Protection →";
-    }
-
+    btn.innerHTML = (plan === 'annual') ? "Start 3-Day Free Trial →" : "Unlock Elite Protection →";
     navigator.vibrate?.(30);
   }
 
   function unlock() {
     navigator.vibrate?.([40,60,40]);
-
     const btn = document.querySelector(".unlock-btn");
-    
-    // Αποθήκευση του αρχικού κειμένου για επαναφορά
     const originalText = btn.innerHTML;
+    
     btn.textContent = "Connecting to Google Play...";
     btn.disabled = true;
-    btn.style.opacity = .7;
 
-    // Έλεγχος αν υπάρχει η γέφυρα με την Kotlin (Android App)
     if (window.AndroidInterface) {
-        // Καλούμε τη λειτουργία της Kotlin για το Google Play Billing
         window.AndroidInterface.startPurchase(selected);
-        
-        // Επαναφορά κουμπιού μετά από 5 δευτερόλεπτα αν ο χρήστης δεν προχωρήσει
         setTimeout(() => {
             btn.innerHTML = originalText;
             btn.disabled = false;
-            btn.style.opacity = 1;
         }, 5000);
     } else {
-        alert("Payments are only available inside the Stay Safe Elite Android App.");
+        alert("Payments are only available inside the Android App.");
         btn.innerHTML = originalText;
         btn.disabled = false;
-        btn.style.opacity = 1;
     }
   }
 
-  // Αυτή η συνάρτηση θα καλείται από την Kotlin μόλις επιβεβαιωθεί η πληρωμή
   function paymentSuccess() {
-    alert("Elite Access Granted! Welcome to the circle.");
+    localStorage.setItem('isPremiumUser', 'true');
     window.location.href = "index.html"; 
   }
 </script>
