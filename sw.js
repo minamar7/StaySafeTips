@@ -1,4 +1,4 @@
-const VERSION = "v66-elite-final"; 
+const VERSION = "v67-elite-final"; 
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 const BASE = '/StaySafeTips/';
 
