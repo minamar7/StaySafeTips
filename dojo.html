@@ -171,7 +171,7 @@
 
         .menu-grid { 
             display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
+            grid-template-columns: repeat(2, 1fr); 
             gap: 12px; 
             margin-bottom: 35px; 
         }
@@ -185,23 +185,16 @@
             transition: all 0.3s ease;
         }
 
-        .drill-item {
-            border-color: rgba(239, 68, 68, 0.4);
-            background: rgba(239, 68, 68, 0.05);
-        }
-
         .tracker-item {
             border-color: rgba(250, 204, 21, 0.4);
             background: rgba(250, 204, 21, 0.05);
         }
 
         .menu-item:hover { border-color: var(--neon); background: rgba(56, 189, 248, 0.1); }
-        .drill-item:hover { border-color: var(--reflex-red); background: rgba(239, 68, 68, 0.1); }
         .tracker-item:hover { border-color: var(--gold); background: rgba(250, 204, 21, 0.1); }
         .menu-item:active { transform: scale(0.92); }
 
         .menu-item img { width: 30px; height: 30px; margin-bottom: 10px; filter: drop-shadow(0 0 8px var(--neon)); }
-        .drill-item img { filter: drop-shadow(0 0 8px var(--reflex-red)); }
         .tracker-item img { filter: drop-shadow(0 0 8px var(--gold)); }
 
         .menu-item span { 
@@ -279,11 +272,6 @@
                 <img src="https://cdn-icons-png.flaticon.com/512/2936/2936900.png" alt="Library">
                 <span>TECHNIQUE<br>LIBRARY</span>
             </div>
-            <div class="menu-item drill-item" onclick="triggerAction('reflexdrill.html')">
-                <img src="https://cdn-icons-png.flaticon.com/512/10539/10539958.png" alt="Drills">
-                <span style="color: var(--reflex-red);">REFLEX<br>DRILLS</span>
-            </div>
-            <!-- ✅ ΑΛΛΑΓΗ: τώρα ανοίγει το progress-tracker.html -->
             <div class="menu-item tracker-item" onclick="triggerAction('progress-tracker.html')">
                 <img src="https://cdn-icons-png.flaticon.com/512/3112/3112946.png" alt="Tracker">
                 <span style="color: var(--gold);">PROGRESS<br>TRACKER</span>
@@ -295,7 +283,6 @@
     </div>
 
     <script>
-        // Φόρτωσε XP από localStorage για να δείχνει το σωστό progress
         window.onload = function() {
             const xp = parseInt(localStorage.getItem('dojo_xp') || '350');
             const pct = Math.min(Math.round((xp / 1000) * 100), 100);
