@@ -124,7 +124,7 @@
     </div>
     <div class="benefit-card">
       <div class="icon">🔓</div>
-      <div><h3>Master Quizzes</h3><p>Unlock all levels from Level 7 and above.</p></div>
+      <div><h3>Unlimited Access</h3><p>Unlock all Tools and the Vault instantly.</p></div>
     </div>
     <div class="benefit-card">
       <div class="icon">🤖</div>
@@ -132,7 +132,7 @@
     </div>
     <div class="benefit-card">
       <div class="icon">🚫</div>
-      <div><h3>No Advertisements</h3><p>Pure focus on your safety training without interruptions.</p></div>
+      <div><h3>No Advertisements</h3><p>Pure focus on your safety training.</p></div>
     </div>
   </div>
 </div>
@@ -157,24 +157,6 @@
   let tapCount = 0;
   let tapTimer = null;
 
-  /* ============================================================
-     REVIEWER UNLOCK (3 TAPS ON UPGRADE BUTTON)
-     ============================================================ */
-  document.getElementById('upgrade-btn').addEventListener('click', (e) => {
-    tapCount++;
-    
-    clearTimeout(tapTimer);
-    tapTimer = setTimeout(() => { tapCount = 0; }, 800);
-
-    if (tapCount === 3) {
-      // Ακύρωση της κανονικής αγοράς αν είναι reviewer
-      localStorage.setItem('isPremiumUser', 'true');
-      if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
-      alert("✅ Reviewer Access: All features unlocked.");
-      window.location.href = "index.html";
-    }
-  });
-
   function selectPlan(el, plan) {
     currentPlan = plan;
     document.querySelectorAll('.plan-option').forEach(opt => opt.classList.remove('active'));
@@ -182,13 +164,26 @@
   }
 
   function handlePurchase() {
-    // Αν δεν είναι το 3ο tap, προχώρα στην αγορά
-    if (tapCount < 3) {
-      if (window.AndroidInterface && typeof window.AndroidInterface.startPurchase === "function") {
+    // Secret Trigger: 3 clicks within 800ms
+    tapCount++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => { tapCount = 0; }, 800);
+
+    if (tapCount === 3) {
+      // Tester/Reviewer Unlock
+      localStorage.setItem('xp_level', '10'); // Unlock tools & vault
+      localStorage.setItem('isPremiumUser', 'true'); // General premium flag
+      if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+      alert("✅ Tester Mode: All features unlocked.");
+      window.location.href = "index.html";
+      return;
+    }
+
+    // Normal Purchase Flow
+    if (window.AndroidInterface && typeof window.AndroidInterface.startPurchase === "function") {
         window.AndroidInterface.startPurchase(currentPlan);
-      } else {
-        alert("Purchase will be processed via Google Play Store.");
-      }
+    } else {
+        alert("Connecting to Google Play Store...");
     }
   }
 </script>
