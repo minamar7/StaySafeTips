@@ -75,16 +75,11 @@ window.QuizEngine = {
     const userLvl = this.getLevel();
     const premium = this.isPremium();
 
-    /* ΑΛΛΑΓΗ: Αν το level είναι 5 ή μεγαλύτερο και ΔΕΝ είναι premium,
-       σταμάτα το quiz και δείξε το paywall.
-    */
     if (userLvl >= 5 && !premium) {
       this.showPaywall();
       return;
     }
 
-    /* ΑΛΛΑΓΗ: Επιλογή αρχείου. Αν level >= 5, διάβασε το premium αρχείο.
-    */
     const sourceFile = (userLvl >= 5)
       ? this.sources.premium(lang)
       : this.sources.free(lang);
@@ -301,10 +296,22 @@ window.QuizEngine = {
 
     if (percent >= 60) {
       if (premium) {
-        this.createBtn(btnBox, this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ" : "CONTINUE", () => { this.updateXP(50); window.showScreen?.("home"); });
+        this.createBtn(btnBox, this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ" : "CONTINUE", () => { 
+          this.updateXP(50); 
+          if(window.showScreen) window.showScreen('home'); 
+          else window.location.reload();
+        });
       } else {
         this.createBtn(btnBox, `💎 ${this.currentLang === "el" ? "ΔΙΠΛΟ XP (VIDEO)" : "DOUBLE XP (VIDEO)"}`, () => { this.playRewardVideo(100); }, "#ca8a04");
         this.createBtn(btnBox, `📺 ${this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ (VIDEO)" : "CONTINUE (VIDEO)"}`, () => { this.playRewardVideo(50); }, "#15803d" );
+      }
+
+      // ΠΡΟΣΘΗΚΗ: Μήνυμα "New Levels" αν είναι Master (Lvl 10)
+      if (this.getLevel() >= 10) {
+          const comingSoon = document.createElement("p");
+          comingSoon.style.cssText = "color:var(--accent); font-size:0.75rem; font-weight:bold; margin-top:15px; text-align:center; letter-spacing:1px;";
+          comingSoon.textContent = this.currentLang === "el" ? "🚀 ΝΕΑ ΕΠΙΠΕΔΑ ΣΥΝΤΟΜΑ!" : "🚀 NEW LEVELS COMING SOON!";
+          btnBox.appendChild(comingSoon);
       }
     } else {
       this.createBtn(btnBox, this.currentLang === "el" ? "ΔΟΚΙΜΑΣΕ ΞΑΝΑ" : "RETRY", () => { this.start(this.currentLang, this.badge); }, "#dc2626");
@@ -319,6 +326,17 @@ window.QuizEngine = {
     btn.style.marginTop = "10px";
     btn.onclick = action;
     container.appendChild(btn);
+  },
+
+  playRewardVideo(xpAmount) {
+    if (window.AndroidAdmob && typeof AndroidAdmob.showRewardedVideo === "function") {
+        window.AndroidAdmob.showRewardedVideo();
+        this.updateXP(xpAmount);
+        if(window.showScreen) window.showScreen('home');
+    } else {
+        this.updateXP(xpAmount);
+        if(window.showScreen) window.showScreen('home');
+    }
   },
 
   updateXP(amount) {
@@ -336,6 +354,17 @@ window.QuizEngine = {
     banner.style.cssText = `position:fixed; top:80px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--gold),#f59e0b); color:#020617; padding:12px 28px; border-radius:16px; font-weight:900; z-index:9999; animation: lvlup 0.4s ease-out;`;
     banner.textContent = `⭐ LEVEL ${newLevel} UNLOCKED!`;
     document.body.appendChild(banner);
+
+    // Έλεγχος για Level 10 Rewards
+    if (newLevel === 10) {
+      localStorage.setItem('vault_unlocked', 'true');
+      localStorage.setItem('achievement_master', 'true');
+      if (window.confetti) {
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+      }
+      if (typeof syncEliteRewards === 'function') syncEliteRewards();
+    }
+
     setTimeout(() => banner.remove(), 3000);
   },
 
