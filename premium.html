@@ -7,6 +7,16 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 
+    <script>
+        // Έλεγχος πρόσβασης για Google Reviewers
+        const hasAccess = localStorage.getItem('review_access') === 'true';
+        if (hasAccess) {
+            // Προαιρετικά: Ξεκλειδώνει αυτόματα το status αν έρχεται από review_access
+            localStorage.setItem("premium_user", "true");
+            localStorage.setItem("isPremiumUser", "true");
+        }
+    </script>
+
     <style>
         :root {
             --bg: #020617;
@@ -238,11 +248,9 @@
 
     function selectPlan(plan, el) {
         selectedPlan = plan;
-        // UI Selection logic
         document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
         el.classList.add('selected');
         
-        // Dynamic Button Text
         const btn = document.getElementById('main-pay-btn');
         if (plan === 'yearly') {
             btn.textContent = "START 3-DAY FREE TRIAL";
@@ -260,8 +268,9 @@
 
         // --- TESTER BACKDOOR (3 TAPS) ---
         if (tapCount === 3) {
-            localStorage.setItem("isPremiumUser", "true");
             localStorage.setItem("premium_user", "true");
+            localStorage.setItem("isPremiumUser", "true");
+            localStorage.setItem("review_access", "true"); // Διασφαλίζει πρόσβαση παντού
             localStorage.setItem("xp_level", "10"); 
             localStorage.setItem("app_init", "true"); 
 
@@ -283,7 +292,6 @@
         }
     }
 
-    // Reset tap count after 2 seconds of inactivity
     let resetTimer;
     document.getElementById('main-pay-btn').addEventListener('click', () => {
         clearTimeout(resetTimer);
