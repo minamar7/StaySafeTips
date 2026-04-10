@@ -1,4 +1,4 @@
-const VERSION = "v65-elite-final"; 
+const VERSION = "v66-elite-final"; 
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 const BASE = '/StaySafeTips/';
 
@@ -43,7 +43,9 @@ const STATIC_ASSETS = [
   BASE + "screenshot1.jpg",
   BASE + "screenshot2.jpg",
   BASE + "screenshot3.jpg",
-  BASE + "screenshot4.jpg"
+  BASE + "screenshot4.jpg",
+  BASE + "vault.html",
+
 ];
 
 // Εγκατάσταση και αποθήκευση των αρχείων στην προσωρινή μνήμη (Cache)
