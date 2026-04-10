@@ -34,9 +34,7 @@ window.QuizEngine = {
   },
 
   /* DAILY STREAK */
-  getDailyStreak() {
-    return parseInt(localStorage.getItem("daily_streak") || "1");
-  },
+  getDailyStreak() { return parseInt(localStorage.getItem("daily_streak") || "1"); },
 
   updateDailyStreak() {
     const today     = new Date().toDateString();
@@ -58,8 +56,8 @@ window.QuizEngine = {
 
   /* PREMIUM CHECK */
   isPremium() {
-    if (window.AndroidBilling && typeof AndroidBilling.isPremium === "function") {
-      return AndroidBilling.isPremium() === true;
+    if (window.AndroidBilling && typeof window.AndroidBilling.isPremium === "function") {
+      return window.AndroidBilling.isPremium() === true;
     }
     return localStorage.getItem("isPremiumUser") === "true";
   },
@@ -77,12 +75,17 @@ window.QuizEngine = {
     const userLvl = this.getLevel();
     const premium = this.isPremium();
 
-    if (userLvl >= 7 && !premium) {
+    /* ΑΛΛΑΓΗ: Αν το level είναι 5 ή μεγαλύτερο και ΔΕΝ είναι premium,
+       σταμάτα το quiz και δείξε το paywall.
+    */
+    if (userLvl >= 5 && !premium) {
       this.showPaywall();
       return;
     }
 
-    const sourceFile = (userLvl >= 7)
+    /* ΑΛΛΑΓΗ: Επιλογή αρχείου. Αν level >= 5, διάβασε το premium αρχείο.
+    */
+    const sourceFile = (userLvl >= 5)
       ? this.sources.premium(lang)
       : this.sources.free(lang);
 
@@ -159,12 +162,10 @@ window.QuizEngine = {
     this._startTimer(30);
   },
 
-  /* TIMER */
   _startTimer(seconds) {
     this._stopTimer();
     let remaining = seconds;
     this._updateTimerUI(remaining, seconds);
-
     this._timer = setInterval(() => {
       remaining--;
       this._updateTimerUI(remaining, seconds);
@@ -186,19 +187,11 @@ window.QuizEngine = {
       if (!qBox) return;
       el = document.createElement("div");
       el.id = "quiz-timer";
-      el.style.cssText = `
-        display:flex; align-items:center; justify-content:center; gap:8px;
-        margin-bottom:12px; font-size:0.8rem; font-weight:800;
-        letter-spacing:0.05em;
-      `;
+      el.style.cssText = `display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; font-size:0.8rem; font-weight:800; letter-spacing:0.05em;`;
       qBox.parentNode.insertBefore(el, qBox);
     }
-
-    const pct   = (remaining / total) * 100;
-    const color = remaining > 15 ? "var(--accent)"
-                : remaining > 7  ? "var(--gold)"
-                :                  "var(--danger)";
-
+    const pct = (remaining / total) * 100;
+    const color = remaining > 15 ? "var(--accent)" : remaining > 7 ? "var(--gold)" : "var(--danger)";
     el.innerHTML = `
       <span style="color:${color}">⏱ ${remaining}s</span>
       <div style="flex:1;height:4px;background:#1e293b;border-radius:2px;overflow:hidden;">
@@ -210,178 +203,154 @@ window.QuizEngine = {
   _timeOut() {
     const qData   = this.activeQuestions[this.currentIndex];
     const buttons = document.querySelectorAll(".option-btn");
-
     buttons.forEach((b, i) => {
       b.disabled = true;
       if (i === qData.a) b.classList.add("correct");
     });
-
     this.streak = 0;
     this._renderStreakBadge();
-
     const qBox = document.getElementById("quiz-question");
     if (qBox) {
       const timeMsg = document.createElement("p");
-      timeMsg.style.cssText = `
-        margin-top:10px;color:var(--danger);
-        font-size:0.85rem;text-align:center;font-weight:700;
-      `;
-      timeMsg.textContent = this.currentLang === "el"
-        ? "⏰ Ο χρόνος σου έληξε!"
-        : "⏰ Time's up!";
+      timeMsg.style.cssText = `margin-top:10px;color:var(--danger);font-size:0.85rem;text-align:center;font-weight:700;`;
+      timeMsg.textContent = this.currentLang === "el" ? "⏰ Ο χρόνος σου έληξε!" : "⏰ Time's up!";
       qBox.appendChild(timeMsg);
     }
-
     setTimeout(() => {
       this.currentIndex++;
-      this.currentIndex < this.activeQuestions.length
-        ? this.render()
-        : this.showResult();
+      this.currentIndex < this.activeQuestions.length ? this.render() : this.showResult();
     }, 2000);
   },
 
-  /* STREAK BADGE */
   _renderStreakBadge() {
     let el = document.getElementById("quiz-streak-badge");
     if (!el) {
       el = document.createElement("div");
       el.id = "quiz-streak-badge";
-      el.style.cssText = `
-        text-align:center;font-size:0.75rem;font-weight:800;
-        letter-spacing:0.08em;min-height:22px;margin-bottom:6px;
-        transition:all 0.3s;
-      `;
+      el.style.cssText = `text-align:center;font-size:0.75rem;font-weight:800;letter-spacing:0.08em;min-height:22px;margin-bottom:6px;transition:all 0.3s;`;
       const pill = document.getElementById("quiz-pill");
       if (pill) pill.parentNode.insertBefore(el, pill.nextSibling);
     }
-
     if (this.streak >= 3) {
-      const flames = this.streak >= 7 ? "🔥🔥🔥"
-                    : this.streak >= 5 ? "🔥🔥"
-                    : "🔥";
+      const flames = this.streak >= 7 ? "🔥🔥🔥" : this.streak >= 5 ? "🔥🔥" : "🔥";
       el.innerHTML = `<span style="color:var(--gold)">${flames} ${this.streak} STREAK!</span>`;
       el.style.transform = "scale(1.15)";
       setTimeout(() => { el.style.transform = "scale(1)"; }, 300);
-    } else {
-      el.innerHTML = "";
-    }
+    } else { el.innerHTML = ""; }
   },
 
-  /* CHECK ANSWER */
   check(idx) {
     this._stopTimer();
-
     const qData    = this.activeQuestions[this.currentIndex];
     const userLvl  = this.getLevel();
     const buttons  = document.querySelectorAll(".option-btn");
     const isCorrect = (idx === qData.a);
-
     buttons.forEach((b, i) => {
       b.disabled = true;
       if (i === qData.a) b.classList.add("correct");
       if (i === idx && !isCorrect) b.classList.add("wrong");
     });
-
     const explanation = qData.exp || qData.explain;
     if (explanation) {
       const qBox = document.getElementById("quiz-question");
-      if (qBox) qBox.innerHTML += `
-        <p class="explain" style="
-          margin-top:12px;color:var(--gold);
-          font-size:0.9rem;border-top:1px solid rgba(255,255,255,0.1);
-          padding-top:10px;">
-          💡 ${explanation}
-        </p>`;
+      if (qBox) qBox.innerHTML += `<p class="explain" style="margin-top:12px;color:var(--gold);font-size:0.9rem;border-top:1px solid rgba(255,255,255,0.1);padding-top:10px;">💡 ${explanation}</p>`;
     }
-
     if (isCorrect) {
       this.score++;
       this.streak++;
-
       const masteredKey = `mastered_${this.currentLang}_lvl${userLvl}`;
       let mastered = JSON.parse(localStorage.getItem(masteredKey) || "[]");
       if (!mastered.includes(qData.q)) {
         mastered.push(qData.q);
         localStorage.setItem(masteredKey, JSON.stringify(mastered));
       }
-    } else {
-      this.streak = 0;
-    }
-
+    } else { this.streak = 0; }
     this._renderStreakBadge();
-
     setTimeout(() => {
       this.currentIndex++;
-      this.currentIndex < this.activeQuestions.length
-        ? this.render()
-        : this.showResult();
+      this.currentIndex < this.activeQuestions.length ? this.render() : this.showResult();
     }, 2500);
   },
-/* ─────────────────────────────────────────
-   SHOW RESULT (με interstitial ad)
-───────────────────────────────────────── */
-showResult() {
-  this._stopTimer();
 
-  /* 
-  ──────────────────────────────────────────────
-  ➤ INTERSTITIAL AD (ONLY FREE USERS)
-  Δείχνει ΜΙΑ διαφήμιση στο τέλος κάθε quiz.
-  Premium users δεν βλέπουν τίποτα.
-  ──────────────────────────────────────────────
-  */
-  try {
-    if (!this.isPremium() &&
-        window.AndroidAdmob &&
-        typeof AndroidAdmob.showInterstitial === "function") {
-      AndroidAdmob.showInterstitial();
+  showResult() {
+    this._stopTimer();
+    try {
+      if (!this.isPremium() && window.AndroidAdmob && typeof AndroidAdmob.showInterstitial === "function") {
+        AndroidAdmob.showInterstitial();
+      }
+    } catch (err) { console.log("Interstitial error:", err); }
+
+    const timerEl  = document.getElementById("quiz-timer");
+    const badgeEl  = document.getElementById("quiz-streak-badge");
+    if (timerEl) timerEl.remove();
+    if (badgeEl) badgeEl.remove();
+
+    const res       = document.getElementById("quiz-result");
+    const scoreText = document.getElementById("quiz-result-score");
+    const btnBox    = document.getElementById("quiz-options");
+    const premium   = this.isPremium();
+    const percent   = Math.round((this.score / this.activeQuestions.length) * 100);
+
+    if (res) { res.classList.remove("hidden"); res.style.display = "flex"; }
+    if (scoreText) scoreText.textContent = (this.currentLang === "el" ? "Σκορ" : "Score") + `: ${percent}%`;
+    if (btnBox) btnBox.innerHTML = "";
+
+    if (percent === 100 && window.confetti) {
+      confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
     }
-  } catch (err) {
-    console.log("Interstitial error:", err);
-  }
 
-  // Καθάρισε timer & streak badge από UI
-  const timerEl  = document.getElementById("quiz-timer");
-  const badgeEl  = document.getElementById("quiz-streak-badge");
-  if (timerEl) timerEl.remove();
-  if (badgeEl) badgeEl.remove();
-
-  const res       = document.getElementById("quiz-result");
-  const scoreText = document.getElementById("quiz-result-score");
-  const btnBox    = document.getElementById("quiz-options");
-  const premium   = this.isPremium();
-  const percent   = Math.round((this.score / this.activeQuestions.length) * 100);
-
-  if (res) { res.classList.remove("hidden"); res.style.display = "flex"; }
-  if (scoreText) scoreText.textContent =
-    (this.currentLang === "el" ? "Σκορ" : "Score") + `: ${percent}%`;
-  if (btnBox) btnBox.innerHTML = "";
-
-  // Confetti για 100%
-  if (percent === 100 && window.confetti) {
-    confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
-  }
-
-  if (percent >= 60) {
-    if (premium) {
-      this.createBtn(btnBox,
-        this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ" : "CONTINUE",
-        () => { this.updateXP(50); window.showScreen?.("home"); }
-      );
+    if (percent >= 60) {
+      if (premium) {
+        this.createBtn(btnBox, this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ" : "CONTINUE", () => { this.updateXP(50); window.showScreen?.("home"); });
+      } else {
+        this.createBtn(btnBox, `💎 ${this.currentLang === "el" ? "ΔΙΠΛΟ XP (VIDEO)" : "DOUBLE XP (VIDEO)"}`, () => { this.playRewardVideo(100); }, "#ca8a04");
+        this.createBtn(btnBox, `📺 ${this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ (VIDEO)" : "CONTINUE (VIDEO)"}`, () => { this.playRewardVideo(50); }, "#15803d" );
+      }
     } else {
-      this.createBtn(btnBox,
-        `💎 ${this.currentLang === "el" ? "ΔΙΠΛΟ XP (VIDEO)" : "DOUBLE XP (VIDEO)"}`,
-        () => { this.playRewardVideo(100); }, "#ca8a04"
-      );
-      this.createBtn(btnBox,
-        `📺 ${this.currentLang === "el" ? "ΣΥΝΕΧΕΙΑ (VIDEO)" : "CONTINUE (VIDEO)"}`,
-        () => { this.playRewardVideo(50); }, "#15803d"
-      );
+      this.createBtn(btnBox, this.currentLang === "el" ? "ΔΟΚΙΜΑΣΕ ΞΑΝΑ" : "RETRY", () => { this.start(this.currentLang, this.badge); }, "#dc2626");
     }
-  } else {
-    this.createBtn(btnBox,
-      this.currentLang === "el" ? "ΔΟΚΙΜΑΣΕ ΞΑΝΑ" : "RETRY",
-      () => { this.start(this.currentLang, this.badge); }, "#dc2626"
-    );
+  },
+
+  createBtn(container, text, action, bgColor = "var(--gold)") {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.innerHTML = text;
+    btn.style.background = bgColor;
+    btn.style.marginTop = "10px";
+    btn.onclick = action;
+    container.appendChild(btn);
+  },
+
+  updateXP(amount) {
+    if (this.streak >= 5) amount = Math.round(amount * 1.5);
+    let xp = this.getXP();
+    let level = this.getLevel();
+    xp += (amount / 5);
+    if (xp >= 100) { level++; xp -= 100; this._showLevelUp(level); }
+    this.saveXP(parseFloat(xp.toFixed(2)), level);
+    this.syncXPBar();
+  },
+
+  _showLevelUp(newLevel) {
+    const banner = document.createElement("div");
+    banner.style.cssText = `position:fixed; top:80px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--gold),#f59e0b); color:#020617; padding:12px 28px; border-radius:16px; font-weight:900; z-index:9999; animation: lvlup 0.4s ease-out;`;
+    banner.textContent = `⭐ LEVEL ${newLevel} UNLOCKED!`;
+    document.body.appendChild(banner);
+    setTimeout(() => banner.remove(), 3000);
+  },
+
+  showPaywall() {
+    const res = document.getElementById("quiz-result");
+    const scoreText = document.getElementById("quiz-result-score");
+    const btnBox = document.getElementById("quiz-options");
+    if (res) { res.classList.remove("hidden"); res.style.display = "flex"; }
+    if (scoreText) scoreText.innerHTML = `<span style="color:var(--gold);font-size:1.2rem;font-weight:bold;">Level 5+ Required 🔒</span><p style="font-size:0.9rem;padding:10px;">Upgrade to Premium for advanced Cybersecurity & AI modules.</p>`;
+    if (btnBox) {
+      btnBox.innerHTML = "";
+      this.createBtn(btnBox, `💎 ${this.currentLang === "el" ? "ΑΝΑΒΑΘΜΙΣΗ" : "UPGRADE"}`, () => {
+        if (window.AndroidBilling) window.AndroidBilling.launchBilling();
+        else window.location.href = "premium.html";
+      }, "linear-gradient(135deg,var(--gold),#f59e0b)");
+    }
   }
-}
+};
