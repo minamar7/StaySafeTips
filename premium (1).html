@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stay Safe Elite — Premium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#020617">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #020617; --card: rgba(15,23,42,0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
+* { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+/* ── HEADER ── */
+.header {
+    padding: 50px 20px 20px;
+    background: rgba(15,23,42,0.8);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(56,189,248,0.15);
+    display: flex; align-items: center; gap: 14px;
+}
+.back-btn {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text); border-radius: 12px; padding: 8px 14px;
+    font-size: 0.85rem; font-weight: 700; cursor: pointer;
+}
+.header h1 { font-size: 1.15rem; font-weight: 900; color: var(--gold); }
+
+/* ── HERO ── */
+.hero {
+    text-align: center; padding: 40px 24px 10px;
+}
+.hero-icon { font-size: 64px; margin-bottom: 16px; }
+.hero h2 { font-size: 1.7rem; font-weight: 900; color: #fff; line-height: 1.2; }
+.hero p { color: var(--muted); font-size: 0.9rem; margin-top: 10px; line-height: 1.5; }
+
+/* ── FEATURES LIST ── */
+.features { padding: 24px 20px 0; }
+.feature-row {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 18px; padding: 16px 18px; margin-bottom: 10px;
+}
+.feature-icon {
+    font-size: 1.5rem; width: 44px; height: 44px;
+    background: rgba(56,189,248,0.08); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.feature-text strong { display: block; font-size: 0.9rem; color: #fff; font-weight: 800; }
+.feature-text span { font-size: 0.75rem; color: var(--muted); }
+
+/* ── PLAN CARDS ── */
+.plans { padding: 28px 20px 10px; }
+.plans h3 { font-size: 0.75rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+
+.plan-card {
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 22px; padding: 18px 20px; margin-bottom: 12px;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    position: relative;
+}
+.plan-card.selected {
+    border-color: var(--gold);
+    background: rgba(250,204,21,0.06);
+}
+.plan-card .plan-name { font-size: 1rem; font-weight: 900; color: #fff; }
+.plan-card .plan-price { font-size: 0.85rem; color: var(--gold); font-weight: 700; margin-top: 3px; }
+.plan-card .plan-save {
+    position: absolute; top: 14px; right: 16px;
+    background: var(--gold); color: #000;
+    font-size: 0.55rem; font-weight: 900; padding: 3px 8px; border-radius: 6px;
+    font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; text-transform: uppercase;
+}
+
+/* ── CTA ── */
+.cta-wrap { padding: 16px 20px 40px; }
+.cta-btn {
+    width: 100%; padding: 18px; border: none; border-radius: 20px;
+    background: linear-gradient(135deg, var(--gold), #f59e0b);
+    color: #020617; font-size: 1rem; font-weight: 900;
+    cursor: pointer; letter-spacing: 0.5px;
+    box-shadow: 0 0 24px rgba(250,204,21,0.3);
+}
+.cta-btn:active { opacity: 0.9; transform: scale(0.98); }
+
+.terms-note {
+    text-align: center; font-size: 0.65rem; color: var(--muted);
+    padding: 0 20px 20px; line-height: 1.5;
+}
+
+/* ── TOAST ── */
+#p-toast {
+    position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
+    background: rgba(15,23,42,0.97); border: 1px solid rgba(56,189,248,0.25);
+    color: #f8fafc; font-size: 0.78rem; font-weight: 700;
+    padding: 11px 26px; border-radius: 30px; backdrop-filter: blur(12px);
+    z-index: 9999; opacity: 0; transition: opacity 0.2s;
+    pointer-events: none; white-space: nowrap; letter-spacing: 0.4px;
+}
+#p-toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="p-toast"></div>
+
+<!-- HEADER -->
+<div class="header">
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <h1>Elite Premium</h1>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-icon">👑</div>
+    <h2>Unlock Your Full Protection</h2>
+    <p>Get unlimited access to all Elite tools, advanced threat detection, and exclusive safety content.</p>
+</div>
+
+<!-- FEATURES -->
+<div class="features">
+    <div class="feature-row">
+        <div class="feature-icon">🔐</div>
+        <div class="feature-text">
+            <strong>Scam Alert System</strong>
+            <span>Real-time fraud & scam database</span>
+        </div>
+    </div>
+    <div class="feature-row">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-text">
+            <strong>AI Threat Analysis</strong>
+            <span>Detect deepfakes, phishing & AI attacks</span>
+        </div>
+    </div>
+    <div class="feature-row">
+        <div class="feature-icon">🗄️</div>
+        <div class="feature-text">
+            <strong>Secure Vault</strong>
+            <span>Encrypted personal safety data storage</span>
+        </div>
+    </div>
+    <div class="feature-row">
+        <div class="feature-icon">🥋</div>
+        <div class="feature-text">
+            <strong>Elite Defense Dojo</strong>
+            <span>Master Tang Soo Do training videos</span>
+        </div>
+    </div>
+    <div class="feature-row">
+        <div class="feature-icon">🚫</div>
+        <div class="feature-text">
+            <strong>Ad-Free Experience</strong>
+            <span>Zero interruptions, pure safety training</span>
+        </div>
+    </div>
+</div>
+
+<!-- PLAN SELECTION -->
+<div class="plans">
+    <h3>Choose Your Plan</h3>
+
+    <div class="plan-card selected" id="plan_yearly" onclick="selectPlan('yearly')">
+        <div class="plan-save">BEST VALUE</div>
+        <div class="plan-name">Annual</div>
+        <div class="plan-price">$29.99 / year &nbsp;·&nbsp; <span style="color:var(--muted);text-decoration:line-through;">$59.99</span></div>
+    </div>
+
+    <div class="plan-card" id="plan_monthly" onclick="selectPlan('monthly')">
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price">$4.99 / month</div>
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+    <!-- 
+        ════════════════════════════════════════════
+        TESTER / REVIEWER UNLOCK — HIDDEN
+        Triple-tap this button rapidly to activate
+        Tester Mode without a real purchase.
+        ════════════════════════════════════════════
+    -->
+    <button class="cta-btn" id="subscribe_btn" onclick="handleSubscribe()">
+        Start Free Trial
+    </button>
+</div>
+
+<p class="terms-note">
+    Payment processed securely via Google Play.<br>
+    Cancel anytime. Subscription renews automatically.
+</p>
+
+<script>
+// ════════════════════════════════════════════
+// PLAN SELECTION
+// ════════════════════════════════════════════
+let selectedPlan = 'yearly';
+
+function selectPlan(plan) {
+    selectedPlan = plan;
+    document.getElementById('plan_yearly').classList.toggle('selected', plan === 'yearly');
+    document.getElementById('plan_monthly').classList.toggle('selected', plan === 'monthly');
+}
+
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+let _toastTimer = null;
+function showToast(msg, duration) {
+    const t = document.getElementById('p-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), duration || 2200);
+}
+
+// ════════════════════════════════════════════
+// SUBSCRIBE HANDLER + HIDDEN 3-TAP TESTER UNLOCK
+// ════════════════════════════════════════════
+let _tapCount = 0;
+let _tapTimer = null;
+const TAP_REQUIRED = 3;
+const TAP_WINDOW   = 800; // ms between taps
+
+function handleSubscribe() {
+    // ── Rapid-tap counter ──
+    if (_tapTimer) clearTimeout(_tapTimer);
+    _tapCount++;
+
+    if (_tapCount >= TAP_REQUIRED) {
+        // Silent tester unlock — no "tap X more times" ever shown
+        _tapCount = 0;
+        _tapTimer = null;
+        activateTesterPremium();
+        return;
+    }
+
+    // Reset counter if user is too slow
+    _tapTimer = setTimeout(() => {
+        _tapCount = 0;
+    }, TAP_WINDOW);
+
+    // On 1st & 2nd tap → show normal "processing" feel, not a tap-count hint
+    if (_tapCount === 1) {
+        // Just let the button feel responsive — no toast
+    }
+
+    // ── Normal purchase flow (Google Play) ──
+    // This runs on the 1st tap unless overridden above.
+    // In production, replace with real billing call.
+    if (_tapCount === 1) {
+        startGooglePlayBilling();
+    }
+}
+
+function startGooglePlayBilling() {
+    try {
+        if (window.AndroidBilling && typeof AndroidBilling.launchBilling === 'function') {
+            AndroidBilling.launchBilling(selectedPlan);
+        } else {
+            // Fallback for web / review build — do nothing visible
+            // (reviewer sees the page, taps 3× on the button to unlock)
+        }
+    } catch (e) {
+        console.log('Billing unavailable:', e);
+    }
+}
+
+// ════════════════════════════════════════════
+// TESTER PREMIUM ACTIVATION
+// ════════════════════════════════════════════
+function activateTesterPremium() {
+    localStorage.setItem('premium_user', 'true');
+    showToast('✅ Premium Activated', 1800);
+
+    // Redirect: go back to intended destination or index
+    setTimeout(() => {
+        const dest = sessionStorage.getItem('premium_dest');
+        sessionStorage.removeItem('premium_dest');
+        if (dest && dest !== '') {
+            window.location.href = dest;
+        } else {
+            window.location.href = 'index.html';
+        }
+    }, 1900);
+}
+
+// ════════════════════════════════════════════
+// CALLED BY GOOGLE PLAY NATIVE (in-app)
+// after successful purchase confirmation
+// ════════════════════════════════════════════
+function onPurchaseSuccess() {
+    localStorage.setItem('premium_user', 'true');
+    const dest = sessionStorage.getItem('premium_dest');
+    sessionStorage.removeItem('premium_dest');
+    window.location.href = (dest && dest !== '') ? dest : 'index.html';
+}
+</script>
+
+</body>
+</html>
