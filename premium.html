@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
 <meta charset="UTF-8">
 <title>Stay Safe Elite — Premium</title>
@@ -9,39 +9,34 @@
 <meta name="theme-color" content="#020617">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
+:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; }
 * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
 
-.app-header { padding: 45px 20px 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 14px; }
-.back-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(56,189,248,0.2); color: var(--accent); border-radius: 12px; padding: 7px 14px; font-size: 0.85rem; font-weight: 800; cursor: pointer; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
-.header-title { font-weight: 900; color: var(--gold); font-size: 1.1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+.app-header { padding: 45px 20px 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(250, 204, 21, 0.3); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 14px; }
+.back-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(250,204,21,0.2); color: var(--gold); border-radius: 12px; padding: 7px 14px; font-size: 0.85rem; font-weight: 800; cursor: pointer; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+.header-title { font-weight: 900; color: var(--gold); font-size: 1.1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
 
 .glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
 
-.hero-icon { font-size: 56px; text-align: center; margin-bottom: 10px; }
+.hero-icon { font-size: 56px; text-align: center; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(250,204,21,0.4)); }
 .hero-title { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); text-align: center; letter-spacing: 1px; margin-bottom: 6px; }
 .hero-sub { color: var(--muted); font-size: 0.85rem; text-align: center; line-height: 1.5; }
 
-.feature-row { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 14px 16px; margin-bottom: 10px; }
-.feature-icon { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.15); }
-.feature-text strong { display: block; font-size: 0.88rem; color: #fff; font-weight: 800; }
-.feature-text span { font-size: 0.72rem; color: var(--muted); }
+.feature-row { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 12px 16px; margin-bottom: 8px; }
+.feature-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; background: rgba(250,204,21,0.05); border: 1px solid rgba(250,204,21,0.15); }
+.feature-text strong { display: block; font-size: 0.85rem; color: #fff; font-weight: 800; }
+.feature-text span { font-size: 0.7rem; color: var(--muted); }
 
-.plan-card { border: 2px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 18px 20px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; background: rgba(255,255,255,0.02); }
-.plan-card.selected { border-color: var(--gold); background: rgba(250,204,21,0.06); box-shadow: 0 0 18px rgba(250,204,21,0.15); }
-.plan-card:active { transform: scale(0.98); }
+.plan-card { border: 2px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 16px 20px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; position: relative; background: rgba(255,255,255,0.02); }
+.plan-card.selected { border-color: var(--gold); background: rgba(250,204,21,0.08); box-shadow: 0 0 15px rgba(250,204,21,0.1); }
 .plan-name { font-size: 1rem; font-weight: 900; color: #fff; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
-.plan-price { font-size: 0.85rem; color: var(--gold); font-weight: 700; margin-top: 4px; }
-.plan-save { position: absolute; top: 14px; right: 16px; background: var(--gold); color: #000; font-size: 0.55rem; padding: 3px 8px; border-radius: 6px; font-weight: 900; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
-.section-label { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+.plan-price { font-size: 0.88rem; color: var(--gold); font-weight: 700; margin-top: 2px; }
+.plan-save { position: absolute; top: 12px; right: 16px; background: var(--gold); color: #000; font-size: 0.6rem; padding: 3px 10px; border-radius: 8px; font-weight: 900; font-family: 'Rajdhani', sans-serif; }
 
-.main-cta { background: linear-gradient(135deg, var(--gold), #f59e0b); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 8px; box-shadow: 0 0 24px rgba(250,204,21,0.25); font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
-.main-cta:active { opacity: 0.9; transform: scale(0.98); }
+.main-cta { background: linear-gradient(135deg, var(--gold), #f59e0b); border: none; color: #020617; padding: 20px; border-radius: 22px; font-size: 17px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 5px; box-shadow: 0 10px 25px rgba(250,204,21,0.2); font-family: 'Rajdhani', sans-serif; letter-spacing: 1.5px; }
 
-.terms-note { text-align: center; font-size: 0.62rem; color: #334155; line-height: 1.6; margin-top: 14px; }
-
-#p-toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.96); border: 1px solid rgba(56,189,248,0.25); color: #f8fafc; font-size: 0.78rem; font-weight: 700; padding: 10px 24px; border-radius: 30px; backdrop-filter: blur(12px); z-index: 99999; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; letter-spacing: 0.4px; }
+#p-toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.96); border: 1px solid var(--gold); color: #fff; font-size: 0.8rem; font-weight: 700; padding: 12px 28px; border-radius: 30px; backdrop-filter: blur(12px); z-index: 99999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
 #p-toast.show { opacity: 1; }
 </style>
 </head>
@@ -50,58 +45,76 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <div id="p-toast"></div>
 
 <header class="app-header">
-    <button class="back-btn" onclick="history.back()">← BACK</button>
-    <span class="header-title">👑 ELITE PREMIUM</span>
+    <button class="back-btn" onclick="history.back()">← ΠΙΣΩ</button>
+    <span class="header-title">👑 ELITE MEMBERSHIP</span>
 </header>
 
-<main style="padding: 20px 20px 60px;">
+<main style="padding: 20px 20px 80px;">
 
     <div class="glass-card" style="text-align:center;">
-        <div class="hero-icon">🛡️</div>
-        <div class="hero-title">UNLOCK FULL PROTECTION</div>
-        <p class="hero-sub">Get unlimited access to all Elite tools, advanced threat detection, and exclusive safety content.</p>
+        <div class="hero-icon">🏆</div>
+        <div class="hero-title">STAY SAFE ELITE PREMIUM</div>
+        <p class="hero-sub">Ολοκληρωμένη προστασία με εργαλεία AI, Defense Dojo και άμεση βοήθεια.</p>
     </div>
 
     <div class="glass-card">
-        <div class="section-label">What's Included</div>
-        <div class="feature-row">
-            <div class="feature-icon">⚠️</div>
-            <div class="feature-text"><strong>Scam Alert System</strong><span>Real-time fraud & scam database</span></div>
-        </div>
-        <div class="feature-row">
-            <div class="feature-icon">🤖</div>
-            <div class="feature-text"><strong>AI Threat Analysis</strong><span>Detect deepfakes, phishing & AI attacks</span></div>
-        </div>
-        <div class="feature-row">
-            <div class="feature-icon">🔐</div>
-            <div class="feature-text"><strong>Secure Vault</strong><span>Encrypted personal safety data storage</span></div>
-        </div>
+        <div style="font-size:0.7rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">💎 ELITE TOOLS & TRAINING</div>
+        
         <div class="feature-row">
             <div class="feature-icon">🥋</div>
-            <div class="feature-text"><strong>Elite Defense Dojo</strong><span>Master Tang Soo Do training content</span></div>
+            <div class="feature-text"><strong>Defense Dojo</strong><span>Master βίντεο αυτοάμυνας & Tang Soo Do</span></div>
         </div>
+        
+        <div class="feature-row">
+            <div class="feature-icon">🚨</div>
+            <div class="feature-text"><strong>SOS Hub & Emergency Alerts</strong><span>Άμεση κλήση (112, 100, 166) & σήματα ανάγκης</span></div>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-icon">🤖</div>
+            <div class="feature-text"><strong>AI Threat Analysis (IA Minaccia)</strong><span>Ανίχνευση απάτης AI, Phishing & Deepfakes</span></div>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-text"><strong>Scam Database (Truffe)</strong><span>Πρόσβαση στη βάση δεδομένων για απάτες</span></div>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-icon">🏥</div>
+            <div class="feature-text"><strong>Visual First Aid Guide</strong><span>Οδηγοί CPR, Heimlich & Πρώτων Βοηθειών</span></div>
+        </div>
+
         <div class="feature-row" style="margin-bottom:0;">
             <div class="feature-icon">🚫</div>
-            <div class="feature-text"><strong>Ad-Free Experience</strong><span>Zero interruptions, pure safety training</span></div>
+            <div class="feature-text"><strong>Χωρίς Διαφημίσεις</strong><span>100% καθαρή εμπειρία χωρίς διακοπές</span></div>
         </div>
     </div>
 
     <div class="glass-card">
-        <div class="section-label">Choose Your Plan</div>
+        <div style="font-size:0.7rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">📍 ΕΠΙΛΕΞΤΕ ΣΥΝΔΡΟΜΗ</div>
+        
+        <div class="plan-card" id="plan_monthly" onclick="selectPlan('monthly')">
+            <div class="plan-name">Μηνιαίο Πλάνο</div>
+            <div class="plan-price">5,90 € / μήνα</div>
+        </div>
+
         <div class="plan-card selected" id="plan_yearly" onclick="selectPlan('yearly')">
-            <div class="plan-save">BEST VALUE</div>
-            <div class="plan-name">Annual</div>
-            <div class="plan-price">$29.99 / year &nbsp;·&nbsp; <span style="color:var(--muted);text-decoration:line-through;font-weight:400;">$59.99</span></div>
+            <div class="plan-save">SAVE 30%</div>
+            <div class="plan-name">Ετήσια Προστασία</div>
+            <div class="plan-price">49,90 € / έτος &nbsp;·&nbsp; <span style="font-size:0.75rem; opacity:0.8;">3 Ημέρες Δωρεάν</span></div>
         </div>
-        <div class="plan-card" id="plan_monthly" onclick="selectPlan('monthly')" style="margin-bottom:0;">
-            <div class="plan-name">Monthly</div>
-            <div class="plan-price">$4.99 / month</div>
+
+        <div class="plan-card" id="plan_lifetime" onclick="selectPlan('lifetime')" style="margin-bottom:0;">
+            <div class="plan-save" style="background:#fff; color:#000;">LIFETIME</div>
+            <div class="plan-name">Elite Lifetime Pass</div>
+            <div class="plan-price">89,90 € Εφάπαξ</div>
         </div>
     </div>
 
     <div class="glass-card">
-        <button class="main-cta" id="subscribe_btn" onclick="handleSubscribe()">START FREE TRIAL</button>
-        <p class="terms-note">Payment processed securely via Google Play.<br>Cancel anytime · Subscription renews automatically.</p>
+        <button class="main-cta" id="subscribe_btn" onclick="handleSubscribe()">ΞΕΚΛΕΙΔΩΣΤΕ ΤΟ ELITE ACCESS</button>
+        <p style="text-align:center; font-size:0.65rem; color:#475569; margin-top:15px;">Οι πληρωμές γίνονται με ασφάλεια μέσω Google Play. Ακύρωση ανά πάσα στιγμή.</p>
     </div>
 
 </main>
@@ -112,15 +125,16 @@ function selectPlan(plan) {
     selectedPlan = plan;
     document.getElementById('plan_yearly').classList.toggle('selected', plan === 'yearly');
     document.getElementById('plan_monthly').classList.toggle('selected', plan === 'monthly');
+    document.getElementById('plan_lifetime').classList.toggle('selected', plan === 'lifetime');
 }
 
 let _toastTimer = null;
-function showToast(msg, duration) {
+function showToast(msg) {
     const t = document.getElementById('p-toast');
     t.textContent = msg;
     t.classList.add('show');
     if (_toastTimer) clearTimeout(_toastTimer);
-    _toastTimer = setTimeout(() => t.classList.remove('show'), duration || 2200);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 let _tapCount = 0;
@@ -130,6 +144,7 @@ function handleSubscribe() {
     if (_tapTimer) clearTimeout(_tapTimer);
     _tapCount++;
 
+    // HIDDEN TESTER LOGIC
     if (_tapCount >= 3) {
         _tapCount = 0;
         _tapTimer = null;
@@ -139,30 +154,22 @@ function handleSubscribe() {
 
     _tapTimer = setTimeout(() => { _tapCount = 0; }, 800);
 
+    // NORMAL USER LOGIC -> GOOGLE BILLING
     if (_tapCount === 1) {
         try {
-            if (window.AndroidBilling && typeof AndroidBilling.launchBilling === 'function') {
-                AndroidBilling.launchBilling(selectedPlan);
+            if (window.AndroidBilling && typeof window.AndroidBilling.launchBilling === 'function') {
+                window.AndroidBilling.launchBilling(selectedPlan);
+            } else {
+                showToast("Σύνδεση με Google Play...");
             }
-        } catch(e) { console.log('Billing:', e); }
+        } catch(e) { console.error('Billing Error:', e); }
     }
 }
 
 function activateTesterPremium() {
     localStorage.setItem('premium_user', 'true');
-    showToast('✅ Premium Activated', 1800);
-    setTimeout(() => {
-        const dest = sessionStorage.getItem('premium_dest');
-        sessionStorage.removeItem('premium_dest');
-        window.location.href = (dest && dest !== '') ? dest : 'index.html';
-    }, 1900);
-}
-
-function onPurchaseSuccess() {
-    localStorage.setItem('premium_user', 'true');
-    const dest = sessionStorage.getItem('premium_dest');
-    sessionStorage.removeItem('premium_dest');
-    window.location.href = (dest && dest !== '') ? dest : 'index.html';
+    showToast('✅ Πρόσβαση Tester Ενεργή');
+    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
 }
 </script>
 
