@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Stay Safe Elite — Premium</title>
@@ -45,7 +45,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 <div id="p-toast"></div>
 
 <header class="app-header">
-    <button class="back-btn" onclick="history.back()">← ΠΙΣΩ</button>
+    <button class="back-btn" onclick="history.back()">← BACK</button>
     <span class="header-title">👑 ELITE MEMBERSHIP</span>
 </header>
 
@@ -54,67 +54,67 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
     <div class="glass-card" style="text-align:center;">
         <div class="hero-icon">🏆</div>
         <div class="hero-title">STAY SAFE ELITE PREMIUM</div>
-        <p class="hero-sub">Ολοκληρωμένη προστασία με εργαλεία AI, Defense Dojo και άμεση βοήθεια.</p>
+        <p class="hero-sub">Complete protection with AI tools, Defense Dojo, and immediate assistance.</p>
     </div>
 
     <div class="glass-card">
         <div style="font-size:0.7rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">💎 ELITE TOOLS & TRAINING</div>
         
         <div class="feature-row">
-            <div class="feature-icon">🥋</div>
-            <div class="feature-text"><strong>Defense Dojo</strong><span>Master βίντεο αυτοάμυνας & Tang Soo Do</span></div>
+            <div class="feature-icon">|🥋</div>
+            <div class="feature-text"><strong>Defense Dojo</strong><span>Master self-defense & Tang Soo Do videos</span></div>
         </div>
         
         <div class="feature-row">
             <div class="feature-icon">🚨</div>
-            <div class="feature-text"><strong>SOS Hub & Emergency Alerts</strong><span>Άμεση κλήση (112, 100, 166) & σήματα ανάγκης</span></div>
+            <div class="feature-text"><strong>SOS Hub & Emergency Alerts</strong><span>Instant call (112, 100, 166) & distress signals</span></div>
         </div>
 
         <div class="feature-row">
             <div class="feature-icon">🤖</div>
-            <div class="feature-text"><strong>AI Threat Analysis (IA Minaccia)</strong><span>Ανίχνευση απάτης AI, Phishing & Deepfakes</span></div>
+            <div class="feature-text"><strong>AI Threat Analysis</strong><span>Detect AI fraud, Phishing & Deepfakes</span></div>
         </div>
 
         <div class="feature-row">
             <div class="feature-icon">🔍</div>
-            <div class="feature-text"><strong>Scam Database (Truffe)</strong><span>Πρόσβαση στη βάση δεδομένων για απάτες</span></div>
+            <div class="feature-text"><strong>Scam Database (Truffe)</strong><span>Access to the global fraud database</span></div>
         </div>
 
         <div class="feature-row">
             <div class="feature-icon">🏥</div>
-            <div class="feature-text"><strong>Visual First Aid Guide</strong><span>Οδηγοί CPR, Heimlich & Πρώτων Βοηθειών</span></div>
+            <div class="feature-text"><strong>Visual First Aid Guide</strong><span>CPR, Heimlich & First Aid visual guides</span></div>
         </div>
 
         <div class="feature-row" style="margin-bottom:0;">
             <div class="feature-icon">🚫</div>
-            <div class="feature-text"><strong>Χωρίς Διαφημίσεις</strong><span>100% καθαρή εμπειρία χωρίς διακοπές</span></div>
+            <div class="feature-text"><strong>Ad-Free Experience</strong><span>100% clean experience without interruptions</span></div>
         </div>
     </div>
 
     <div class="glass-card">
-        <div style="font-size:0.7rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">📍 ΕΠΙΛΕΞΤΕ ΣΥΝΔΡΟΜΗ</div>
+        <div style="font-size:0.7rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">📍 CHOOSE YOUR PLAN</div>
         
         <div class="plan-card" id="plan_monthly" onclick="selectPlan('monthly')">
-            <div class="plan-name">Μηνιαίο Πλάνο</div>
-            <div class="plan-price">5,90 € / μήνα</div>
+            <div class="plan-name">Monthly Plan</div>
+            <div class="plan-price">5,90 € / month</div>
         </div>
 
         <div class="plan-card selected" id="plan_yearly" onclick="selectPlan('yearly')">
             <div class="plan-save">SAVE 30%</div>
-            <div class="plan-name">Ετήσια Προστασία</div>
-            <div class="plan-price">49,90 € / έτος &nbsp;·&nbsp; <span style="font-size:0.75rem; opacity:0.8;">3 Ημέρες Δωρεάν</span></div>
+            <div class="plan-name">Annual Protection</div>
+            <div class="plan-price">49,90 € / year &nbsp;·&nbsp; <span style="font-size:0.75rem; opacity:0.8;">3 Days Free</span></div>
         </div>
 
         <div class="plan-card" id="plan_lifetime" onclick="selectPlan('lifetime')" style="margin-bottom:0;">
             <div class="plan-save" style="background:#fff; color:#000;">LIFETIME</div>
             <div class="plan-name">Elite Lifetime Pass</div>
-            <div class="plan-price">89,90 € Εφάπαξ</div>
+            <div class="plan-price">89,90 € One-time</div>
         </div>
     </div>
 
     <div class="glass-card">
-        <button class="main-cta" id="subscribe_btn" onclick="handleSubscribe()">ΞΕΚΛΕΙΔΩΣΤΕ ΤΟ ELITE ACCESS</button>
-        <p style="text-align:center; font-size:0.65rem; color:#475569; margin-top:15px;">Οι πληρωμές γίνονται με ασφάλεια μέσω Google Play. Ακύρωση ανά πάσα στιγμή.</p>
+        <button class="main-cta" id="subscribe_btn" onclick="handleSubscribe()">UNLOCK ELITE ACCESS</button>
+        <p style="text-align:center; font-size:0.65rem; color:#475569; margin-top:15px;">Payments are securely processed via Google Play. Cancel anytime.</p>
     </div>
 
 </main>
@@ -144,7 +144,7 @@ function handleSubscribe() {
     if (_tapTimer) clearTimeout(_tapTimer);
     _tapCount++;
 
-    // HIDDEN TESTER LOGIC
+    // HIDDEN TESTER LOGIC (3 TAPS)
     if (_tapCount >= 3) {
         _tapCount = 0;
         _tapTimer = null;
@@ -160,7 +160,7 @@ function handleSubscribe() {
             if (window.AndroidBilling && typeof window.AndroidBilling.launchBilling === 'function') {
                 window.AndroidBilling.launchBilling(selectedPlan);
             } else {
-                showToast("Σύνδεση με Google Play...");
+                showToast("Connecting to Google Play...");
             }
         } catch(e) { console.error('Billing Error:', e); }
     }
@@ -168,7 +168,7 @@ function handleSubscribe() {
 
 function activateTesterPremium() {
     localStorage.setItem('premium_user', 'true');
-    showToast('✅ Πρόσβαση Tester Ενεργή');
+    showToast('✅ Tester Access Active');
     setTimeout(() => { window.location.href = 'index.html'; }, 1500);
 }
 </script>
