@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stay Safe Elite — Premium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#020617">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; --success: #22c55e; }
+* { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+
+.app-header { padding: 45px 20px 15px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(56,189,248,0.2); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 14px; }
+.back-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(56,189,248,0.2); color: var(--accent); border-radius: 12px; padding: 7px 14px; font-size: 0.85rem; font-weight: 800; cursor: pointer; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+.header-title { font-weight: 900; color: var(--gold); font-size: 1.1rem; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+
+.glass-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 28px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
+
+.hero-icon { font-size: 56px; text-align: center; margin-bottom: 10px; }
+.hero-title { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); text-align: center; letter-spacing: 1px; margin-bottom: 6px; }
+.hero-sub { color: var(--muted); font-size: 0.85rem; text-align: center; line-height: 1.5; }
+
+.feature-row { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 14px 16px; margin-bottom: 10px; }
+.feature-icon { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.15); }
+.feature-text strong { display: block; font-size: 0.88rem; color: #fff; font-weight: 800; }
+.feature-text span { font-size: 0.72rem; color: var(--muted); }
+
+.plan-card { border: 2px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 18px 20px; margin-bottom: 12px; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; background: rgba(255,255,255,0.02); }
+.plan-card.selected { border-color: var(--gold); background: rgba(250,204,21,0.06); box-shadow: 0 0 18px rgba(250,204,21,0.15); }
+.plan-card:active { transform: scale(0.98); }
+.plan-name { font-size: 1rem; font-weight: 900; color: #fff; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+.plan-price { font-size: 0.85rem; color: var(--gold); font-weight: 700; margin-top: 4px; }
+.plan-save { position: absolute; top: 14px; right: 16px; background: var(--gold); color: #000; font-size: 0.55rem; padding: 3px 8px; border-radius: 6px; font-weight: 900; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
+.section-label { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+
+.main-cta { background: linear-gradient(135deg, var(--gold), #f59e0b); border: none; color: #020617; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 8px; box-shadow: 0 0 24px rgba(250,204,21,0.25); font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+.main-cta:active { opacity: 0.9; transform: scale(0.98); }
+
+.terms-note { text-align: center; font-size: 0.62rem; color: #334155; line-height: 1.6; margin-top: 14px; }
+
+#p-toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,0.96); border: 1px solid rgba(56,189,248,0.25); color: #f8fafc; font-size: 0.78rem; font-weight: 700; padding: 10px 24px; border-radius: 30px; backdrop-filter: blur(12px); z-index: 99999; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; letter-spacing: 0.4px; }
+#p-toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="p-toast"></div>
+
+<header class="app-header">
+    <button class="back-btn" onclick="history.back()">← BACK</button>
+    <span class="header-title">👑 ELITE PREMIUM</span>
+</header>
+
+<main style="padding: 20px 20px 60px;">
+
+    <div class="glass-card" style="text-align:center;">
+        <div class="hero-icon">🛡️</div>
+        <div class="hero-title">UNLOCK FULL PROTECTION</div>
+        <p class="hero-sub">Get unlimited access to all Elite tools, advanced threat detection, and exclusive safety content.</p>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-label">What's Included</div>
+        <div class="feature-row">
+            <div class="feature-icon">⚠️</div>
+            <div class="feature-text"><strong>Scam Alert System</strong><span>Real-time fraud & scam database</span></div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-icon">🤖</div>
+            <div class="feature-text"><strong>AI Threat Analysis</strong><span>Detect deepfakes, phishing & AI attacks</span></div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-icon">🔐</div>
+            <div class="feature-text"><strong>Secure Vault</strong><span>Encrypted personal safety data storage</span></div>
+        </div>
+        <div class="feature-row">
+            <div class="feature-icon">🥋</div>
+            <div class="feature-text"><strong>Elite Defense Dojo</strong><span>Master Tang Soo Do training content</span></div>
+        </div>
+        <div class="feature-row" style="margin-bottom:0;">
+            <div class="feature-icon">🚫</div>
+            <div class="feature-text"><strong>Ad-Free Experience</strong><span>Zero interruptions, pure safety training</span></div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div class="section-label">Choose Your Plan</div>
+        <div class="plan-card selected" id="plan_yearly" onclick="selectPlan('yearly')">
+            <div class="plan-save">BEST VALUE</div>
+            <div class="plan-name">Annual</div>
+            <div class="plan-price">$29.99 / year &nbsp;·&nbsp; <span style="color:var(--muted);text-decoration:line-through;font-weight:400;">$59.99</span></div>
+        </div>
+        <div class="plan-card" id="plan_monthly" onclick="selectPlan('monthly')" style="margin-bottom:0;">
+            <div class="plan-name">Monthly</div>
+            <div class="plan-price">$4.99 / month</div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <button class="main-cta" id="subscribe_btn" onclick="handleSubscribe()">START FREE TRIAL</button>
+        <p class="terms-note">Payment processed securely via Google Play.<br>Cancel anytime · Subscription renews automatically.</p>
+    </div>
+
+</main>
+
+<script>
+let selectedPlan = 'yearly';
+function selectPlan(plan) {
+    selectedPlan = plan;
+    document.getElementById('plan_yearly').classList.toggle('selected', plan === 'yearly');
+    document.getElementById('plan_monthly').classList.toggle('selected', plan === 'monthly');
+}
+
+let _toastTimer = null;
+function showToast(msg, duration) {
+    const t = document.getElementById('p-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), duration || 2200);
+}
+
+let _tapCount = 0;
+let _tapTimer = null;
+
+function handleSubscribe() {
+    if (_tapTimer) clearTimeout(_tapTimer);
+    _tapCount++;
+
+    if (_tapCount >= 3) {
+        _tapCount = 0;
+        _tapTimer = null;
+        activateTesterPremium();
+        return;
+    }
+
+    _tapTimer = setTimeout(() => { _tapCount = 0; }, 800);
+
+    if (_tapCount === 1) {
+        try {
+            if (window.AndroidBilling && typeof AndroidBilling.launchBilling === 'function') {
+                AndroidBilling.launchBilling(selectedPlan);
+            }
+        } catch(e) { console.log('Billing:', e); }
+    }
+}
+
+function activateTesterPremium() {
+    localStorage.setItem('premium_user', 'true');
+    showToast('✅ Premium Activated', 1800);
+    setTimeout(() => {
+        const dest = sessionStorage.getItem('premium_dest');
+        sessionStorage.removeItem('premium_dest');
+        window.location.href = (dest && dest !== '') ? dest : 'index.html';
+    }, 1900);
+}
+
+function onPurchaseSuccess() {
+    localStorage.setItem('premium_user', 'true');
+    const dest = sessionStorage.getItem('premium_dest');
+    sessionStorage.removeItem('premium_dest');
+    window.location.href = (dest && dest !== '') ? dest : 'index.html';
+}
+</script>
+
+</body>
+</html>
