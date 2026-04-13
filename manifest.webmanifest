@@ -90,6 +90,12 @@
   "launch_handler": {
     "client_mode": "navigate-existing"
   },
-  "prefer_related_applications": false,
-  "related_applications": []
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.minamar7.staysafetipselite",
+      "url": "https://play.google.com/store/apps/details?id=com.minamar7.staysafetipselite"
+    }
+  ]
 }
