@@ -1,14 +1,11 @@
-[
-  {
-    "relation": [
-      "delegate_permission/common.get_login_creds",
-      "delegate_permission/common.store_login_creds"
-    ],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.minamar7.test_pwa",
-      "sha256_cert_fingerprint": "CB:9F:BF:A8:9B:6B:0F:D5:77:80:CC:0F:70:95:90:54:19:40:48:42:25:2A:9C:52:95:25:FB:06:5D:F3:D9:D0"
-    }
+[{
+  "relation": [
+    "delegate_permission/common.get_login_creds",
+    "delegate_permission/common.store_login_creds"
+  ],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.minamar7.test_pwa",
+    "sha256_cert_fingerprint": "CB:9F:BF:A8:9B:6B:0F:D5:77:80:CC:0F:70:95:90:54:19:40:48:42:25:2A:9C:52:95:25:FB:06:5D:F3:D9:D0"
   }
-]
-
+}]
