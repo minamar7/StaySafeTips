@@ -1,13 +1,26 @@
-[{
-  "relation": [
-    "delegate_permission/common.get_login_creds",
-    "delegate_permission/common.store_login_creds"
-  ],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.minamar7.test_pwa",
-    "sha256_cert_fingerprints": [
-      "CB:9F:BF:A8:9B:6B:0F:D5:77:80:CC:0F:70:95:90:54:19:40:48:42:25:2A:9C:52:95:25:FB:06:5D:F3:D9:D0"
-    ]
+[
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds",
+      "delegate_permission/common.store_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.minamar7.yourpackagename",
+      "sha256_cert_fingerprint": "CB:9F:BF:A8:9B:6B:0F:..."
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.minamar7.staysafetipselite",
+      "sha256_cert_fingerprints": [
+        "CB:9F:BF:A8:9B:6B:0F:90:1E:F3:C7:6F:6A:59:D4:51:2A:08:72:76:BC:3B:FF:05:9D:B3:4E:36:77:B1:86:54"
+      ]
+    }
   }
-}] 
+]
