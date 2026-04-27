@@ -4,19 +4,16 @@ module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     const { num } = req.query;
-    // Χρήση του ονόματος που έχεις στο Vercel
-    const apiKey = process.env.AVIATION_API_KEY;
+    const apiKey = process.env.AVIATION_API_KEY; // Ακριβώς όπως στο Vercel
 
     try {
-        // Χρήση http (όχι https) για να μην απορρίψει την κλήση το API
+        // Υποχρεωτικά http για το free plan του AviationStack
         const url = `http://api.aviationstack.com/v1/flights?access_key=${apiKey}&flight_iata=${num.toUpperCase()}&limit=1`;
         
         const response = await fetch(url);
         const data = await response.json();
-
-        if (data.error) return res.status(200).json({ error: data.error.message });
         return res.status(200).json(data);
     } catch (err) {
-        return res.status(500).json({ error: 'Flight API Error' });
+        return res.status(500).json({ error: "Flight Error" });
     }
 };
