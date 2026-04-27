@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Safety Advisor - Stay Safe Elite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(15, 23, 42, 0.9);
+            --accent: #38bdf8;
+            --travel: #0ea5e9;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --gold: #facc15;
+        }
+        * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .search-container {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        input {
+            flex: 1;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px;
+            border-radius: 12px;
+            color: white;
+            outline: none;
+            font-size: 1rem;
+        }
+        button {
+            background: var(--travel);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:active { opacity: 0.7; }
+        #results {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .result-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 18px;
+            border-left: 4px solid var(--accent);
+            line-height: 1.6;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading {
+            text-align: center;
+            color: var(--muted);
+            padding: 40px;
+        }
+        .tag {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ AI Safety Assistant</h1>
+            <p style="color: var(--muted); font-size: 0.8rem;">Ask AI about the safety of any destination</p>
+        </div>
+
+        <div class="search-container">
+            <label style="font-size: 0.8rem; color: var(--muted);">Where are you traveling to?</label>
+            <div class="input-group">
+                <input type="text" id="destinationInput" placeholder="e.g. Mexico, Paris, Thailand">
+                <button onclick="askAI()">ANALYZE</button>
+            </div>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        async function askAI() {
+            const dest = document.getElementById('destinationInput').value.trim();
+            const resDiv = document.getElementById('results');
+            
+            if(!dest) return;
+
+            resDiv.innerHTML = '<div class="loading">Analyzing security data...</div>';
+
+            try {
+                // Connecting to the working analyze.js endpoint
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        situation: `Comprehensive security analysis for ${dest}. Provide: 1. Overall safety level. 2. Dangerous areas/neighborhoods to avoid. 3. Essential safety gear/tips. Response language: English.`
+                    })
+                });
+
+                const data = await response.json();
+                
+                if(data.assessment) {
+                    const riskColor = data.level.toLowerCase() === 'high' ? 'var(--danger)' : 
+                                    (data.level.toLowerCase() === 'medium' ? 'var(--gold)' : 'var(--success)');
+
+                    resDiv.innerHTML = `
+                        <div class="result-card">
+                            <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <span class="tag" style="background: ${riskColor}; color: #000;">
+                                    ${data.level} RISK
+                                </span>
+                                <span style="color: var(--gold); font-weight: bold; font-size: 0.8rem;">Safety Score: ${data.score}/100</span>
+                            </div>
+                            <div style="color: var(--text);">\${data.assessment}</div>
+                        </div>
+                    `;
+                } else {
+                    resDiv.innerHTML = '<div class="result-card">Analysis failed. Please try again.</div>';
+                }
+            } catch (err) {
+                resDiv.innerHTML = '<div class="result-card">Connection error. Please check your internet.</div>';
+            }
+        }
+    </script>
+</body>
+</html>
