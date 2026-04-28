@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ———— STYLES (όπως πριν, δεν τα πειράζω) ———— */
+/* ———— STYLES ———— */
 :root{
   --bg:#05060a;
   --bg2:#0b0f18;
@@ -163,7 +163,6 @@ button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);}
 
   <div class="grid">
 
-    <!-- Flight Tracker -->
     <div class="card">
       <div class="card-header">
         <h2>✈️ Flight Tracker</h2>
@@ -176,20 +175,18 @@ button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);}
       </div>
     </div>
 
-    <!-- AI Travel Threat -->
     <div class="card">
       <div class="card-header">
         <h2>⚠️ AI Travel Threat Advisor</h2>
         <div class="card-tag card-premium">Gemini 3 Flash</div>
       </div>
       <div>
-        <input id="countryThreat" placeholder="Destination Country (Thailand)">
+        <input id="countryThreat" placeholder="Destination (e.g. London or Thailand)">
         <button onclick="travelThreat()">Analyze Risk</button>
         <div class="result" id="threatResult">Get a concise AI safety briefing for your destination.</div>
       </div>
     </div>
 
-    <!-- Currency -->
     <div class="card">
       <div class="card-header">
         <h2>💱 Currency Rates</h2>
@@ -208,7 +205,6 @@ button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);}
       </div>
     </div>
 
-    <!-- Safety Score -->
     <div class="card">
       <div class="card-header">
         <h2>🛡 Country Safety Score</h2>
@@ -221,7 +217,6 @@ button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);}
       </div>
     </div>
 
-    <!-- Packing Tips -->
     <div class="card">
       <div class="card-header">
         <h2>🧳 Smart Packing Tips</h2>
@@ -234,7 +229,6 @@ button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);}
       </div>
     </div>
 
-    <!-- Quick Status -->
     <div class="card">
       <div class="card-header">
         <h2>🌐 Quick Status</h2>
@@ -293,17 +287,33 @@ async function trackFlight(){
 
   try{
     const r = await fetch(`${API_BASE}/flight?num=${encodeURIComponent(num)}`);
-    const data = await r.json();
+    const result = await r.json();
 
-    if(data.error){
-      box.innerHTML = "Tracker error: "+(data.error.info || data.error);
+    if(result.error || !result.data || result.data.length === 0){
+      box.innerHTML = "Tracker error: Flight not found or API issue.";
       return;
     }
 
-    box.innerHTML =
-      "<b>Flight:</b> "+num+
-      "<br><b>Status:</b> Live tracking enabled"+
-      "<br><span class='small'>Aviation API connected</span>";
+    const data = result.data[0];
+
+    box.innerHTML = `
+      <b>Flight:</b> ${data.flight.iata}<br>
+      <b>Airline:</b> ${data.airline.name}<br><br>
+
+      <b>Departure:</b><br>
+      Airport: ${data.departure.airport} (${data.departure.iata})<br>
+      Time: ${data.departure.scheduled.split('T')[1].substring(0,5)}<br>
+      Terminal: ${data.departure.terminal || "-"}<br>
+      Gate: ${data.departure.gate || "-"}<br><br>
+
+      <b>Arrival:</b><br>
+      Airport: ${data.arrival.airport} (${data.arrival.iata})<br>
+      Time: ${data.arrival.scheduled.split('T')[1].substring(0,5)}<br>
+      Terminal: ${data.arrival.terminal || "-"}<br>
+      Gate: ${data.arrival.gate || "-"}<br><br>
+
+      <b>Status:</b> <span style="color:var(--gold2)">${data.flight_status.toUpperCase()}</span>
+    `;
 
   }catch(e){
     box.innerHTML = "Tracker unavailable.";
@@ -320,7 +330,7 @@ async function travelThreat(){
     return;
   }
 
-  box.innerHTML = "Analyzing with Gemini...";
+  box.innerHTML = "Analyzing with Gemini AI...";
 
   try{
     const r = await fetch(`${API_BASE}/ai-threat`,{
@@ -328,25 +338,20 @@ async function travelThreat(){
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         messages:[
-          {role:"user",content:"Short travel safety tips for "+country}
+          {role:"user", content: country}
         ]
       })
     });
 
     const data = await r.json();
+    
+    // Πρόσβαση στο text από το σωστό format (content[0].text)
+    let txt = data.content?.[0]?.text || "AI safety briefing temporarily unavailable.";
 
-    let txt = "Use normal caution, avoid common scams and monitor local news.";
-
-    if(data.candidates?.[0]?.content?.parts?.[0]?.text){
-      txt = data.candidates[0].content.parts[0].text;
-    }else if(data.content?.[0]?.text){
-      txt = data.content[0].text;
-    }
-
-    box.innerHTML = txt;
+    box.innerHTML = `<div style="white-space:pre-wrap;">${txt}</div>`;
 
   }catch(e){
-    box.innerHTML = "AI temporarily unavailable.";
+    box.innerHTML = "AI service temporarily unavailable.";
   }
 }
 
@@ -366,7 +371,7 @@ async function loadCurrency(){
       return;
     }
 
-    const rate = data.rates[cur];
+    const rate = data.rates[cur].toFixed(2);
 
     box.innerHTML =
       "<b>1 EUR = "+rate+" "+cur+"</b>"+
