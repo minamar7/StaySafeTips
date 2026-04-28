@@ -283,35 +283,39 @@ async function trackFlight(){
     return;
   }
 
-  box.innerHTML = "Connecting to Flight API...";
+  box.innerHTML = "Connecting to flight API...";
 
   try{
     const r = await fetch(`${API_BASE}/flight?num=${encodeURIComponent(num)}`);
-    const data = await r.json();
+    const result = await r.json();
 
-    if(data.error){
-      box.innerHTML = "Tracker error: " + data.error;
+    if(result.error){
+      box.innerHTML = "Tracker error: " + result.error;
       return;
     }
 
+    // Τα ελληνικά keys από το AviationStack
+    const dep = result.departure;
+    const arr = result.arrival;
+
     box.innerHTML = `
-      <b>Flight:</b> ${data.flight}<br>
-      <b>Airline:</b> ${data.airline}<br><br>
+      <b>Flight:</b> ${result.flight}<br>
+      <b>Airline:</b> ${result.airline}<br><br>
 
       <b>Departure:</b><br>
-      Airport: ${data.departure.airport} (${data.departure.iata})<br>
-      Time: ${data.departure.time}<br>
-      Terminal: ${data.departure.terminal || "-"}<br>
-      Gate: ${data.departure.gate || "-"}<br><br>
+      Airport: ${dep.airport || "-"} (${dep.iata || "-"})<br>
+      Time: ${dep.time || "-"}<br>
+      Terminal: ${dep.terminal || "-"}<br>
+      Gate: ${dep.gate || "-"}<br><br>
 
       <b>Arrival:</b><br>
-      Airport: ${data.arrival.airport} (${data.arrival.iata})<br>
-      Time: ${data.arrival.time}<br>
-      Terminal: ${data.arrival.terminal || "-"}<br>
-      Gate: ${data.arrival.gate || "-"}<br><br>
+      Airport: ${arr.airport || "-"} (${arr.iata || "-"})<br>
+      Time: ${arr.time || "-"}<br>
+      Terminal: ${arr.terminal || "-"}<br>
+      Gate: ${arr.gate || "-"}<br><br>
 
       <b>Status:</b> <span style="color:var(--gold2)">
-        ${data.status ? data.status.toUpperCase() : "-"}
+        ${result.status ? result.status.toUpperCase() : "-"}
       </span>
     `;
 
@@ -319,44 +323,6 @@ async function trackFlight(){
     box.innerHTML = "Tracker unavailable.";
   }
 }
-
-  box.innerHTML = "Connecting to aviation API...";
-
-  try{
-    const r = await fetch(`${API_BASE}/flight?num=${encodeURIComponent(num)}`);
-    const data = await r.json();
-
-    if(data.error){
-      box.innerHTML = "Tracker error: " + data.error;
-      return;
-    }
-
-    box.innerHTML = `
-      <b>Flight:</b> ${data.flight}<br>
-      <b>Airline:</b> ${data.airline}<br><br>
-
-      <b>Departure:</b><br>
-      Airport: ${data.departure.airport} (${data.departure.iata})<br>
-      Time: ${data.departure.time}<br>
-      Terminal: ${data.departure.terminal || "-"}<br>
-      Gate: ${data.departure.gate || "-"}<br><br>
-
-      <b>Arrival:</b><br>
-      Airport: ${data.arrival.airport} (${data.arrival.iata})<br>
-      Time: ${data.arrival.time}<br>
-      Terminal: ${data.arrival.terminal || "-"}<br>
-      Gate: ${data.arrival.gate || "-"}<br><br>
-
-      <b>Status:</b> <span style="color:var(--gold2)">
-        ${data.status.toUpperCase()}
-      </span>
-    `;
-
-  }catch(e){
-    box.innerHTML = "Tracker unavailable.";
-  }
-}
-
 /* ———— AI THREAT ———— */
 async function travelThreat(){
   const country = document.getElementById("countryThreat").value.trim();
