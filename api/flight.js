@@ -1,26 +1,52 @@
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  const { num } = req.query;
-  const apiKey = process.env.AVIATION_API_KEY;
+  if (req.method === "OPTIONS") return res.status(200).end();
 
-  if (!num) {
+  const flightNum = req.query.num;
+  if (!flightNum) {
     return res.status(400).json({ error: "Missing flight number" });
   }
 
   try {
-    const url = `http://api.aviationstack.com/v1/flights?access_key=${apiKey}&flight_iata=${num.toUpperCase()}&limit=1`;
+    const apiKey = process.env.AVIATION_API_KEY;
+    const url = `http://api.aviationstack.com/v1/flights?access_key=${apiKey}&flight_iata=${flightNum}`;
 
     const response = await fetch(url);
     const data = await response.json();
 
-    if (data.error) {
-      return res.status(500).json({ error: data.error.info || "API Error" });
+    if (!data || !data.data || data.data.length === 0) {
+      return res.status(404).json({ error: "Flight not found" });
     }
 
-    return res.status(200).json(data);
+    const f = data.data[0];
+
+    return res.status(200).json({
+      flight: f.flight.iata,
+      airline: f.airline.name,
+      status: f.flight_status,
+      departure: {
+        airport: f.departure.airport,
+        iata: f.departure.iata,
+        terminal: f.departure.terminal,
+        gate: f.departure.gate,
+        time: f.departure.scheduled
+      },
+      arrival: {
+        airport: f.arrival.airport,
+        iata: f.arrival.iata,
+        terminal: f.arrival.terminal,
+        gate: f.arrival.gate,
+        time: f.arrival.scheduled
+      }
+    });
 
   } catch (err) {
-    return res.status(500).json({ error: "API Connection Failed" });
+    return res.status(500).json({
+      error: "Aviation API error",
+      message: err.message
+    });
   }
 };
