@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flight Intel — Live Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #03080f; --surface: #071020; --card: #0b1828;
+            --accent: #38bdf8; --text: #e2f0fb; --muted: #3b6a8a;
+        }
+        body { 
+            background: var(--bg); color: var(--text); 
+            font-family: 'Space Mono', monospace; padding: 20px;
+            overflow-x: hidden;
+        }
+        .container { max-width: 100%; margin: 0 auto; }
+        .search-box {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+        input {
+            flex: 1; padding: 12px; border-radius: 8px;
+            border: 1px solid var(--muted); background: var(--surface);
+            color: white; font-size: 16px; /* Prevent zoom on iOS */
+        }
+        button {
+            padding: 12px 20px; border-radius: 8px; border: none;
+            background: var(--accent); color: var(--bg); font-weight: bold;
+        }
+        .flight-card {
+            background: var(--card); padding: 15px; border-radius: 12px;
+            border: 1px solid var(--border); margin-top: 20px;
+        }
+        .grid-details {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;
+        }
+        .detail-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; }
+        .detail-value { font-size: 0.9rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="font-family: 'Syne'; margin-bottom: 20px;">FLIGHT TRACKER</h2>
+        <div class="search-box">
+            <input type="text" id="flightNum" placeholder="e.g. AA123">
+            <button onclick="track()">TRACK</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function track() {
+            const num = document.getElementById('flightNum').value;
+            const resDiv = document.getElementById('result');
+            resDiv.innerHTML = "Searching...";
+            try {
+                // Χρήση του δικού σου endpoint στο Vercel
+                const response = await fetch(`/api/flight?num=${num}`);
+                const data = await response.json();
+                if(!data.data || data.data.length === 0) throw new Error("Not found");
+                
+                const f = data.data[0];
+                resDiv.innerHTML = `
+                    <div class="flight-card">
+                        <div style="font-size: 1.2rem; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+                            ${f.flight.iata} | ${f.airline.name}
+                        </div>
+                        <div class="grid-details">
+                            <div><div class="detail-label">From</div><div class="detail-value">${f.departure.iata}</div></div>
+                            <div><div class="detail-label">To</div><div class="detail-value">${f.arrival.iata}</div></div>
+                            <div><div class="detail-label">Status</div><div class="detail-value">${f.flight_status}</div></div>
+                            <div><div class="detail-label">Aircraft</div><div class="detail-value">${f.aircraft?.registration || 'N/A'}</div></div>
+                        </div>
+                    </div>`;
+            } catch (err) {
+                resDiv.innerHTML = "Flight not found or API error.";
+            }
+        }
+    </script>
+</body>
+</html>
