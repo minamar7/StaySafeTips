@@ -23,23 +23,33 @@ module.exports = async (req, res) => {
 
     const f = data.data[0];
 
+    // Helper για να πιάνει ΚΑΙ ελληνικά ΚΑΙ αγγλικά keys
+    const get = (obj, ...keys) => {
+      for (const k of keys) {
+        if (obj && obj[k] !== undefined && obj[k] !== null) return obj[k];
+      }
+      return null;
+    };
+
     return res.status(200).json({
-      flight: f.flight.iata,
-      airline: f.airline.name,
+      flight: get(f.flight, "iata", "number"),
+      airline: get(f.airline, "name"),
       status: f.flight_status,
+
       departure: {
-        airport: f.departure["αεροδρόμιο"] || f.departure.airport,
-        iata: f.departure.iata,
-        terminal: f.departure["τερματικό"] || f.departure.terminal,
-        gate: f.departure["πύλη"] || f.departure.gate,
-        time: f.departure["προγραμματισμένο"] || f.departure.scheduled
+        airport: get(f.departure, "αεροδρόμιο", "airport"),
+        iata: get(f.departure, "iata"),
+        terminal: get(f.departure, "τερματικό", "terminal"),
+        gate: get(f.departure, "πύλη", "gate"),
+        time: get(f.departure, "προγραμματισμένο", "scheduled", "estimated", "actual")
       },
+
       arrival: {
-        airport: f.arrival["αεροδρόμιο"] || f.arrival.airport,
-        iata: f.arrival.iata,
-        terminal: f.arrival["τερματικός σταθμός"] || f.arrival.terminal,
-        gate: f.arrival["πύλη"] || f.arrival.gate,
-        time: f.arrival["προγραμματισμένο"] || f.arrival.scheduled
+        airport: get(f.arrival, "αεροδρόμιο", "airport"),
+        iata: get(f.arrival, "iata"),
+        terminal: get(f.arrival, "τερματικός σταθμός", "terminal"),
+        gate: get(f.arrival, "πύλη", "gate"),
+        time: get(f.arrival, "προγραμματισμένο", "scheduled", "estimated", "actual")
       }
     });
 
