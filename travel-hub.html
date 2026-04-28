@@ -283,6 +283,43 @@ async function trackFlight(){
     return;
   }
 
+  box.innerHTML = "Connecting to Flight API...";
+
+  try{
+    const r = await fetch(`${API_BASE}/flight?num=${encodeURIComponent(num)}`);
+    const data = await r.json();
+
+    if(data.error){
+      box.innerHTML = "Tracker error: " + data.error;
+      return;
+    }
+
+    box.innerHTML = `
+      <b>Flight:</b> ${data.flight}<br>
+      <b>Airline:</b> ${data.airline}<br><br>
+
+      <b>Departure:</b><br>
+      Airport: ${data.departure.airport} (${data.departure.iata})<br>
+      Time: ${data.departure.time}<br>
+      Terminal: ${data.departure.terminal || "-"}<br>
+      Gate: ${data.departure.gate || "-"}<br><br>
+
+      <b>Arrival:</b><br>
+      Airport: ${data.arrival.airport} (${data.arrival.iata})<br>
+      Time: ${data.arrival.time}<br>
+      Terminal: ${data.arrival.terminal || "-"}<br>
+      Gate: ${data.arrival.gate || "-"}<br><br>
+
+      <b>Status:</b> <span style="color:var(--gold2)">
+        ${data.status ? data.status.toUpperCase() : "-"}
+      </span>
+    `;
+
+  }catch(e){
+    box.innerHTML = "Tracker unavailable.";
+  }
+}
+
   box.innerHTML = "Connecting to aviation API...";
 
   try{
