@@ -1,26 +1,18 @@
-// api/ai-threat.js — Συγχρονισμένο με τη λειτουργία του analyze.js
-module.exports = async (req, res) => {
-    // CORS headers για να επιτρέπεται η κλήση από την εφαρμογή
+
+    
+        module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
     const { messages } = req.body;
-    if (!messages || !Array.isArray(messages)) {
-        return res.status(400).json({ error: 'Missing messages array' });
-    }
-
-    // Χρήση της μεταβλητής Travel_Ai_Threat από το Vercel
-    const apiKey = process.env.Travel_Ai_Threat;
-    
-    // Παίρνουμε το τελευταίο μήνυμα (τη χώρα/πόλη)
+    const apiKey = process.env.Travel_Ai_Threat; 
     const userPrompt = messages[messages.length - 1].content;
 
     try {
-        // Χρήση του gemini-3-flash-preview που ξέρουμε ότι λειτουργεί
+        // Χρήση του ίδιου URL/Model με το analyze.js
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
@@ -38,20 +30,12 @@ module.exports = async (req, res) => {
         });
 
         const data = await response.json();
-
-        if (data.error) {
-            return res.status(data.error.code || 500).json({ error: data.error.message });
-        }
-
-        // Εξαγωγή του κειμένου από την απάντηση της Google
         const aiText = data.candidates[0].content.parts[0].text;
 
-        // Επιστροφή στο format που περιμένει το travel-hub.html
         return res.status(200).json({
             content: [{ type: 'text', text: aiText }]
         });
-
     } catch (err) {
-        return res.status(500).json({ error: 'Failed to fetch AI data', detail: err.message });
+        return res.status(500).json({ error: "AI Generation Failed" });
     }
 };
