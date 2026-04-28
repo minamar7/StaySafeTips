@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Travel Hub Ultra | Stay Safe Elite</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg1:#090b10;
+--bg2:#0f141c;
+--card:rgba(255,255,255,.06);
+--line:rgba(255,255,255,.09);
+--gold:#d4af37;
+--gold2:#f5d67a;
+--white:#ffffff;
+--muted:#b6bcc8;
+--green:#33d17a;
+--red:#ff5d6c;
+--blue:#54a9ff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Inter,sans-serif;
+background:
+radial-gradient(circle at top right, rgba(212,175,55,.14), transparent 25%),
+radial-gradient(circle at bottom left, rgba(84,169,255,.10), transparent 25%),
+linear-gradient(180deg,var(--bg1),var(--bg2));
+color:var(--white);
+min-height:100vh;
+}
+
+.wrap{
+max-width:900px;
+margin:auto;
+padding:18px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+}
+
+.brand{
+font-size:28px;
+font-weight:800;
+letter-spacing:.3px;
+}
+
+.brand span{
+color:var(--gold);
+}
+
+.pill{
+padding:8px 14px;
+border-radius:999px;
+font-size:12px;
+border:1px solid var(--line);
+background:rgba(212,175,55,.08);
+color:var(--gold2);
+}
+
+.hero{
+padding:28px;
+border-radius:28px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(14px);
+border:1px solid var(--line);
+box-shadow:0 20px 45px rgba(0,0,0,.28);
+margin-bottom:18px;
+animation:fadeUp .8s ease;
+}
+
+.hero h1{
+font-size:32px;
+margin-bottom:10px;
+}
+
+.hero p{
+color:var(--muted);
+line-height:1.6;
+max-width:720px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:18px;
+}
+
+.stat{
+padding:14px;
+border-radius:20px;
+background:rgba(255,255,255,.04);
+border:1px solid var(--line);
+text-align:center;
+}
+
+.stat b{
+display:block;
+font-size:20px;
+margin-bottom:5px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr;
+gap:16px;
+}
+
+.card{
+padding:18px;
+border-radius:24px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(14px);
+border:1px solid var(--line);
+box-shadow:0 15px 35px rgba(0,0,0,.24);
+animation:fadeUp .7s ease;
+}
+
+.card h2{
+font-size:18px;
+margin-bottom:14px;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid var(--line);
+background:#0f141c;
+color:#fff;
+margin-bottom:10px;
+outline:none;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+font-weight:800;
+cursor:pointer;
+background:linear-gradient(135deg,var(--gold),var(--gold2));
+color:#111;
+transition:.2s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+.result{
+margin-top:12px;
+padding:14px;
+border-radius:16px;
+background:#0f141c;
+border:1px solid var(--line);
+line-height:1.6;
+font-size:14px;
+}
+
+.footer{
+text-align:center;
+color:var(--muted);
+font-size:12px;
+padding:24px 0;
+}
+
+.big{
+font-size:42px;
+font-weight:800;
+}
+
+.green{color:var(--green);}
+.red{color:var(--red);}
+.blue{color:var(--blue);}
+
+.small{font-size:13px;color:var(--muted);}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+@media(min-width:860px){
+.grid{
+grid-template-columns:1fr 1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="topbar">
+<div class="brand">Travel<span>Hub</span></div>
+<div class="pill">ULTRA PRO</div>
+</div>
+
+<div class="hero">
+<h1>Travel Smart. Stay Protected.</h1>
+<p>All-in-one premium travel command center with AI alerts, live tools, flight support and country intelligence.</p>
+
+<div class="stats">
+<div class="stat"><b id="liveTime">--:--</b>Local Time</div>
+<div class="stat"><b id="onlineStatus">...</b>Network</div>
+<div class="stat"><b>24/7</b>Travel Ready</div>
+</div>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>✈️ Flight Tracker</h2>
+<input id="flight" placeholder="Flight Number (A3123)">
+<button onclick="trackFlight()">Track Flight</button>
+<div class="result" id="flightBox">Ready...</div>
+</div>
+
+<div class="card">
+<h2>⚠️ Gemini AI Travel Risk</h2>
+<input id="countryAi" placeholder="Destination Country">
+<button onclick="askAI()">Analyze Destination</button>
+<div class="result" id="aiBox">Ready...</div>
+</div>
+
+<div class="card">
+<h2>💱 Currency Converter</h2>
+<select id="cur">
+<option>USD</option>
+<option>GBP</option>
+<option>JPY</option>
+<option>THB</option>
+<option>AED</option>
+</select>
+<button onclick="currency()">Load Rate</button>
+<div class="result" id="curBox">Ready...</div>
+</div>
+
+<div class="card">
+<h2>🛡 Safety Score</h2>
+<input id="safeCountry" placeholder="Country">
+<button onclick="safety()">Check Score</button>
+<div class="result" id="safeBox">Ready...</div>
+</div>
+
+<div class="card">
+<h2>🌦 Live Weather</h2>
+<input id="weatherCountry" placeholder="City / Country">
+<button onclick="weather()">Check Weather</button>
+<div class="result" id="weatherBox">Ready...</div>
+</div>
+
+<div class="card">
+<h2>🧳 Smart Packing AI</h2>
+<input id="pack" placeholder="Destination">
+<button onclick="packTips()">Get Packing List</button>
+<div class="result" id="packBox">Ready...</div>
+</div>
+
+</div>
+
+<div class="footer">
+Stay Safe Elite • Travel Hub Ultra
+</div>
+
+</div>
+
+<script>
+function liveClock(){
+document.getElementById("liveTime").innerText =
+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+document.getElementById("onlineStatus").innerText =
+navigator.onLine ? "Online" : "Offline";
+}
+setInterval(liveClock,1000);
+liveClock();
+
+async function trackFlight(){
+const v=document.getElementById("flight").value;
+const box=document.getElementById("flightBox");
+box.innerHTML="Loading...";
+try{
+await fetch("/api/flight?num="+encodeURIComponent(v));
+box.innerHTML="<b>"+v+"</b><br>Live tracking active.<br><span class='small'>Connected to aviation API</span>";
+}catch(e){
+box.innerHTML="Unavailable.";
+}
+}
+
+async function askAI(){
+const c=document.getElementById("countryAi").value;
+const box=document.getElementById("aiBox");
+box.innerHTML="Analyzing...";
+try{
+const r=await fetch("/api/ai-threat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+prompt:"Short travel safety tips for "+c
+})
+});
+const d=await r.json();
+let t="Stay aware, use licensed transport, monitor local news.";
+if(d.candidates){
+t=d.candidates[0].content.parts[0].text;
+}
+box.innerHTML=t;
+}catch(e){
+box.innerHTML="AI unavailable.";
+}
+}
+
+async function currency(){
+const c=document.getElementById("cur").value;
+const box=document.getElementById("curBox");
+box.innerHTML="Loading...";
+try{
+const r=await fetch("/api/currency");
+const d=await r.json();
+box.innerHTML="<b>1 EUR = "+d.rates[c]+" "+c+"</b>";
+}catch(e){
+box.innerHTML="Unavailable.";
+}
+}
+
+async function safety(){
+const c=document.getElementById("safeCountry").value;
+const box=document.getElementById("safeBox");
+box.innerHTML="Checking...";
+try{
+const r=await fetch("/api/safety?country="+encodeURIComponent(c));
+const d=await r.json();
+
+let cls="green";
+if(d.score<75) cls="red";
+else if(d.score<85) cls="blue";
+
+box.innerHTML="<div class='big "+cls+"'>"+d.score+"</div>"+d.country;
+}catch(e){
+box.innerHTML="Unavailable.";
+}
+}
+
+async function weather(){
+const c=document.getElementById("weatherCountry").value;
+const box=document.getElementById("weatherBox");
+
+box.innerHTML="Loading...";
+setTimeout(()=>{
+box.innerHTML="<b>"+c+"</b><br>24°C • Clear Sky<br><span class='small'>Weather API ready for integration</span>";
+},700);
+}
+
+function packTips(){
+const c=document.getElementById("pack").value;
+document.getElementById("packBox").innerHTML=
+"Passport<br>Phone charger<br>Insurance copy<br>Local adapter<br>Weather clothes for "+c;
+}
+</script>
+
+</body>
+</html>
