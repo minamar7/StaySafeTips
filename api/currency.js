@@ -1,32 +1,26 @@
+// api/currency.js
 module.exports = async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method === 'OPTIONS') return res.status(200).end();
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
+    try {
+        // Χρήση του Open Access endpoint (δωρεάν, χωρίς key για βασικά rates)
+        const response = await fetch('https://open.er-api.com/v6/latest/EUR');
+        
+        if (!response.ok) throw new Error("Currency API unreachable");
+        
+        const data = await response.json();
 
-  try {
-    // Free EUR-based API (σταθερό, δεν χρειάζεται API key)
-    const url = "https://api.exchangerate.host/latest?base=EUR";
+        // Επιστρέφουμε μόνο τα rates και την ημερομηνία ενημέρωσης
+        return res.status(200).json({
+            rates: data.rates,
+            updated: data.time_last_update_utc
+        });
 
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (!data || !data.rates) {
-      return res.status(500).json({ error: "Currency data unavailable" });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch exchange rates" });
     }
-
-    return res.status(200).json({
-      base: "EUR",
-      rates: data.rates,
-      date: data.date
-    });
-
-  } catch (err) {
-    return res.status(500).json({
-      error: "Currency API connection failed",
-      message: err.message
-    });
-  }
 };
