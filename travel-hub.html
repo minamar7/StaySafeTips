@@ -8,15 +8,14 @@ content="width=device-width,initial-scale=1.0">
 
 <script>
 (function() {
-    // Έλεγχος αν ο χρήστης είναι Elite
-    const isPremium = localStorage.getItem('premium_user') === 'true';
-    
-    if (!isPremium) {
-        // Ανακατεύθυνση στην σελίδα Premium
+    if (localStorage.getItem('premium_user') !== 'true') {
+        // Κρύβουμε το περιεχόμενο μέχρι να φύγει ο χρήστης
+        document.documentElement.style.display = 'none';
         window.location.href = 'premium.html'; 
     }
 })();
 </script>
+
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
