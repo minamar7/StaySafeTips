@@ -11,45 +11,53 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const apiKey = process.env.AVIATION_API_KEY;
-    const url = `http://api.aviationstack.com/v1/flights?access_key=${apiKey}&flight_iata=${flightNum}`;
+    const apiKey = process.env.AERODATABOX_KEY; // ✅ Σωστό όνομα από Vercel
 
-    const response = await fetch(url);
-    const data = await response.json();
+    const today = new Date().toISOString().split("T")[0];
 
-    if (!data || !data.data || data.data.length === 0) {
-      return res.status(404).json({ error: "Flight not found" });
+    const url = `https://aerodatabox.p.rapidapi.com/flights/iata/${encodeURIComponent(flightNum)}/${today}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": "aerodatabox.p.rapidapi.com",
+        "x-rapidapi-key": apiKey
+      }
+    });
+
+    if (!response.ok) {
+      return res.status(response.status).json({ error: "Flight not found or API error" });
     }
 
-    const f = data.data[0];
+    const data = await response.json();
+    const f = Array.isArray(data) ? data[0] : data;
 
-    // Helper για να πιάνει ΚΑΙ ελληνικά ΚΑΙ αγγλικά keys
-    const get = (obj, ...keys) => {
-      for (const k of keys) {
-        if (obj && obj[k] !== undefined && obj[k] !== null) return obj[k];
-      }
-      return null;
-    };
+    if (!f) {
+      return res.status(404).json({ error: "No flight data found" });
+    }
+
+    const dep = f.departure || {};
+    const arr = f.arrival   || {};
 
     return res.status(200).json({
-      flight: get(f.flight, "iata", "number"),
-      airline: get(f.airline, "name"),
-      status: f.flight_status,
+      flight:  f.number || flightNum,
+      airline: f.airline?.name || "-",
+      status:  f.status || "-",
 
       departure: {
-        airport: get(f.departure, "αεροδρόμιο", "airport"),
-        iata: get(f.departure, "iata"),
-        terminal: get(f.departure, "τερματικό", "terminal"),
-        gate: get(f.departure, "πύλη", "gate"),
-        time: get(f.departure, "προγραμματισμένο", "scheduled", "estimated", "actual")
+        airport:  dep.airport?.name || "-",
+        iata:     dep.airport?.iata || "-",
+        terminal: dep.terminal      || "-",
+        gate:     dep.gate          || "-",
+        time:     dep.actualTime    || dep.scheduledTime || "-"
       },
 
       arrival: {
-        airport: get(f.arrival, "αεροδρόμιο", "airport"),
-        iata: get(f.arrival, "iata"),
-        terminal: get(f.arrival, "τερματικός σταθμός", "terminal"),
-        gate: get(f.arrival, "πύλη", "gate"),
-        time: get(f.arrival, "προγραμματισμένο", "scheduled", "estimated", "actual")
+        airport:  arr.airport?.name || "-",
+        iata:     arr.airport?.iata || "-",
+        terminal: arr.terminal      || "-",
+        gate:     arr.gate          || "-",
+        time:     arr.actualTime    || arr.scheduledTime || "-"
       }
     });
 
