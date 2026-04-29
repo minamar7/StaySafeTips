@@ -379,27 +379,36 @@ async function loadCurrency(){
   const cur = document.getElementById("currencySelect").value;
   const box = document.getElementById("currencyResult");
 
-  box.innerHTML = "Loading live rate...";
+  box.innerHTML = "Fetching live market rates...";
 
-  try{
+  try {
     const r = await fetch(`${API_BASE}/currency`);
     const data = await r.json();
 
     if(!data.rates || !data.rates[cur]){
-      box.innerHTML = "Rate unavailable for "+cur+".";
+      box.innerHTML = `Rate for ${cur} unavailable.`;
       return;
     }
 
     const rate = data.rates[cur].toFixed(2);
+    // Προσθήκη συμβόλου $ αν επιλεγεί το USD
+    const symbol = cur === "USD" ? "$" : "";
 
-    box.innerHTML =
-      "<b>1 EUR = "+rate+" "+cur+"</b>"+
-      "<br><span class='small'>Live rate from currency API</span>";
+    box.innerHTML = `
+      <div style="font-size: 11px; color: var(--gold); letter-spacing: 1px; margin-bottom: 5px;">LIVE EXCHANGE</div>
+      <div style="font-size: 22px; font-weight: 800;">
+        1 EUR = <span style="color: var(--gold2);">${symbol}${rate} ${cur}</span>
+      </div>
+      <div class="small" style="margin-top: 8px; color: var(--muted);">
+        Updated: ${new Date().toLocaleDateString()}
+      </div>
+    `;
 
-  }catch(e){
-    box.innerHTML = "Currency service unavailable.";
+  } catch(e) {
+    box.innerHTML = "Currency service unavailable. Try again later.";
   }
 }
+
 
 async function loadSafety(){
   const country = document.getElementById("safeCountry").value.trim();
