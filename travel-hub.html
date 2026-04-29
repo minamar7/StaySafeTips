@@ -272,10 +272,9 @@ setInterval(setStatusBox,1000);
 
 /* ———— API URLs ———— */
 const API_BASE = "https://stay-safe-tips.vercel.app/api";
-
-/* ———— FLIGHT ———— */
+/* ———— FLIGHT TRACKER (AeroDataBox Compatible) ———— */
 async function trackFlight(){
-  const num = document.getElementById("flightInput").value.trim();
+  const num = document.getElementById("flightInput").value.trim().toUpperCase();
   const box = document.getElementById("flightResult");
 
   if(!num){
@@ -283,46 +282,63 @@ async function trackFlight(){
     return;
   }
 
-  box.innerHTML = "Connecting to flight API...";
+  box.innerHTML = "Connecting to global radar...";
 
   try{
     const r = await fetch(`${API_BASE}/flight?num=${encodeURIComponent(num)}`);
-    const result = await r.json();
-
-    if(result.error){
-      box.innerHTML = "Tracker error: " + result.error;
-      return;
+    
+    if (!r.ok) {
+       const errorData = await r.json();
+       box.innerHTML = `Tracker error: ${errorData.error || 'Flight not found'}`;
+       return;
     }
 
-    // Τα ελληνικά keys από το AviationStack
-    const dep = result.departure;
-    const arr = result.arrival;
+    const data = await r.json();
+
+    // Συνάρτηση για να καθαρίζουμε την ώρα (από "2024-04-29 14:30" σε "14:30")
+    const formatTime = (timeStr) => {
+      if(!timeStr || timeStr === "-") return "-";
+      // Αν περιέχει κενό ή T, παίρνουμε το κομμάτι της ώρας
+      const parts = timeStr.includes(" ") ? timeStr.split(" ") : timeStr.split("T");
+      return parts[1] ? parts[1].substring(0, 5) : timeStr;
+    };
 
     box.innerHTML = `
-      <b>Flight:</b> ${result.flight}<br>
-      <b>Airline:</b> ${result.airline}<br><br>
+      <div style="border-bottom:1px solid var(--line); padding-bottom:8px; margin-bottom:10px;">
+        <b style="color:var(--gold2); font-size:16px;">${data.flight}</b> 
+        <span style="font-size:12px; color:var(--muted); margin-left:8px;">${data.airline}</span>
+      </div>
 
-      <b>Departure:</b><br>
-      Airport: ${dep.airport || "-"} (${dep.iata || "-"})<br>
-      Time: ${dep.time || "-"}<br>
-      Terminal: ${dep.terminal || "-"}<br>
-      Gate: ${dep.gate || "-"}<br><br>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+        <div>
+          <div style="font-size:10px; color:var(--gold); letter-spacing:1px;">DEPARTURE</div>
+          <b style="font-size:18px;">${data.departure.iata}</b><br>
+          <div style="font-size:11px; color:var(--muted); line-height:1.2; margin:4px 0;">${data.departure.airport}</div>
+          <div class="small">Time: <b>${formatTime(data.departure.time)}</b></div>
+          <div class="small">Gate: ${data.departure.gate} | Term: ${data.departure.terminal}</div>
+        </div>
+        
+        <div>
+          <div style="font-size:10px; color:var(--gold); letter-spacing:1px;">ARRIVAL</div>
+          <b style="font-size:18px;">${data.arrival.iata}</b><br>
+          <div style="font-size:11px; color:var(--muted); line-height:1.2; margin:4px 0;">${data.arrival.airport}</div>
+          <div class="small">Time: <b>${formatTime(data.arrival.time)}</b></div>
+          <div class="small">Gate: ${data.arrival.gate} | Term: ${data.arrival.terminal}</div>
+        </div>
+      </div>
 
-      <b>Arrival:</b><br>
-      Airport: ${arr.airport || "-"} (${arr.iata || "-"})<br>
-      Time: ${arr.time || "-"}<br>
-      Terminal: ${arr.terminal || "-"}<br>
-      Gate: ${arr.gate || "-"}<br><br>
-
-      <b>Status:</b> <span style="color:var(--gold2)">
-        ${result.status ? result.status.toUpperCase() : "-"}
-      </span>
+      <div style="margin-top:12px; padding-top:8px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+        <span class="small">Status: <b style="color:var(--gold2)">${data.status.toUpperCase()}</b></span>
+        <span style="font-size:10px; color:var(--muted);">LIVE RADAR</span>
+      </div>
     `;
 
-  }catch(e){
-    box.innerHTML = "Tracker unavailable.";
+  } catch(e) {
+    box.innerHTML = "Tracker unavailable. Check your connection.";
+    console.error(e);
   }
 }
+
 /* ———— AI THREAT ———— */
 async function travelThreat(){
   const country = document.getElementById("countryThreat").value.trim();
