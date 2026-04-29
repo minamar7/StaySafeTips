@@ -401,35 +401,46 @@ async function loadCurrency(){
   }
 }
 
-/* ———— SAFETY ———— */
 async function loadSafety(){
   const country = document.getElementById("safeCountry").value.trim();
   const box = document.getElementById("safeResult");
 
   if(!country){
-    box.innerHTML = "Enter a country.";
+    box.innerHTML = "Enter a country name.";
     return;
   }
 
-  box.innerHTML = "Checking live advisory...";
+  box.innerHTML = "Consulting global security databases...";
 
   try{
     const r = await fetch(`${API_BASE}/safety?country=${encodeURIComponent(country)}`);
     const data = await r.json();
 
+    if(data.error) {
+      box.innerHTML = `⚠️ ${data.error}`;
+      return;
+    }
+
+    // Επιλογή χρώματος score
     let cls = "green";
-    if(data.score < 75) cls = "red";
+    if(data.score < 60) cls = "red";
     else if(data.score < 85) cls = "blue";
 
-    box.innerHTML =
-      "<div class='score "+cls+"'>"+data.score+"</div>"+
-      "<b>"+(data.country || country)+"</b>"+
-      "<br><span class='small'>"+(data.level || "Risk level")+
-      " • "+(data.emoji || "")+
-      "<br>"+(data.message || "")+"</span>";
+    box.innerHTML = `
+      <div class="score ${cls}">${data.score}</div>
+      <b style="font-size:16px;">${data.country}</b>
+      <div style="margin-top:8px;">
+        <span class="card-tag card-premium" style="background:rgba(255,255,255,0.05); color:var(--text);">
+          ${data.level} ${data.emoji}
+        </span>
+      </div>
+      <p class="small" style="margin-top:12px; line-height:1.4; color:var(--muted);">
+        ${data.message}
+      </p>
+    `;
 
-  }catch(e){
-    box.innerHTML = "Safety score unavailable.";
+  } catch(e){
+    box.innerHTML = "Safety advisory service unavailable.";
   }
 }
 
