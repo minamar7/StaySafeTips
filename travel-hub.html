@@ -444,19 +444,46 @@ async function loadSafety(){
   }
 }
 
-/* ———— PACKING ———— */
-function packingTips(){
+/* ———— SMART AI PACKING TIPS ———— */
+async function packingTips(){
   const country = document.getElementById("packCountry").value.trim();
   const box = document.getElementById("packResult");
 
   if(!country){
-    box.innerHTML = "Enter a destination.";
+    box.innerHTML = "Enter a destination (e.g. Iceland or Bali).";
     return;
   }
 
-  box.innerHTML =
-    "Passport<br>Phone & power bank<br>Travel insurance<br>Local currency / card<br>Adapter & charger<br>Weather-appropriate clothes for "+country;
+  box.innerHTML = "AI is generating your custom packing list...";
+
+  try {
+    // Χρησιμοποιούμε το ίδιο API που έχεις για το AI Threat
+    const r = await fetch(`${API_BASE}/ai-threat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: [
+          { 
+            role: "user", 
+            content: `Provide a concise, bulleted packing list for a trip to ${country}. 
+                     Include 5 essential items specific to this destination's climate or culture. 
+                     Keep it in English.` 
+          }
+        ]
+      })
+    });
+
+    const data = await r.json();
+    let txt = data.content?.[0]?.text || "Packing tips temporarily unavailable.";
+
+    // Εμφάνιση με ωραίο formatting
+    box.innerHTML = `<div style="white-space:pre-wrap; line-height:1.6;">🧳 <b>Essentials for ${country}:</b>\n${txt}</div>`;
+
+  } catch(e) {
+    box.innerHTML = "AI service unavailable. Default: Passport, Charger, Insurance, Local Currency.";
+  }
 }
+
 </script>
 
 </body>
