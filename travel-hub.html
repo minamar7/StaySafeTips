@@ -272,69 +272,62 @@ setInterval(setStatusBox,1000);
 
 /* ———— API URLs ———— */
 const API_BASE = "https://stay-safe-tips.vercel.app/api";
-/* ———— FLIGHT TRACKER (AeroDataBox Compatible) ———— */
-async function trackFlight(){
-  const num = document.getElementById("flightInput").value.trim().toUpperCase();
+
+/* ———— SAFE TRIP FINDER ———— */
+async function findSafeTrips() {
+  const origin = document.getElementById("originCity").value.trim();
   const box = document.getElementById("flightResult");
 
-  if(!num){
-    box.innerHTML = "Enter a valid flight number.";
+  if (!origin) {
+    box.innerHTML = "Please enter your city to find flights.";
     return;
   }
 
-  box.innerHTML = "Connecting to global radar...";
+  box.innerHTML = "AI is analyzing safe global destinations...";
 
-  try{
-    const r = await fetch(`${API_BASE}/flight?num=${encodeURIComponent(num)}`);
-    
-    if (!r.ok) {
-       const errorData = await r.json();
-       box.innerHTML = `Tracker error: ${errorData.error || 'Flight not found'}`;
-       return;
-    }
+  try {
+    // Χρησιμοποιούμε το AI Threat API για να πάρουμε προτάσεις
+    const r = await fetch(`${API_BASE}/ai-threat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: [
+          { 
+            role: "user", 
+            content: `Suggest 3 top-rated safe travel destinations for someone flying from ${origin}. 
+                     For each, give a 1-sentence reason why it's safe. Format as JSON: 
+                     [{"city":"CityName", "country":"CountryName", "reason":"..."}]` 
+          }
+        ]
+      })
+    });
 
     const data = await r.json();
+    // Καθαρισμός του AI response αν επιστρέψει markdown
+    let rawText = data.content[0].text.replace(/```json|```/g, "");
+    const destinations = JSON.parse(rawText);
 
-    // Συνάρτηση για να καθαρίζουμε την ώρα (από "2024-04-29 14:30" σε "14:30")
-    const formatTime = (timeStr) => {
-      if(!timeStr || timeStr === "-") return "-";
-      // Αν περιέχει κενό ή T, παίρνουμε το κομμάτι της ώρας
-      const parts = timeStr.includes(" ") ? timeStr.split(" ") : timeStr.split("T");
-      return parts[1] ? parts[1].substring(0, 5) : timeStr;
-    };
+    let html = `<div style="font-size:12px; color:var(--gold); margin-bottom:10px;">TOP SAFE DEALS FROM ${origin.toUpperCase()}</div>`;
 
-    box.innerHTML = `
-      <div style="border-bottom:1px solid var(--line); padding-bottom:8px; margin-bottom:10px;">
-        <b style="color:var(--gold2); font-size:16px;">${data.flight}</b> 
-        <span style="font-size:12px; color:var(--muted); margin-left:8px;">${data.airline}</span>
-      </div>
-
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-        <div>
-          <div style="font-size:10px; color:var(--gold); letter-spacing:1px;">DEPARTURE</div>
-          <b style="font-size:18px;">${data.departure.iata}</b><br>
-          <div style="font-size:11px; color:var(--muted); line-height:1.2; margin:4px 0;">${data.departure.airport}</div>
-          <div class="small">Time: <b>${formatTime(data.departure.time)}</b></div>
-          <div class="small">Gate: ${data.departure.gate} | Term: ${data.departure.terminal}</div>
+    destinations.forEach(dest => {
+      // Δημιουργία δυναμικού link για Google Flights
+      const flightUrl = `https://www.google.com/travel/flights?q=Flights%20to%20${dest.city}%20from%20${origin}`;
+      
+      html += `
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:12px; padding:10px; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <b>📍 ${dest.city}, ${dest.country}</b>
+            <a href="${flightUrl}" target="_blank" style="color:var(--gold2); text-decoration:none; font-size:12px; font-weight:700;">BOOK ✈️</a>
+          </div>
+          <div style="font-size:11px; color:var(--muted); margin-top:4px;">${dest.reason}</div>
         </div>
-        
-        <div>
-          <div style="font-size:10px; color:var(--gold); letter-spacing:1px;">ARRIVAL</div>
-          <b style="font-size:18px;">${data.arrival.iata}</b><br>
-          <div style="font-size:11px; color:var(--muted); line-height:1.2; margin:4px 0;">${data.arrival.airport}</div>
-          <div class="small">Time: <b>${formatTime(data.arrival.time)}</b></div>
-          <div class="small">Gate: ${data.arrival.gate} | Term: ${data.arrival.terminal}</div>
-        </div>
-      </div>
+      `;
+    });
 
-      <div style="margin-top:12px; padding-top:8px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
-        <span class="small">Status: <b style="color:var(--gold2)">${data.status.toUpperCase()}</b></span>
-        <span style="font-size:10px; color:var(--muted);">LIVE RADAR</span>
-      </div>
-    `;
+    box.innerHTML = html;
 
-  } catch(e) {
-    box.innerHTML = "Tracker unavailable. Check your connection.";
+  } catch (e) {
+    box.innerHTML = "Unable to fetch destinations. Try searching 'Singapore' or 'Iceland' for maximum safety.";
     console.error(e);
   }
 }
