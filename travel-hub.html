@@ -274,20 +274,19 @@ setInterval(setStatusBox,1000);
 /* ———— API URLs ———— */
 const API_BASE = "https://stay-safe-tips.vercel.app/api";
 
-/* ———— SAFE TRIP FINDER ———— */
+/* ———— SAFE TRIP FINDER (STABLE VERSION) ———— */
 async function findSafeTrips() {
   const origin = document.getElementById("originCity").value.trim();
   const box = document.getElementById("flightResult");
 
   if (!origin) {
-    box.innerHTML = "Please enter your city to find flights.";
+    box.innerHTML = "Please enter your city.";
     return;
   }
 
-  box.innerHTML = "AI is analyzing safe global destinations...";
+  box.innerHTML = "AI is scanning for the safest routes...";
 
   try {
-    // Χρησιμοποιούμε το AI Threat API για να πάρουμε προτάσεις
     const r = await fetch(`${API_BASE}/ai-threat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -295,32 +294,36 @@ async function findSafeTrips() {
         messages: [
           { 
             role: "user", 
-            content: `Suggest 3 top-rated safe travel destinations for someone flying from ${origin}. 
-                     For each, give a 1-sentence reason why it's safe. Format as JSON: 
-                     [{"city":"CityName", "country":"CountryName", "reason":"..."}]` 
+            content: `Return ONLY a JSON array of 3 safe travel destinations from ${origin}. 
+                     Format: [{"city":"...", "country":"...", "reason":"..."}] 
+                     No conversational text, just the array.` 
           }
         ]
       })
     });
 
     const data = await r.json();
-    // Καθαρισμός του AI response αν επιστρέψει markdown
-    let rawText = data.content[0].text.replace(/```json|```/g, "");
-    const destinations = JSON.parse(rawText);
+    let txt = data.content?.[0]?.text || "";
 
-    let html = `<div style="font-size:12px; color:var(--gold); margin-bottom:10px;">TOP SAFE DEALS FROM ${origin.toUpperCase()}</div>`;
+    // ΚΑΘΑΡΙΣΜΟΣ: Αφαίρεση τυχόν Markdown (```json) που μπορεί να στείλει η AI
+    txt = txt.replace(/```json/g, "").replace(/```/g, "").trim();
+
+    const destinations = JSON.parse(txt);
+
+    let html = `<div style="font-size:11px; color:var(--gold); margin-bottom:12px; letter-spacing:1px;">SECURE DESTINATIONS FROM ${origin.toUpperCase()}</div>`;
 
     destinations.forEach(dest => {
-      // Δημιουργία δυναμικού link για Google Flights
-      const flightUrl = `https://www.google.com/travel/flights?q=Flights%20to%20${dest.city}%20from%20${origin}`;
+      // Δυναμικό Link για Google Flights
+      const flightUrl = `https://www.google.com/search?q=flights+from+${encodeURIComponent(origin)}+to+${encodeURIComponent(dest.city)}`;
       
       html += `
-        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:12px; padding:10px; margin-bottom:8px;">
+        <div style="background:linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <b>📍 ${dest.city}, ${dest.country}</b>
-            <a href="${flightUrl}" target="_blank" style="color:var(--gold2); text-decoration:none; font-size:12px; font-weight:700;">BOOK ✈️</a>
+            <b style="font-size:15px;">📍 ${dest.city}</b>
+            <a href="${flightUrl}" target="_blank" style="background:var(--gold); color:#000; padding:4px 10px; border-radius:8px; text-decoration:none; font-size:10px; font-weight:800;">BOOK ✈️</a>
           </div>
-          <div style="font-size:11px; color:var(--muted); margin-top:4px;">${dest.reason}</div>
+          <div style="font-size:11px; color:var(--gold2); margin-bottom:4px;">${dest.country}</div>
+          <div style="font-size:11px; color:var(--muted); line-height:1.4;">${dest.reason}</div>
         </div>
       `;
     });
@@ -328,9 +331,14 @@ async function findSafeTrips() {
     box.innerHTML = html;
 
   } catch (e) {
-    box.innerHTML = "Unable to fetch destinations. Try searching 'Singapore' or 'Iceland' for maximum safety.";
-    console.error(e);
+    console.error("JSON Parse Error:", e);
+    box.innerHTML = `
+      <div style="color:var(--danger); font-size:12px;">
+        ⚠️ AI response format error. <br>
+        <button onclick="findSafeTrips()" style="background:none; color:var(--gold); text-decoration:underline; width:auto; padding:0; margin-top:5px;">Try Again</button>
+      </div>`;
   }
+}
 }
 
 /* ———— AI THREAT ———— */
