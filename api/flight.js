@@ -11,8 +11,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const apiKey = process.env.AERODATABOX_KEY; // ✅ Σωστό όνομα από Vercel
-
+    const apiKey = process.env.AERODATABOX_API_KEY;
     const today = new Date().toISOString().split("T")[0];
 
     const url = `https://aerodatabox.p.rapidapi.com/flights/iata/${encodeURIComponent(flightNum)}/${today}`;
@@ -30,6 +29,7 @@ module.exports = async (req, res) => {
     }
 
     const data = await response.json();
+
     const f = Array.isArray(data) ? data[0] : data;
 
     if (!f) {
@@ -45,19 +45,19 @@ module.exports = async (req, res) => {
       status:  f.status || "-",
 
       departure: {
-        airport:  dep.airport?.name || "-",
-        iata:     dep.airport?.iata || "-",
-        terminal: dep.terminal      || "-",
-        gate:     dep.gate          || "-",
-        time:     dep.actualTime    || dep.scheduledTime || "-"
+        airport:  dep.airport?.name  || "-",
+        iata:     dep.airport?.iata  || "-",
+        terminal: dep.terminal       || "-",
+        gate:     dep.gate           || "-",
+        time:     dep.actualTime     || dep.scheduledTime || "-"
       },
 
       arrival: {
-        airport:  arr.airport?.name || "-",
-        iata:     arr.airport?.iata || "-",
-        terminal: arr.terminal      || "-",
-        gate:     arr.gate          || "-",
-        time:     arr.actualTime    || arr.scheduledTime || "-"
+        airport:  arr.airport?.name  || "-",
+        iata:     arr.airport?.iata  || "-",
+        terminal: arr.terminal       || "-",
+        gate:     arr.gate           || "-",
+        time:     arr.actualTime     || arr.scheduledTime || "-"
       }
     });
 
