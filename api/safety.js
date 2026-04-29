@@ -1,93 +1,42 @@
+
 module.exports = async (req, res) => {
-
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  const country = (req.query.country || "Greece").trim().toLowerCase();
-
-  const countries = {
-    greece:"GR", cyprus:"CY", italy:"IT", france:"FR", spain:"ES",
-    portugal:"PT", germany:"DE", austria:"AT", switzerland:"CH",
-    netherlands:"NL", belgium:"BE", luxembourg:"LU", ireland:"IE",
-    uk:"GB", "united kingdom":"GB", england:"GB", scotland:"GB",
-    wales:"GB", norway:"NO", sweden:"SE", finland:"FI", denmark:"DK",
-    poland:"PL", "czech republic":"CZ", hungary:"HU", romania:"RO",
-    bulgaria:"BG", croatia:"HR", serbia:"RS", slovenia:"SI",
-    slovakia:"SK", albania:"AL", "north macedonia":"MK", bosnia:"BA",
-    montenegro:"ME", turkey:"TR", ukraine:"UA",
-
-    thailand:"TH", japan:"JP", china:"CN", "south korea":"KR",
-    india:"IN", pakistan:"PK", indonesia:"ID", malaysia:"MY",
-    singapore:"SG", philippines:"PH", vietnam:"VN", cambodia:"KH",
-    laos:"LA", "sri lanka":"LK", nepal:"NP", maldives:"MV",
-    uae:"AE", dubai:"AE", "abu dhabi":"AE", qatar:"QA",
-    "saudi arabia":"SA", kuwait:"KW", oman:"OM", bahrain:"BH",
-    jordan:"JO", israel:"IL", lebanon:"LB",
-
-    egypt:"EG", morocco:"MA", tunisia:"TN", algeria:"DZ",
-    "south africa":"ZA", kenya:"KE", tanzania:"TZ",
-    seychelles:"SC", mauritius:"MU", nigeria:"NG",
-
-    usa:"US", "united states":"US", canada:"CA", mexico:"MX",
-    brazil:"BR", argentina:"AR", chile:"CL", colombia:"CO",
-    peru:"PE", "dominican republic":"DO", jamaica:"JM",
-    bahamas:"BS", cuba:"CU",
-
-    australia:"AU", "new zealand":"NZ", fiji:"FJ"
-  };
-
-  const code = countries[country] || country.toUpperCase();
+  const { country } = req.query;
 
   try {
-    const response = await fetch(
-      `https://www.travel-advisory.info/api?countrycode=${code}`
-    );
-
+    // 1. Παίρνουμε όλα τα δεδομένα ασφαλείας
+    const response = await fetch('https://www.travel-advisory.info/api/repository/suggestions');
     const data = await response.json();
 
-    if (!data || !data.data || !data.data[code]) {
-      throw new Error("Country not found");
+    // 2. Αναζήτηση της χώρας στα δεδομένα
+    const countryData = Object.values(data.data).find(
+      c => c.name.toLowerCase() === country.toLowerCase()
+    );
+
+    if (!countryData) {
+      return res.status(404).json({ error: "Country not found" });
     }
 
-    const item = data.data[code];
-    const advisory = item.advisory?.score || 2.5;
-
-    let score = Math.round(100 - advisory * 20);
-    score = Math.max(0, Math.min(100, score));
+    // Αντιστοίχιση σκορ (Το API δίνει 0-5, εμείς το κάνουμε 0-100)
+    // 0 = Πολύ Ασφαλές, 5 = Πολύ Επικίνδυνο. Οπότε:
+    const rawScore = countryData.advisory.score;
+    const finalScore = Math.round((5 - rawScore) * 20); 
 
     let level = "Low Risk";
-    let emoji = "🟢";
-
-    if (score < 80) { level = "Moderate Risk"; emoji = "🟡"; }
-    if (score < 65) { level = "Elevated Risk"; emoji = "🟠"; }
-    if (score < 45) { level = "High Risk"; emoji = "🔴"; }
+    if (finalScore < 50) level = "High Risk";
+    else if (finalScore < 80) level = "Medium Risk";
 
     return res.status(200).json({
-      success: true,
-      country: item.name,
-      code,
-      score,
-      level,
-      emoji,
-      message: item.advisory?.message || "No message available",
-      updated: item.advisory?.updated || "Live",
-      source: "travel-advisory.info"
+      country: countryData.name,
+      score: finalScore,
+      level: level,
+      message: countryData.advisory.message,
+      emoji: "🛡️"
     });
 
-  } catch (error) {
-
-    return res.status(200).json({
-      success: false,
-      country,
-      score: 75,
-      level: "Unavailable",
-      emoji: "⚪",
-      message: "Live advisory source temporarily unavailable.",
-      updated: "Now",
-      source: "fallback"
-    });
+  } catch (err) {
+    return res.status(500).json({ error: "Safety API error" });
   }
 };
+
+     
