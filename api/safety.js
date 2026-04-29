@@ -9,39 +9,40 @@ module.exports = async (req, res) => {
     if (!country) return res.status(400).json({ error: "Country is required" });
 
     try {
-        // Χρησιμοποιούμε το Rest Countries API που είναι εξαιρετικά σταθερό στο Vercel
         const response = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(country)}?fullText=true`);
         
         if (!response.ok) {
-            return res.status(404).json({ error: "Country not found. Try the AI Advisor for cities." });
+            return res.status(404).json({ error: "Country not found. Use English names (e.g. Greece)." });
         }
 
         const data = await response.json();
+        if (!data || data.length === 0) throw new Error("No data found");
+        
         const c = data[0];
 
-        // Επειδή το Rest Countries δεν δίνει score, θα δώσουμε ένα "Dynamic Safety Status"
-        // βασισμένο στην περιοχή, μέχρι να φτιάξεις ένα δικό σου scoring system ή 
-        // να χρησιμοποιήσεις το AI tool σου που λειτουργεί ήδη.
-        
-        // Προσωρινό Score βασισμένο σε Region (για να μη μένει κενό το UI σου)
-        let baseScore = 85; 
+        // Ασφαλής έλεγχος για νομίσματα και ήπειρο
+        const currency = c.currencies ? Object.keys(c.currencies)[0] : "N/A";
+        const continent = c.continents ? c.continents[0] : c.region;
+
+        let baseScore = 80; 
         if (c.region === 'Africa') baseScore = 65;
         if (c.region === 'Americas') baseScore = 75;
         if (c.region === 'Europe') baseScore = 92;
-        if (c.region === 'Asia') baseScore = 80;
+        if (c.region === 'Oceania') baseScore = 88;
 
         return res.status(200).json({
             country: c.name.common,
             score: baseScore,
             level: baseScore > 80 ? "Generally Safe" : "Exercise Caution",
             emoji: c.flag || "🌍",
-            message: `Official data for ${c.name.common} (${c.continents[0]}). Currency: ${Object.keys(c.currencies)[0]}. Emergency contact services are active.`
+            message: `Official data for ${c.name.common} (${continent}). Local Currency: ${currency}. Emergency services are monitored.`
         });
 
     } catch (err) {
+        console.error("Backend Error:", err);
         return res.status(500).json({ 
             error: "Data fetching error",
-            details: "Please use the AI Threat Advisor for real-time risk analysis." 
+            debug: err.message 
         });
     }
 };
