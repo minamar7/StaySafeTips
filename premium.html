@@ -1,4 +1,4 @@
-<div class="glass-card">
+    <div class="glass-card">
         <div style="font-size:0.7rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">💎 ELITE TOOLS & TRAINING</div>
         
         <div class="feature-row">
@@ -11,21 +11,28 @@
             <div class="feature-text"><strong>Defense Dojo</strong><span>Master self-defense & Tang Soo Do videos</span></div>
         </div>
         
+        <div class="feature-row">
+            <div class="feature-icon">🚨</div>
+            <div class="feature-text"><strong>SOS Hub & Emergency Alerts</strong><span>Instant call (112, 100, 166) & distress signals</span></div>
         </div>
 
-<script>
-// Το logic σου παραμένει όπως είναι, απλά επιβεβαιώνουμε το κλειδί 'premium_user'
-function activateTesterPremium() {
-    localStorage.setItem('premium_user', 'true'); // Αυτό το κλειδί πρέπει να ελέγχει και το travel-hub.html
-    showToast('✅ Elite Access Unlocked!');
-    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-}
+        <div class="feature-row">
+            <div class="feature-icon">🤖</div>
+            <div class="feature-text"><strong>AI Threat Analysis</strong><span>Detect AI fraud, Phishing & Deepfakes</span></div>
+        </div>
 
-// Προαιρετική πρόταση: Πρόσθεσε αυτό για να ξέρεις αν ο χρήστης είναι ήδη premium
-window.onload = function() {
-    if(localStorage.getItem('premium_user') === 'true') {
-        document.getElementById('subscribe_btn').textContent = "ALREADY ELITE ACTIVE";
-        document.getElementById('subscribe_btn').style.opacity = "0.7";
-    }
-}
-</script>
+        <div class="feature-row">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-text"><strong>Scam Database (Truffe)</strong><span>Access to the global fraud database</span></div>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-icon">🏥</div>
+            <div class="feature-text"><strong>Visual First Aid Guide</strong><span>CPR, Heimlich & First Aid visual guides</span></div>
+        </div>
+
+        <div class="feature-row" style="margin-bottom:0;">
+            <div class="feature-icon">🚫</div>
+            <div class="feature-text"><strong>Ad-Free Experience</strong><span>100% clean experience without interruptions</span></div>
+        </div>
+    </div>
