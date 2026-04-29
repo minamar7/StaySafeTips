@@ -273,8 +273,7 @@ setInterval(setStatusBox,1000);
 
 /* ———— API URLs ———— */
 const API_BASE = "https://stay-safe-tips.vercel.app/api";
-
-/* ———— SAFE TRIP FINDER (STABLE VERSION) ———— */
+/* ———— SAFE TRIP FINDER (ULTRA STABLE) ———— */
 async function findSafeTrips() {
   const origin = document.getElementById("originCity").value.trim();
   const box = document.getElementById("flightResult");
@@ -294,9 +293,9 @@ async function findSafeTrips() {
         messages: [
           { 
             role: "user", 
-            content: `Return ONLY a JSON array of 3 safe travel destinations from ${origin}. 
+            content: `Act as a travel API. Return ONLY a raw JSON array of 3 safe travel destinations from ${origin}. 
                      Format: [{"city":"...", "country":"...", "reason":"..."}] 
-                     No conversational text, just the array.` 
+                     No markdown, no backticks, no intro, no outro.` 
           }
         ]
       })
@@ -305,25 +304,25 @@ async function findSafeTrips() {
     const data = await r.json();
     let txt = data.content?.[0]?.text || "";
 
-    // ΚΑΘΑΡΙΣΜΟΣ: Αφαίρεση τυχόν Markdown (```json) που μπορεί να στείλει η AI
-    txt = txt.replace(/```json/g, "").replace(/```/g, "").trim();
+    // ΚΑΘΑΡΙΣΜΟΣ: Βρίσκει μόνο ό,τι είναι ανάμεσα σε [ και ]
+    const jsonMatch = txt.match(/\[.*\]/s);
+    if (!jsonMatch) throw new Error("No JSON found");
+    
+    const destinations = JSON.parse(jsonMatch[0]);
 
-    const destinations = JSON.parse(txt);
-
-    let html = `<div style="font-size:11px; color:var(--gold); margin-bottom:12px; letter-spacing:1px;">SECURE DESTINATIONS FROM ${origin.toUpperCase()}</div>`;
+    let html = `<div style="font-size:11px; color:var(--gold); margin-bottom:12px; letter-spacing:1px; font-weight:700;">SECURE DEPARTURES FROM ${origin.toUpperCase()}</div>`;
 
     destinations.forEach(dest => {
-      // Δυναμικό Link για Google Flights
       const flightUrl = `https://www.google.com/search?q=flights+from+${encodeURIComponent(origin)}+to+${encodeURIComponent(dest.city)}`;
       
       html += `
-        <div style="background:linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px;">
+        <div style="background:linear-gradient(145deg, #161b29, #0d1117); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <b style="font-size:15px;">📍 ${dest.city}</b>
-            <a href="${flightUrl}" target="_blank" style="background:var(--gold); color:#000; padding:4px 10px; border-radius:8px; text-decoration:none; font-size:10px; font-weight:800;">BOOK ✈️</a>
+            <b style="font-size:15px; color:#fff;">📍 ${dest.city}</b>
+            <a href="${flightUrl}" target="_blank" style="background:linear-gradient(135deg, var(--gold), var(--gold2)); color:#000; padding:5px 12px; border-radius:8px; text-decoration:none; font-size:10px; font-weight:800; transition: 0.2s;">BOOK ✈️</a>
           </div>
-          <div style="font-size:11px; color:var(--gold2); margin-bottom:4px;">${dest.country}</div>
-          <div style="font-size:11px; color:var(--muted); line-height:1.4;">${dest.reason}</div>
+          <div style="font-size:11px; color:var(--gold2); margin: 2px 0 6px 0;">${dest.country}</div>
+          <div style="font-size:11px; color:var(--muted); line-height:1.4; font-style:italic;">"${dest.reason}"</div>
         </div>
       `;
     });
@@ -331,14 +330,13 @@ async function findSafeTrips() {
     box.innerHTML = html;
 
   } catch (e) {
-    console.error("JSON Parse Error:", e);
+    console.error("AI Response Error:", e);
     box.innerHTML = `
-      <div style="color:var(--danger); font-size:12px;">
-        ⚠️ AI response format error. <br>
-        <button onclick="findSafeTrips()" style="background:none; color:var(--gold); text-decoration:underline; width:auto; padding:0; margin-top:5px;">Try Again</button>
+      <div style="padding:10px; border-radius:10px; background:rgba(255,91,110,0.1); border:1px solid var(--danger); color:var(--danger); font-size:12px;">
+        ⚠️ AI response error. Please try again.
+        <button onclick="findSafeTrips()" style="display:block; background:none; color:var(--text); text-decoration:underline; font-size:11px; border:none; margin-top:8px; cursor:pointer;">Retry Search</button>
       </div>`;
   }
-}
 }
 
 /* ———— AI THREAT ———— */
