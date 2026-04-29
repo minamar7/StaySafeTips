@@ -163,17 +163,18 @@ button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);}
 
   <div class="grid">
 
-    <div class="card">
-      <div class="card-header">
-        <h2>✈️ Flight Tracker</h2>
-        <div class="card-tag card-premium">Premium</div>
-      </div>
-      <div>
-        <input id="flightInput" placeholder="Flight Number (A3123)">
-        <button onclick="trackFlight()">Track Flight</button>
-        <div class="result" id="flightResult">Ready to connect to aviation API.</div>
-      </div>
-    </div>
+  <div class="card">
+  <div class="card-header">
+    <h2>🌍 Safe Trip Finder</h2>
+    <div class="card-tag card-premium">Booking Helper</div>
+  </div>
+  <div>
+    <input id="originCity" placeholder="From (e.g. Athens)">
+    <button onclick="findSafeTrips()">Find Safe Destinations</button>
+    <div class="result" id="flightResult">Discover top-rated safe places and find flights.</div>
+  </div>
+</div>
+
 
     <div class="card">
       <div class="card-header">
