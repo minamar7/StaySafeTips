@@ -45,6 +45,11 @@ const STATIC_ASSETS = [
   BASE + "screenshot3.jpg",
   BASE + "screenshot4.jpg",
   BASE + "vault.html",
+  BASE + "travel-hub.html",
+  BASE + "safety.js",
+  
+
+
 
 ];
 
