@@ -1,4 +1,5 @@
-// api/safety.js
+const https = require('https');
+
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -7,67 +8,59 @@ module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     const { country } = req.query;
+    if (!country) return res.status(400).json({ error: "Country is required" });
 
-    if (!country) {
-        return res.status(400).json({ error: "Country name is required" });
-    }
+    const fetchData = () => {
+        return new Promise((resolve, reject) => {
+            const url = 'https://www.travel-advisory.info/api/repository/suggestions';
+            
+            https.get(url, { headers: { 'User-Agent': 'TravelHub/1.0' } }, (resp) => {
+                let data = '';
+                resp.on('data', (chunk) => { data += chunk; });
+                resp.on('end', () => {
+                    try {
+                        resolve(JSON.parse(data));
+                    } catch (e) {
+                        reject(new Error("Failed to parse API response"));
+                    }
+                });
+            }).on("error", (err) => {
+                reject(err);
+            });
+        });
+    };
 
     try {
-        // Χρησιμοποιούμε ένα εναλλακτικό endpoint του ίδιου API που είναι πιο σταθερό
-        const response = await fetch('https://www.travel-advisory.info/api/repository/suggestions', {
-            headers: {
-                'User-Agent': 'TravelHubUltra/1.0'
-            }
-        });
+        const result = await fetchData();
+        
+        // Μετατροπή σε array για ευκολότερη αναζήτηση
+        const countries = Object.values(result.data);
+        const match = countries.find(c => c.name.toLowerCase() === country.toLowerCase());
 
-        if (!response.ok) {
-            throw new Error(`API responded with status ${response.status}`);
+        if (!match) {
+            return res.status(404).json({ error: "Country not found in database." });
         }
 
-        const result = await response.json();
-
-        // Έλεγχος αν το result.data υπάρχει
-        if (!result || !result.data) {
-            throw new Error("Invalid API response structure");
-        }
-
-        // Αναζήτηση χώρας
-        const countryEntry = Object.values(result.data).find(
-            c => c.name && c.name.toLowerCase() === country.toLowerCase()
-        );
-
-        if (!countryEntry) {
-            return res.status(404).json({ 
-                error: "Country not found. Use AI Advisor for cities." 
-            });
-        }
-
-        const rawScore = countryEntry.advisory.score;
-        const invertedScore = Math.round((5 - rawScore) * 20);
-
+        const score = Math.round((5 - match.advisory.score) * 20);
+        
         let level = "Low Risk";
-        let statusEmoji = "✅";
-        if (invertedScore < 50) {
-            level = "High Risk";
-            statusEmoji = "🚨";
-        } else if (invertedScore < 80) {
-            level = "Medium Risk";
-            statusEmoji = "⚠️";
-        }
+        let emoji = "✅";
+        if (score < 50) { level = "High Risk"; emoji = "🚨"; }
+        else if (score < 80) { level = "Medium Risk"; emoji = "⚠️"; }
 
         return res.status(200).json({
-            country: countryEntry.name,
-            score: invertedScore,
+            country: match.name,
+            score: score,
             level: level,
-            emoji: statusEmoji,
-            message: countryEntry.advisory.message || "No specific advisory available."
+            emoji: emoji,
+            message: match.advisory.message || "No specific warnings."
         });
 
     } catch (err) {
-        console.error("Safety API Error:", err.message);
+        // Επιστρέφουμε το ΑΚΡΙΒΕΣ σφάλμα για να το δούμε στην οθόνη
         return res.status(500).json({ 
-            error: "Safety API connection error",
-            details: err.message 
+            error: "Connection Error", 
+            debug: err.message 
         });
     }
 };
