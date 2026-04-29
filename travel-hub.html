@@ -421,8 +421,14 @@ async function loadSafety(){
 
   box.innerHTML = "Consulting global security databases...";
 
-  try{
+  try {
     const r = await fetch(`${API_BASE}/safety?country=${encodeURIComponent(country)}`);
+    
+    // ΕΛΕΓΧΟΣ ΑΠΟΚΡΙΣΗΣ
+    if (!r.ok) {
+        throw new Error(`Server responded with ${r.status}`);
+    }
+
     const data = await r.json();
 
     if(data.error) {
@@ -430,7 +436,6 @@ async function loadSafety(){
       return;
     }
 
-    // Επιλογή χρώματος score
     let cls = "green";
     if(data.score < 60) cls = "red";
     else if(data.score < 85) cls = "blue";
@@ -440,7 +445,7 @@ async function loadSafety(){
       <b style="font-size:16px;">${data.country}</b>
       <div style="margin-top:8px;">
         <span class="card-tag card-premium" style="background:rgba(255,255,255,0.05); color:var(--text);">
-          ${data.level} ${data.emoji}
+          ${data.level} ${data.emoji || "🌍"}
         </span>
       </div>
       <p class="small" style="margin-top:12px; line-height:1.4; color:var(--muted);">
@@ -448,10 +453,12 @@ async function loadSafety(){
       </p>
     `;
 
-  } catch(e){
-    box.innerHTML = "Safety advisory service unavailable.";
+  } catch(e) {
+    console.error("Safety Error:", e); // Δες το error στην κονσόλα
+    box.innerHTML = "Safety advisory service unavailable. Check connection.";
   }
 }
+
 
 /* ———— SMART AI PACKING TIPS ———— */
 async function packingTips(){
