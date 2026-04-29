@@ -1,42 +1,64 @@
-
+// api/safety.js
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  const { country } = req.query;
+    // CORS Headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  try {
-    // 1. Παίρνουμε όλα τα δεδομένα ασφαλείας
-    const response = await fetch('https://www.travel-advisory.info/api/repository/suggestions');
-    const data = await response.json();
+    if (req.method === 'OPTIONS') return res.status(200).end();
 
-    // 2. Αναζήτηση της χώρας στα δεδομένα
-    const countryData = Object.values(data.data).find(
-      c => c.name.toLowerCase() === country.toLowerCase()
-    );
+    const { country } = req.query;
 
-    if (!countryData) {
-      return res.status(404).json({ error: "Country not found" });
+    if (!country) {
+        return res.status(400).json({ error: "Country name is required" });
     }
 
-    // Αντιστοίχιση σκορ (Το API δίνει 0-5, εμείς το κάνουμε 0-100)
-    // 0 = Πολύ Ασφαλές, 5 = Πολύ Επικίνδυνο. Οπότε:
-    const rawScore = countryData.advisory.score;
-    const finalScore = Math.round((5 - rawScore) * 20); 
+    try {
+        // Fetch global advisory data
+        const response = await fetch('https://www.travel-advisory.info/api/repository/suggestions');
+        const data = await response.json();
 
-    let level = "Low Risk";
-    if (finalScore < 50) level = "High Risk";
-    else if (finalScore < 80) level = "Medium Risk";
+        // Search for the country in the API data (case insensitive)
+        const countryEntry = Object.values(data.data).find(
+            c => c.name.toLowerCase() === country.toLowerCase()
+        );
 
-    return res.status(200).json({
-      country: countryData.name,
-      score: finalScore,
-      level: level,
-      message: countryData.advisory.message,
-      emoji: "🛡️"
-    });
+        if (!countryEntry) {
+            return res.status(404).json({ 
+                error: "Country not found in global database. For city-specific safety, use the AI Threat Advisor." 
+            });
+        }
 
-  } catch (err) {
-    return res.status(500).json({ error: "Safety API error" });
-  }
+        // The API returns a score from 0 (Safe) to 5 (Dangerous).
+        // We convert it to a 0-100 scale where 100 is Safest.
+        const rawScore = countryEntry.advisory.score;
+        const invertedScore = Math.round((5 - rawScore) * 20);
+
+        // Determine Risk Level and Color
+        let level = "Low Risk";
+        let statusEmoji = "✅";
+        if (invertedScore < 50) {
+            level = "High Risk";
+            statusEmoji = "🚨";
+        } else if (invertedScore < 80) {
+            level = "Medium Risk";
+            statusEmoji = "⚠️";
+        }
+
+        return res.status(200).json({
+            country: countryEntry.name,
+            code: countryEntry.iso_alpha2,
+            score: invertedScore,
+            level: level,
+            emoji: statusEmoji,
+            message: countryEntry.advisory.message || "No specific advisory available.",
+            attribution: countryEntry.advisory.sources_active + " official sources"
+        });
+
+    } catch (err) {
+        return res.status(500).json({ 
+            error: "Safety API connection error",
+            details: err.message 
+        });
+    }
 };
-
-     
