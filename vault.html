@@ -5,8 +5,33 @@
     <title>Elite Security Vault</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <style>
-        :root { --bg: #020617; --gold: #facc15; --accent: #38bdf8; --card: #1e293b; }
-        body { margin: 0; font-family: sans-serif; background: var(--bg); color: #fff; overflow: hidden; }
+        [span_6](start_span)[span_7](start_span)/* CSS Variables για υποστήριξη θεμάτων (Theme Support)[span_6](end_span)[span_7](end_span) */
+        :root { 
+            --bg: #020617; 
+            --gold: #facc15; 
+            --accent: #38bdf8; 
+            --card: #1e293b; 
+            --text: #ffffff;
+            --input-bg: rgba(255,255,255,0.03);
+        }
+
+        [span_8](start_span)[span_9](start_span)/* Light Mode υποστήριξη για εξάλειψη της ασυνέπειας (Issue #3)[span_8](end_span)[span_9](end_span) */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f8fafc;
+                --text: #0f172a;
+                --card: #ffffff;
+                --input-bg: #f1f5f9;
+            }
+        }
+
+        body { 
+            margin: 0; 
+            font-family: sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            overflow: hidden; 
+        }
         
         /* PIN Screen */
         .auth-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; }
@@ -14,15 +39,36 @@
         .dot { width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--gold); }
         .dot.filled { background: var(--gold); box-shadow: 0 0 10px var(--gold); }
         .pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .pin-btn { width: 70px; height: 70px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .pin-btn { width: 70px; height: 70px; border-radius: 50%; border: 1px solid rgba(128,128,128,0.2); background: rgba(128,128,128,0.05); color: var(--text); font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .pin-btn:active { background: var(--gold); color: #000; }
 
         /* Main Content */
-        .vault-container { padding: 40px 20px; height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
+        .vault-container { 
+            padding: 40px 20px; 
+            height: 100vh; 
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column; 
+        }
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .back-btn { background: none; border: none; color: var(--accent); font-weight: bold; cursor: pointer; }
         
-        textarea { width: 100%; flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: #fff; padding: 20px; font-size: 1rem; line-height: 1.5; resize: none; margin-bottom: 20px; outline: none; }
+        [span_10](start_span)[span_11](start_span)/* ΔΙΟΡΘΩΣΗ OVERFLOW (Issue #4): Χρήση box-sizing και σωστών constraints[span_10](end_span)[span_11](end_span) */
+        textarea { 
+            width: 100%; 
+            flex: 1; 
+            background: var(--input-bg); 
+            border: 1px solid rgba(128,128,128,0.2); 
+            border-radius: 15px; 
+            color: var(--text); 
+            padding: 20px; 
+            font-size: 1rem; 
+            line-height: 1.5; 
+            resize: none; 
+            margin-bottom: 20px; 
+            outline: none;
+            box-sizing: border-box; [span_12](start_span)/* Διασφαλίζει ότι το padding δεν μεγαλώνει το πλάτος πέρα από το 100%[span_12](end_span) */
+        }
         textarea:focus { border-color: var(--gold); }
         
         .save-btn { background: var(--gold); color: #000; border: none; padding: 18px; border-radius: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; width: 100%; cursor: pointer; }
@@ -109,10 +155,9 @@
 
     function saveVault() {
         const text = document.getElementById('vault-data').value;
-        const encrypted = btoa(unescape(encodeURIComponent(text))); // Simple encryption
+        const encrypted = btoa(unescape(encodeURIComponent(text))); 
         localStorage.setItem('vault_content', encrypted);
         
-        // Haptic or Feedback
         const btn = document.querySelector('.save-btn');
         btn.innerText = "SAVED & ENCRYPTED ✓";
         btn.style.background = "var(--accent)";
