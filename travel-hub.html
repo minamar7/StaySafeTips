@@ -380,14 +380,16 @@ async function packingTips(){
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
-        situation: `5 essential packing items for ${country}`,
+        country: `packing list for ${country}`,
         userLang: userLang 
       })
     });
     const data = await r.json();
-    box.innerHTML = `<div style="white-space:pre-wrap;">${data.assessment}</div>`;
+    const output = data.result || data.assessment || "No data";
+    box.innerHTML = `<div style="white-space:pre-wrap;">${output}</div>`;
   } catch(e) { box.innerHTML = t.error; }
 }
+
 </script>
 </body>
 </html>
