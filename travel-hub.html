@@ -323,7 +323,6 @@ async function findSafeTrips() {
     box.innerHTML = t.error; 
   }
 }
-
 async function travelThreat(){
   const country = document.getElementById("countryThreat").value.trim();
   const box = document.getElementById("threatResult");
@@ -335,12 +334,14 @@ async function travelThreat(){
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({ 
-        situation: `Brief safety report for ${country}`,
+        country: country,
         userLang: userLang 
       })
     });
     const data = await r.json();
-    box.innerHTML = `<div style="white-space:pre-wrap;">${data.assessment}</div>`;
+    // Παίρνουμε το .result από το backend
+    const output = data.result || data.assessment || "No data";
+    box.innerHTML = `<div style="white-space:pre-wrap;">${output}</div>`;
   }catch(e){ box.innerHTML = t.error; }
 }
 
