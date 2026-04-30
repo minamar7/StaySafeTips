@@ -219,12 +219,20 @@ textarea:focus {
 <script>
 // --- ΣΥΣΤΗΜΑ ΠΟΛΥΓΛΩΣΣΙΚΟΤΗΤΑΣ ---
 const uiTranslations = {
-    'en': { back: 'BACK TO HUB', badge: 'AI ANALYZER v1.5 FLASH', title: '🤖 <span>ELITE</span> THREAT<br>ANALYSIS', sc_personal: 'Personal', sc_cyber: 'Cyber', sc_nature: 'Nature', sc_emergency: 'Emergency', details: 'Situation Details', placeholder: 'Describe the threat or situation in detail...', btn: 'START AI SCAN', assess: 'AI Security Assessment', scanning: '⚡ SCANNING CORE...', error_short: 'Please describe your situation more clearly.', ai_instruction: 'Please respond in English.' },
-    'el': { back: 'ΕΠΙΣΤΡΟΦΗ', badge: 'AI ΑΝΑΛΥΤΗΣ v1.5 FLASH', title: '🤖 <span>ELITE</span> ΑΝΑΛΥΣΗ<br>ΑΠΕΙΛΗΣ', sc_personal: 'Προσωπική', sc_cyber: 'Κυβερνοχώρος', sc_nature: 'Φύση', sc_emergency: 'Έκτακτη', details: 'Λεπτομέρειες Κατάστασης', placeholder: 'Περιγράψτε την απειλή ή την κατάσταση λεπτομερώς...', btn: 'ΕΝΑΡΞΗ AI ΣΑΡΩΣΗΣ', assess: 'AI Αξιολόγηση Ασφαλείας', scanning: '⚡ ΣΑΡΩΣΗ ΠΥΡΗΝΑ...', error_short: 'Παρακαλώ περιγράψτε την κατάσταση πιο αναλυτικά.', ai_instruction: 'IMPORTANT: Respond strictly in GREEK language.' }
+    'en': { back: 'BACK TO HUB', badge: 'AI ANALYZER v1.5 FLASH', title: '🤖 <span>ELITE</span> THREAT<br>ANALYSIS', sc_personal: 'Personal', sc_cyber: 'Cyber', sc_nature: 'Nature', sc_emergency: 'Emergency', details: 'Situation Details', placeholder: 'Describe the threat or situation in detail...', btn: 'START AI SCAN', assess: 'AI Security Assessment', scanning: '⚡ SCANNING CORE...', error_short: 'Please describe your situation more clearly.' },
+    'el': { back: 'ΕΠΙΣΤΡΟΦΗ', badge: 'AI ΑΝΑΛΥΤΗΣ v1.5 FLASH', title: '🤖 <span>ELITE</span> ΑΝΑΛΥΣΗ<br>ΑΠΕΙΛΗΣ', sc_personal: 'Προσωπική', sc_cyber: 'Κυβερνοχώρος', sc_nature: 'Φύση', sc_emergency: 'Έκτακτη', details: 'Λεπτομέρειες Κατάστασης', placeholder: 'Περιγράψτε την απειλή ή την κατάσταση λεπτομερώς...', btn: 'ΕΝΑΡΞΗ AI ΣΑΡΩΣΗΣ', assess: 'AI Αξιολόγηση Ασφαλείας', scanning: '⚡ ΣΑΡΩΣΗ ΠΥΡΗΝΑ...', error_short: 'Παρακαλώ περιγράψτε την κατάσταση πιο αναλυτικά.' },
+    'de': { back: 'ZURÜCK', badge: 'AI ANALYSATOR v1.5', title: '🤖 <span>ELITE</span> GEFAHREN<br>ANALYSE', sc_personal: 'Privat', sc_cyber: 'Cyber', sc_nature: 'Natur', sc_emergency: 'Notfall', details: 'Situationsdetails', placeholder: 'Beschreiben Sie die Bedrohung...', btn: 'AI-SCAN STARTEN', assess: 'AI-Sicherheitsbewertung', scanning: '⚡ SCANNT...', error_short: 'Bitte beschreiben Sie die Situation genauer.' },
+    'fr': { back: 'RETOUR', badge: 'ANALYSEUR IA v1.5', title: '🤖 <span>ELITE</span> ANALYSE DE<br>MENACE', sc_personal: 'Personnel', sc_cyber: 'Cyber', sc_nature: 'Nature', sc_emergency: 'Urgence', details: 'Détails de la situation', placeholder: 'Décrivez la menace...', btn: 'LANCER SCAN IA', assess: 'Évaluation de sécurité IA', scanning: '⚡ ANALYSE...', error_short: 'Veuillez décrire la situation plus clairement.' },
+    'es': { back: 'VOLVER', badge: 'ANALIZADOR IA v1.5', title: '🤖 <span>ELITE</span> ANÁLISIS DE<br>AMENAZA', sc_personal: 'Personal', sc_cyber: 'Cyber', sc_nature: 'Naturaleza', sc_emergency: 'Emergencia', details: 'Detalles', placeholder: 'Describe la amenaza...', btn: 'INICIAR ESCANEO IA', assess: 'Evaluación de seguridad IA', scanning: '⚡ ESCANEANDO...', error_short: 'Por favor describe la situación con más detalle.' },
+    'it': { back: 'INDIETRO', badge: 'ANALIZZATORE IA v1.5', title: '🤖 <span>ELITE</span> ANALISI<br>MINACCE', sc_personal: 'Personale', sc_cyber: 'Cyber', sc_nature: 'Natura', sc_emergency: 'Emergenza', details: 'Dettagli', placeholder: 'Descrivi la minaccia...', btn: 'AVVIA SCAN IA', assess: 'Valutazione sicurezza IA', scanning: '⚡ SCANSIONE...', error_short: 'Descrivi la situazione più chiaramente.' },
+    'pt': { back: 'VOLTAR', badge: 'ANALISADOR IA v1.5', title: '🤖 <span>ELITE</span> ANÁLISE DE<br>AMEAÇAS', sc_personal: 'Pessoal', sc_cyber: 'Cyber', sc_nature: 'Natureza', sc_emergency: 'Emergência', details: 'Detalhes', placeholder: 'Descreva a ameaça...', btn: 'INICIAR SCAN IA', assess: 'Avaliação de segurança IA', scanning: '⚡ ANALISANDO...', error_short: 'Descreva a situação com mais detalhes.' },
+    'ru': { back: 'НАЗАД', badge: 'ИИ АНАЛИЗАТОР v1.5', title: '🤖 <span>ELITE</span> АНАЛИЗ<br>УГРОЗ', sc_personal: 'Личное', sc_cyber: 'Кибер', sc_nature: 'Природа', sc_emergency: 'Чрезвычайная', details: 'Детали ситуации', placeholder: 'Опишите угрозу...', btn: 'ЗАПУСТИТЬ СКАН', assess: 'Оценка безопасности ИИ', scanning: '⚡ СКАНИРОВАНИЕ...', error_short: 'Пожалуйста, опишите ситуацию подробнее.' },
+    'zh': { back: '返回', badge: 'AI 分析器 v1.5', title: '🤖 <span>ELITE</span> 威胁分析', sc_personal: '个人', sc_cyber: '网络', sc_nature: '自然', sc_emergency: '紧急', details: '情况详情', placeholder: '请描述威胁...', btn: '开始 AI 扫描', assess: 'AI 安全评估', scanning: '⚡ 正在扫描...', error_short: '请更清楚地描述您的情况。' },
+    'hi': { back: 'वापस', badge: 'AI विश्लेषक v1.5', title: '🤖 <span>ELITE</span> खतरा विश्लेषण', sc_personal: 'व्यक्तिगत', sc_cyber: 'साइबर', sc_nature: 'प्रकृति', sc_emergency: 'आपातकालीन', details: 'विवरण', placeholder: 'खतरे का वर्णन करें...', btn: 'AI स्कैन शुरू करें', assess: 'AI सुरक्षा मूल्यांकन', scanning: '⚡ स्कैनिंग...', error_short: 'कृपया अपनी स्थिति का स्पष्ट वर्णन करें।' }
 };
 
-// Ανίχνευση γλώσσας από το localStorage (που ορίσαμε στο index.html)
-const userLang = localStorage.getItem('selectedLanguage') || 'en';
+// Διάβασμα της γλώσσας από το localStorage (κλειδί 'user_lang' όπως το index.html)
+const userLang = localStorage.getItem('user_lang') || 'en';
 const lang = uiTranslations[userLang] || uiTranslations['en'];
 
 // Εφαρμογή μεταφράσεων στο UI
@@ -263,9 +271,6 @@ async function analyze() {
   btn.disabled = true;
   btn.textContent = lang.scanning;
 
-  // Ενσωμάτωση κρυφής οδηγίας γλώσσας για την AI
-  const finalPrompt = situation + "\n\n(" + lang.ai_instruction + ")";
-
   try {
     const res = await fetch('https://stay-safe-tips.vercel.app/api/analyze', {
       method: 'POST',
@@ -275,8 +280,9 @@ async function analyze() {
         'Accept': 'application/json'
       },
       body: JSON.stringify({ 
-        situation: finalPrompt, 
-        scenario: selectedScenario 
+        situation: situation, 
+        scenario: selectedScenario,
+        userLang: userLang // Στέλνουμε τη γλώσσα στο Vercel API
       })
     });
 
