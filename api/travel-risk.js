@@ -7,10 +7,16 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const apiKey = process.env.Travel_Ai_Threat;
-  const { country } = req.body;
+  // Προσθέτουμε το userLang που στέλνει το Travel Hub
+  const { country, userLang } = req.body;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    // Ορίζουμε τη γλώσσα απάντησης
+    const instructions = userLang === 'el' 
+      ? "Respond strictly in GREEK language." 
+      : "Respond in English.";
 
     const response = await fetch(url, {
       method: "POST",
@@ -20,7 +26,7 @@ module.exports = async (req, res) => {
           parts: [{
             text: `Provide a short travel safety briefing for ${country}.
             Include: 🔴 Threats, 🟡 Scams, 🟢 Tips.
-            Keep it under 200 words.`
+            Keep it under 200 words. ${instructions}`
           }]
         }]
       })
@@ -36,7 +42,11 @@ module.exports = async (req, res) => {
       data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "No response available.";
 
-    return res.status(200).json({ result: text });
+    // Επιστρέφουμε το αποτέλεσμα (το Travel Hub περιμένει το 'assessment' ή το 'result')
+    return res.status(200).json({ 
+        result: text,
+        assessment: text // Προσθήκη για συμβατότητα με το travel-hub.html
+    });
 
   } catch (err) {
     return res.status(500).json({ error: "AI Generation Failed" });
