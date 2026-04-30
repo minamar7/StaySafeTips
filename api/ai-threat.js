@@ -5,9 +5,9 @@ module.exports = async (req, res) => {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const apiKey = process.env.Travel_Ai_Threat;
+  const apiKey = process.env.Travel_Ai_Threat; 
   const { situation, country, userLang } = req.body;
-  const query = situation || country; 
+  const query = situation || country; // Παίρνει όποιο από τα δύο στείλει το HTML
 
   const langMap = {
     'el': 'GREEK', 'en': 'ENGLISH', 'de': 'GERMAN', 'fr': 'FRENCH', 
@@ -34,11 +34,11 @@ module.exports = async (req, res) => {
 
     const data = await response.json();
     
-    // Η ίδια λογική parse που σου δουλεύει
+    // Η λογική καθαρισμού JSON που ξέρουμε ότι δουλεύει
     const aiText = data.candidates[0].content.parts[0].text.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(aiText);
 
-    // Επιστρέφουμε το αποτέλεσμα έτσι ώστε το Travel Hub να το διαβάζει όπως πριν
+    // Στέλνουμε το αποτέλεσμα έτσι ώστε το HTML σου να το "βλέπει" σίγουρα
     res.status(200).json({
       assessment: parsed.assessment,
       result: parsed.assessment 
