@@ -292,12 +292,19 @@ async function findSafeTrips() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        situation: `List 3 safe travel destinations from ${origin}. Return JSON array only: [{"city":"...", "country":"...", "reason":"..."}]`,
-        userLang: userLang // Η γλώσσα για το AI
+        country: origin, // Στέλνουμε την πόλη ως αφετηρία
+        userLang: userLang,
+        situation: `List 3 safe travel destinations from ${origin}. Return JSON array only.` // Πρόσθετη οδηγία
       })
     });
     const data = await r.json();
-    let destinations = JSON.parse(data.assessment.match(/\[.*\]/s)[0]);
+    
+    // Χρησιμοποιούμε το .result που στέλνει πλέον το backend σου
+    const rawText = data.result || data.assessment;
+    const jsonMatch = rawText.match(/\[.*\]/s);
+    if (!jsonMatch) throw new Error("No JSON found");
+    
+    const destinations = JSON.parse(jsonMatch[0]);
 
     let html = "";
     destinations.forEach(dest => {
@@ -311,7 +318,10 @@ async function findSafeTrips() {
         </div>`;
     });
     box.innerHTML = html;
-  } catch (e) { box.innerHTML = t.error; }
+  } catch (e) { 
+    console.error(e);
+    box.innerHTML = t.error; 
+  }
 }
 
 async function travelThreat(){
