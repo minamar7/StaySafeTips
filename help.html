@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Help Center - Stay Safe Elite</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+    :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding: 40px 20px; }
+    
+    .header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+    .back-btn { background: none; border: none; color: var(--accent); font-size: 28px; cursor: pointer; padding: 0; }
+    h1 { font-family: 'Rajdhani', sans-serif; margin: 0; font-size: 1.8rem; letter-spacing: 1px; text-transform: uppercase; }
+
+    .help-intro { margin-bottom: 30px; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+    .cat-label { font-size: 0.75rem; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin: 25px 0 10px 5px; display: block; }
+
+    .faq-container { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item { background: var(--card); border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; transition: 0.3s; }
+    .faq-question { padding: 18px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 0.9rem; }
+    .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: all 0.3s ease-out; color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+    
+    .faq-item.active { border-color: rgba(56, 189, 248, 0.3); background: rgba(15, 23, 42, 1); }
+    .faq-item.active .faq-answer { padding: 0 20px 20px; max-height: 400px; }
+    .faq-item.active .arrow { transform: rotate(180deg); }
+    .arrow { transition: 0.3s; color: var(--accent); font-size: 0.7rem; }
+
+    .elite-card-img { width: 100%; border-radius: 20px; margin-top: 40px; border: 1px solid rgba(250, 204, 21, 0.2); opacity: 0.9; }
+    
+    .contact-card { margin-top: 40px; padding: 25px; background: rgba(56, 189, 248, 0.05); border-radius: 22px; text-align: center; border: 1px solid rgba(56, 189, 248, 0.1); }
+    .contact-btn { display: inline-block; margin-top: 15px; background: var(--accent); color: var(--bg); padding: 12px 25px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+    <div class="header">
+        <button class="back-btn" onclick="location.href='index.html'">✕</button>
+        <h1 id="txt-title">Help Center</h1>
+    </div>
+
+    <p class="help-intro" id="txt-intro">Loading guide...</p>
+
+    <div id="faq-content">
+        </div>
+
+    <div class="contact-card">
+        <div style="font-family: 'Rajdhani', sans-serif; color: var(--accent); font-weight: 700; letter-spacing: 1px;" id="txt-contact-title">STAY SAFE ELITE SUPPORT</div>
+        <p style="font-size: 0.75rem; color: var(--muted); margin-top: 5px;" id="txt-contact-desc">Need more help with our professional tools?</p>
+        <a href="mailto:support@staysafeelite.com" class="contact-btn" id="txt-contact-btn">SEND EMAIL</a>
+    </div>
+
+    <img src="https://minamar7.github.io/StaySafeTips/IMG_20260209_231913.jpg" class="elite-card-img" alt="Elite Member Card">
+
+    <script>
+        const translations = {
+            'en': {
+                title: "Help Center",
+                intro: "Your professional guide to Stay Safe Elite protection tools and Premium features.",
+                contactTitle: "ELITE SUPPORT",
+                contactDesc: "Need more help with our professional tools?",
+                contactBtn: "SEND EMAIL",
+                categories: {
+                    travel: "World Travel Hub Ultra",
+                    safety: "Core Safety Tools",
+                    premium: "Elite Premium Membership"
+                },
+                faqs: [
+                    { cat: "travel", q: "What is Travel Hub Ultra?", a: "A premium hub for travelers featuring AI risk analysis, country safety scores (0-100), and live currency rates." },
+                    { cat: "travel", q: "Which languages does AI Advisor support?", a: "The AI responds in your selected app language. However, for Chinese and Hindi, reports are generated in English to ensure maximum safety accuracy." },
+                    { cat: "safety", q: "How does the Safe Timer work?", a: "Set a timer before you start a journey. If you don't confirm you are safe before it ends, an emergency alert is triggered." },
+                    { cat: "safety", q: "What is the SOS Hub?", a: "Your emergency command center. Access local emergency numbers, send your location, or activate the loud Panic Alarm." },
+                    { cat: "premium", q: "What is the Visual First Aid Guide?", a: "A step-by-step visual training guide for emergencies like CPR, Heimlich maneuver, and basic first aid." },
+                    { cat: "premium", q: "What is the Elite Defense Dojo?", a: "An exclusive training portal featuring self-defense masterclasses and Tang Soo Do techniques." }
+                ]
+            },
+            'el': {
+                title: "Κέντρο Βοήθειας",
+                intro: "Ο επαγγελματικός οδηγός σας για τα εργαλεία προστασίας και τις Premium λειτουργίες.",
+                contactTitle: "ELITE ΥΠΟΣΤΗΡΙΞΗ",
+                contactDesc: "Χρειάζεστε βοήθεια με τα εργαλεία μας;",
+                contactBtn: "ΑΠΟΣΤΟΛΗ EMAIL",
+                categories: {
+                    travel: "World Travel Hub Ultra",
+                    safety: "Εργαλεία Ασφαλείας",
+                    premium: "Elite Premium Συνδρομή"
+                },
+                faqs: [
+                    { cat: "travel", q: "Τι είναι το Travel Hub Ultra;", a: "Ένας premium κόμβος για ταξιδιώτες με AI ανάλυση κινδύνου, βαθμολογίες ασφαλείας χωρών και ζωντανές ισοτιμίες." },
+                    { cat: "travel", q: "Σε ποιες γλώσσες απαντάει το AI Advisor;", a: "Το AI απαντά στη γλώσσα που έχετε επιλέξει. Για Κινέζικα και Χίντι, οι αναλύσεις παρέχονται στα Αγγλικά για απόλυτη ακρίβεια." },
+                    { cat: "safety", q: "Πώς λειτουργεί το Safe Timer;", a: "Ορίζετε έναν χρόνο για τη διαδρομή σας. Αν δεν επιβεβαιώσετε την ασφάλειά σας στη λήξη, ενεργοποιείται ειδοποίηση έκτακτης ανάγκης." },
+                    { cat: "safety", q: "Τι περιλαμβάνει το SOS Hub;", a: "Άμεση κλήση αρχών, αποστολή τοποθεσίας και ηχητικό Panic Alarm για απομάκρυνση απειλών." },
+                    { cat: "premium", q: "Τι είναι ο Visual First Aid Guide;", a: "Οπτικός οδηγός βήμα-προς-βήμα για Πρώτες Βοήθειες όπως ΚΑΡΠΑ και η λαβή Heimlich." },
+                    { cat: "premium", q: "Τι είναι το Elite Defense Dojo;", a: "Αποκλειστική πύλη εκπαίδευσης με μαθήματα αυτοάμυνας και τεχνικές Tang Soo Do." }
+                ]
+            }
+        };
+
+        function toggleFAQ(element) {
+            const isActive = element.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
+            if (!isActive) element.classList.add('active');
+        }
+
+        function initHelp() {
+            // Default: English
+            let lang = localStorage.getItem('user_lang') || 'en';
+            
+            // Force English for Chinese and Hindi
+            if (lang === 'zh' || lang === 'hi') {
+                lang = 'en';
+            }
+
+            const t = translations[lang] || translations['en'];
+            
+            document.getElementById('txt-title').innerText = t.title;
+            document.getElementById('txt-intro').innerText = t.intro;
+            document.getElementById('txt-contact-title').innerText = t.contactTitle;
+            document.getElementById('txt-contact-desc').innerText = t.contactDesc;
+            document.getElementById('txt-contact-btn').innerText = t.contactBtn;
+
+            const container = document.getElementById('faq-content');
+            let html = '';
+
+            // Group by Categories
+            const cats = t.categories;
+            for (let key in cats) {
+                html += `<span class="cat-label">${cats[key]}</span>`;
+                html += `<div class="faq-container">`;
+                t.faqs.filter(f => f.cat === key).forEach(item => {
+                    html += `
+                        <div class="faq-item" onclick="toggleFAQ(this)">
+                            <div class="faq-question"><span>${item.q}</span><span class="arrow">▼</span></div>
+                            <div class="faq-answer">${item.a}</div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        window.onload = initHelp;
+    </script>
+</body>
+</html>
