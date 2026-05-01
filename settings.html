@@ -11,7 +11,7 @@
     
     .header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
     .back-btn { background: none; border: none; color: var(--accent); font-size: 28px; cursor: pointer; padding: 0; }
-    h1 { font-family: 'Rajdhani', sans-serif; margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+    h1 { font-family: 'Rajdhani', sans-serif; margin: 0; font-size: 1.8rem; letter-spacing: 1px; text-transform: uppercase; }
 
     .settings-group { background: var(--card); border-radius: 22px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; overflow: hidden; }
     .group-title { padding: 18px 20px 5px; font-size: 0.7rem; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
@@ -24,25 +24,34 @@
 
     /* UI Elements */
     .level-badge { background: rgba(56, 189, 248, 0.1); color: var(--accent); padding: 4px 12px; border-radius: 12px; font-weight: 800; font-family: 'Rajdhani', sans-serif; border: 1px solid rgba(56, 189, 248, 0.2); }
-    select { background: #1e293b; color: white; border: 1px solid rgba(56, 189, 248, 0.3); padding: 6px 12px; border-radius: 10px; font-size: 0.85rem; outline: none; }
+    select { background: #1e293b; color: white; border: 1px solid rgba(56, 189, 248, 0.3); padding: 6px 12px; border-radius: 10px; font-size: 0.85rem; outline: none; cursor: pointer; }
     
+    /* Danger Zone */
     .danger-zone { margin-top: 40px; border: 1px solid rgba(239, 68, 68, 0.15); background: rgba(239, 68, 68, 0.03); border-radius: 22px; padding: 25px; text-align: center; }
-    .btn-reset { background: var(--danger); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 15px; font-size: 0.9rem; letter-spacing: 0.5px; }
+    .btn-reset { background: var(--danger); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 15px; font-size: 0.9rem; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    /* Custom Toggle Switch (Optional for future use) */
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background-color: #334155; transition: .4s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--accent); }
+    input:checked + .slider:before { transform: translateX(20px); }
 </style>
 </head>
 <body>
 
     <div class="header">
         <button class="back-btn" onclick="location.href='index.html'">✕</button>
-        <h1>SETTINGS</h1>
+        <h1>Settings</h1>
     </div>
 
     <div class="settings-group">
         <div class="group-title">System Status</div>
         <div class="setting-item">
             <div class="setting-info">
-                <span class="setting-label">Current Level</span>
-                <span class="setting-desc">Your training progress</span>
+                <span class="setting-label">Elite Level</span>
+                <span class="setting-desc">Global training progress</span>
             </div>
             <span class="level-badge">LVL <span id="display-level">1</span></span>
         </div>
@@ -51,7 +60,7 @@
                 <span class="setting-label">Membership</span>
                 <span class="setting-desc" id="status-text">Standard Access</span>
             </div>
-            <span id="premium-icon">👤</span>
+            <span id="premium-icon" style="font-size: 1.2rem;">👤</span>
         </div>
     </div>
 
@@ -59,63 +68,97 @@
         <div class="group-title">Configuration</div>
         <div class="setting-item">
             <div class="setting-info">
-                <span class="setting-label">Interface Language</span>
-                <span class="setting-desc">Select your preferred language</span>
+                <span class="setting-label">Language</span>
+                <span class="setting-desc">App display language</span>
             </div>
             <select id="lang-select" onchange="changeLang(this.value)">
-                <option value="en">English</option>
+                <option value="en">English (Default)</option>
                 <option value="el">Ελληνικά</option>
                 <option value="de">Deutsch</option>
                 <option value="fr">Français</option>
                 <option value="es">Español</option>
+                <option value="it">Italiano</option>
+                <option value="pt">Português</option>
+                <option value="ru">Русский</option>
+                <option value="zh">中文 (English AI)</option>
+                <option value="hi">हिन्दी (English AI)</option>
             </select>
+        </div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Safety Notifications</span>
+                <span class="setting-desc">Emergency & Training alerts</span>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="notif-toggle" checked onchange="toggleNotifs()">
+                <span class="slider"></span>
+            </label>
         </div>
     </div>
 
     <div class="settings-group">
         <div class="group-title">Information</div>
-        <div class="setting-item" onclick="location.href='about.html'">
+        <div class="setting-item" onclick="location.href='help.html'" style="cursor: pointer;">
             <div class="setting-info">
-                <span class="setting-label">About Elite Team</span>
-                <span class="setting-desc">Version 1.0.2 - Production Ready</span>
+                <span class="setting-label">Help Center & FAQ</span>
+                <span class="setting-desc">Guide for Elite tools</span>
             </div>
-            <span style="color:var(--muted)">→</span>
+            <span style="color: var(--muted);">→</span>
+        </div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">App Version</span>
+                <span class="setting-desc">v1.2.0 Elite Production</span>
+            </div>
         </div>
     </div>
 
     <div class="danger-zone">
         <span style="color: var(--danger); font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">DATA TERMINATION</span>
-        <p style="font-size: 0.7rem; color: var(--muted); line-height: 1.4; margin-top: 10px;">Warning: This action will permanently wipe your levels, streaks, and local preferences.</p>
-        <button class="btn-reset" onclick="confirmReset()">WIPE ALL DATA</button>
+        <p style="font-size: 0.7rem; color: var(--muted); line-height: 1.4; margin-top: 10px;">Warning: This action will permanently wipe your XP, Levels, and local preferences.</p>
+        <button class="btn-reset" onclick="confirmReset()">Wipe All Data</button>
     </div>
 
     <script>
         window.onload = () => {
-            // Φόρτωση Γλώσσας
+            // Φόρτωση Γλώσσας (Default English)
             const currentLang = localStorage.getItem('user_lang') || 'en';
             document.getElementById('lang-select').value = currentLang;
 
-            // Φόρτωση Level
+            // Φόρτωση Level από το index
             const level = localStorage.getItem('user_level') || '1';
             document.getElementById('display-level').innerText = level;
 
-            // Έλεγχος Premium
-            if(localStorage.getItem('premium_user') === 'true') {
-                document.getElementById('status-text').innerText = 'Elite Pro Member';
+            // Έλεγχος Premium Status
+            if (localStorage.getItem('premium_user') === 'true') {
+                document.getElementById('status-text').innerText = 'Elite Premium Member';
                 document.getElementById('status-text').style.color = 'var(--gold)';
                 document.getElementById('premium-icon').innerText = '💎';
+            }
+
+            // Φόρτωση Προτίμησης Ειδοποιήσεων
+            const notifs = localStorage.getItem('notifs_enabled');
+            if (notifs === 'false') {
+                document.getElementById('notif-toggle').checked = false;
             }
         };
 
         function changeLang(val) {
             localStorage.setItem('user_lang', val);
-            // Προαιρετικά: reload για να δει αμέσως την αλλαγή αν έχεις μεταφράσεις και εδώ
-            alert('Language updated.');
+            // Ενημερώνουμε το χρήστη ότι η αλλαγή απαιτεί επανεκκίνηση ή απλά reload
+            alert('Language updated to ' + val.toUpperCase());
+            location.reload();
+        }
+
+        function toggleNotifs() {
+            const isChecked = document.getElementById('notif-toggle').checked;
+            localStorage.setItem('notifs_enabled', isChecked);
         }
 
         function confirmReset() {
-            if(confirm("Confirm data termination? This cannot be undone.")) {
+            if (confirm("CRITICAL ACTION: Are you sure you want to wipe all local data? This cannot be undone.")) {
                 localStorage.clear();
+                // Επαναφορά στην αρχική σελίδα (Onboarding)
                 location.href = 'index.html';
             }
         }
