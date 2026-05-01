@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Settings - Stay Safe Elite</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+    :root { --bg: #020617; --card: rgba(15, 23, 42, 0.9); --accent: #38bdf8; --gold: #facc15; --text: #f8fafc; --muted: #94a3b8; --danger: #ef4444; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; padding: 40px 20px; }
+    
+    .header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
+    .back-btn { background: none; border: none; color: var(--accent); font-size: 28px; cursor: pointer; padding: 0; }
+    h1 { font-family: 'Rajdhani', sans-serif; margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+
+    .settings-group { background: var(--card); border-radius: 22px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; overflow: hidden; }
+    .group-title { padding: 18px 20px 5px; font-size: 0.7rem; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
+    
+    .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .setting-item:last-child { border-bottom: none; }
+    .setting-info { display: flex; flex-direction: column; gap: 2px; }
+    .setting-label { font-weight: 600; font-size: 0.95rem; color: #fff; }
+    .setting-desc { font-size: 0.75rem; color: var(--muted); }
+
+    /* UI Elements */
+    .level-badge { background: rgba(56, 189, 248, 0.1); color: var(--accent); padding: 4px 12px; border-radius: 12px; font-weight: 800; font-family: 'Rajdhani', sans-serif; border: 1px solid rgba(56, 189, 248, 0.2); }
+    select { background: #1e293b; color: white; border: 1px solid rgba(56, 189, 248, 0.3); padding: 6px 12px; border-radius: 10px; font-size: 0.85rem; outline: none; }
+    
+    .danger-zone { margin-top: 40px; border: 1px solid rgba(239, 68, 68, 0.15); background: rgba(239, 68, 68, 0.03); border-radius: 22px; padding: 25px; text-align: center; }
+    .btn-reset { background: var(--danger); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 15px; font-size: 0.9rem; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+
+    <div class="header">
+        <button class="back-btn" onclick="location.href='index.html'">✕</button>
+        <h1>SETTINGS</h1>
+    </div>
+
+    <div class="settings-group">
+        <div class="group-title">System Status</div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Current Level</span>
+                <span class="setting-desc">Your training progress</span>
+            </div>
+            <span class="level-badge">LVL <span id="display-level">1</span></span>
+        </div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Membership</span>
+                <span class="setting-desc" id="status-text">Standard Access</span>
+            </div>
+            <span id="premium-icon">👤</span>
+        </div>
+    </div>
+
+    <div class="settings-group">
+        <div class="group-title">Configuration</div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Interface Language</span>
+                <span class="setting-desc">Select your preferred language</span>
+            </div>
+            <select id="lang-select" onchange="changeLang(this.value)">
+                <option value="en">English</option>
+                <option value="el">Ελληνικά</option>
+                <option value="de">Deutsch</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="settings-group">
+        <div class="group-title">Information</div>
+        <div class="setting-item" onclick="location.href='about.html'">
+            <div class="setting-info">
+                <span class="setting-label">About Elite Team</span>
+                <span class="setting-desc">Version 1.0.2 - Production Ready</span>
+            </div>
+            <span style="color:var(--muted)">→</span>
+        </div>
+    </div>
+
+    <div class="danger-zone">
+        <span style="color: var(--danger); font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">DATA TERMINATION</span>
+        <p style="font-size: 0.7rem; color: var(--muted); line-height: 1.4; margin-top: 10px;">Warning: This action will permanently wipe your levels, streaks, and local preferences.</p>
+        <button class="btn-reset" onclick="confirmReset()">WIPE ALL DATA</button>
+    </div>
+
+    <script>
+        window.onload = () => {
+            // Φόρτωση Γλώσσας
+            const currentLang = localStorage.getItem('user_lang') || 'en';
+            document.getElementById('lang-select').value = currentLang;
+
+            // Φόρτωση Level
+            const level = localStorage.getItem('user_level') || '1';
+            document.getElementById('display-level').innerText = level;
+
+            // Έλεγχος Premium
+            if(localStorage.getItem('premium_user') === 'true') {
+                document.getElementById('status-text').innerText = 'Elite Pro Member';
+                document.getElementById('status-text').style.color = 'var(--gold)';
+                document.getElementById('premium-icon').innerText = '💎';
+            }
+        };
+
+        function changeLang(val) {
+            localStorage.setItem('user_lang', val);
+            // Προαιρετικά: reload για να δει αμέσως την αλλαγή αν έχεις μεταφράσεις και εδώ
+            alert('Language updated.');
+        }
+
+        function confirmReset() {
+            if(confirm("Confirm data termination? This cannot be undone.")) {
+                localStorage.clear();
+                location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
