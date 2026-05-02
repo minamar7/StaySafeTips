@@ -11,10 +11,6 @@ module.exports = async (req, res) => {
     const zodiacSign = sign || 'Aries';
     const apiKey = process.env.Safety_Zodiac_Daily;
 
-    if (!apiKey) {
-        return res.status(500).json({ error: 'Missing API Key' });
-    }
-
     try {
         const kv = createClient({
             url: process.env.KV_REST_API_URL,
@@ -22,12 +18,13 @@ module.exports = async (req, res) => {
         });
 
         const today = new Date().toISOString().split('T')[0];
-        const cacheKey = `zodiac_sarcastic_${targetLang}_${today}`;
+        const cacheKey = `zodiac_elite_${targetLang}_${today}`;
 
         let allData = await kv.get(cacheKey);
 
         if (!allData) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            // Χρήση του gemini-1.5-flash που είναι πιο σταθερό για JSON παραγωγή
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
             
             const response = await fetch(url, {
                 method: 'POST',
@@ -35,20 +32,19 @@ module.exports = async (req, res) => {
                 body: JSON.stringify({
                     contents: [{
                         parts: [{
-                            text: `You are a world-class Cybersecurity Expert with a sharp, sarcastic, and witty sense of humor. 
-                            Provide a daily security forecast for ALL 12 zodiac signs in ${targetLang} language. 
-                            The tone should be "Elite Sarcasm" - mocking bad digital habits while giving real protection advice.
-                            
-                            Return ONLY a valid JSON object with this exact structure:
-                            {"forecasts": {"Aries": {"forecast": "sarcastic short text", "protocol": "witty tip", "security_index": 85}, ...}}
-                            Do not use markdown formatting or the word "json".`
+                            text: `Return ONLY a JSON object for 12 zodiac signs in ${targetLang}. 
+                            Tone: Sharp, sarcastic cybersecurity expert.
+                            Format: {"forecasts": {"Aries": {"forecast": "...", "protocol": "...", "security_index": 85}, ...}}`
                         }]
                     }]
                 })
             });
 
             const data = await response.json();
+            if (!data.candidates) throw new Error("AI Failed to respond");
+
             let aiText = data.candidates[0].content.parts[0].text.trim();
+            // Καθαρισμός από τυχόν markdown που χαλάει το JSON
             aiText = aiText.replace(/```json/g, "").replace(/```/g, "").trim();
             
             allData = JSON.parse(aiText);
@@ -59,6 +55,6 @@ module.exports = async (req, res) => {
         return res.status(200).json(result);
 
     } catch (err) {
-        return res.status(500).json({ error: 'System error', detail: err.message });
+        return res.status(500).json({ error: 'Crash', details: err.message });
     }
 };
