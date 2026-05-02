@@ -1,4 +1,4 @@
-const VERSION = "v127-elite-final"; 
+const VERSION = "v128-elite-final"; 
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 const BASE = '/StaySafeTips/';
 
@@ -47,6 +47,8 @@ const STATIC_ASSETS = [
   BASE + "vault.html",
   BASE + "travel-hub.html",
   BASE + "safety.js",
+  BASE + "safety_zodiac_daily.js",
+  BASE + "safetyzodiacdaily.html",
   
 
 
