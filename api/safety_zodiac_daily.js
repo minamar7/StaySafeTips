@@ -1,12 +1,13 @@
-// Χρησιμοποιούμε τον client για να ορίσουμε χειροκίνητα τις μεταβλητές
 const { createClient } = require('@vercel/kv');
 
+// Σύνδεση με τη βάση χρησιμοποιώντας το δικό σου prefix: ZODIAC_KV
 const kv = createClient({
   url: process.env.ZODIAC_KV_REST_API_URL,
   token: process.env.ZODIAC_KV_REST_API_TOKEN,
 });
 
 module.exports = async (req, res) => {
+    // CORS Headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -23,17 +24,18 @@ module.exports = async (req, res) => {
     const cacheKey = `zodiac:${targetLang}:${today}`;
 
     try {
-        // Έλεγχος στο Cache
+        // 1. Έλεγχος αν υπάρχει ήδη η πρόβλεψη στη βάση (Cache)
         let cachedData = await kv.get(cacheKey);
         
         if (cachedData && cachedData.forecasts && cachedData.forecasts[sign]) {
+            console.log("Data retrieved from ZODIAC_KV Storage");
             return res.status(200).json({
                 planetary_context: cachedData.planetary_context,
                 ...cachedData.forecasts[sign]
             });
         }
 
-        // Αν δεν υπάρχει, καλούμε το Gemini
+        // 2. Αν δεν υπάρχει, καλούμε το Gemini (όπως στο ai-threat.js)
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const apiResponse = await fetch(url, {
@@ -42,14 +44,25 @@ module.exports = async (req, res) => {
             body: JSON.stringify({
                 contents: [{
                     parts: [{
-                        text: `Context: Today is ${today}. You are the 'Stay Safe Elite' Cosmic Analyst. 
-                        Provide a digital security horoscope for ALL signs in ${targetLang}.
-                        Return ONLY JSON:
+                        text: `Context: Today is ${today}. You are the 'Stay Safe Elite' Cosmic Security Analyst.
+                        Provide a digital security horoscope for ALL 12 signs.
+                        The response MUST be in ${targetLang}.
+                        Return ONLY a JSON object:
                         {
                             "planetary_context": "summary in ${targetLang}",
                             "forecasts": {
-                                "Aries": { "forecast": "...", "protocol": "...", "security_index": 85 },
-                                ... (all 12 signs)
+                                "Aries": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Taurus": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Gemini": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Cancer": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Leo": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Virgo": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Libra": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Scorpio": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Sagittarius": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Capricorn": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Aquarius": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 },
+                                "Pisces": { "forecast": "max 25 words", "protocol": "max 5 words", "security_index": 60-99 }
                             }
                         }`
                     }]
@@ -62,7 +75,7 @@ module.exports = async (req, res) => {
         const cleanJson = rawText.replace(/```json|```/g, "").trim();
         const allForecasts = JSON.parse(cleanJson);
 
-        // Αποθήκευση στο KV
+        // 3. Αποθήκευση στη βάση για τις επόμενες 24 ώρες
         await kv.set(cacheKey, allForecasts, { ex: 86400 });
 
         return res.status(200).json({
@@ -71,6 +84,6 @@ module.exports = async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(500).json({ error: 'Sync failed', detail: err.message });
+        return res.status(500).json({ error: 'Database/AI Sync Error', detail: err.message });
     }
 };
