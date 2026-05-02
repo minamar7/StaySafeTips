@@ -61,7 +61,7 @@
         <div class="meter-container">
             <div class="meter-bar"><div id="meter-fill" class="meter-fill"></div></div>
             <div style="display:flex; justify-content: space-between; font-size: 9px; color: var(--gold); margin-top: 5px; font-weight: bold;">
-                <span>SECURITY INDEX</span><span id="meter-val">0%</span>
+                <span id="ui-index-lbl">SECURITY INDEX</span><span id="meter-val">0%</span>
             </div>
         </div>
 
@@ -77,21 +77,31 @@
 </div>
 
 <script>
-    // ΣΥΝΔΕΣΗ ΜΕ ΤΟ LIVE VERCEL API ΣΟΥ
     const VERCEL_API = "https://stay-safe-tips-maria-s-projects-f1da5c4f.vercel.app/api/safety_zodiac_daily";
 
     const urlParams = new URLSearchParams(window.location.search);
     const userLang = urlParams.get('lang') || 'en';
 
     const translations = {
-        en: { tagline: "Daily Threat Intelligence", protocol: "Security Protocol", btn: "Start Elite Training", decrypting: "Decrypting System...", signs: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"], signsEng: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"] },
-        el: { tagline: "Ημερήσια Ανάλυση Απειλών", protocol: "Πρωτόκολλο Ασφαλείας", btn: "Έναρξη Elite Εκπαίδευσης", decrypting: "Αποκρυπτογράφηση Συστήματος...", signs: ["Κριός", "Ταύρος", "Δίδυμοι", "Καρκίνος", "Λέων", "Παρθένος", "Ζυγός", "Σκορπιός", "Τοξότης", "Αιγόκερως", "Υδροχόος", "Ιχθύες"], signsEng: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"] }
+        en: { tagline: "Daily Threat Intelligence", protocol: "Security Protocol", btn: "Start Elite Training", decrypting: "Decrypting System...", index: "SECURITY INDEX", signs: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"] },
+        el: { tagline: "Ημερήσια Ανάλυση Απειλών", protocol: "Πρωτόκολλο Ασφαλείας", btn: "Έναρξη Elite Εκπαίδευσης", decrypting: "Αποκρυπτογράφηση Συστήματος...", index: "ΔΕΙΚΤΗΣ ΑΣΦΑΛΕΙΑΣ", signs: ["Κριός", "Ταύρος", "Δίδυμοι", "Καρκίνος", "Λέων", "Παρθένος", "Ζυγός", "Σκορπιός", "Τοξότης", "Αιγόκερως", "Υδροχόος", "Ιχθύες"] },
+        de: { tagline: "Tägliche Bedrohungsanalyse", protocol: "Sicherheitsprotokoll", btn: "Elite-Training Starten", decrypting: "Systementschlüsselung...", index: "SICHERHEITSINDEX", signs: ["Widder", "Stier", "Zwillinge", "Krebs", "Löwe", "Jungfrau", "Waage", "Skorpion", "Schütze", "Steinbock", "Wassermann", "Fische"] },
+        fr: { tagline: "Intelligence Quotidienne", protocol: "Protocole de Sécurité", btn: "Démarrer l'Entraînement", decrypting: "Décryptage du Système...", index: "INDICE DE SÉCURITÉ", signs: ["Bélier", "Taureau", "Gémeaux", "Cancer", "Lion", "Vierge", "Balance", "Scorpion", "Sagittaire", "Capricorne", "Verseau", "Poissons"] },
+        es: { tagline: "Inteligencia de Amenazas", protocol: "Protocolo de Seguridad", btn: "Iniciar Entrenamiento", decrypting: "Descifrando Sistema...", index: "ÍNDICE DE SEGURIDAD", signs: ["Aries", "Tauro", "Géminis", "Cáncer", "Leo", "Virgo", "Libra", "Escorpio", "Sagitario", "Capricornio", "Acuario", "Piscis"] },
+        it: { tagline: "Intelligence Minacce", protocol: "Protocollo di Sicurezza", btn: "Inizia Addestramento", decrypting: "Decrittazione Sistema...", index: "INDICE DI SICUREZZA", signs: ["Ariete", "Toro", "Gemelli", "Cancro", "Leone", "Vergine", "Bilancia", "Scorpione", "Sagittario", "Capricorno", "Acquario", "Pesci"] },
+        pt: { tagline: "Inteligência de Ameaças", protocol: "Protocolo de Segurança", btn: "Iniciar Treinamento", decrypting: "Descriptografando...", index: "ÍNDICE DE SEGURANÇA", signs: ["Áries", "Touro", "Gêmeos", "Câncer", "Leão", "Virgem", "Libra", "Escorpião", "Sagitário", "Capricórnio", "Aquário", "Peixes"] },
+        ru: { tagline: "Анализ Угроз", protocol: "Протокол Безопасности", btn: "Начать Обучение", decrypting: "Расшифровка Системы...", index: "ИНДЕКС БЕЗОПАСНОСТИ", signs: ["Овен", "Телец", "Близнецы", "Рак", "Лев", "Дева", "Весы", "Скорпион", "Стрелец", "Козерог", "Водолей", "Рыбы"] },
+        zh: { tagline: "每日威胁情报", protocol: "安全协议", btn: "开始精英训练", decrypting: "系统解密中...", index: "安全指数", signs: ["白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "摩羯座", "水瓶座", "双鱼座"] },
+        hi: { tagline: "दैनिक खतरा खुफिया", protocol: "सुरक्षा प्रोटोकॉल", btn: "एलीट ट्रेनिंग शुरू करें", decrypting: "डिक्रिप्टिंग सिस्टम...", index: "सुरक्षा सूचकांक", signs: ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"] }
     };
 
+    const signsEng = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
     const ui = translations[userLang] || translations.en;
+    
     document.getElementById('ui-tagline').innerText = ui.tagline;
     document.getElementById('ui-btn').innerText = ui.btn;
     document.getElementById('ui-protocol-lbl').innerText = ui.protocol;
+    document.getElementById('ui-index-lbl').innerText = ui.index;
 
     const zodiacIcons = ["♈", "♉", "♊", "♋", "♌", "♍", "♎", "♏", "♐", "♑", "♒", "♓"];
     const selector = document.getElementById('selector');
@@ -112,13 +122,11 @@
         const forecastEl = document.getElementById('z-forecast');
         forecastEl.classList.remove('visible');
         document.getElementById('z-protocol').innerText = ui.decrypting;
-        
-        // Reset meter animation
         document.getElementById('meter-fill').style.width = '0%';
         document.getElementById('meter-val').innerText = '0%';
 
         try {
-            const response = await fetch(`${VERCEL_API}?sign=${ui.signsEng[index]}&lang=${userLang}`);
+            const response = await fetch(`${VERCEL_API}?sign=${signsEng[index]}&lang=${userLang}`);
             const data = await response.json();
 
             if (data.error) throw new Error(data.error);
@@ -134,7 +142,7 @@
             forecastEl.classList.add('visible');
         } catch (e) {
             console.error("Fetch error:", e);
-            forecastEl.innerText = userLang === 'el' ? "Σφάλμα σύνδεσης με το AI." : "AI Connection Error.";
+            forecastEl.innerText = "Error!";
             forecastEl.classList.add('visible');
         }
     }
