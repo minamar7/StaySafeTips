@@ -77,16 +77,15 @@
 </div>
 
 <script>
-    // ΤΟ ΔΙΚΟ ΣΟΥ LINK ΣΤΟ VERCEL
+    // ΣΥΝΔΕΣΗ ΜΕ ΤΟ LIVE VERCEL API ΣΟΥ
     const VERCEL_API = "https://stay-safe-tips-maria-s-projects-f1da5c4f.vercel.app/api/safety_zodiac_daily";
 
-    // Ανίχνευση γλώσσας από το URL (?lang=el)
     const urlParams = new URLSearchParams(window.location.search);
     const userLang = urlParams.get('lang') || 'en';
 
     const translations = {
-        en: { tagline: "Daily Threat Intelligence", protocol: "Security Protocol", btn: "Start Elite Training", decrypting: "Decrypting...", signs: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"], signsEng: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"] },
-        el: { tagline: "Ημερήσια Ανάλυση Απειλών", protocol: "Πρωτόκολλο Ασφαλείας", btn: "Έναρξη Elite Εκπαίδευσης", decrypting: "Αποκρυπτογράφηση...", signs: ["Κριός", "Ταύρος", "Δίδυμοι", "Καρκίνος", "Λέων", "Παρθένος", "Ζυγός", "Σκορπιός", "Τοξότης", "Αιγόκερως", "Υδροχόος", "Ιχθύες"], signsEng: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"] }
+        en: { tagline: "Daily Threat Intelligence", protocol: "Security Protocol", btn: "Start Elite Training", decrypting: "Decrypting System...", signs: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"], signsEng: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"] },
+        el: { tagline: "Ημερήσια Ανάλυση Απειλών", protocol: "Πρωτόκολλο Ασφαλείας", btn: "Έναρξη Elite Εκπαίδευσης", decrypting: "Αποκρυπτογράφηση Συστήματος...", signs: ["Κριός", "Ταύρος", "Δίδυμοι", "Καρκίνος", "Λέων", "Παρθένος", "Ζυγός", "Σκορπιός", "Τοξότης", "Αιγόκερως", "Υδροχόος", "Ιχθύες"], signsEng: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"] }
     };
 
     const ui = translations[userLang] || translations.en;
@@ -113,19 +112,29 @@
         const forecastEl = document.getElementById('z-forecast');
         forecastEl.classList.remove('visible');
         document.getElementById('z-protocol').innerText = ui.decrypting;
+        
+        // Reset meter animation
+        document.getElementById('meter-fill').style.width = '0%';
+        document.getElementById('meter-val').innerText = '0%';
 
         try {
             const response = await fetch(`${VERCEL_API}?sign=${ui.signsEng[index]}&lang=${userLang}`);
             const data = await response.json();
 
+            if (data.error) throw new Error(data.error);
+
             document.getElementById('z-name').innerText = ui.signs[index];
             forecastEl.innerText = data.forecast;
             document.getElementById('z-protocol').innerText = data.protocol;
-            document.getElementById('meter-fill').style.width = (data.security_index || 75) + '%';
-            document.getElementById('meter-val').innerText = (data.security_index || 75) + '%';
+            
+            const sIndex = data.security_index || 75;
+            document.getElementById('meter-fill').style.width = sIndex + '%';
+            document.getElementById('meter-val').innerText = sIndex + '%';
+            
             forecastEl.classList.add('visible');
         } catch (e) {
-            forecastEl.innerText = "Connection Error.";
+            console.error("Fetch error:", e);
+            forecastEl.innerText = userLang === 'el' ? "Σφάλμα σύνδεσης με το AI." : "AI Connection Error.";
             forecastEl.classList.add('visible');
         }
     }
