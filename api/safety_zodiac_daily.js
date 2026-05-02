@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   const { sign, lang } = req.query;
   const targetLang = lang || 'en';
   const zodiacSign = sign || 'Aries';
-  const apiKey = process.env.SAFETY_ZODIAC_DAILY;
+  const apiKey = process.env.Safety_Zodiac_Daily;
 
   if (!apiKey) return res.status(500).json({ error: 'Missing Gemini API Key' });
 
