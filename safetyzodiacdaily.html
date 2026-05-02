@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <p id="z-forecast" class="forecast">Select your sign to decrypt your daily security protocol.</p>
+        <p id="z-forecast" class="forecast">Επιλέξτε το ζώδιό σας για να αποκρυπτογραφήσετε το σημερινό πρωτόκολλο ασφαλείας.</p>
         
         <div class="protocol">
             <span id="ui-protocol-lbl" style="color: var(--blue); font-size: 10px; font-weight: bold; text-transform: uppercase;">Protocol</span>
@@ -77,8 +77,8 @@
 </div>
 
 <script>
-    // Χρησιμοποιούμε το path του API σου στο Vercel
-    const API_ENDPOINT = "/api/Safety_Zodiac_Daily";
+    // ΣΗΜΑΝΤΙΚΟ: Χρησιμοποιούμε το πλήρες URL και το όνομα του αρχείου .js με μικρά γράμματα
+    const API_ENDPOINT = "https://stay-safe-tips.vercel.app/api/safety_zodiac_daily";
 
     const userLang = (navigator.language || navigator.userLanguage).split('-')[0];
     const translations = {
@@ -109,30 +109,28 @@
     async function fetchZodiacData(index) {
         const forecastEl = document.getElementById('z-forecast');
         const planetaryBox = document.getElementById('planetary-box');
-        const signEng = ui.signsEng[index]; // Στέλνουμε πάντα το Αγγλικό όνομα στο API key
+        const signEng = ui.signsEng[index];
 
         forecastEl.classList.remove('visible');
         document.getElementById('meter-fill').style.width = '0%';
+        document.getElementById('z-protocol').innerText = "Decrypting...";
 
         try {
-            // Κλήση στο δικό σου Vercel API με sign και lang
             const response = await fetch(`${API_ENDPOINT}?sign=${signEng}&lang=${userLang}`);
+            if (!response.ok) throw new Error('API Response Error');
+            
             const data = await response.json();
-
-            if (data.error) throw new Error(data.error);
 
             document.getElementById('z-name').innerText = ui.signs[index];
             
-            // Planetary Context
             if(data.planetary_context) {
                 planetaryBox.innerText = data.planetary_context;
                 planetaryBox.style.display = 'block';
             }
 
-            forecastEl.innerText = data.forecast;
-            document.getElementById('z-protocol').innerText = data.protocol;
+            forecastEl.innerText = data.forecast || "Data not available";
+            document.getElementById('z-protocol').innerText = data.protocol || "Follow standard elite protocols";
             
-            // Security Meter
             const sIndex = data.security_index || 75;
             document.getElementById('meter-fill').style.width = sIndex + '%';
             document.getElementById('meter-val').innerText = sIndex + '%';
@@ -140,8 +138,10 @@
             forecastEl.classList.add('visible');
 
         } catch (error) {
-            forecastEl.innerText = "Sync Error. Please check your connection.";
+            console.error("Fetch Error:", error);
+            forecastEl.innerText = "Connection Sync Error. Please retry.";
             forecastEl.classList.add('visible');
+            document.getElementById('z-protocol').innerText = "Check your internet connection.";
         }
     }
 
@@ -152,7 +152,11 @@
     function shareZodiac() {
         const name = document.getElementById('z-name').innerText;
         const text = `🛡️ Stay Safe Elite Zodiac: ${name}\n${document.getElementById('z-forecast').innerText}`;
-        if (navigator.share) navigator.share({ title: 'Safety Zodiac', text: text });
+        if (navigator.share) {
+            navigator.share({ title: 'Safety Zodiac', text: text });
+        } else {
+            alert("Sharing is not supported on this browser.");
+        }
     }
 </script>
 </body>
