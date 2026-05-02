@@ -1,4 +1,5 @@
 module.exports = async (req, res) => {
+    // CORS headers για να επιτρέπεται η κλήση από το HTML σου
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -9,6 +10,7 @@ module.exports = async (req, res) => {
     const targetLang = lang || 'el';
     const zodiacSign = sign || 'Aries';
 
+    // Χρήση της μεταβλητής σου από το Vercel
     const apiKey = process.env.Safety_Zodiac_Daily;
 
     if (!apiKey) {
@@ -16,8 +18,8 @@ module.exports = async (req, res) => {
     }
 
     try {
-        // ΔΙΟΡΘΩΜΕΝΟ URL (Χωρίς το v1beta αν σου βγάζει error, ή με τη σωστή δομή)
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // Χρήση του gemini-3-flash-preview όπως το ζήτησες
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
             method: 'POST',
@@ -25,8 +27,9 @@ module.exports = async (req, res) => {
             body: JSON.stringify({
                 contents: [{
                     parts: [{
-                        text: `Provide a short daily security forecast for ${zodiacSign} in ${targetLang}. 
-                        Return ONLY JSON: {"forecast": "...", "protocol": "...", "security_index": 85}`
+                        text: `You are a professional Cybersecurity Expert. Provide a daily security forecast for the zodiac sign ${zodiacSign} in ${targetLang} language. 
+                        Return ONLY a valid JSON object. Do not include markdown formatting or backticks.
+                        Structure: {"forecast": "a short professional text", "protocol": "a specific security tip", "security_index": 85}`
                     }]
                 }]
             })
@@ -35,14 +38,16 @@ module.exports = async (req, res) => {
         const data = await response.json();
 
         if (data.error) {
-            // Αν το gemini-1.5-flash εξακολουθεί να μην βρίσκεται, δοκίμασε το gemini-pro
-            return res.status(500).json({ error: data.error.message, code: data.error.code });
+            return res.status(data.error.code || 500).json({ error: data.error.message });
         }
 
+        // Καθαρισμός του κειμένου (σε περίπτωση που η AI βάλει ```json)
         let aiText = data.candidates[0].content.parts[0].text;
         aiText = aiText.replace(/```json/g, "").replace(/```/g, "").trim();
 
-        return res.status(200).json(JSON.parse(aiText));
+        // Μετατροπή σε JSON και αποστολή στο frontend
+        const finalJson = JSON.parse(aiText);
+        return res.status(200).json(finalJson);
 
     } catch (err) {
         return res.status(500).json({ error: 'Failed to fetch AI data', detail: err.message });
