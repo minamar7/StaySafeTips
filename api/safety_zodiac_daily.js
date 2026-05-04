@@ -125,3 +125,4 @@ CRITICAL: Return ONLY raw JSON, no backticks, no markdown, no explanation:
         return res.status(500).json({ error: 'Server Error', detail: err.message });
     }
 };
+ 
