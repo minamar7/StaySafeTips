@@ -2,6 +2,6 @@
   "functions": {
     "api/flight.js": { "maxDuration": 10 },
     "api/ai-threat.js": { "maxDuration": 15 },
-    "api/safety_zodiac_daily.js": { "maxDuration": 20 }
+    "api/safety_zodiac_daily.js": { "maxDuration": 30 }
   }
 }
