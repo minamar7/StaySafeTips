@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
     const today = new Date().toISOString().split('T')[0];
     const cacheKey = `zodiac:${targetLang}:${today}`;
 
-    // 1. Έλεγχος Redis Cache για το συγκεκριμένο ζώδιο
+    // 1. Έλεγχος Redis Cache
     try {
         const client = getRedis();
         const cached = await client.get(cacheKey);
@@ -42,14 +42,13 @@ module.exports = async (req, res) => {
                 return res.status(200).json(allData[zodiacSign]);
             }
         }
-        console.log(`Cache MISS: ${cacheKey} — fetching all 12 signs from Gemini...`);
     } catch (cacheErr) {
-        console.warn('Redis read error (continuing):', cacheErr.message);
+        console.warn('Redis read error:', cacheErr.message);
     }
 
-    // 2. Κλήση Gemini για ΟΛΑ τα 12 ζώδια μαζί
+    // 2. Κλήση Gemini (Διορθωμένο URL σε gemini-3-flash)
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
             method: 'POST',
@@ -62,14 +61,14 @@ module.exports = async (req, res) => {
 Generate a daily security forecast for ALL 12 zodiac signs in the language "${targetLang}".
 
 Rules for each sign:
-- Use sharp, sarcastic, darkly funny tone — like a cybersecurity stand-up comedian
+- Use sharp, sarcastic, darkly funny tone
 - Naturally mention 1-2 of the app tools by name
-- Give REAL, actionable security expert advice — not generic fluff
+- Give REAL, actionable security expert advice
 - Personalize to each sign's personality traits
-- Respond ENTIRELY in the language "${targetLang}" — every single word
+- Respond ENTIRELY in the language "${targetLang}"
 - security_index must be a number between 60 and 99
 
-CRITICAL: Return ONLY raw JSON, no backticks, no markdown, no explanation:
+CRITICAL: Return ONLY raw JSON:
 {
   "Aries":        {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
   "Taurus":       {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
@@ -96,8 +95,6 @@ CRITICAL: Return ONLY raw JSON, no backticks, no markdown, no explanation:
         }
 
         let aiText = data.candidates[0].content.parts[0].text.trim();
-
-        // Aggressive καθαρισμός
         aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
 
         const match = aiText.match(/\{[\s\S]*\}/);
@@ -105,20 +102,18 @@ CRITICAL: Return ONLY raw JSON, no backticks, no markdown, no explanation:
 
         const allSigns = JSON.parse(match[0]);
 
-        // Βεβαιώσου ότι υπάρχουν όλα τα 12 ζώδια
+        // Έλεγχος εγκυρότητας 12 ζωδίων
         const valid = ALL_SIGNS.every(s => allSigns[s] && allSigns[s].forecast);
-        if (!valid) return res.status(500).json({ error: 'Incomplete data from Gemini', detail: Object.keys(allSigns) });
+        if (!valid) return res.status(500).json({ error: 'Incomplete data from Gemini' });
 
-        // 3. Αποθήκευση ΟΛΩΝ στο Redis για 24 ώρες
+        // 3. Αποθήκευση στο Redis
         try {
             const client = getRedis();
             await client.set(cacheKey, JSON.stringify(allSigns), 'EX', 86400);
-            console.log(`✅ Cached all 12 signs: ${cacheKey}`);
         } catch (cacheErr) {
             console.warn('Redis save error:', cacheErr.message);
         }
 
-        // 4. Επιστροφή μόνο του ζητούμενου ζωδίου
         return res.status(200).json(allSigns[zodiacSign]);
 
     } catch (err) {
