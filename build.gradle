@@ -1,10 +1,10 @@
 buildscript {
     repositories {
         google()
-        mavenCentral() // Πιο ασφαλές και σύγχρονο από το jcenter
+        mavenCentral() 
     }
     dependencies {
-        // Η έκδοση που έχεις είναι ήδη πολύ καλή
+        // Αυτό το classpath είναι το εργαλείο που χτίζει το app
         classpath 'com.android.tools.build:gradle:8.9.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0"
     }
@@ -16,8 +16,3 @@ allprojects {
         mavenCentral()
     }
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
- 
