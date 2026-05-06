@@ -10,9 +10,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
+    
+    <uses-permission android:name="com.samsung.android.iap.permission.BILLING" />
     
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
+    <queries>
+        <package android:name="com.sec.android.app.billing" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -22,6 +27,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="false">
+
+        <meta-data
+            android:name="com.samsung.android.iap.version"
+            android:value="6.1" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -52,3 +61,4 @@
     </application>
 
 </manifest>
+ 
