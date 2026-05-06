@@ -1,0 +1,55 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    // Το μοναδικό αναγνωριστικό της εφαρμογής σου
+    namespace 'com.staysafetips.elite'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.staysafetips.elite"
+        // Το 24 (Android 7.0) είναι ιδανικό για συσκευές Samsung
+        minSdk 24
+        targetSdk 34
+        versionCode 5
+        versionName "1.0.5-samsung"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            // Το αφήνουμε false για να μην έχουμε θέματα με το "μπέρδεμα" του κώδικα (obfuscation)
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    // Βασικές βιβλιοθήκες για να τρέχει το App
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // --- ΤΟ SDK ΤΗΣ SAMSUNG (ΑΠΑΡΑΙΤΗΤΟ) ---
+    // Αυτό αντικαθιστά πλήρως το Google Billing
+    implementation 'com.samsung.android.sdk.iap:iap:6.1.0'
+
+    // Βιβλιοθήκες για δοκιμές (Testing)
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
