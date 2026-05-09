@@ -46,6 +46,7 @@
       letter-spacing: 0.05em;
       margin-bottom: 12px;
       border: 1px solid rgba(34, 197, 94, 0.3);
+      transition: all 0.3s ease;
     }
 
     .offline-block {
@@ -159,7 +160,7 @@
 
   <div class="app-shell">
     <header style="margin-bottom: 30px;">
-      <span class="offline-indicator">✓ OFFLINE READY</span>
+      <span id="status-tag" class="offline-indicator">✓ OFFLINE READY</span>
       <h1 style="margin: 5px 0; font-size: 1.8rem;">📱 Offline Mode</h1>
       <p style="color: var(--text-muted); font-size: 0.95rem;">Stay Safe Elite Protection Protocols</p>
     </header>
@@ -197,10 +198,19 @@
   </div>
 
   <script>
+    // Registration tailored to your sw.js path
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/StaySafeTips/sw.js')
+          .then(reg => console.log('SW Active'))
+          .catch(err => console.error('SW Error', err));
+      });
+    }
+
     (() => {
       "use strict";
 
-      // Elite Status Check
+      // Security check (No Elite = No Access)
       if (localStorage.getItem("isElite") !== "true") {
         window.location.href = "index.html";
         return;
@@ -208,6 +218,24 @@
 
       const container = document.getElementById("offline-container");
       const refreshBtn = document.getElementById("refresh-offline-btn");
+      const statusTag = document.getElementById("status-tag");
+
+      // Auto-update UI based on real connection
+      const checkConnection = () => {
+        if (navigator.onLine) {
+          statusTag.textContent = "✓ ONLINE MODE";
+          statusTag.style.background = "rgba(34, 197, 94, 0.15)";
+          statusTag.style.color = "var(--safe-green)";
+        } else {
+          statusTag.textContent = "⚠ OFFLINE MODE";
+          statusTag.style.background = "rgba(239, 68, 68, 0.2)";
+          statusTag.style.color = "var(--danger)";
+        }
+      };
+
+      window.addEventListener('online', checkConnection);
+      window.addEventListener('offline', checkConnection);
+      checkConnection(); // Initial trigger
 
       const extraTips = [
         {
