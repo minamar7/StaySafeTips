@@ -1,8 +1,8 @@
 {
-  "id": "/StaySafeTips/",
-  "name": "Stay Safe Elite",
-  "short_name": "StaySafe",
-  "description": "The ultimate educational app for your physical and digital security.",
+  "id": "/StaySafeTipsMi/",
+  "name": "Stay Safe Elite Mi",
+  "short_name": "StaySafe Mi",
+  "description": "The ultimate educational app for your physical and digital security (Xiaomi Edition).",
   "lang": "en-US",
   "start_url": "/StaySafeTips/index.html",
   "scope": "/StaySafeTips/",
@@ -54,27 +54,6 @@
       "type": "image/jpeg",
       "form_factor": "narrow",
       "label": "Security Training"
-    },
-    {
-      "src": "screenshot3.jpg",
-      "sizes": "1079x1981",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "Security Tips"
-    },
-    {
-      "src": "screenshot4.jpg",
-      "sizes": "1079x1981",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "Privacy Settings"
-    },
-    {
-      "src": "screenshot1.jpg",
-      "sizes": "1006x1981",
-      "type": "image/jpeg",
-      "form_factor": "wide",
-      "label": "Desktop View"
     }
   ],
   "shortcuts": [
@@ -90,12 +69,5 @@
   "launch_handler": {
     "client_mode": "navigate-existing"
   },
-  "prefer_related_applications": true,
-  "related_applications": [
-    {
-      "platform": "play",
-      "id": "com.minamar7.staysafetipselite",
-      "url": "https://play.google.com/store/apps/details?id=com.minamar7.staysafetipselite"
-    }
-  ]
+  "prefer_related_applications": false
 }
