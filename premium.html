@@ -72,12 +72,12 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
         
         <div class="feature-row">
             <div class="feature-icon">🚨</div>
-            <div class="feature-text"><strong>SOS Hub & Emergency Alerts</strong><span>Instant call (112, 100, 166) & distress signals</span></div>
+            <div class="feature-text"><strong>SOS Hub & Emergency Alerts</strong><span>Instant call & distress signals</span></div>
         </div>
 
         <div class="feature-row">
             <div class="feature-icon">🤖</div>
-            <div class="feature-text"><strong>AI Threat Analysis</strong><span>Detect AI fraud, Phishing & Deepfakes</span></div>
+            <div class="feature-text"><strong>AI Threat Analysis</strong><span>Detect AI fraud & Phishing</span></div>
         </div>
 
         <div class="feature-row">
@@ -87,12 +87,12 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 
         <div class="feature-row">
             <div class="feature-icon">🏥</div>
-            <div class="feature-text"><strong>Visual First Aid Guide</strong><span>CPR, Heimlich & First Aid visual guides</span></div>
+            <div class="feature-text"><strong>Visual First Aid Guide</strong><span>CPR & First Aid visual guides</span></div>
         </div>
 
         <div class="feature-row" style="margin-bottom:0;">
             <div class="feature-icon">🚫</div>
-            <div class="feature-text"><strong>Ad-Free Experience</strong><span>100% clean experience without interruptions</span></div>
+            <div class="feature-text"><strong>Ad-Free Experience</strong><span>100% clean experience</span></div>
         </div>
     </div>
 
@@ -119,7 +119,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
 
     <div class="glass-card">
         <button class="main-cta" id="subscribe_btn" onclick="handleSubscribe()">UNLOCK ELITE ACCESS</button>
-        <p style="text-align:center; font-size:0.65rem; color:#475569; margin-top:15px;">Payments are securely processed via Google Play. Cancel anytime.</p>
+        <p style="text-align:center; font-size:0.65rem; color:#475569; margin-top:15px;">Payments are securely processed via Xiaomi Mi Pay. Cancel anytime.</p>
     </div>
 
 </main>
@@ -142,39 +142,17 @@ function showToast(msg) {
     _toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-let _tapCount = 0;
-let _tapTimer = null;
-
 function handleSubscribe() {
-    if (_tapTimer) clearTimeout(_tapTimer);
-    _tapCount++;
-
-    // HIDDEN TESTER LOGIC (3 TAPS)
-    if (_tapCount >= 3) {
-        _tapCount = 0;
-        _tapTimer = null;
-        activateTesterPremium();
-        return;
+    try {
+        if (window.XiaomiBilling && typeof window.XiaomiBilling.launchPayment === 'function') {
+            window.XiaomiBilling.launchPayment(selectedPlan);
+        } else {
+            showToast("Connecting to Xiaomi GetApps...");
+        }
+    } catch(e) { 
+        console.error('Xiaomi Billing Error:', e); 
+        showToast("Payment service unavailable");
     }
-
-    _tapTimer = setTimeout(() => { _tapCount = 0; }, 800);
-
-    // NORMAL USER LOGIC -> GOOGLE BILLING
-    if (_tapCount === 1) {
-        try {
-            if (window.AndroidBilling && typeof window.AndroidBilling.launchBilling === 'function') {
-                window.AndroidBilling.launchBilling(selectedPlan);
-            } else {
-                showToast("Connecting to Google Play...");
-            }
-        } catch(e) { console.error('Billing Error:', e); }
-    }
-}
-
-function activateTesterPremium() {
-    localStorage.setItem('premium_user', 'true'); // Κλειδί που χρησιμοποιείται παντού
-    showToast('✅ Elite Access Unlocked!');
-    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
 }
 </script>
 
