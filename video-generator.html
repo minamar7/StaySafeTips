@@ -5,77 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stay Safe Elite - Video Generator</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: #fff; padding: 20px; }
-        .box { max-width: 500px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 8px; }
-        textarea, select, button { width: 100%; padding: 10px; margin-top: 10px; border-radius: 4px; border: none; box-sizing: border-box; }
-        textarea { height: 100px; background: #333; color: #fff; }
-        select { background: #333; color: #fff; }
-        button { background: #1a73e8; color: white; font-weight: bold; cursor: pointer; }
-        button:disabled { background: #555; }
-        #videoPlayer { width: 100%; margin-top: 20px; display: none; border-radius: 8px; }
-        .status { margin-top: 15px; font-style: italic; color: #bbb; text-align: center; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 550px;
+        }
+        h2 {
+            text-align: center;
+            color: #fff;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #aaa;
+        }
+        textarea, select {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            background-color: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 15px;
+        }
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        button:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+        #resultContainer {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+        video {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #444;
+            margin-top: 15px;
+            background: #000;
+        }
+        .status {
+            font-style: italic;
+            color: #34a853;
+            margin-top: 10px;
+        }
+        .error {
+            color: #ea4335;
+        }
     </style>
 </head>
 <body>
 
-<div class="box">
+<div class="container">
     <h2>Παραγωγή Βίντεο (Veo 3)</h2>
-    <p style="font-size: 12px; color: #aaa;">Εσωτερικό εργαλείο παραγωγής υλικού Tang Soo Do</p>
-    
-    <label>Περιγραφή (Prompt):</label>
-    <textarea id="prompt" placeholder="π.χ. An instructor avatar explaining a Tang Soo Do self-defense technique..."></textarea>
+    <div class="subtitle">Εσωτερικό εργαλείο δημιουργίας υλικού για το Stay Safe Elite</div>
 
-    <label style="display:block; margin-top:15px;">Διαστάσεις:</label>
-    <select id="aspectRatio">
-        <option value="16:9">16:9 (Οριζόντιο)</option>
-        <option value="9:16">9:16 (Κάθετο για Κινητά)</option>
-    </select>
+    <div class="form-group">
+        <label for="prompt">Περιγραφή (Prompt στα Αγγλικά):</label>
+        <textarea id="prompt" placeholder="π.χ. An instructor avatar performing a Tang Soo Do defensive block, studio lighting, high fidelity..."></textarea>
+    </div>
 
-    <button id="btn" onclick="generate()">Δημιουργία</button>
-    
-    <div id="status" class="status"></div>
-    <video id="videoPlayer" controls></video>
+    <div class="form-group">
+        <label for="aspectRatio">Διαστάσεις (Aspect Ratio):</label>
+        <select id="aspectRatio">
+            <option value="16:9">16:9 (Οριζόντιο / YouTube)</option>
+            <option value="9:16">9:16 (Κάθετο / Shorts & Εφαρμογές)</option>
+            <option value="1:1">1:1 (Τετράγωνο)</option>
+        </select>
+    </div>
+
+    <button id="generateBtn" onclick="generateVideo()">Δημιουργία Βίντεο</button>
+
+    <div id="resultContainer">
+        <div id="statusMessage" class="status"></div>
+        <video id="videoPlayer" controls></video>
+    </div>
 </div>
 
 <script>
-async function generate() {
+async function generateVideo() {
     const prompt = document.getElementById('prompt').value.trim();
     const aspectRatio = document.getElementById('aspectRatio').value;
-    const btn = document.getElementById('btn');
-    const status = document.getElementById('status');
-    const player = document.getElementById('videoPlayer');
+    
+    const generateBtn = document.getElementById('generateBtn');
+    const resultContainer = document.getElementById('resultContainer');
+    const statusMessage = document.getElementById('statusMessage');
+    const videoPlayer = document.getElementById('videoPlayer');
 
-    if(!prompt) return alert('Γράψε ένα prompt πρώτα!');
+    if (!prompt) {
+        alert('Παρακαλώ γράψτε μια περιγραφή (prompt) για το βίντεο.');
+        return;
+    }
 
-    btn.disabled = true;
-    status.innerText = 'Γίνεται επικοινωνία με το Vercel...';
-    player.style.display = 'none';
+    // Προετοιμασία UI για την αναμονή
+    generateBtn.disabled = true;
+    generateBtn.innerText = 'Γίνεται παραγωγή...';
+    resultContainer.style.display = 'block';
+    videoPlayer.style.display = 'none';
+    statusMessage.className = 'status';
+    statusMessage.innerText = 'Αποστολή αιτήματος στο Vercel backend...';
 
-    // ΕΔΩ ΒΑΖΕΙΣ ΤΟ ΔΙΚΟ ΣΟΥ URL ΑΠΟ ΤΟ VERCEL
-    const vercelUrl = 'https://το-δικό-σου-project.vercel.app/api/generate-video';
+    // Σύνδεση με το Vercel API σου (όνομα αρχείου: generatorvideo)
+    const vercelUrl = 'https://stay-safe-tips.vercel.app/api/generatorvideo';
 
     try {
-        const res = await fetch(vercelUrl, {
+        const response = await fetch(vercelUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt, aspectRatio })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                prompt: prompt,
+                aspectRatio: aspectRatio
+            })
         });
 
-        const data = await res.json();
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || `Σφάλμα διακομιστή (${response.status})`);
+        }
 
         if (data.videoUrl) {
-            status.innerText = 'Έτοιμο!';
-            player.src = data.videoUrl;
-            player.style.display = 'block';
+            statusMessage.className = 'status';
+            statusMessage.innerText = 'Το βίντεο δημιουργήθηκε επιτυχώς!';
+            videoPlayer.src = data.videoUrl;
+            videoPlayer.style.display = 'block';
         } else {
-            status.innerText = 'Το API δεν επέστρεψε βίντεο. Έλεγξε τα logs στο Vercel.';
+            throw new Error('Δεν επιστράφηκε έγκυρο URL βίντεο.');
         }
-    } catch (err) {
-        status.innerText = 'Σφάλμα κατά την παραγωγή: ' + err.message;
+
+    } catch (error) {
+        console.error(error);
+        statusMessage.className = 'status error';
+        statusMessage.innerText = 'Σφάλμα: ' + error.message;
     } finally {
-        btn.disabled = false;
+        generateBtn.disabled = false;
+        generateBtn.innerText = 'Δημιουργία Βίντεο';
     }
 }
 </script>
+
 </body>
 </html>
