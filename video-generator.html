@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stay Safe Elite - Video Generator</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #fff; padding: 20px; }
+        .box { max-width: 500px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 8px; }
+        textarea, select, button { width: 100%; padding: 10px; margin-top: 10px; border-radius: 4px; border: none; box-sizing: border-box; }
+        textarea { height: 100px; background: #333; color: #fff; }
+        select { background: #333; color: #fff; }
+        button { background: #1a73e8; color: white; font-weight: bold; cursor: pointer; }
+        button:disabled { background: #555; }
+        #videoPlayer { width: 100%; margin-top: 20px; display: none; border-radius: 8px; }
+        .status { margin-top: 15px; font-style: italic; color: #bbb; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Παραγωγή Βίντεο (Veo 3)</h2>
+    <p style="font-size: 12px; color: #aaa;">Εσωτερικό εργαλείο παραγωγής υλικού Tang Soo Do</p>
+    
+    <label>Περιγραφή (Prompt):</label>
+    <textarea id="prompt" placeholder="π.χ. An instructor avatar explaining a Tang Soo Do self-defense technique..."></textarea>
+
+    <label style="display:block; margin-top:15px;">Διαστάσεις:</label>
+    <select id="aspectRatio">
+        <option value="16:9">16:9 (Οριζόντιο)</option>
+        <option value="9:16">9:16 (Κάθετο για Κινητά)</option>
+    </select>
+
+    <button id="btn" onclick="generate()">Δημιουργία</button>
+    
+    <div id="status" class="status"></div>
+    <video id="videoPlayer" controls></video>
+</div>
+
+<script>
+async function generate() {
+    const prompt = document.getElementById('prompt').value.trim();
+    const aspectRatio = document.getElementById('aspectRatio').value;
+    const btn = document.getElementById('btn');
+    const status = document.getElementById('status');
+    const player = document.getElementById('videoPlayer');
+
+    if(!prompt) return alert('Γράψε ένα prompt πρώτα!');
+
+    btn.disabled = true;
+    status.innerText = 'Γίνεται επικοινωνία με το Vercel...';
+    player.style.display = 'none';
+
+    // ΕΔΩ ΒΑΖΕΙΣ ΤΟ ΔΙΚΟ ΣΟΥ URL ΑΠΟ ΤΟ VERCEL
+    const vercelUrl = 'https://το-δικό-σου-project.vercel.app/api/generate-video';
+
+    try {
+        const res = await fetch(vercelUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt, aspectRatio })
+        });
+
+        const data = await res.json();
+
+        if (data.videoUrl) {
+            status.innerText = 'Έτοιμο!';
+            player.src = data.videoUrl;
+            player.style.display = 'block';
+        } else {
+            status.innerText = 'Το API δεν επέστρεψε βίντεο. Έλεγξε τα logs στο Vercel.';
+        }
+    } catch (err) {
+        status.innerText = 'Σφάλμα κατά την παραγωγή: ' + err.message;
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
+</body>
+</html>
