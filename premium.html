@@ -62,7 +62,7 @@ body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden;
         
         <div class="feature-row">
             <div class="feature-icon">🌍</div>
-            <div class="feature-text"><strong>AI Travel Hub</strong><span>Real-time safety scores & secure route finder</span></div>
+            <div class="feature-text"><strong>AI Travel Hub</strong><span>Real-time safety scores, secure route finder & Travel-hub web access</span></div>
         </div>
 
         <div class="feature-row">
@@ -142,39 +142,17 @@ function showToast(msg) {
     _toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-let _tapCount = 0;
-let _tapTimer = null;
-
 function handleSubscribe() {
-    if (_tapTimer) clearTimeout(_tapTimer);
-    _tapCount++;
-
-    // HIDDEN TESTER LOGIC (3 TAPS)
-    if (_tapCount >= 3) {
-        _tapCount = 0;
-        _tapTimer = null;
-        activateTesterPremium();
-        return;
+    // Μόνο η αυθεντική ροή πληρωμής της Google Play, χωρίς μετρητές clicks ή bypasses
+    try {
+        if (window.AndroidBilling && typeof window.AndroidBilling.launchBilling === 'function') {
+            window.AndroidBilling.launchBilling(selectedPlan);
+        } else {
+            showToast("Connecting to Google Play...");
+        }
+    } catch(e) { 
+        console.error('Billing Error:', e); 
     }
-
-    _tapTimer = setTimeout(() => { _tapCount = 0; }, 800);
-
-    // NORMAL USER LOGIC -> GOOGLE BILLING
-    if (_tapCount === 1) {
-        try {
-            if (window.AndroidBilling && typeof window.AndroidBilling.launchBilling === 'function') {
-                window.AndroidBilling.launchBilling(selectedPlan);
-            } else {
-                showToast("Connecting to Google Play...");
-            }
-        } catch(e) { console.error('Billing Error:', e); }
-    }
-}
-
-function activateTesterPremium() {
-    localStorage.setItem('premium_user', 'true'); // Κλειδί που χρησιμοποιείται παντού
-    showToast('✅ Elite Access Unlocked!');
-    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
 }
 </script>
 
