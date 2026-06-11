@@ -160,6 +160,7 @@ html, body {
   font-family: 'Rajdhani', sans-serif; flex-shrink: 0; margin-top: 2px;
 }
 .badge-save { background: var(--gold); color: #05080f; }
+.badge-offer { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.3); }
 .badge-life { background: rgba(255,255,255,0.12); color: var(--text); }
 .plan-radio {
   width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 2px;
@@ -246,17 +247,14 @@ html, body {
 
 <div id="toast"></div>
 
-<!-- HEADER -->
 <header class="header">
   <a class="back-btn" href="index.html">← BACK</a>
   <span class="header-crown">👑</span>
   <span class="header-title">Elite Membership</span>
 </header>
 
-<!-- MAIN SCROLL -->
 <div class="scroll">
 
-  <!-- HERO -->
   <div class="hero">
     <div class="hero-badge">⭐ Premium Access</div>
     <span class="hero-shield">🛡️</span>
@@ -264,14 +262,13 @@ html, body {
     <p class="hero-sub">Full protection with AI tools, Defense Dojo, and instant assistance wherever you are.</p>
   </div>
 
-  <!-- FEATURES -->
   <section>
     <span class="section-label">💎 Elite Tools & Training</span>
     <div class="features">
       <div class="feat">
         <div class="feat-icon">🌍</div>
         <div class="feat-info">
-          options<strong>AI Travel Hub</strong>
+          <strong>AI Travel Hub</strong>
           <span>Real-time safety scores & secure route finder</span>
         </div>
         <div class="feat-check">✓</div>
@@ -329,7 +326,6 @@ html, body {
 
   <div class="divider"></div>
 
-  <!-- PLANS -->
   <section>
     <span class="section-label">📍 Choose Your Plan</span>
     <div class="plans">
@@ -341,6 +337,19 @@ html, body {
             <div class="plan-price">€5.90 / month</div>
           </div>
           <div style="display:flex;align-items:flex-start;gap:8px;">
+            <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="plan" id="plan_quarterly" onclick="selectPlan('quarterly')">
+        <div class="plan-top">
+          <div>
+            <div class="plan-name">Quarterly Protection</div>
+            <div class="plan-price">€14.90 / 3 months</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:8px;">
+            <span class="plan-badge badge-offer">SPECIAL OFFER</span>
             <div class="plan-radio"><div class="plan-radio-dot"></div></div>
           </div>
         </div>
@@ -375,17 +384,13 @@ html, body {
     </div>
   </section>
 
-  <!-- TRUST -->
   <div class="trust">
     <div class="trust-item"><span>🔒</span> Secure payment</div>
     <div class="trust-item"><span>↩️</span> Cancel anytime</div>
     <div class="trust-item"><span>✅</span> Google Play</div>
   </div>
 
-</div><!-- end scroll -->
-
-<!-- FIXED CTA -->
-<div class="cta-wrap">
+</div><div class="cta-wrap">
   <button class="cta-btn" id="cta" onclick="handleSubscribe()">
     <span class="btn-text">
       <div class="spinner" id="spinner"></div>
@@ -401,14 +406,15 @@ html, body {
 var selectedPlan = 'yearly';
 
 var SKU_MAP = {
-  monthly:  'staysafe_monthl',
-  yearly:   'staysafe_yearly',
-  lifetime: 'staysafe_lifetime'
+  monthly:   'staysafe_monthly',
+  quarterly: 'premium_quarter',
+  yearly:    'staysafe_yearly',
+  lifetime:  'staysafe_lifetime'
 };
 
 function selectPlan(plan) {
   selectedPlan = plan;
-  ['monthly','yearly','lifetime'].forEach(function(p) {
+  ['monthly','quarterly','yearly','lifetime'].forEach(function(p) {
     document.getElementById('plan_' + p).classList.toggle('selected', p === plan);
   });
 }
@@ -468,7 +474,7 @@ async function handleSubscribe() {
       }
 
       var paymentResponse = await paymentRequest.show();
-      /* ── Confirmation (send the token to your backend if you want server-side validation) ── */
+      /* ── Confirmation ── */
       await paymentResponse.complete('success');
       showToast('🎉 Payment successful! Welcome to Elite!');
       setTimeout(function() {
