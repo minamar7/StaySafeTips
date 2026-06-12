@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nature Alerts – Global Guard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #030712;
+      --bg2: #0a0f1e;
+      --accent: #00d4ff;
+      --accent2: #7c3aed;
+      --accent3: #f97316;
+      --danger: #ef4444;
+      --warning: #fbbf24;
+      --success: #22c55e;
+      --sand: #d4a853;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --text: #e2e8f0;
+      --muted: #64748b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    /* ─── BACKGROUND ─── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(0,212,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(124,58,237,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 10% 70%, rgba(249,115,22,0.05) 0%, transparent 60%);
+    }
+    .stars {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.25) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.2) 0%, transparent 100%);
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      position: relative;
+      z-index: 10;
+      padding: 20px 20px 0;
+    }
+    .back-btn {
+      color: var(--accent);
+      text-decoration: none;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .back-btn:hover { opacity: 1; }
+
+    /* ─── GLOBE SECTION ─── */
+    .globe-section {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 20px 10px;
+    }
+
+    .globe-container {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 16px;
+    }
+
+    .globe-ring {
+      position: absolute;
+      inset: -15px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,212,255,0.15);
+      animation: ring-pulse 3s ease-in-out infinite;
+    }
+    .globe-ring:nth-child(2) {
+      inset: -30px;
+      border-color: rgba(0,212,255,0.07);
+      animation-delay: 1s;
+    }
+    .globe-ring:nth-child(3) {
+      inset: -45px;
+      border-color: rgba(0,212,255,0.04);
+      animation-delay: 2s;
+    }
+
+    @keyframes ring-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.5; }
+    }
+
+    .globe {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Earthmap1000x500.jpg/1024px-Earthmap1000x500.jpg') 0 center / 200% auto;
+      box-shadow:
+        inset -30px -20px 60px rgba(0,0,0,0.8),
+        inset 10px 10px 30px rgba(0,212,255,0.1),
+        0 0 60px rgba(0,212,255,0.2),
+        0 0 120px rgba(0,212,255,0.05);
+      animation: globe-spin 20s linear infinite;
+      position: relative;
+      z-index: 2;
+    }
+    .globe::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    @keyframes globe-spin {
+      from { background-position: 0 center; }
+      to { background-position: -200% center; }
+    }
+
+    .page-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-align: center;
+      background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-sub {
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 6px;
+      font-family: 'Orbitron', monospace;
+    }
+
+    /* ─── LIVE WEATHER HERO ─── */
+    .weather-hero {
+      position: relative;
+      z-index: 10;
+      margin: 24px 20px 0;
+      background: linear-gradient(135deg, rgba(0,212,255,0.08) 0%, rgba(124,58,237,0.08) 100%);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 28px;
+      padding: 24px;
+      overflow: hidden;
+    }
+    .weather-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .weather-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .weather-location {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .weather-city {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .weather-icon-big {
+      font-size: 3rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 20px rgba(0,212,255,0.4));
+    }
+
+    .weather-temp-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .weather-temp {
+      font-family: 'Orbitron', monospace;
+      font-size: 3.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .weather-feels {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .weather-desc {
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 16px;
+    }
+
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .weather-stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 10px;
+      text-align: center;
+    }
+    .weather-stat-label {
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-family: 'Orbitron', monospace;
+    }
+    .weather-stat-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* ─── SECTION LABEL ─── */
+    .section-label {
+      position: relative;
+      z-index: 10;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      padding: 20px 20px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ─── ALERT CARDS ─── */
+    .alerts-grid {
+      position: relative;
+      z-index: 10;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .alert-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .alert-card:active { transform: scale(0.98); }
+
+    .alert-card.quake { border-left: 3px solid var(--warning); }
+    .alert-card.fire  { border-left: 3px solid var(--danger); }
+    .alert-card.dust  { border-left: 3px solid var(--sand); }
+    .alert-card.wind  { border-left: 3px solid var(--accent); }
+
+    .alert-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 100px;
+      height: 100%;
+      background: linear-gradient(to left, rgba(255,255,255,0.01), transparent);
+      pointer-events: none;
+    }
+
+    .alert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .alert-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert-icon {
+      font-size: 1.6rem;
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+    .alert-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.55rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .badge-live { background: rgba(239,68,68,0.2); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); animation: blink 1.5s infinite; }
+    .badge-warn { background: rgba(251,191,36,0.15); color: var(--warning); border: 1px solid rgba(251,191,36,0.25); }
+    .badge-ok   { background: rgba(34,197,94,0.12); color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
+    .badge-info { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .alert-content { font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.5; }
+
+    /* Earthquake list */
+    .quake-list { display: flex; flex-direction: column; gap: 8px; }
+    .quake-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+    .quake-mag {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      min-width: 40px;
+    }
+    .quake-place { font-size: 0.78rem; color: rgba(255,255,255,0.6); flex: 1; padding: 0 10px; }
+    .quake-time  { font-size: 0.65rem; color: var(--muted); white-space: nowrap; }
+
+    /* Dust meter */
+    .dust-meter {
+      margin-top: 8px;
+    }
+    .dust-bar-bg {
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .dust-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(to right, #d4a853, #ef4444);
+      transition: width 1s ease;
+    }
+    .dust-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-family: 'Orbitron', monospace;
+    }
+    .dust-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .dust-stat {
+      background: rgba(212,168,83,0.06);
+      border: 1px solid rgba(212,168,83,0.15);
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+    .dust-stat-label { font-size: 0.6rem; color: var(--sand); font-family: 'Orbitron', monospace; letter-spacing: 1px; }
+    .dust-stat-val   { font-size: 1rem; font-weight: 600; color: #fff; margin-top: 2px; }
+
+    /* Fire stats */
+    .fire-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .fire-stat {
+      background: rgba(239,68,68,0.05);
+      border: 1px solid rgba(239,68,68,0.12);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+    .fire-stat-val   { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 700; color: var(--danger); }
+    .fire-stat-label { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+
+    /* ─── EXTERNAL LINKS ─── */
+    .links-grid {
+      position: relative;
+      z-index: 10;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .link-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.2s, transform 0.15s;
+    }
+    .link-card:active { transform: scale(0.97); }
+    .link-card:hover  { background: rgba(255,255,255,0.07); }
+    .link-left { display: flex; align-items: center; gap: 12px; }
+    .link-icon { font-size: 1.4rem; }
+    .link-title { font-size: 0.9rem; font-weight: 600; }
+    .link-sub   { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+    .link-arrow { color: var(--accent); font-size: 1rem; opacity: 0.7; }
+
+    /* ─── LOADING ─── */
+    .loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: 'Orbitron', monospace;
+    }
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(0,212,255,0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .fade-in {
+      animation: fadeUp 0.5s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .err { color: var(--muted); font-size: 0.8rem; }
+  </style>
+<!-- AdSense Auto Ads: hidden for premium users -->
+<script>
+if (localStorage.getItem("premium_user") !== "true") {
+  var _as = document.createElement("script");
+  _as.async = true;
+  _as.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4000056160039274";
+  _as.crossOrigin = "anonymous";
+  document.head.appendChild(_as);
+}
+</script>
+</head>
+<body>
+
+<div class="bg-layer"><div class="stars"></div></div>
+
+<div class="header">
+  <a href="index.html" class="back-btn" id="btnBack">← DASHBOARD</a>
+</div>
+
+<div class="globe-section">
+  <div class="globe-container">
+    <div class="globe-ring"></div>
+    <div class="globe-ring"></div>
+    <div class="globe-ring"></div>
+    <div class="globe"></div>
+  </div>
+  <div class="page-title" id="txtPageTitle">NATURE ALERTS</div>
+  <div class="page-sub" id="txtPageSub">Global Guard System · Live</div>
+</div>
+
+<div class="weather-hero fade-in" id="weatherCard"></div>
+
+<div class="section-label" id="lblSeismic">🌍 Seismic Activity</div>
+<div class="alerts-grid">
+  <div class="alert-card quake fade-in" id="quakeCard">
+    <div class="alert-header">
+      <div class="alert-title-row">
+        <span class="alert-icon">🌍</span>
+        <span class="alert-title" id="lblQuakes">EARTHQUAKES</span>
+      </div>
+      <span class="badge badge-live" id="badgeQuakeLive">LIVE</span>
+    </div>
+    <div class="alert-content"></div>
+  </div>
+</div>
+
+<div class="section-label" id="lblDust">🏜️ Saharan Dust</div>
+<div class="alerts-grid">
+  <div class="alert-card dust fade-in" id="dustCard">
+    <div class="alert-header">
+      <div class="alert-title-row">
+        <span class="alert-icon">🏜️</span>
+        <span class="alert-title" id="lblDustTitle">SAHARAN DUST</span>
+      </div>
+      <span class="badge badge-warn" id="dustBadge">LOADING</span>
+    </div>
+    <div class="alert-content" id="dustContent"></div>
+  </div>
+</div>
+
+<div class="section-label" id="lblWildfires">🔥 Wildfire Monitor</div>
+<div class="alerts-grid">
+  <div class="alert-card fire fade-in" id="fireCard">
+    <div class="alert-header">
+      <div class="alert-title-row">
+        <span class="alert-icon">🔥</span>
+        <span class="alert-title" id="lblFires">WILDFIRES</span>
+      </div>
+      <span class="badge badge-live" id="badgeFireLive">LIVE</span>
+    </div>
+    <div class="alert-content" id="fireContent"></div>
+  </div>
+</div>
+
+<div class="section-label" id="lblLiveMonitors">📡 Live Monitors</div>
+<div class="links-grid">
+  <a href="https://www.windy.com" target="_blank" class="link-card fade-in">
+    <div class="link-left">
+      <span class="link-icon">⛈️</span>
+      <div>
+        <div class="link-title" id="lnkWeatherRadar">Weather Radar</div>
+        <div class="link-sub" id="subWeatherRadar">Windy · Storms & Wind maps</div>
+      </div>
+    </div>
+    <span class="link-arrow">→</span>
+  </a>
+  <a href="https://firms.modaps.eosdis.nasa.gov/map/" target="_blank" class="link-card fade-in">
+    <div class="link-left">
+      <span class="link-icon">🛰️</span>
+      <div>
+        <div class="link-title" id="lnkNasaMap">NASA Wildfire Map</div>
+        <div class="link-sub" id="subNasaMap">Satellite thermal detection</div>
+      </div>
+    </div>
+    <span class="link-arrow">→</span>
+  </a>
+  <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank" class="link-card fade-in">
+    <div class="link-left">
+      <span class="link-icon">📈</span>
+      <div>
+        <div class="link-title" id="lnkUsgsMap">USGS Seismic Map</div>
+        <div class="link-sub" id="subUsgsMap">Global earthquake visualizer</div>
+      </div>
+    </div>
+    <span class="link-arrow">→</span>
+  </a>
+  <a href="https://dust.aemet.es" target="_blank" class="link-card fade-in">
+    <div class="link-left">
+      <span class="link-icon">🌫️</span>
+      <div>
+        <div class="link-title" id="lnkAemetMap">AEMET Dust Forecast</div>
+        <div class="link-sub" id="subAemetMap">Saharan dust transport model</div>
+      </div>
+    </div>
+    <span class="link-arrow">→</span>
+  </a>
+</div>
+
+<script>
+// ─── TRANSLATIONS DICTIONARY FOR 10 LANGUAGES ───────────────────────────────
+const translations = {
+  en: {
+    dashboard: "← DASHBOARD", pageTitle: "NATURE ALERTS", pageSub: "Global Guard System · Live",
+    locating: "Locating & fetching weather…", liveLocation: "📍 LIVE LOCATION", feelsLike: "Feels like",
+    humidity: "Humidity", wind: "Wind", uvIndex: "UV Index", direction: "Direction", rain: "Rain", breeze: "Breeze",
+    seismicTitle: "🌍 Seismic Activity", earthquakes: "EARTHQUAKES", live: "LIVE", fetchingUsgs: "Fetching USGS data…",
+    totalToday: "Total M2.5+ today", mag5: "Magnitude 5+", saharanDustTitle: "🏜️ Saharan Dust", saharanDust: "SAHARAN DUST",
+    fetchingDust: "Fetching dust data…", dustConcentration: "Dust concentration", wildfireTitle: "🔥 Wildfire Monitor",
+    wildfires: "WILDFIRES", fetchingWildfires: "Fetching NASA FIRMS data…", activeEvents: "Active Events",
+    last7days: "Last 7 days", topRegions: "TOP REGIONS", sourceNasa: "Source: NASA EONET · Open Events",
+    liveMonitors: "📡 Live Monitors", weatherRadar: "Weather Radar", subWeatherRadar: "Windy · Storms & Wind maps",
+    nasaMap: "NASA Wildfire Map", subNasaMap: "Satellite thermal detection", usgsMap: "USGS Seismic Map",
+    subUsgsMap: "Global earthquake visualizer", aemetMap: "AEMET Dust Forecast", subAemetMap: "Saharan dust transport model",
+    dustLow: "Air quality is good. No precautions needed.", dustMod: "Sensitive individuals may feel effects. Consider wearing a mask outdoors.",
+    dustHigh: "Significant dust transport. Wear FFP2 mask. Avoid outdoor exercise.", dustExt: "Dangerous dust levels. Remain indoors. Keep windows closed.",
+    dustEnableLoc: "Real-time Saharan dust data requires your location. Enable location access and reload.",
+    weatherErr: "Could not load weather data.", quakeErr: "Could not load earthquake data.", fireErr: "Could not load wildfire data.",
+    badgeLow: "LOW", badgeMod: "MODERATE", badgeHigh: "HIGH", badgeExt: "EXTREME", badgeLoad: "LOADING", badgeMap: "SEE MAP",
+    agoS: "s ago", agoM: "m ago", agoH: "h ago", agoD: "d ago", other: "Other", regionErr: "No region data."
+  },
+  el: {
+    dashboard: "← ΑΡΧΙΚΗ", pageTitle: "ΦΥΣΙΚΕΣ ΑΠΕΙΛΕΣ", pageSub: "Σύστημα Global Guard · Live",
+    locating: "Εντοπισμός τοποθεσίας & λήψη καιρού…", liveLocation: "📍 ΖΩΝΤΑΝΗ ΤΟΠΟΘΕΣΙΑ", feelsLike: "Αίσθηση ως",
+    humidity: "Υγρασία", wind: "Άνεμος", uvIndex: "Δείκτης UV", direction: "Κατεύθυνση", rain: "Βροχή", breeze: "Ένταση",
+    seismicTitle: "🌍 Σεισμική Δραστηριότητα", earthquakes: "ΣΕΙΣΜΟΙ", live: "LIVE", fetchingUsgs: "Λήψη δεδομένων USGS…",
+    totalToday: "Σύνολο M2.5+ σήμερα", mag5: "Μέγεθος 5+", saharanDustTitle: "🏜️ Σαχαριανή Σκόνη", saharanDust: "ΣΑΧΑΡΙΑΝΗ ΣΚΟΝΗ",
+    fetchingDust: "Λήψη δεδομένων σκόνης…", dustConcentration: "Συγκέντρωση σκόνης", wildfireTitle: "🔥 Παρακολούθηση Πυρκαγιών",
+    wildfires: "ΠΥΡΚΑΓΙΕΣ", fetchingWildfires: "Λήψη δεδομένων NASA FIRMS…", activeEvents: "Ενεργές Εστίες",
+    last7days: "Τελευταίες 7 ημέρες", topRegions: "ΚΥΡΙΕΣ ΠΕΡΙΟΧΕΣ", sourceNasa: "Πηγή: NASA EONET · Ανοιχτά Δεδομένα",
+    liveMonitors: "📡 Ζωντανές Οθόνες", weatherRadar: "Ραντάρ Καιρού", subWeatherRadar: "Windy · Χάρτες καταιγίδων & ανέμου",
+    nasaMap: "Χάρτης Πυρκαγιών NASA", subNasaMap: "Θερμικός εντοπισμός μέσω δορυφόρου", usgsMap: "Σεισμικός Χάρτης USGS",
+    subUsgsMap: "Παγκόσμια οπτικοποίηση σεισμών", aemetMap: "Πρόγνωση Σκόνης AEMET", subAemetMap: "Μοντέλο μεταφοράς σκόνης Σαχάρας",
+    dustLow: "Η ποιότητα του αέρα είναι καλή. Δεν χρειάζονται προφυλάξεις.", dustMod: "Ευαίσθητα άτομα μπορεί να επηρεαστούν. Σκεφτείτε τη χρήση μάσκας.",
+    dustHigh: "Σημαντική μεταφορά σκόνης. Φορέστε μάσκα FFP2. Αποφύγετε την άσκηση έξω.", dustExt: "Επικίνδυνα επίπεδα σκόνης. Μείνετε μέσα. Κλείστε τα παράθυρα.",
+    dustEnableLoc: "Τα δεδομένα σκόνης απαιτούν την τοποθεσία σας. Ενεργοποιήστε την πρόσβαση και ανανεώστε.",
+    weatherErr: "Αδυναμία φόρτωσης δεδομένων καιρού.", quakeErr: "Αδυναμία φόρτωσης δεδομένων σεισμών.", fireErr: "Αδυναμία φόρτωσης δεδομένων πυρκαγιών.",
+    badgeLow: "ΧΑΜΗΛΗ", badgeMod: "ΜΕΤΡΙΑ", badgeHigh: "ΥΨΗΛΗ", badgeExt: "ΑΚΡΑΙΑ", badgeLoad: "ΦΟΡΤΩΣΗ", badgeMap: "ΧΑΡΤΗΣ",
+    agoS: "δ πριν", agoM: "λ πριν", agoH: "ώ πριν", agoD: "ημ πριν", other: "Άλλο", regionErr: "Δεν υπάρχουν δεδομένα."
+  },
+  de: {
+    dashboard: "← DASHBOARD", pageTitle: "NATURGEFAHREN", pageSub: "Global Guard System · Live",
+    locating: "Ortung & Wetterabruf…", liveLocation: "📍 LIVE-STANDORT", feelsLike: "Gefühlt wie",
+    humidity: "Luftfeuchtigkeit", wind: "Wind", uvIndex: "UV-Index", direction: "Richtung", rain: "Regen", breeze: "Brise",
+    seismicTitle: "🌍 Seismische Aktivität", earthquakes: "ERDBEBEN", live: "LIVE", fetchingUsgs: "USGS-Daten werden abgerufen…",
+    totalToday: "Gesamt M2.5+ heute", mag5: "Magnitude 5+", saharanDustTitle: "🏜️ Saharastaub", saharanDust: "SAHARASTAUB",
+    fetchingDust: "Staubdaten werden abgerufen…", dustConcentration: "Staubkonzentration", wildfireTitle: "🔥 Waldbrand-Monitor",
+    wildfires: "WALDBRÄNDE", fetchingWildfires: "NASA FIRMS-Daten werden abgerufen…", activeEvents: "Aktive Ereignisse",
+    last7days: "Letzte 7 Tage", topRegions: "TOP-REGIONEN", sourceNasa: "Quelle: NASA EONET · Offene Ereignisse",
+    liveMonitors: "📡 Live-Monitore", weatherRadar: "Wetterradar", subWeatherRadar: "Windy · Sturm- & Windkarten",
+    nasaMap: "NASA Waldbrandkarte", subNasaMap: "Thermische Satellitenerkennung", usgsMap: "USGS Seismische Karte",
+    subUsgsMap: "Globaler Erdbeben-Visualisierer", aemetMap: "AEMET Staubprognose", subAemetMap: "Saharastaub-Transportmodell",
+    dustLow: "Gute Luftqualität. Keine Vorsichtsmaßnahmen erforderlich.", dustMod: "Empfindliche Personen können Auswirkungen spüren. Maske im Freien erwägen.",
+    dustHigh: "Erheblicher Staubtransport. FFP2-Maske tragen. Außensport vermeiden.", dustExt: "Gefährliche Staubkonzentration. Im Haus bleiben. Fenster schließen.",
+    dustEnableLoc: "Echtzeit-Saharastaubdaten erfordern Ihren Standort. Zugriff erlauben.",
+    weatherErr: "Wetterdaten konnten nicht geladen werden.", quakeErr: "Erdbebendaten konnten nicht geladen werden.", fireErr: "Waldbranddaten konnten nicht geladen werden.",
+    badgeLow: "NIEDRIG", badgeMod: "MÄSSIG", badgeHigh: "HOCH", badgeExt: "EXTREM", badgeLoad: "LADEN", badgeMap: "KARTE",
+    agoS: "s her", agoM: "m her", agoH: "h her", agoD: "d her", other: "Andere", regionErr: "Keine Regionsdaten."
+  },
+  fr: {
+    dashboard: "← TABLEAU DE BORD", pageTitle: "ALERTES NATURE", pageSub: "Global Guard System · Live",
+    locating: "Localisation & météo en cours…", liveLocation: "📍 POSITION EN DIRECT", feelsLike: "Ressenti",
+    humidity: "Humidité", wind: "Vent", uvIndex: "Indice UV", direction: "Direction", rain: "Pluie", breeze: "Brise",
+    seismicTitle: "🌍 Activité Seismique", earthquakes: "SÉISMES", live: "DIRECT", fetchingUsgs: "Récupération données USGS…",
+    totalToday: "Total M2.5+ aujourd'hui", mag5: "Magnitude 5+", saharanDustTitle: "🏜️ Poussière du Sahara", saharanDust: "POUSSIÈRE SAHARA",
+    fetchingDust: "Récupération données poussière…", dustConcentration: "Concentration de poussière", wildfireTitle: "🔥 Suivi des Incendies",
+    wildfires: "INCENDIES", fetchingWildfires: "Récupération données NASA FIRMS…", activeEvents: "Foyers Actifs",
+    last7days: "7 derniers jours", topRegions: "PRINCIPALES RÉGIONS", sourceNasa: "Source: NASA EONET · Événements Ouverts",
+    liveMonitors: "📡 Moniteurs en Direct", weatherRadar: "Radar Météo", subWeatherRadar: "Windy · Cartes des vents & tempêtes",
+    nasaMap: "Carte des incendies NASA", subNasaMap: "Détection thermique par satellite", usgsMap: "Carte séismique USGS",
+    subUsgsMap: "Visualiseur global des séismes", aemetMap: "Prévisions de poussière AEMET", subAemetMap: "Modèle de transport des poussières",
+    dustLow: "La qualité de l'air est bonne. Aucune précaution nécessaire.", dustMod: "Les personnes sensibles peuvent être affectées. Envisager un masque.",
+    dustHigh: "Transport de poussière important. Porter un masque FFP2. Éviter le sport.", dustExt: "Niveaux de poussière dangereux. Rester à l'intérieur. Fermer les fenêtres.",
+    dustEnableLoc: "Les données météo en temps réel nécessitent votre position. Activez l'accès.",
+    weatherErr: "Impossible de charger la météo.", quakeErr: "Impossible de charger les séismes.", fireErr: "Impossible de charger les incendies.",
+    badgeLow: "FAIBLE", badgeMod: "MODÉRÉ", badgeHigh: "ÉLEVÉ", badgeExt: "EXTRÊME", badgeLoad: "CHARGEMENT", badgeMap: "VOIR CARTE",
+    agoS: "il y a s", agoM: "il y a m", agoH: "il y a h", agoD: "il y a d", other: "Autre", regionErr: "Pas de données régionales."
+  },
+  es: {
+    dashboard: "← PANEL", pageTitle: "ALERTAS NATURALES", pageSub: "Global Guard System · Live",
+    locating: "Localizando y obteniendo clima…", liveLocation: "📍 UBICACIÓN EN VIVO", feelsLike: "Sensación",
+    humidity: "Humedad", wind: "Viento", uvIndex: "Índice UV", direction: "Dirección", rain: "Lluvia", breeze: "Brisa",
+    seismicTitle: "🌍 Actividad Sísmica", earthquakes: "TERREMOTOS", live: "EN VIVO", fetchingUsgs: "Obteniendo datos de USGS…",
+    totalToday: "Total M2.5+ hoy", mag5: "Magnitud 5+", saharanDustTitle: "🏜️ Polvo del Sahara", saharanDust: "POLVO DEL SAHARA",
+    fetchingDust: "Obteniendo datos de polvo…", dustConcentration: "Concentración de polvo", wildfireTitle: "🔥 Monitor de Incendios",
+    wildfires: "INCENDIOS", fetchingWildfires: "Obteniendo datos de NASA FIRMS…", activeEvents: "Eventos Activos",
+    last7days: "Últimos 7 días", topRegions: "REGIONES PRINCIPALES", sourceNasa: "Fuente: NASA EONET · Eventos Abiertos",
+    liveMonitors: "📡 Monitores en Vivo", weatherRadar: "Radar Meteorológico", subWeatherRadar: "Windy · Mapas de tormentas y viento",
+    nasaMap: "Mapa de incendios de la NASA", subNasaMap: "Detección térmica satelital", usgsMap: "Mapa sísmico de USGS",
+    subUsgsMap: "Visualizador global de terremotos", aemetMap: "Predicción de polvo AEMET", subAemetMap: "Modelo de transporte de polvo",
+    dustLow: "La calidad del aire es buena. No se necesitan precauciones.", dustMod: "Personas sensibles pueden sentir efectos. Considerar usar mascarilla.",
+    dustHigh: "Transporte significativo de polvo. Usar mascarilla FFP2. Evitar ejercicio.", dustExt: "Niveles de polvo peligrosos. Permanecer en interiores. Cerrar ventanas.",
+    dustEnableLoc: "Los datos requieren su ubicación. Active el acceso a la ubicación.",
+    weatherErr: "No se pudieron cargar los datos del clima.", quakeErr: "No se pudieron cargar los datos de terremotos.", fireErr: "No se pudieron cargar los datos de incendios.",
+    badgeLow: "BAJO", badgeMod: "MODERADO", badgeHigh: "ALTO", badgeExt: "EXTREMO", badgeLoad: "CARGANDO", badgeMap: "VER MAPA",
+    agoS: "hace s", agoM: "hace m", agoH: "hace h", agoD: "hace d", other: "Otros", regionErr: "Sin datos de regiones."
+  },
+  it: {
+    dashboard: "← DASHBOARD", pageTitle: "ALLERTE NATURA", pageSub: "Global Guard System · Live",
+    locating: "Localizzazione e recupero meteo…", liveLocation: "📍 POSIZIONE IN TEMPO REALE", feelsLike: "Percepita",
+    humidity: "Umidità", wind: "Vento", uvIndex: "Indice UV", direction: "Direzione", rain: "Pioggia", breeze: "Brezza",
+    seismicTitle: "🌍 Attività Sismica", earthquakes: "TERREMOTI", live: "LIVE", fetchingUsgs: "Recupero dati USGS…",
+    totalToday: "Totale M2.5+ oggi", mag5: "Magnitudo 5+", saharanDustTitle: "🏜️ Polvere del Sahara", saharanDust: "POLVERE DEL SAHARA",
+    fetchingDust: "Recupero dati polvere…", dustConcentration: "Concentrazione polvere", wildfireTitle: "🔥 Monitor Incendi",
+    wildfires: "INCENDI", fetchingWildfires: "Recupero dati NASA FIRMS…", activeEvents: "Eventi Attivi",
+    last7days: "Ultimi 7 giorni", topRegions: "REGIONI PRINCIPALI", sourceNasa: "Fonte: NASA EONET · Eventi Aperti",
+    liveMonitors: "📡 Monitor Live", weatherRadar: "Radar Meteo", subWeatherRadar: "Windy · Mappe di tempeste e vento",
+    nasaMap: "Mappa incendi NASA", subNasaMap: "Rilevamento termico satellitare", usgsMap: "Mappa sismica USGS",
+    subUsgsMap: "Visualizzatore globale di terremoti", aemetMap: "Previsioni polvere AEMET", subAemetMap: "Modello trasporto polvere del Sahara",
+    dustLow: "La qualità dell'air è buona. Nessuna precauzione necessaria.", dustMod: "Soggetti sensibili possono risentire degli effetti. Valutare mascherina.",
+    dustHigh: "Significativo trasporto di polvere. Indossare maschera FFP2. Evitare sport.", dustExt: "Livelli di polvere pericolosi. Restare in casa. Chiudere le finestre.",
+    dustEnableLoc: "I dati richiedono la tua posizione. Abilita l'accesso alla posizione.",
+    weatherErr: "Impossibile caricare i dati meteo.", quakeErr: "Impossibile caricare i dati dei terremoti.", fireErr: "Impossibile caricare i dati degli incendi.",
+    badgeLow: "BASSO", badgeMod: "MODERATO", badgeHigh: "ALTO", badgeExt: "ESTREMO", badgeLoad: "CARICAMENTO", badgeMap: "VEDI MAPPA",
+    agoS: "s fa", agoM: "m fa", agoH: "h fa", agoD: "d fa", other: "Altro", regionErr: "Nessun dato sulle regioni."
+  },
+  pt: {
+    dashboard: "← PAINEL", pageTitle: "ALERTAS DA NATUREZA", pageSub: "Global Guard System · Live",
+    locating: "Localizando e obtendo clima…", liveLocation: "📍 LOCALIZAÇÃO EM DIRETO", feelsLike: "Sensação",
+    humidity: "Humidade", wind: "Vento", uvIndex: "Índice UV", direction: "Direção", rain: "Chuva", breeze: "Brisa",
+    seismicTitle: "🌍 Atividade Sísmica", earthquakes: "TERREMOTOS", live: "DIRETO", fetchingUsgs: "Obtendo dados do USGS…",
+    totalToday: "Total M2.5+ hoje", mag5: "Magnitude 5+", saharanDustTitle: "🏜️ Poeira do Sahara", saharanDust: "POEIRA DO SAHARA",
+    fetchingDust: "Obtendo dados de poeira…", dustConcentration: "Concentração de poeira", wildfireTitle: "🔥 Monitor de Incêndios",
+    wildfires: "INCÊNDIOS", fetchingWildfires: "Obtendo dados da NASA FIRMS…", activeEvents: "Eventos Ativos",
+    last7days: "Últimos 7 dias", topRegions: "PRINCIPAIS REGIÕES", sourceNasa: "Fonte: NASA EONET · Eventos Abertos",
+    liveMonitors: "📡 Monitores ao Vivo", weatherRadar: "Radar Meteorológico", subWeatherRadar: "Windy · Mapas de tempestades e vento",
+    nasaMap: "Mapa de incêndios da NASA", subNasaMap: "Deteção térmica por satélite", usgsMap: "Mapa sísmico do USGS",
+    subUsgsMap: "Visualizador global de terremotos", aemetMap: "Previsão de poeira AEMET", subAemetMap: "Modelo de transporte de poeira",
+    dustLow: "A qualidade do ar está boa. Sem precauções necessárias.", dustMod: "Indivíduos sensíveis podem sentir efeitos. Considere usar máscara.",
+    dustHigh: "Transporte significativo de poeira. Use máscara FFP2. Evite exercício.", dustExt: "Níveis de poeira perigosos. Permaneça no interior. Feche janelas.",
+    dustEnableLoc: "Os dados em tempo real requerem a sua localização. Ative o acesso.",
+    weatherErr: "Não foi possível carregar os dados do clima.", quakeErr: "Não foi possível carregar os dados de terremotos.", fireErr: "Não foi possível carregar os dados de incêndios.",
+    badgeLow: "BAIXO", badgeMod: "MODERADO", badgeHigh: "ALTO", badgeExt: "EXTREMO", badgeLoad: "CARREGANDO", badgeMap: "VER MAPA",
+    agoS: "s atrás", agoM: "m atrás", agoH: "h atrás", agoD: "d atrás", other: "Outros", regionErr: "Sem dados de regiões."
+  },
+  ru: {
+    dashboard: "← ПАНЕЛЬ", pageTitle: "ПРИРОДНЫЕ УГРОЗЫ", pageSub: "Global Guard System · Live",
+    locating: "Определение локации и погоды…", liveLocation: "📍 ТЕКУЩЕЕ МЕСТОПОЛОЖЕНИЕ", feelsLike: "Ощущается как",
+    humidity: "Влажность", wind: "Ветер", uvIndex: "УФ-индекс", direction: "Направление", rain: "Осадки", breeze: "Бриз",
+    seismicTitle: "🌍 Сейсмическая активность", earthquakes: "ЗЕМЛЕТРЯСЕНИЯ", live: "ЖИВОЙ", fetchingUsgs: "Получение данных USGS…",
+    totalToday: "Всего M2.5+ за сегодня", mag5: "Магнитуда 5+", saharanDustTitle: "🏜️ Сахарская пыль", saharanDust: "САХАРСКАЯ ПЫЛЬ",
+    fetchingDust: "Получение данных о пыли…", dustConcentration: "Концентрация пыли", wildfireTitle: "🔥 Мониторинг пожаров",
+    wildfires: "ПОЖАРЫ", fetchingWildfires: "Получение данных NASA FIRMS…", activeEvents: "Активные очаги",
+    last7days: "За 7 дней", topRegions: "ОСНОВНЫЕ РЕГИОНЫ", sourceNasa: "Источник: NASA EONET · Открытые данные",
+    liveMonitors: "📡 Мониторы LIVE", weatherRadar: "Погодный радар", subWeatherRadar: "Windy · Карта ветров и штормов",
+    nasaMap: "Карта пожаров NASA", subNasaMap: "Спутниковое тепловое обнаружение", usgsMap: "Сейсмическая карта USGS",
+    subUsgsMap: "Визуализатор землетрясений", aemetMap: "Прогноз пыли AEMET", subAemetMap: "Модель переноса сахарской пыли",
+    dustLow: "Качество воздуха хорошее. Меры предосторожности не требуются.", dustMod: "Чувствительные люди могут ощутить эффект. Рекомендуется маска.",
+    dustHigh: "Значительный перенос пыли. Носите маску FFP2. Избегайте спорта на улице.", dustExt: "Опасный уровень пыли. Оставайтесь в помещении. Закройте окна.",
+    dustEnableLoc: "Для получения данных требуется доступ к геолокации. Разрешите его.",
+    weatherErr: "Не удалось загрузить данные о погоде.", quakeErr: "Не удалось загрузить данные о землетрясениях.", fireErr: "Не удалось загрузить данные о пожарах.",
+    badgeLow: "НИЗКИЙ", badgeMod: "УМЕРЕННЫЙ", badgeHigh: "ВЫСОКИЙ", badgeExt: "ОПАСНЫЙ", badgeLoad: "ЗАГРУЗКА", badgeMap: "КАРТА",
+    agoS: "с назад", agoM: "м назад", agoH: "ч назад", agoD: "д назад", other: "Другие", regionErr: "Нет данных по регионам."
+  },
+  zh: {
+    dashboard: "← 返回仪表盘", pageTitle: "自然灾害预警", pageSub: "全球防御系统 · Live",
+    locating: "正在定位并获取天气…", liveLocation: "📍 实时位置", feelsLike: "体感温度",
+    humidity: "湿度", wind: "风速", uvIndex: "紫外线指数", direction: "风向", rain: "降水量", breeze: "微风级别",
+    seismicTitle: "🌍 地震活动", earthquakes: "地震历史监测", live: "实时", fetchingUsgs: "正在获取 USGS 地震数据…",
+    totalToday: "今日 M2.5+ 地震总数", mag5: "5级以上地震", saharanDustTitle: "🏜️ 撒哈拉沙尘暴", saharanDust: "撒哈拉沙尘",
+    fetchingDust: "正在获取沙尘数据…", dustConcentration: "沙尘浓度", wildfireTitle: "🔥 山火动态监测",
+    wildfires: "林火/山火", fetchingWildfires: "正在获取 NASA FIRMS 数据…", activeEvents: "活跃火点",
+    last7days: "过去 7 天内", topRegions: "主要发生区域", sourceNasa: "数据源: NASA EONET · 公开事件",
+    liveMonitors: "📡 实时监视器", weatherRadar: "气象雷达高清图", subWeatherRadar: "Windy · 气流与风暴实时地图",
+    nasaMap: "NASA 全球山火地图", subNasaMap: "卫星热成像火源观测", usgsMap: "USGS 全球地震地图",
+    subUsgsMap: "全球地震三维可视化展示", aemetMap: "AEMET 沙尘预测", subAemetMap: "撒哈拉沙尘大气传输模型",
+    dustLow: "空气质量良好。无需采取特别防护措施。", dustMod: "敏感人群可能会受到影响。建议在户外佩戴口罩。",
+    dustHigh: "沙尘浓度极高。请佩戴 FFP2 专业口罩，避免户外运动。", dustExt: "危险的沙尘水平！请务必待在室内并关闭所有窗户。",
+    dustEnableLoc: "获取实时撒哈拉沙尘数据需要您的位置权限。请开启并刷新。",
+    weatherErr: "无法加载天气数据。", quakeErr: "无法加载地震数据。", fireErr: "无法加载山火数据。",
+    badgeLow: "低风险", badgeMod: "中度", badgeHigh: "高风险", badgeExt: "极度危险", badgeLoad: "加载中", badgeMap: "查看地图",
+    agoS: "秒前", agoM: "分钟前", agoH: "小时前", agoD: "天前", other: "其他地区", regionErr: "暂无区域细分数据。"
+  },
+  hi: {
+    dashboard: "← डैशबोर्ड", pageTitle: "प्राकृतिक अलर्ट", pageSub: "ग्लोबल गार्ड सिस्टम · लाइव",
+    locating: "स्थान और मौसम की जानकारी ली जा रही है…", liveLocation: "📍 लाइव स्थान", feelsLike: "ऐसा महसूस होता है",
+    humidity: "आर्द्रता", wind: "हवा की गति", uvIndex: "यूवी इंडेक्स", direction: "दिशा", rain: "बारिश", breeze: "हवा का स्तर",
+    seismicTitle: "🌍 भूकंपीय गतिविधि", earthquakes: "भूकंप रिकॉर्ड", live: "लाइव", fetchingUsgs: "USGS डेटा लिया जा रहा है…",
+    totalToday: "आज कुल M2.5+ भूकंप", mag5: "तीव्रता 5+", saharanDustTitle: "🏜️ सहारा की धूल", saharanDust: "सहारा धूल",
+    fetchingDust: "धूल का डेटा लिया जा रहा है…", dustConcentration: "धूल की सघनता", wildfireTitle: "🔥 जंगलों की आग का मॉनिटर",
+    wildfires: "जंगल की आग", fetchingWildfires: "NASA FIRMS डेटा लिया जा रहा है…", activeEvents: "सक्रिय घटनाएं",
+    last7days: "पिछले 7 दिन", topRegions: "शीर्ष क्षेत्र", sourceNasa: "स्रोत: NASA EONET · ओपन इवेंट्स",
+    liveMonitors: "📡 लाइव मॉनिटर्स", weatherRadar: "मौसम रडार", subWeatherRadar: "Windy · तूफान और हवा के नक्शे",
+    nasaMap: "NASA जंगल की आग का नक्शा", subNasaMap: "सैटेलाइट थर्मल डिटेक्शन", usgsMap: "USGS भूकंपीय नक्शा",
+    subUsgsMap: "वैश्विक भूकंप विज़ुअलाइज़र", aemetMap: "AEMET धूल का पूर्वानुमान", subAemetMap: "सहारा धूल परिवहन मॉडल",
+    dustLow: "वायु गुणवत्ता अच्छी है। किसी सावधानी की आवश्यकता नहीं है।", dustMod: "संवेदनशील लोग प्रभाव महसूस कर सकते हैं। मास्क पहनने पर विचार करें।",
+    dustHigh: "महत्वपूर्ण धूल परिवहन। FFP2 मास्क पहनें। बाहरी व्यायाम से बचें।", dustExt: "खतरनाक धूल का स्तर। घर के अंदर रहें। खिड़कियां बंद रखें।",
+    dustEnableLoc: "धूल डेटा के लिए आपके स्थान की आवश्यकता है। कृपया अनुमति दें और रीलोड करें।",
+    weatherErr: "मौसम का डेटा लोड नहीं किया जा सका।", quakeErr: "भूकंप का डेटा लोड नहीं किया जा सका।", fireErr: "आग का डेटा लोड नहीं किया जा सका।",
+    badgeLow: "कम", badgeMod: "मध्यम", badgeHigh: "उच्च", badgeExt: "अत्यधिक", badgeLoad: "लोड हो रहा है", badgeMap: "मानचित्र देखें",
+    agoS: "s पहले", agoM: "m पहले", agoH: "h पहले", agoD: "d पहले", other: "अन्य", regionErr: "कोई डेटा उपलब्ध नहीं है।"
+  }
+};
+
+// Language detection from localStorage
+const currentLang = localStorage.getItem('selectedLanguage') || 'en';
+const lang = translations[currentLang] || translations['en'];
+
+function windDirection(deg) {
+  const dirs = ['N','NE','E','SE','S','SW','W','NW'];
+  return dirs[Math.round(deg / 45) % 8];
+}
+
+function beaufort(kmh) {
+  if (kmh < 2) return 'Calm';
+  if (kmh < 12) return 'Light breeze';
+  if (kmh < 29) return 'Gentle breeze';
+  if (kmh < 50) return 'Moderate breeze';
+  if (kmh < 75) return 'Fresh breeze';
+  if (kmh < 102) return 'Strong breeze';
+  return 'Near gale+';
+}
+
+function timeSince(date) {
+  const s = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (s < 60)    return `${s}${lang.agoS}`;
+  if (s < 3600)  return `${Math.floor(s/60)}${lang.agoM}`;
+  if (s < 86400) return `${Math.floor(s/3600)}${lang.agoH}`;
+  return `${Math.floor(s/86400)}${lang.agoD}`;
+}
+
+// ─── APPLY STATIC LABELS ON LOAD ────────────────────────────────────────────
+function applyStaticTranslations() {
+  document.getElementById('btnBack').textContent = lang.dashboard;
+  document.getElementById('txtPageTitle').textContent = lang.pageTitle;
+  document.getElementById('txtPageSub').textContent = lang.pageSub;
+  document.getElementById('lblSeismic').textContent = lang.seismicTitle;
+  document.getElementById('lblQuakes').textContent = lang.earthquakes;
+  document.getElementById('badgeQuakeLive').textContent = lang.live;
+  document.getElementById('lblDust').textContent = lang.saharanDustTitle;
+  document.getElementById('lblDustTitle').textContent = lang.saharanDust;
+  document.getElementById('dustBadge').textContent = lang.badgeLoad;
+  document.getElementById('lblWildfires').textContent = lang.wildfireTitle;
+  document.getElementById('lblFires').textContent = lang.wildfires;
+  document.getElementById('badgeFireLive').textContent = lang.live;
+  document.getElementById('lblLiveMonitors').textContent = lang.liveMonitors;
+  
+  document.getElementById('lnkWeatherRadar').textContent = lang.weatherRadar;
+  document.getElementById('subWeatherRadar').textContent = lang.subWeatherRadar;
+  document.getElementById('lnkNasaMap').textContent = lang.nasaMap;
+  document.getElementById('subNasaMap').textContent = lang.subNasaMap;
+  document.getElementById('lnkUsgsMap').textContent = lang.usgsMap;
+  document.getElementById('subUsgsMap').textContent = lang.subUsgsMap;
+  document.getElementById('lnkAemetMap').textContent = lang.aemetMap;
+  document.getElementById('subAemetMap').textContent = lang.subAemetMap;
+
+  // Set Loaders
+  document.getElementById('weatherCard').innerHTML = `<div class="loading"><div class="spinner"></div> ${lang.locating}</div>`;
+  document.querySelector('#quakeCard .alert-content').innerHTML = `<div class="loading"><div class="spinner"></div> ${lang.fetchingUsgs}</div>`;
+  document.getElementById('dustContent').innerHTML = `<div class="loading"><div class="spinner"></div> ${lang.fetchingDust}</div>`;
+  document.getElementById('fireContent').innerHTML = `<div class="loading"><div class="spinner"></div> ${lang.fetchingWildfires}</div>`;
+}
+
+// WMO Weather Code Maps
+const WMO = {
+  0:'Clear Sky', 1:'Mainly Clear', 2:'Partly Cloudy', 3:'Overcast',
+  45:'Foggy', 48:'Icy Fog', 51:'Light Drizzle', 53:'Moderate Drizzle', 55:'Heavy Drizzle',
+  61:'Slight Rain', 63:'Moderate Rain', 65:'Heavy Rain', 71:'Slight Snow', 73:'Moderate Snow',
+  75:'Heavy Snow', 77:'Snow Grains', 80:'Slight Showers', 81:'Moderate Showers', 82:'Violent Showers',
+  85:'Slight Snow Showers', 86:'Heavy Snow Showers', 95:'Thunderstorm', 96:'Thunderstorm w/ Hail', 99:'Thunderstorm w/ Heavy Hail'
+};
+const WMO_ICON = {
+  0:'☀️', 1:'🌤️', 2:'⛅', 3:'☁️', 45:'🌫️', 48:'🌫️', 51:'🌦️', 53:'🌦️', 55:'🌧️',
+  61:'🌧️', 63:'🌧️', 65:'🌧️', 71:'❄️', 73:'❄️', 75:'❄️', 77:'🌨️', 80:'🌦️', 81:'🌧️',
+  82:'⛈️', 85:'🌨️', 86:'🌨️', 95:'⛈️', 96:'⛈️', 99:'⛈️'
+};
+
+// ─── FETCH WEATHER ────────────────────────────────────────────────────────────
+async function loadWeather(lat, lon, cityName) {
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,weather_code,uv_index&wind_speed_unit=kmh`;
+    const res = await fetch(url);
+    const d = await res.json();
+    const c = d.current;
+
+    const code = c.weather_code;
+    const icon = WMO_ICON[code] || '🌡️';
+    const desc = WMO[code] || 'Unknown';
+
+    const alertLevel = c.uv_index >= 8 ? 'danger' : c.uv_index >= 5 ? 'warn' : 'ok';
+    const alertColor = alertLevel === 'danger' ? '#ef4444' : alertLevel === 'warn' ? '#fbbf24' : '#22c55e';
+
+    document.getElementById('weatherCard').innerHTML = `
+      <div class="weather-top">
+        <div>
+          <div class="weather-location">${lang.liveLocation}</div>
+          <div class="weather-city">${cityName}</div>
+        </div>
+        <div class="weather-icon-big">${icon}</div>
+      </div>
+      <div class="weather-temp-row">
+        <div class="weather-temp">${Math.round(c.temperature_2m)}°</div>
+        <div class="weather-feels">${lang.feelsLike} ${Math.round(c.apparent_temperature)}°C</div>
+      </div>
+      <div class="weather-desc">${desc}</div>
+      <div class="weather-grid">
+        <div class="weather-stat">
+          <div class="weather-stat-label">${lang.humidity}</div>
+          <div class="weather-stat-value">${c.relative_humidity_2m}%</div>
+        </div>
+        <div class="weather-stat">
+          <div class="weather-stat-label">${lang.wind}</div>
+          <div class="weather-stat-value">${Math.round(c.wind_speed_10m)} km/h</div>
+        </div>
+        <div class="weather-stat">
+          <div class="weather-stat-label">${lang.uvIndex}</div>
+          <div class="weather-stat-value" style="color:${alertColor}">${c.uv_index ?? '–'}</div>
+        </div>
+        <div class="weather-stat">
+          <div class="weather-stat-label">${lang.direction}</div>
+          <div class="weather-stat-value">${windDirection(c.wind_direction_10m)}</div>
+        </div>
+        <div class="weather-stat">
+          <div class="weather-stat-label">${lang.rain}</div>
+          <div class="weather-stat-value">${c.precipitation} mm</div>
+        </div>
+        <div class="weather-stat">
+          <div class="weather-stat-label">${lang.breeze}</div>
+          <div class="weather-stat-value" style="font-size:0.7rem">${beaufort(c.wind_speed_10m)}</div>
+        </div>
+      </div>`;
+  } catch(e) {
+    document.getElementById('weatherCard').innerHTML = `<span class="err">${lang.weatherErr}</span>`;
+  }
+}
+
+// ─── FETCH EARTHQUAKES ────────────────────────────────────────────────────────
+async function loadQuakes() {
+  try {
+    const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson';
+    const res = await fetch(url);
+    const d = await res.json();
+    const quakes = d.features.slice(0, 5);
+
+    const countAll = d.features.length;
+    const significant = d.features.filter(q => q.properties.mag >= 5).length;
+
+    let html = `
+      <div style="display:flex;gap:12px;margin-bottom:12px">
+        <div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:12px;padding:10px 14px;flex:1;text-align:center">
+          <div style="font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:#fbbf24">${countAll}</div>
+          <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">${lang.totalToday}</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:12px;padding:10px 14px;flex:1;text-align:center">
+          <div style="font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:#ef4444">${significant}</div>
+          <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">${lang.mag5}</div>
+        </div>
+      </div>
+      <div class="quake-list">`;
+
+    quakes.forEach(q => {
+      const mag = q.properties.mag.toFixed(1);
+      const place = q.properties.place || 'Unknown';
+      const time = new Date(q.properties.time);
+      const ago = timeSince(time);
+      const color = mag >= 6 ? '#ef4444' : mag >= 5 ? '#fbbf24' : '#22c55e';
+      html += `
+        <div class="quake-item">
+          <span class="quake-mag" style="color:${color}">M${mag}</span>
+          <span class="quake-place">${place}</span>
+          <span class="quake-time">${ago}</span>
+        </div>`;
+    });
+    html += '</div>';
+    document.querySelector('#quakeCard .alert-content').innerHTML = html;
+  } catch(e) {
+    document.querySelector('#quakeCard .alert-content').innerHTML = `<span class="err">${lang.quakeErr}</span>`;
+  }
+}
+
+// ─── SAHARAN DUST via Open-Meteo Air Quality ──────────────────────────────────
+async function loadDust(lat, lon) {
+  try {
+    const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=dust,pm10,pm2_5,european_aqi&hourly=dust&forecast_days=1`;
+    const res = await fetch(url);
+    const d = await res.json();
+    const dust = d.current?.dust ?? null;
+    const pm10 = d.current?.pm10 ?? null;
+    const aqi  = d.current?.european_aqi ?? null;
+
+    let level, color, badge, advice;
+    if (dust === null) throw new Error('no data');
+    if (dust < 20)       { color='#22c55e'; badge=lang.badgeLow;    advice=lang.dustLow; }
+    else if (dust < 100) { color='#fbbf24'; badge=lang.badgeMod;    advice=lang.dustMod; }
+    else if (dust < 250) { color='#f97316'; badge=lang.badgeHigh;   advice=lang.dustHigh; }
+    else                 { color='#ef4444'; badge=lang.badgeExt;    advice=lang.dustExt; }
+
+    document.getElementById('dustBadge').textContent = badge;
+    document.getElementById('dustBadge').className = `badge ${dust >= 100 ? 'badge-live' : dust >= 20 ? 'badge-warn' : 'badge-ok'}`;
+
+    const pct = Math.min(100, (dust / 500) * 100);
+
+    document.getElementById('dustContent').innerHTML = `
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.7);margin-bottom:10px">${advice}</div>
+      <div class="dust-meter">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:0.7rem;color:var(--muted)">${lang.dustConcentration}</span>
+          <span style="font-family:'Orbitron',monospace;font-size:0.8rem;color:${color};font-weight:700">${dust.toFixed(1)} µg/m³</span>
+        </div>
+        <div class="dust-bar-bg">
+          <div class="dust-bar-fill" style="width:${pct}%;background:linear-gradient(to right, #22c55e, ${color})"></div>
+        </div>
+        <div class="dust-labels"><span>0</span><span>100</span><span>250</span><span>500</span></div>
+      </div>
+      <div class="dust-stats">
+        <div class="dust-stat">
+          <div class="dust-stat-label">PM10</div>
+          <div class="dust-stat-val">${pm10 !== null ? pm10.toFixed(1) : '–'} <span style="font-size:0.65rem;color:var(--muted)">µg/m³</span></div>
+        </div>
+        <div class="dust-stat">
+          <div class="dust-stat-label">EU AQI</div>
+          <div class="dust-stat-val">${aqi ?? '–'}</div>
+        </div>
+      </div>`;
+  } catch(e) {
+    document.getElementById('dustBadge').textContent = lang.badgeMap;
+    document.getElementById('dustContent').innerHTML = `
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-bottom:10px">${lang.dustEnableLoc}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <a href="https://dust.aemet.es" target="_blank" style="background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);border-radius:10px;padding:8px 14px;color:#d4a853;text-decoration:none;font-size:0.78rem;font-family:'Orbitron',monospace">AEMET Map →</a>
+        <a href="https://atmosphere.copernicus.eu/charts/packages/cams/products/african-dust-forecasts" target="_blank" style="background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);border-radius:10px;padding:8px 14px;color:#d4a853;text-decoration:none;font-size:0.78rem;font-family:'Orbitron',monospace">Copernicus →</a>
+      </div>`;
+  }
+}
+
+// ─── FETCH WILDFIRE COUNT ────────────────────────────────────────────────────
+async function loadFires() {
+  try {
+    const url = 'https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&limit=100';
+    const res = await fetch(url);
+    const d = await res.json();
+    const total = d.events?.length ?? 0;
+    const recent = d.events?.filter(e => {
+      const g = e.geometry?.[0]?.date;
+      if (!g) return false;
+      return (Date.now() - new Date(g).getTime()) < 7 * 86400000;
+    }).length ?? 0;
+
+    const regions = {};
+    d.events?.slice(0, 20).forEach(e => {
+      const title = e.title;
+      let region = lang.other;
+      if (/australia/i.test(title)) region = 'Australia';
+      else if (/canada/i.test(title)) region = 'Canada';
+      else if (/usa|california|alaska|oregon|washington/i.test(title)) region = 'USA';
+      else if (/russia|siberia/i.test(title)) region = 'Russia';
+      else if (/mediterranean|greece|turkey|spain|portugal/i.test(title)) region = 'Mediterranean';
+      regions[region] = (regions[region] || 0) + 1;
+    });
+
+    let regionHtml = '';
+    Object.entries(regions).slice(0, 4).forEach(([r, n]) => {
+      regionHtml += `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.8rem">
+        <span style="color:rgba(255,255,255,0.65)">${r}</span>
+        <span style="color:#ef4444;font-family:'Orbitron',monospace;font-size:0.75rem">${n}</span>
+      </div>`;
+    });
+
+    document.getElementById('fireContent').innerHTML = `
+      <div class="fire-stats">
+        <div class="fire-stat">
+          <div class="fire-stat-val">${total}</div>
+          <div class="fire-stat-label">${lang.activeEvents}</div>
+        </div>
+        <div class="fire-stat">
+          <div class="fire-stat-val">${recent}</div>
+          <div class="fire-stat-label">${lang.last7days}</div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-size:0.6rem;font-family:'Orbitron',monospace;color:var(--muted);letter-spacing:1px;margin-bottom:6px">${lang.topRegions}</div>
+        ${regionHtml || `<span class="err">${lang.regionErr}</span>`}
+      </div>
+      <div style="margin-top:10px;font-size:0.7rem;color:var(--muted)">${lang.sourceNasa}</div>`;
+  } catch(e) {
+    document.getElementById('fireContent').innerHTML = `<span class="err">${lang.fireErr}</span>`;
+  }
+}
+
+// ─── GEOLOCATION & INIT ──────────────────────────────────────────────────────
+async function reverseGeocode(lat, lon) {
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+    const d = await res.json();
+    return d.address?.city || d.address?.town || d.address?.village || d.address?.county || 'Your Location';
+  } catch { return 'Your Location'; }
+}
+
+async function init() {
+  applyStaticTranslations();
+  loadQuakes();
+  loadFires();
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async pos => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      const city = await reverseGeocode(lat, lon);
+      loadWeather(lat, lon, city);
+      loadDust(lat, lon);
+    }, async () => {
+      // Default Fallback: Athens, Greece
+      loadWeather(37.9838, 23.7275, currentLang === 'el' ? 'Αθήνα, Ελλάδα' : 'Athens, Greece');
+      loadDust(37.9838, 23.7275);
+    });
+  } else {
+    loadWeather(37.9838, 23.7275, currentLang === 'el' ? 'Αθήνα, Ελλάδα' : 'Athens, Greece');
+    loadDust(37.9838, 23.7275);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
