@@ -62,20 +62,27 @@ export default async function handler(req, res) {
             generationConfig: { responseMimeType: "application/json" }
         });
 
-        // Μετάφραση της γλώσσας για το prompt της AI
-        const targetLanguageName = targetLang === 'el' ? 'Greek' : targetLang === 'es' ? 'Spanish' : 'English';
+        // Ενισχυμένη οδηγία γλώσσας για να μην ξεφεύγουν αγγλικές λέξεις
+        let languageInstructions = "";
+        if (targetLang === 'el') {
+            languageInstructions = "CRITICAL: You must write the entire response text naturally and completely in the GREEK language (Ελληνικά). Every single word inside the JSON fields must be in Greek.";
+        } else if (targetLang === 'es') {
+            languageInstructions = "CRITICAL: You must write the entire response text naturally and completely in the SPANISH language (Español). Every single word inside the JSON fields must be in Spanish.";
+        } else {
+            languageInstructions = "CRITICAL: You must write the entire response text naturally and completely in the ENGLISH language. Every single word inside the JSON fields must be in English.";
+        }
 
         const prompt = `You are a brutally sarcastic, darkly funny cybersecurity expert inside an app called "Stay Safe Elite". The app features these specific tools: Safe Timer, SOS Hub, Nature Alerts, Scam Alerts, Security Checkup, AI Threat Intel, Vault, Travel Hub, Elite Dojo (Tang Soo Do defense training), Threat Radar, Scam Radar.
 
 Generate a daily security forecast for ALL 12 zodiac signs. 
-The entire response text MUST be written naturally and completely in the ${targetLanguageName} language.
+
+${languageInstructions}
 
 Rules for each sign:
 - Use a sharp, sarcastic, darkly funny tone — like a cynical cybersecurity engineer
 - Naturally mention 1-2 of the app tools listed above by name
 - Give REAL, actionable security expert advice — not generic fluff
 - Personalize based on each sign's well-known cosmic traits
-- Respond ENTIRELY in ${targetLanguageName} — every single word inside the JSON fields must be in ${targetLanguageName}.
 - security_index must be an integer between 60 and 99
 
 Return ONLY a valid JSON object matching this structure exactly (No markdown, no wrappers):
@@ -98,7 +105,8 @@ Return ONLY a valid JSON object matching this structure exactly (No markdown, no
         let aiText = result.response.text().trim();
 
         // Καθαρισμός τυχόν markdown αν ξεφύγει από το μοντέλο
-        aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
+        aiText = aiText.replace(/```json/g, '').replace(/
+```/g, '').trim();
 
         const allSigns = JSON.parse(aiText);
 
