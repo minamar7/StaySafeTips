@@ -7,8 +7,6 @@
   "start_url": "/StaySafeTips/index.html",
   "scope": "/StaySafeTips/",
   "display": "standalone",
-  "display_override": ["standalone", "window-controls-overlay"],
-  "orientation": "portrait",
   "background_color": "#020617",
   "theme_color": "#020617",
   "dir": "ltr",
@@ -99,4 +97,3 @@
     }
   ]
 }
-
