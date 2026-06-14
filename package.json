@@ -1,7 +1,6 @@
 {
   "name": "stay-safe-tips",
   "version": "1.0.0",
-  "type": "module",
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "ioredis": "^5.4.1"
