@@ -1,5 +1,5 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const Redis = require('ioredis');
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import Redis from 'ioredis';
 
 let redis;
 function getRedis() {
@@ -15,7 +15,7 @@ function getRedis() {
 
 const ALL_SIGNS = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
     // CORS Headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -123,10 +123,10 @@ Return ONLY a valid JSON object matching this structure exactly (No markdown, no
     } catch (err) {
         return res.status(500).json({ error: 'Server Error', detail: err.message });
     } finally {
-        // 5. Κρίσιμο: Πάντα κλείνουμε το Redis connection στο τέλος της Serverless εκτέλεσης
+        // 5. Κλείνουμε πάντα τη σύνδεση Redis στο τέλος
         if (redis) {
             await redis.quit().catch(() => {});
             redis = null;
         }
     }
-};
+}
