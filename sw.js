@@ -1,4 +1,4 @@
-const VERSION = "v194-elite-final"; 
+const VERSION = "v195-elite-final"; 
 const STATIC_CACHE = `ss-elite-static-${VERSION}`;
 const BASE = '/StaySafeTips/';
 
@@ -33,6 +33,7 @@ const STATIC_ASSETS = [
   BASE + "premium-ml.html",
   BASE + "premium.html",
   BASE + "premium-suite.html",
+  BASE + "package.json",
   BASE + "emergency_hub.json",
   BASE + "kiai.mp3",
   BASE + "kiai1.mp3",
