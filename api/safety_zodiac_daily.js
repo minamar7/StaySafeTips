@@ -1,3 +1,4 @@
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const Redis = require('ioredis');
 
 let redis;
@@ -15,6 +16,7 @@ function getRedis() {
 const ALL_SIGNS = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
 
 module.exports = async (req, res) => {
+    // CORS Headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -39,6 +41,11 @@ module.exports = async (req, res) => {
             const allData = JSON.parse(cached);
             if (allData[zodiacSign]) {
                 console.log(`Cache HIT: ${cacheKey} → ${zodiacSign}`);
+                
+                // Κλείνουμε σωστά τη σύνδεση για το Vercel Serverless
+                await client.quit().catch(() => {});
+                redis = null;
+                
                 return res.status(200).json(allData[zodiacSign]);
             }
         }
@@ -47,29 +54,31 @@ module.exports = async (req, res) => {
         console.warn('Redis read error (continuing):', cacheErr.message);
     }
 
-    // 2. Κλήση Gemini για ΟΛΑ τα 12 ζώδια μαζί
+    // 2. Κλήση Gemini μέσω του επίσημου SDK
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const ai = new GoogleGenerativeAI(apiKey);
+        const model = ai.getGenerativeModel({ 
+            model: "gemini-2.5-flash",
+            generationConfig: { responseMimeType: "application/json" }
+        });
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: `You are a brutally sarcastic, darkly funny cybersecurity expert inside an app called "Stay Safe Elite". The app has these tools: Safe Timer (timed safety check-ins), SOS Hub (emergency contacts), Nature Alerts (weather threats), Scam Alerts (live fraud database), Security Checkup (digital safety scan), AI Threat Intel (AI risk analysis), Vault (secure storage), Travel Hub (stay safe abroad), Elite Dojo (Tang Soo Do defense training), Threat Radar (live threat scanning), Scam Radar (real-time threat broadcasts).
+        // Μετάφραση της γλώσσας για το prompt της AI
+        const targetLanguageName = targetLang === 'el' ? 'Greek' : targetLang === 'es' ? 'Spanish' : 'English';
 
-Generate a daily security forecast for ALL 12 zodiac signs in the language "${targetLang}".
+        const prompt = `You are a brutally sarcastic, darkly funny cybersecurity expert inside an app called "Stay Safe Elite". The app features these specific tools: Safe Timer, SOS Hub, Nature Alerts, Scam Alerts, Security Checkup, AI Threat Intel, Vault, Travel Hub, Elite Dojo (Tang Soo Do defense training), Threat Radar, Scam Radar.
+
+Generate a daily security forecast for ALL 12 zodiac signs. 
+The entire response text MUST be written naturally and completely in the ${targetLanguageName} language.
 
 Rules for each sign:
-- Use sharp, sarcastic, darkly funny tone — like a cybersecurity stand-up comedian
-- Naturally mention 1-2 of the app tools by name
+- Use a sharp, sarcastic, darkly funny tone — like a cynical cybersecurity engineer
+- Naturally mention 1-2 of the app tools listed above by name
 - Give REAL, actionable security expert advice — not generic fluff
-- Personalize to each sign's personality traits
-- Respond ENTIRELY in the language "${targetLang}" — every single word
-- security_index must be a number between 60 and 99
+- Personalize based on each sign's well-known cosmic traits
+- Respond ENTIRELY in ${targetLanguageName} — every single word inside the JSON fields must be in ${targetLanguageName}.
+- security_index must be an integer between 60 and 99
 
-CRITICAL: Return ONLY raw JSON, no backticks, no markdown, no explanation:
+Return ONLY a valid JSON object matching this structure exactly (No markdown, no wrappers):
 {
   "Aries":        {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
   "Taurus":       {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
@@ -83,33 +92,23 @@ CRITICAL: Return ONLY raw JSON, no backticks, no markdown, no explanation:
   "Capricorn":    {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
   "Aquarius":     {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
   "Pisces":       {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75}
-}`
-                    }]
-                }]
-            })
-        });
+}`;
 
-        const data = await response.json();
+        const result = await model.generateContent(prompt);
+        let aiText = result.response.text().trim();
 
-        if (!data.candidates || !data.candidates[0]) {
-            return res.status(500).json({ error: 'Gemini returned no response', detail: JSON.stringify(data) });
-        }
-
-        let aiText = data.candidates[0].content.parts[0].text.trim();
-
-        // Aggressive καθαρισμός
+        // Καθαρισμός τυχόν markdown αν ξεφύγει από το μοντέλο
         aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
 
-        const match = aiText.match(/\{[\s\S]*\}/);
-        if (!match) return res.status(500).json({ error: 'No JSON found', detail: aiText });
+        const allSigns = JSON.parse(aiText);
 
-        const allSigns = JSON.parse(match[0]);
-
-        // Βεβαιώσου ότι υπάρχουν όλα τα 12 ζώδια
+        // Έλεγχος εγκυρότητας των 12 ζωδίων
         const valid = ALL_SIGNS.every(s => allSigns[s] && allSigns[s].forecast);
-        if (!valid) return res.status(500).json({ error: 'Incomplete data from Gemini', detail: Object.keys(allSigns) });
+        if (!valid) {
+            return res.status(500).json({ error: 'Incomplete data from Gemini', detail: Object.keys(allSigns) });
+        }
 
-        // 3. Αποθήκευση ΟΛΩΝ στο Redis για 24 ώρες
+        // 3. Αποθήκευση στο Redis για 24 ώρες
         try {
             const client = getRedis();
             await client.set(cacheKey, JSON.stringify(allSigns), 'EX', 86400);
@@ -123,5 +122,11 @@ CRITICAL: Return ONLY raw JSON, no backticks, no markdown, no explanation:
 
     } catch (err) {
         return res.status(500).json({ error: 'Server Error', detail: err.message });
+    } finally {
+        // 5. Κρίσιμο: Πάντα κλείνουμε το Redis connection στο τέλος της Serverless εκτέλεσης
+        if (redis) {
+            await redis.quit().catch(() => {});
+            redis = null;
+        }
     }
 };
