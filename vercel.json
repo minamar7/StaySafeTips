@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/ai-threat.cjs": { "maxDuration": 15 },
-    "api/safety_zodiac_daily.cjs": { "maxDuration": 30 }
+    "api/ai-threat.js": { "maxDuration": 15 },
+    "api/safety_zodiac_daily.js": { "maxDuration": 30 }
   }
 }
