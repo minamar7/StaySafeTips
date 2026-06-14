@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Safety Zodiac Daily - Stay Safe Elite</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-4545564564564564" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4000056160039274" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
@@ -52,18 +52,21 @@
         .loading { display: none; text-align: center; padding: 20px 0; }
         .spinner { width: 30px; height: 30px; border: 3px solid rgba(79,172,254,0.2); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
         .loading-text { font-size: 10px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <div class="ad-container">
-        <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-app-pub-4545564564564564" data-ad-slot="4546456456"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <!-- Top Ad -->
+    <div class="ad-container" style="display:none;" data-ad-wrap>
+        <ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-pub-4000056160039274" data-ad-slot="6359424861"></ins>
+        <script>if(localStorage.getItem('premium_user')!=='true'){(adsbygoogle=window.adsbygoogle||[]).push({});}</script>
     </div>
 
     <div class="header">
+        <div style="font-size:50px;text-align:center;margin-bottom:8px;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(197,160,89,0.4));">🛡️⭐</div>
         <h1 class="logo-text">SAFETY <span>ZODIAC</span></h1>
         <p id="ui-tagline" class="tagline">Loading Intelligence...</p>
     </div>
@@ -94,9 +97,10 @@
         </div>
     </div>
 
+    <!-- Bottom Ad -->
     <div class="ad-container" style="min-height: 100px;">
-        <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-fb+5w+4e-db+86" data-ad-client="ca-app-pub-4545564564564564" data-ad-slot="456456456"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-fb+5w+4e-db+86" data-ad-client="ca-pub-4000056160039274" data-ad-slot="6359424861"></ins>
+        <script>if(localStorage.getItem('premium_user')!=='true'){(adsbygoogle=window.adsbygoogle||[]).push({});}</script>
     </div>
 
     <button id="ui-btn" class="btn-elite" onclick="celebrate()">Start Training</button>
@@ -107,7 +111,6 @@
 </div>
 
 <script>
-    // ✅ ΣΩΣΤΟ URL
     const VERCEL_URL = "https://stay-safe-tips.vercel.app/api/safety_zodiac_daily";
 
     const userLang = new URLSearchParams(window.location.search).get('lang') || (navigator.language || navigator.userLanguage).split('-')[0] || 'en';
@@ -163,10 +166,10 @@
     });
 
     async function fetchZodiacData(index) {
-        const forecastEl = document.getElementById('z-forecast');
-        const loadingEl  = document.getElementById('loading');
+        const forecastEl  = document.getElementById('z-forecast');
+        const loadingEl   = document.getElementById('loading');
+        const loadingText = document.getElementById('loading-text');
 
-        // Reset
         forecastEl.classList.remove('visible');
         forecastEl.style.display = 'none';
         loadingEl.style.display = 'block';
@@ -175,14 +178,28 @@
         document.getElementById('z-name').innerText = ui.signs[index];
         document.getElementById('z-protocol').innerText = '...';
 
+        const messages = [ui.decrypting, "Scanning planetary nodes...", "Evaluating risk vectors...", "Compiling elite protocol..."];
+        let msgIdx = 0;
+        loadingText.innerText = messages[0];
+        const msgInterval = setInterval(() => {
+            msgIdx = (msgIdx + 1) % messages.length;
+            loadingText.innerText = messages[msgIdx];
+        }, 1200);
+
+        let fakeVal = 0;
+        const meterInterval = setInterval(() => {
+            fakeVal = Math.min(fakeVal + Math.random() * 15, 85);
+            document.getElementById('meter-fill').style.width = fakeVal + '%';
+        }, 200);
+
         try {
             const response = await fetch(`${VERCEL_URL}?sign=${signsEng[index]}&lang=${userLang}`);
-
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
             const data = await response.json();
-
             if (data.error) throw new Error(data.error);
+
+            clearInterval(msgInterval);
+            clearInterval(meterInterval);
 
             forecastEl.innerText = data.forecast || '—';
             document.getElementById('z-protocol').innerText = data.protocol || '—';
@@ -196,10 +213,14 @@
             setTimeout(() => forecastEl.classList.add('visible'), 50);
 
         } catch (error) {
+            clearInterval(msgInterval);
+            clearInterval(meterInterval);
             loadingEl.style.display = 'none';
             forecastEl.style.display = 'block';
             forecastEl.innerText = "⚠️ " + error.message;
             forecastEl.classList.add('visible');
+            document.getElementById('meter-fill').style.width = '0%';
+            document.getElementById('meter-val').innerText = '0%';
         }
     }
 
@@ -218,6 +239,12 @@
             navigator.clipboard?.writeText(text).then(() => alert('Copied!'));
         }
     }
+</script>
+
+<script>
+if (localStorage.getItem("premium_user") !== "true") {
+  document.querySelectorAll('[data-ad-wrap]').forEach(function(el){ el.style.display='flex'; });
+}
 </script>
 </body>
 </html>
