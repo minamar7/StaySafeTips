@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Travel Hub Ultra | Stay Safe Elite</title>
 
 <script>
@@ -15,8 +14,6 @@ content="width=device-width,initial-scale=1.0">
     }
 })();
 </script>
-
-
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -177,18 +174,17 @@ button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);}
 
   <div class="grid">
 
-  <div class="card">
-  <div class="card-header">
-    <h2>🌍 Safe Trip Finder</h2>
-    <div class="card-tag card-premium">Booking Helper</div>
-  </div>
-  <div>
-    <input id="originCity" placeholder="From (e.g. Athens)">
-    <button onclick="findSafeTrips()">Find Safe Destinations</button>
-    <div class="result" id="flightResult">Discover top-rated safe places and find flights.</div>
-  </div>
-</div>
-
+    <div class="card">
+      <div class="card-header">
+        <h2>🌍 Safe Trip Finder</h2>
+        <div class="card-tag card-premium">Booking Helper</div>
+      </div>
+      <div>
+        <input id="originCity" placeholder="From (e.g. Athens)">
+        <button onclick="findSafeTrips()">Find Safe Destinations</button>
+        <div class="result" id="flightResult">Discover top-rated safe places and find flights.</div>
+      </div>
+    </div>
 
     <div class="card">
       <div class="card-header">
@@ -285,8 +281,10 @@ function setStatusBox(){
 setStatusBox();
 setInterval(setStatusBox,1000);
 
-/* ———— API URLs ———— */
-const API_BASE = "https://stay-safe-tips.vercel.app/api";
+/* ———— API ENDPOINTS (.CJS UPDATED) ———— */
+const API_AI_THREAT = "https://stay-safe-tips.vercel.app/api/ai-threat.cjs";
+const API_CURRENCY = "https://stay-safe-tips.vercel.app/api/currency.cjs";
+
 /* ———— SAFE TRIP FINDER (ULTRA STABLE) ———— */
 async function findSafeTrips() {
   const origin = document.getElementById("originCity").value.trim();
@@ -300,7 +298,7 @@ async function findSafeTrips() {
   box.innerHTML = "AI is scanning for the safest routes...";
 
   try {
-    const r = await fetch(`${API_BASE}/ai-threat`, {
+    const r = await fetch(API_AI_THREAT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -318,7 +316,6 @@ async function findSafeTrips() {
     const data = await r.json();
     let txt = data.content?.[0]?.text || "";
 
-    // ΚΑΘΑΡΙΣΜΟΣ: Βρίσκει μόνο ό,τι είναι ανάμεσα σε [ και ]
     const jsonMatch = txt.match(/\[.*\]/s);
     if (!jsonMatch) throw new Error("No JSON found");
     
@@ -366,7 +363,7 @@ async function travelThreat(){
   box.innerHTML = "Analyzing with Gemini AI...";
 
   try{
-    const r = await fetch(`${API_BASE}/ai-threat`,{
+    const r = await fetch(API_AI_THREAT, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
@@ -377,8 +374,6 @@ async function travelThreat(){
     });
 
     const data = await r.json();
-    
-    // Πρόσβαση στο text από το σωστό format (content[0].text)
     let txt = data.content?.[0]?.text || "AI safety briefing temporarily unavailable.";
 
     box.innerHTML = `<div style="white-space:pre-wrap;">${txt}</div>`;
@@ -396,7 +391,7 @@ async function loadCurrency(){
   box.innerHTML = "Fetching live market rates...";
 
   try {
-    const r = await fetch(`${API_BASE}/currency`);
+    const r = await fetch(API_CURRENCY);
     const data = await r.json();
 
     if(!data.rates || !data.rates[cur]){
@@ -405,7 +400,6 @@ async function loadCurrency(){
     }
 
     const rate = data.rates[cur].toFixed(2);
-    // Προσθήκη συμβόλου $ αν επιλεγεί το USD
     const symbol = cur === "USD" ? "$" : "";
 
     box.innerHTML = `
@@ -423,7 +417,7 @@ async function loadCurrency(){
   }
 }
 
-
+/* ———— COUNTRY SAFETY SCORE ———— */
 async function loadSafety(){
   const country = document.getElementById("safeCountry").value.trim();
   const box = document.getElementById("safeResult");
@@ -436,7 +430,7 @@ async function loadSafety(){
   box.innerHTML = "Consulting global security databases...";
 
   try {
-    const r = await fetch(`${API_BASE}/ai-threat`, {
+    const r = await fetch(API_AI_THREAT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -453,7 +447,6 @@ async function loadSafety(){
     const data = await r.json();
     let txt = data.content?.[0]?.text || "";
 
-    // Clean and parse JSON
     const jsonMatch = txt.match(/\{.*\}/s);
     if (!jsonMatch) throw new Error("No JSON");
     const d = JSON.parse(jsonMatch[0]);
@@ -477,7 +470,6 @@ async function loadSafety(){
   }
 }
 
-
 /* ———— SMART AI PACKING TIPS ———— */
 async function packingTips(){
   const country = document.getElementById("packCountry").value.trim();
@@ -491,8 +483,7 @@ async function packingTips(){
   box.innerHTML = "AI is generating your custom packing list...";
 
   try {
-    // Χρησιμοποιούμε το ίδιο API που έχεις για το AI Threat
-    const r = await fetch(`${API_BASE}/ai-threat`, {
+    const r = await fetch(API_AI_THREAT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -510,14 +501,12 @@ async function packingTips(){
     const data = await r.json();
     let txt = data.content?.[0]?.text || "Packing tips temporarily unavailable.";
 
-    // Εμφάνιση με ωραίο formatting
     box.innerHTML = `<div style="white-space:pre-wrap; line-height:1.6;">🧳 <b>Essentials for ${country}:</b>\n${txt}</div>`;
 
   } catch(e) {
     box.innerHTML = "AI service unavailable. Default: Passport, Charger, Insurance, Local Currency.";
   }
 }
-
 </script>
 
 </body>
