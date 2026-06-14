@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     const today = new Date().toISOString().split('T')[0];
     const cacheKey = `zodiac:${targetLang}:${today}`;
 
-    // 1. Έλεγχος Redis Cache για το συγκεκριμένο ζώδιο
+    // 1. Έλεγχος Redis Cache για το συγκεκριμένο ζώδιο και γλώσσα
     try {
         const client = getRedis();
         const cached = await client.get(cacheKey);
@@ -104,9 +104,8 @@ Return ONLY a valid JSON object matching this structure exactly (No markdown, no
         const result = await model.generateContent(prompt);
         let aiText = result.response.text().trim();
 
-        // Καθαρισμός τυχόν markdown αν ξεφύγει από το μοντέλο
-        aiText = aiText.replace(/```json/g, '').replace(/
-```/g, '').trim();
+        // ✅ Διορθώθηκε: Καθαρισμός τυχόν markdown σε μία ενιαία γραμμή
+        aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
 
         const allSigns = JSON.parse(aiText);
 
