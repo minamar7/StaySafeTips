@@ -111,7 +111,6 @@
 <script>
     const VERCEL_URL = "https://stay-safe-tips.vercel.app/api/safety_zodiac_daily";
 
-    // Προεπιλεγμένη γλώσσα του app είναι τα αγγλικά ('en') αν δεν ορίζεται κάτι άλλο στο URL ή στον browser
     const userLang = new URLSearchParams(window.location.search).get('lang') || (navigator.language || navigator.userLanguage).split('-')[0] || 'en';
 
     const translations = {
@@ -138,6 +137,62 @@
             decrypting: "Descifrando...",
             placeholder: "Selecciona tu signo para descifrar tu protocolo diario.",
             signs: ["Aries","Tauro","Géminis","Cáncer","Leo","Virgo","Libra","Escorpio","Sagitario","Capricornio","Acuario","Piscis"]
+        },
+        de: {
+            tagline: "Tägliche Bedrohungsanalyse",
+            protocol: "Sicherheitsprotokoll",
+            btn: "Sterne ausgerichtet",
+            decrypting: "Entschlüsselung...",
+            placeholder: "Wählen Sie Ihr Zeichen, um Ihr tägliches Sicherheitsprotokoll zu entschlüsseln.",
+            signs: ["Widder","Stier","Zwillinge","Krebs","Löwe","Jungfrau","Waage","Skorpion","Schütze","Steinbock","Wassermann","Fische"]
+        },
+        fr: {
+            tagline: "Intelligence des menaces daily",
+            protocol: "Protocole de sécurité",
+            btn: "Étoiles alignées",
+            decrypting: "Déchiffrement...",
+            placeholder: "Sélectionnez votre signe pour décrypter votre protocole de sécurité quotidien.",
+            signs: ["Bélier","Taureau","Gémeaux","Cancer","Lion","Vierge","Balance","Scorpion","Sagittaire","Capricorne","Verseau","Poissons"]
+        },
+        it: {
+            tagline: "Intelligence giornaliera minacce",
+            protocol: "Protocollo di sicurezza",
+            btn: "Stelle allineate",
+            decrypting: "Decrittazione...",
+            placeholder: "Seleziona il tuo segno για decifrare il tuo protocollo di sicurezza quotidiano.",
+            signs: ["Ariete","Toro","Gemelli","Cancro","Leone","Vergine","Bilancia","Scorpione","Sagittario","Capricorno","Acquario","Pesci"]
+        },
+        pt: {
+            tagline: "Inteligência Diária de Ameaças",
+            protocol: "Protocolo de Segurança",
+            btn: "Estrelas Alinhadas",
+            decrypting: "Descriptografando...",
+            placeholder: "Selecione seu signo para decifrar seu protocolo de segurança diário.",
+            signs: ["Áries","Touro","Gêmeos","Câncer","Leão","Virgem","Libra","Escorpião","Sagitário","Capricórnio","Aquário","Peixes"]
+        },
+        ru: {
+            tagline: "Ежедневная аналитика угроз",
+            protocol: "Протокол безопасности",
+            btn: "Звезды сошлись",
+            decrypting: "Расшифровка...",
+            placeholder: "Выберите свой знак, чтобы расшифровать ежедневный протокол безопасности.",
+            signs: ["Овен","Телец","Близнецы","Рак","Лев","Дева","Весы","Скорпион","Стрелец","Козерог","Водолей","Рыбы"]
+        },
+        zh: {
+            tagline: "每日威胁情报",
+            protocol: "安全协议",
+            btn: "星象就绪",
+            decrypting: "解密中...",
+            placeholder: "选择你的星座以解密你的每日安全 card。",
+            signs: ["白羊座","金牛座","双子座","巨蟹座","狮子座","处女座","天秤座","天蝎座","射手座","摩羯座","水瓶座","双鱼座"]
+        },
+        hi: {
+            tagline: "दैनिक खतरा खुफिया",
+            protocol: "सुरक्षा प्रोटोकॉल",
+            btn: "सितारे संरेखित हैं",
+            decrypting: "डिक्रिप्टिंग...",
+            placeholder: "अपने दैनिक सुरक्षा प्रोटोकॉल को डिक्रिप्ट करने के लिए अपने साइन का चयन करें।",
+            signs: ["मेष","वृषभ","मिथुन","कर्क","सिंह","कन्या","तुला","वृश्चिक","धनु","मकर","कुंभ","मीन"]
         }
     };
 
@@ -193,10 +248,8 @@
         }, 200);
 
         try {
-            // Αν η τρέχουσα γλώσσα είναι ελληνικά, στέλνουμε 'Greek' στο API ώστε το AI να απαντάει σωστά
-            const apiLang = userLang === 'el' ? 'Greek' : userLang;
-
-            const response = await fetch(`${VERCEL_URL}?sign=${signsEng[index]}&lang=${apiLang}`);
+            // Διορθώθηκε: Στέλνουμε απευθείας το userLang (π.χ. 'el', 'de', 'es') για να το αναγνωρίζει το backend map
+            const response = await fetch(`${VERCEL_URL}?sign=${signsEng[index]}&lang=${userLang}`);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             if (data.error) throw new Error(data.error);
