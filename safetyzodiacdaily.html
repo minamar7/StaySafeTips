@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,7 +88,7 @@
             <div class="loading-text" id="loading-text">Decrypting...</div>
         </div>
 
-        <p id="z-forecast" class="forecast">Επίλεξε το ζώδιό σου για να αποκρυπτογραφήσεις το ημερήσιο πρωτόκολλό σου.</p>
+        <p id="z-forecast" class="forecast">Select your sign to decrypt your daily security protocol.</p>
         
         <div class="protocol">
             <span id="ui-protocol-lbl" style="color: var(--blue); font-size: 10px; font-weight: bold; text-transform: uppercase;">Protocol</span>
@@ -111,6 +111,7 @@
 <script>
     const VERCEL_URL = "https://stay-safe-tips.vercel.app/api/safety_zodiac_daily";
 
+    // Προεπιλεγμένη γλώσσα του app είναι τα αγγλικά ('en') αν δεν ορίζεται κάτι άλλο στο URL ή στον browser
     const userLang = new URLSearchParams(window.location.search).get('lang') || (navigator.language || navigator.userLanguage).split('-')[0] || 'en';
 
     const translations = {
@@ -146,6 +147,7 @@
     document.getElementById('ui-btn').innerText = ui.btn;
     document.getElementById('ui-protocol-lbl').innerText = ui.protocol;
     document.getElementById('loading-text').innerText = ui.decrypting;
+    document.getElementById('z-forecast').innerText = ui.placeholder;
 
     const zodiacIcons = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
     const signsEng = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
@@ -191,7 +193,10 @@
         }, 200);
 
         try {
-            const response = await fetch(`${VERCEL_URL}?sign=${signsEng[index]}&lang=${userLang}`);
+            // Αν η τρέχουσα γλώσσα είναι ελληνικά, στέλνουμε 'Greek' στο API ώστε το AI να απαντάει σωστά
+            const apiLang = userLang === 'el' ? 'Greek' : userLang;
+
+            const response = await fetch(`${VERCEL_URL}?sign=${signsEng[index]}&lang=${apiLang}`);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             if (data.error) throw new Error(data.error);
