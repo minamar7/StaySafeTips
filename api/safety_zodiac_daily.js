@@ -15,18 +15,18 @@ function getRedis() {
 
 const ALL_SIGNS = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
 
-// Οι 10 γλώσσες από την εικόνα 169.jpg χαρτογραφημένες για το Gemini
-const LANGUAGE_MAP = {
-    'el': 'GREEK (Ελληνικά)',
-    'en': 'ENGLISH',
-    'de': 'GERMAN (Deutsch)',
-    'fr': 'FRENCH (Français)',
-    'es': 'SPANISH (Español)',
-    'it': 'ITALIAN (Italiano)',
-    'pt': 'PORTUGUESE (Português)',
-    'ru': 'RUSSIAN (Русский)',
-    'zh': 'CHINESE (中文)',
-    'hi': 'HINDI (हिन्दी)'
+// Πλήρης χάρτης γλωσσών — όλες οι 10 γλώσσες της εφαρμογής
+const LANG_NAMES = {
+    'en': 'English',
+    'el': 'Greek (Ελληνικά)',
+    'de': 'German (Deutsch)',
+    'fr': 'French (Français)',
+    'es': 'Spanish (Español)',
+    'it': 'Italian (Italiano)',
+    'pt': 'Portuguese (Português)',
+    'ru': 'Russian (Русский)',
+    'zh': 'Chinese (中文)',
+    'hi': 'Hindi (हिन्दी)'
 };
 
 export default async function handler(req, res) {
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     const { sign, lang } = req.query;
-    const targetLang = lang || 'en';
+    const targetLang = (lang || 'en').toLowerCase();
     const zodiacSign = sign || 'Aries';
     const apiKey = process.env.Safety_Zodiac_Daily;
 
@@ -55,11 +55,10 @@ export default async function handler(req, res) {
             const allData = JSON.parse(cached);
             if (allData[zodiacSign]) {
                 console.log(`Cache HIT: ${cacheKey} → ${zodiacSign}`);
-                
-                // Κλείνουμε σωστά τη σύνδεση για το Vercel Serverless
+
                 await client.quit().catch(() => {});
                 redis = null;
-                
+
                 return res.status(200).json(allData[zodiacSign]);
             }
         }
@@ -71,51 +70,50 @@ export default async function handler(req, res) {
     // 2. Κλήση Gemini μέσω του επίσημου SDK
     try {
         const ai = new GoogleGenerativeAI(apiKey);
-        
-        // Δυναμικός εντοπισμός της γλώσσας από το MAP
-        const fullLanguageName = LANGUAGE_MAP[targetLang] || 'ENGLISH';
+        const langName = LANG_NAMES[targetLang] || LANG_NAMES.en;
 
-        const model = ai.getGenerativeModel({ 
+        const model = ai.getGenerativeModel({
             model: "gemini-2.5-flash",
-            // System instruction για να επιβάλλεται η γλώσσα καθολικά στο μοντέλο
+            // ✅ ΔΙΟΡΘΩΣΗ: Προσθήκη systemInstruction για απόλυτη επιβολή της γλώσσας και της περσόνας
             systemInstruction: `You are a brutally sarcastic, darkly funny cybersecurity expert inside an app called "Stay Safe Elite". The app features these specific tools: Safe Timer, SOS Hub, Nature Alerts, Scam Alerts, Security Checkup, AI Threat Intel, Vault, Travel Hub, Elite Dojo (Tang Soo Do defense training), Threat Radar, Scam Radar.
 
-CRITICAL: You must write the entire response text naturally and completely in the ${fullLanguageName} language. Every single word inside the JSON fields (forecast and protocol) must be in ${fullLanguageName}. Do not translate or change the technical names of the app tools listed above.`,
+CRITICAL REQUIREMENT: You must write the entire response text inside the fields "forecast" and "protocol" naturally and completely in the ${langName} language. Every single word of your output text must be in ${langName}. Do not translate or modify the technical names of the app tools listed above.`,
             generationConfig: { responseMimeType: "application/json" }
         });
 
-        const prompt = `Generate a daily security forecast for ALL 12 zodiac signs. 
+        const prompt = `Generate a daily security forecast for ALL 12 zodiac signs.
 
 Rules for each sign:
 - Use a sharp, sarcastic, darkly funny tone — like a cynical cybersecurity engineer
 - Naturally mention 1-2 of the app tools listed above by name
 - Give REAL, actionable security expert advice — not generic fluff
 - Personalize based on each sign's well-known cosmic traits
-- The content for forecast and protocol MUST be in ${fullLanguageName}
+- The values for "forecast" and "protocol" MUST be written in ${langName}
 - security_index must be an integer between 60 and 99
+
+CRITICAL JSON STRUCTURE RULE: You must keep the JSON keys exactly as written below in English ("Aries", "Taurus", etc.). Do not translate the zodiac sign names used as keys.
 
 Return ONLY a valid JSON object matching this structure exactly (No markdown, no wrappers):
 {
-  "Aries":        {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Taurus":       {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Gemini":       {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Cancer":       {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Leo":          {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Virgo":        {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Libra":        {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Scorpio":      {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Sagittarius":  {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Capricorn":    {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Aquarius":     {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75},
-  "Pisces":       {"forecast": "2-3 sentences", "protocol": "1 tip", "security_index": 75}
+  "Aries":        {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Taurus":       {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Gemini":       {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Cancer":       {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Leo":          {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Virgo":        {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Libra":        {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Scorpio":      {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Sagittarius":  {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Capricorn":    {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Aquarius":     {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75},
+  "Pisces":       {"forecast": "2-3 sentences in ${langName}", "protocol": "1 tip in ${langName}", "security_index": 75}
 }`;
 
         const result = await model.generateContent(prompt);
         let aiText = result.response.text().trim();
 
-        // Καθαρισμός τυχόν markdown σε μία ενιαία γραμμή
-        aiText = aiText.replace(/```json/g, '').replace(/
-```/g, '').trim();
+        // Καθαρισμός τυχόν markdown
+        aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
 
         const allSigns = JSON.parse(aiText);
 
