@@ -15,6 +15,20 @@ function getRedis() {
 
 const ALL_SIGNS = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
 
+// Οι 10 γλώσσες από την εικόνα 169.jpg χαρτογραφημένες για το Gemini
+const LANGUAGE_MAP = {
+    'el': 'GREEK (Ελληνικά)',
+    'en': 'ENGLISH',
+    'de': 'GERMAN (Deutsch)',
+    'fr': 'FRENCH (Français)',
+    'es': 'SPANISH (Español)',
+    'it': 'ITALIAN (Italiano)',
+    'pt': 'PORTUGUESE (Português)',
+    'ru': 'RUSSIAN (Русский)',
+    'zh': 'CHINESE (中文)',
+    'hi': 'HINDI (हिन्दी)'
+};
+
 export default async function handler(req, res) {
     // CORS Headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -57,32 +71,27 @@ export default async function handler(req, res) {
     // 2. Κλήση Gemini μέσω του επίσημου SDK
     try {
         const ai = new GoogleGenerativeAI(apiKey);
+        
+        // Δυναμικός εντοπισμός της γλώσσας από το MAP
+        const fullLanguageName = LANGUAGE_MAP[targetLang] || 'ENGLISH';
+
         const model = ai.getGenerativeModel({ 
             model: "gemini-2.5-flash",
+            // System instruction για να επιβάλλεται η γλώσσα καθολικά στο μοντέλο
+            systemInstruction: `You are a brutally sarcastic, darkly funny cybersecurity expert inside an app called "Stay Safe Elite". The app features these specific tools: Safe Timer, SOS Hub, Nature Alerts, Scam Alerts, Security Checkup, AI Threat Intel, Vault, Travel Hub, Elite Dojo (Tang Soo Do defense training), Threat Radar, Scam Radar.
+
+CRITICAL: You must write the entire response text naturally and completely in the ${fullLanguageName} language. Every single word inside the JSON fields (forecast and protocol) must be in ${fullLanguageName}. Do not translate or change the technical names of the app tools listed above.`,
             generationConfig: { responseMimeType: "application/json" }
         });
 
-        // Ενισχυμένη οδηγία γλώσσας για να μην ξεφεύγουν αγγλικές λέξεις
-        let languageInstructions = "";
-        if (targetLang === 'el') {
-            languageInstructions = "CRITICAL: You must write the entire response text naturally and completely in the GREEK language (Ελληνικά). Every single word inside the JSON fields must be in Greek.";
-        } else if (targetLang === 'es') {
-            languageInstructions = "CRITICAL: You must write the entire response text naturally and completely in the SPANISH language (Español). Every single word inside the JSON fields must be in Spanish.";
-        } else {
-            languageInstructions = "CRITICAL: You must write the entire response text naturally and completely in the ENGLISH language. Every single word inside the JSON fields must be in English.";
-        }
-
-        const prompt = `You are a brutally sarcastic, darkly funny cybersecurity expert inside an app called "Stay Safe Elite". The app features these specific tools: Safe Timer, SOS Hub, Nature Alerts, Scam Alerts, Security Checkup, AI Threat Intel, Vault, Travel Hub, Elite Dojo (Tang Soo Do defense training), Threat Radar, Scam Radar.
-
-Generate a daily security forecast for ALL 12 zodiac signs. 
-
-${languageInstructions}
+        const prompt = `Generate a daily security forecast for ALL 12 zodiac signs. 
 
 Rules for each sign:
 - Use a sharp, sarcastic, darkly funny tone — like a cynical cybersecurity engineer
 - Naturally mention 1-2 of the app tools listed above by name
 - Give REAL, actionable security expert advice — not generic fluff
 - Personalize based on each sign's well-known cosmic traits
+- The content for forecast and protocol MUST be in ${fullLanguageName}
 - security_index must be an integer between 60 and 99
 
 Return ONLY a valid JSON object matching this structure exactly (No markdown, no wrappers):
@@ -104,8 +113,9 @@ Return ONLY a valid JSON object matching this structure exactly (No markdown, no
         const result = await model.generateContent(prompt);
         let aiText = result.response.text().trim();
 
-        // ✅ Διορθώθηκε: Καθαρισμός τυχόν markdown σε μία ενιαία γραμμή
-        aiText = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
+        // Καθαρισμός τυχόν markdown σε μία ενιαία γραμμή
+        aiText = aiText.replace(/```json/g, '').replace(/
+```/g, '').trim();
 
         const allSigns = JSON.parse(aiText);
 
@@ -119,7 +129,7 @@ Return ONLY a valid JSON object matching this structure exactly (No markdown, no
         try {
             const client = getRedis();
             await client.set(cacheKey, JSON.stringify(allSigns), 'EX', 86400);
-            console.log(`✅ Cached all 12 signs: ${cacheKey}`);
+            console.log(`✅ Cached all 12 signs for language ${targetLang}: ${cacheKey}`);
         } catch (cacheErr) {
             console.warn('Redis save error:', cacheErr.message);
         }
