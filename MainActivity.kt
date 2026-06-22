@@ -1,9 +1,9 @@
 /* * Repository: https://minamar7.github.io/StaySafeTips/
  * Stay Safe Elite - Android Application Logic
- * Package Name: com.staysafetips.elite
+ * Package Name: com.minamar7.staysafetipselite
  */
 
-package com.staysafetips.elite
+package com.minamar7.staysafetipselite
 
 import android.content.Context
 import android.os.Bundle
