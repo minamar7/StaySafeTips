@@ -1,8 +1,3 @@
-/* * Repository: https://minamar7.github.io/StaySafeTips/
- * Stay Safe Elite - Android Application Logic
- * Package Name: com.minamar7.staysafetipselite
- */
-
 package com.minamar7.staysafetipselite
 
 import android.content.Context
@@ -13,32 +8,47 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
+// --- ADMOB IMPORTS ---
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.FullScreenContentCallback
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var billingClient: BillingClient
     private lateinit var webView: WebView
+    // --- ΜΕΤΑΒΛΗΤΗ ΓΙΑ ΤΗ ΔΙΑΦΗΜΙΣΗ ---
+    private var mInterstitialAd: InterstitialAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // --- 1. WEBVIEW SETUP (FULL SCREEN) ---
+        // --- 1. ΑΡΧΙΚΟΠΟΙΗΣΗ GOOGLE MOBILE ADS SDK ---
+        MobileAds.initialize(this) {}
+
+        // --- 2. WEBVIEW SETUP (FULL SCREEN) ---
         webView = findViewById(R.id.webview)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         
-        // Σύνδεση με το Paywall του HTML
-        webView.addJavascriptInterface(WebAppInterface(), "AndroidInterface")
+        // Αλλαγή σε "Android" για να ταιριάζει με το window.Android του HTML
+        webView.addJavascriptInterface(WebAppInterface(), "Android")
         
         webView.webViewClient = WebViewClient()
         webView.loadUrl("https://minamar7.github.io/StaySafeTips/")
 
-        // --- 2. GOOGLE PLAY BILLING SETUP ---
+        // --- 3. GOOGLE PLAY BILLING SETUP ---
         setupBillingClient()
+
+        // --- 4. ΦΟΡΤΩΣΗ ΔΙΑΦΗΜΙΣΗΣ ADMOB ---
+        loadInterstitialAd()
     }
 
-    // --- INTERFACE BRIDGE FOR HTML (Ο κώδικας που καλεί το κουμπί σου) ---
+    // --- ENHANCED INTERFACE BRIDGE FOR HTML ---
     inner class WebAppInterface {
         @JavascriptInterface
         fun startPurchase(planId: String) {
@@ -46,38 +56,66 @@ class MainActivity : AppCompatActivity() {
                 launchBillingFlow(planId)
             }
         }
+
+        // --- Ακούει το κουμπί "I HAVE ARRIVED SAFELY" ---
+        @JavascriptInterface
+        fun onSafeArrival() {
+            runOnUiThread {
+                if (mInterstitialAd != null) {
+                    // Ορισμός Callback: Τι γίνεται όταν κλείσει η διαφήμιση
+                    mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            mInterstitialAd = null
+                            loadInterstitialAd() // Προετοιμασία επόμενης διαφήμισης
+                            webView.loadUrl("javascript:showSuccess()") // Επιστροφή στο HTML για το Success Screen
+                        }
+                    }
+                    // Εμφάνιση της διαφήμισης
+                    mInterstitialAd?.show(this@MainActivity)
+                } else {
+                    // Αν δεν πρόλαβε να φορτώσει, δείξε απευθείας την επιτυχία
+                    webView.loadUrl("javascript:showSuccess()")
+                }
+            }
+        }
+    }
+
+    // --- ΣΥΝΑΡΤΗΣΗ ΦΟΡΤΩΣΗΣ ΔΙΑΦΗΜΙΣΗΣ ---
+    private fun loadInterstitialAd() {
+        val adRequest = AdRequest.Builder().build()
+        // Χρησιμοποιούμε το δοκιμαστικό ID της Google για interstitials κατά τις δοκιμές.
+        InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                }
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
     private fun setupBillingClient() {
         billingClient = BillingClient.newBuilder(this)
             .setListener { billingResult, purchases ->
-                // Αν η πληρωμή πετύχει
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
                     Toast.makeText(this, "Elite Status Activated!", Toast.LENGTH_LONG).show()
-                    webView.loadUrl("javascript:paymentSuccess()") // Ξεκλειδώνει το site
+                    webView.loadUrl("javascript:paymentSuccess()") 
                 }
             }
             .enablePendingPurchases()
             .build()
 
         billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                // Έτοιμο για αγορές
-            }
-            override fun onBillingServiceDisconnected() {
-                // Επανασύνδεση αν κοπεί το ίντερνετ
-            }
+            override fun onBillingSetupFinished(billingResult: BillingResult) {}
+            override fun onBillingServiceDisconnected() {}
         })
     }
 
     private fun launchBillingFlow(planId: String) {
-        // Εδώ η Google αναλαμβάνει τη χρέωση
         Toast.makeText(this, "Connecting to Google Play: $planId", Toast.LENGTH_SHORT).show()
-        
-        // Σημείωση: Εδώ θα προστεθεί το SKU details logic μόλις φτιάξεις τα προϊόντα στο Console
     }
 
-    // Διαχείριση του Back Button για να μην κλείνει το app κατά λάθος
     override fun onBackPressed() {
         if (webView.canGoBack()) {
             webView.goBack()
