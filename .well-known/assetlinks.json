@@ -1,17 +1,6 @@
 [
   {
     "relation": [
-      "delegate_permission/common.get_login_creds",
-      "delegate_permission/common.store_login_creds"
-    ],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.minamar7.yourpackagename",
-      "sha256_cert_fingerprint": "CB:9F:BF:A8:9B:6B:0F:..."
-    }
-  },
-  {
-    "relation": [
       "delegate_permission/common.handle_all_urls",
       "delegate_permission/common.get_login_creds"
     ],
