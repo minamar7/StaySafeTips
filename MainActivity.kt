@@ -1,6 +1,5 @@
 package com.minamar7.staysafetipselite
 
-import android.content.Context
 import android.os.Bundle
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -28,7 +27,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // --- 1. ΑΡΧΙΚΟΠΟΙΗΣΗ GOOGLE MOBILE ADS SDK ---
-        MobileAds.initialize(this) {}
+        try {
+            MobileAds.initialize(this) {}
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         // --- 2. WEBVIEW SETUP (FULL SCREEN) ---
         webView = findViewById(R.id.webview)
@@ -83,7 +86,6 @@ class MainActivity : AppCompatActivity() {
     // --- ΣΥΝΑΡΤΗΣΗ ΦΟΡΤΩΣΗΣ ΔΙΑΦΗΜΙΣΗΣ ---
     private fun loadInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
-        // Χρησιμοποιούμε το δοκιμαστικό ID της Google για interstitials κατά τις δοκιμές.
         InterstitialAd.load(this, "ca-app-pub-3940256099942544/1033173712", adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -96,6 +98,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBillingClient() {
+        // Διορθωμένο PendingPurchasesParams για συμβατότητα με Google Play Billing 7.0.0
+        val pendingPurchasesParams = PendingPurchasesParams.newBuilder()
+            .enableOneTimeProducts()
+            .build()
+
         billingClient = BillingClient.newBuilder(this)
             .setListener { billingResult, purchases ->
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
@@ -103,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                     webView.loadUrl("javascript:paymentSuccess()") 
                 }
             }
-            .enablePendingPurchases()
+            .enablePendingPurchases(pendingPurchasesParams)
             .build()
 
         billingClient.startConnection(object : BillingClientStateListener {
