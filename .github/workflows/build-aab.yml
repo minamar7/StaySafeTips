@@ -1,7 +1,7 @@
 name: 🛡️ Build Stay Safe Elite AAB
 
 on:
-  workflow_dispatch:  # Τρέχει μόνο όταν το πατάς χειροκίνητα
+  workflow_dispatch:  # Τρέχει χειροκίνητα από το Actions tab
 
 jobs:
   build:
@@ -35,12 +35,12 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > signing.keystore
 
-      # ── 6. twa-manifest.json ────────────────────────────
+      # ── 6. Δημιουργία twa-manifest.json ─────────────────
       - name: Create twa-manifest.json
         run: |
           cat > twa-manifest.json << 'EOF'
           {
-            "packageId": "com.minamar7.staysafeelite",
+            "packageId": "com.minamar7.staysafetipselite",
             "host": "minamar7.github.io",
             "name": "Stay Safe Elite",
             "launcherName": "Stay Safe",
@@ -61,8 +61,8 @@ jobs:
               "path": "./signing.keystore",
               "alias": "my-key-alias"
             },
-            "appVersionCode": 1,
-            "appVersionName": "2.0.0",
+            "appVersionCode": 18,
+            "appVersionName": "1.0.0.18",
             "shortcuts": [],
             "generatorApp": "bubblewrap-cli",
             "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest.json",
@@ -73,13 +73,33 @@ jobs:
             "isChromeOSOnly": false,
             "isMetaQuest": false,
             "fullScopeUrl": "https://minamar7.github.io/StaySafeTips/",
-            "minSdkVersion": 19,
+            "minSdkVersion": 21,
             "orientation": "default",
             "fingerprints": []
           }
           EOF
 
-      # ── 7. Build ─────────────────────────────────────────
+      # ── 7. Initialize & Inject Custom Manifest / Code ───
+      - name: Initialize project and copy custom Android files
+        run: |
+          # 1. Δημιουργία του Android Project δομής από το twa-manifest.json
+          bubblewrap init --manifest=twa-manifest.json --skipPwaValidation || true
+          
+          # 2. Αντικατάσταση του γενικού AndroidManifest.xml με το δικό σου custom
+          if [ -f "AndroidManifest.xml" ]; then
+            cp -f AndroidManifest.xml app/src/main/AndroidManifest.xml
+          fi
+
+          # 3. Αντιγραφή τυχόν custom Java/Kotlin αρχείων (π.χ. SplashAdActivity) αν υπάρχουν στη ρίζα
+          mkdir -p app/src/main/java/com/minamar7/staysafetipselite/
+          if [ -f "SplashAdActivity.java" ]; then
+            cp -f SplashAdActivity.java app/src/main/java/com/minamar7/staysafetipselite/
+          fi
+          if [ -f "SplashAdActivity.kt" ]; then
+            cp -f SplashAdActivity.kt app/src/main/java/com/minamar7/staysafetipselite/
+          fi
+
+      # ── 8. Build AAB ────────────────────────────────────
       - name: Build AAB
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -89,13 +109,14 @@ jobs:
           echo -e "n\nn\n" | bubblewrap build --skipPwaValidation 2>&1 || \
           yes n | bubblewrap build --skipPwaValidation
 
-      # ── 8. Ανέβασε το .aab ως artifact ──────────────────
-      - name: Upload AAB
+      # ── 9. Upload Artifact ──────────────────────────────
+      - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
         with:
           name: stay-safe-elite-aab
           path: |
-            app-release-bundle.aab
-            output/*.aab
+            *.aab
+            app/*.aab
+            app/build/outputs/bundle/release/*.aab
           if-no-files-found: warn
           retention-days: 30
