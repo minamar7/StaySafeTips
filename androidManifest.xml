@@ -55,7 +55,7 @@
             android:resource="@xml/gma_ad_services_config"
             tools:replace="android:resource" />
 
-        <!-- Ξεκινάει πρώτη: δείχνει το interstitial ad, μετά ανοίγει το TWA -->
+        <!-- 1. ΜΟΝΑΔΙΚΟ POINT OF ENTRY (LAUNCHER): Ανοίγει πρώτη για τη διαφήμιση -->
         <activity
             android:name=".SplashAdActivity"
             android:label="@string/launcherName"
@@ -68,7 +68,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Καθαρή TWA δραστηριότητα - ανοίγει το site σας -->
+        <!-- 2. TWA ACTIVITY: Ανοίγει μόνο από το SplashAdActivity ή μέσω Web Deep Links -->
         <activity
             android:name=".LauncherActivity"
             android:label="@string/launcherName"
@@ -81,7 +81,7 @@
                 android:name="android.support.customtabs.trusted.DEFAULT_URL"
                 android:value="@string/launchUrl" />
 
-            <!-- TWA Intent Filter για χειρισμό verified links -->
+            <!-- TWA Intent Filter για χειρισμό verified links (Domain Verification) -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
