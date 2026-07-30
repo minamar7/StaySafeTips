@@ -83,18 +83,17 @@ jobs:
           EOF
 
       # ── 7. Initialize & Inject Custom Manifest / Code / Dependencies ───
-      - name: Configure Bubblewrap JDK & Android SDK paths (non-interactive)
-        run: |
-          echo "JAVA_HOME=$JAVA_HOME"
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_HOME"
-          cat ~/.bubblewrap/config.json
-
+      # Σημείωση: το bubblewrap CLI δεν έχει πλήρες non-interactive mode
+      # (γνωστό, ανοιχτό θέμα: github.com/GoogleChromeLabs/bubblewrap/issues/806).
+      # Λύση: απαντάμε αυτόματα "yes" σε όλες τις ερωτήσεις (εγκατάσταση JDK,
+      # εγκατάσταση Android SDK, αποδοχή αδειών χρήσης). Το bubblewrap θα
+      # κατεβάσει και θα διαχειριστεί το δικό του JDK/SDK — παίρνει λίγο
+      # παραπάνω χρόνο αλλά είναι το πιο αξιόπιστο σε CI.
       - name: Initialize project and copy custom Android files
+        timeout-minutes: 15
         run: |
           # 1. Δημιουργία του Android Project δομής από το twa-manifest.json
-          # (χωρίς || true — θέλουμε να δούμε ΠΡΑΓΜΑΤΙΚΟ σφάλμα αν αποτύχει)
-          bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
+          yes | bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
 
           # 2. Force compileSdkVersion & targetSdkVersion σε 36 (Android 16 / API 36)
           if [ -f "app/build.gradle" ]; then
