@@ -83,10 +83,18 @@ jobs:
           EOF
 
       # ── 7. Initialize & Inject Custom Manifest / Code / Dependencies ───
+      - name: Configure Bubblewrap JDK & Android SDK paths (non-interactive)
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_HOME"
+          cat ~/.bubblewrap/config.json
+
       - name: Initialize project and copy custom Android files
         run: |
           # 1. Δημιουργία του Android Project δομής από το twa-manifest.json
-          bubblewrap init --manifest=twa-manifest.json --skipPwaValidation || true
+          # (χωρίς || true — θέλουμε να δούμε ΠΡΑΓΜΑΤΙΚΟ σφάλμα αν αποτύχει)
+          bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
 
           # 2. Force compileSdkVersion & targetSdkVersion σε 36 (Android 16 / API 36)
           if [ -f "app/build.gradle" ]; then
@@ -114,6 +122,12 @@ jobs:
           fi
           if [ -f "SplashAdActivity.kt" ]; then
             cp -f SplashAdActivity.kt app/src/main/java/com/minamar7/staysafetipselite/
+          fi
+
+          # Ρητός έλεγχος: αν δεν δημιουργήθηκε το build.gradle, σταμάτα εδώ με σαφές μήνυμα
+          if [ ! -f "app/build.gradle" ]; then
+            echo "❌ Το app/build.gradle δεν δημιουργήθηκε — το bubblewrap init απέτυχε."
+            exit 1
           fi
 
       # ── 8. Έλεγχος ότι οι τιμές όντως άλλαξαν ────────────
