@@ -61,8 +61,8 @@ jobs:
               "path": "./signing.keystore",
               "alias": "my-key-alias"
             },
-            "appVersionCode": 20,
-            "appVersionName": "1.0.0.20",
+            "appVersionCode": 21,
+            "appVersionName": "1.0.0.21",
             "shortcuts": [],
             "generatorApp": "bubblewrap-cli",
             "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest.json",
