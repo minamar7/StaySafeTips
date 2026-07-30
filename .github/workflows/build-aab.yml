@@ -61,36 +61,44 @@ jobs:
               "path": "./signing.keystore",
               "alias": "my-key-alias"
             },
-            "appVersionCode": 18,
-            "appVersionName": "1.0.0.18",
+            "appVersionCode": 20,
+            "appVersionName": "1.0.0.20",
             "shortcuts": [],
             "generatorApp": "bubblewrap-cli",
             "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest.json",
             "fallbackType": "customtabs",
-            "features": {},
+            "features": {
+              "playBilling": { "enabled": true }
+            },
             "alphaDependencies": { "enabled": false },
             "enableSiteSettingsShortcut": true,
             "isChromeOSOnly": false,
             "isMetaQuest": false,
             "fullScopeUrl": "https://minamar7.github.io/StaySafeTips/",
             "minSdkVersion": 21,
+            "targetSdkVersion": 36,
             "orientation": "default",
             "fingerprints": []
           }
           EOF
 
-      # ── 7. Initialize & Inject Custom Manifest / Code ───
+      # ── 7. Initialize & Inject Custom Manifest / Code / Dependencies ───
       - name: Initialize project and copy custom Android files
         run: |
           # 1. Δημιουργία του Android Project δομής από το twa-manifest.json
           bubblewrap init --manifest=twa-manifest.json --skipPwaValidation || true
           
-          # 2. Αντικατάσταση του γενικού AndroidManifest.xml με το δικό σου custom
+          # 2. Force Google Play Billing v8.0.0+ στο build.gradle
+          if [ -f "app/build.gradle" ]; then
+            sed -i 's/com.android.billingclient:billing:[0-9.]*/com.android.billingclient:billing:8.0.0/g' app/build.gradle
+          fi
+
+          # 3. Αντικατάσταση του γενικού AndroidManifest.xml με το custom
           if [ -f "AndroidManifest.xml" ]; then
             cp -f AndroidManifest.xml app/src/main/AndroidManifest.xml
           fi
 
-          # 3. Αντιγραφή τυχόν custom Java/Kotlin αρχείων (π.χ. SplashAdActivity) αν υπάρχουν στη ρίζα
+          # 4. Αντιγραφή custom Java/Kotlin αρχείων (π.χ. SplashAdActivity)
           mkdir -p app/src/main/java/com/minamar7/staysafetipselite/
           if [ -f "SplashAdActivity.java" ]; then
             cp -f SplashAdActivity.java app/src/main/java/com/minamar7/staysafetipselite/
