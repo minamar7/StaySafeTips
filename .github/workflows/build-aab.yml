@@ -83,12 +83,6 @@ jobs:
           EOF
 
       # ── 7. Initialize & Inject Custom Manifest / Code / Dependencies ───
-      # Σημείωση: το bubblewrap CLI δεν έχει πλήρες non-interactive mode
-      # (γνωστό, ανοιχτό θέμα: github.com/GoogleChromeLabs/bubblewrap/issues/806).
-      # Λύση: απαντάμε αυτόματα "yes" σε όλες τις ερωτήσεις (εγκατάσταση JDK,
-      # εγκατάσταση Android SDK, αποδοχή αδειών χρήσης). Το bubblewrap θα
-      # κατεβάσει και θα διαχειριστεί το δικό του JDK/SDK — παίρνει λίγο
-      # παραπάνω χρόνο αλλά είναι το πιο αξιόπιστο σε CI.
       - name: Initialize project and copy custom Android files
         timeout-minutes: 15
         run: |
