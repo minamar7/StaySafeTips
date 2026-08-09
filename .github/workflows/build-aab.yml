@@ -77,7 +77,7 @@ jobs:
             "fullScopeUrl": "https://minamar7.github.io/StaySafeTips/",
             "minSdkVersion": 21,
             "targetSdkVersion": 36,
-            "orientation": "default",
+            "orientation": "any",
             "fingerprints": []
           }
           EOF
@@ -102,12 +102,18 @@ jobs:
             sed -i 's/com.android.billingclient:billing:[^"'"'"']*/com.android.billingclient:billing:8.0.0/g' app/build.gradle
           fi
 
-          # 4. Αντικατάσταση του γενικού AndroidManifest.xml με το custom
+          # 4. Ενεργοποίηση R8 Minification (για το 4ο warning των Android Vitals)
+          if [ -f "app/build.gradle" ]; then
+            sed -i 's/minifyEnabled false/minifyEnabled true/g' app/build.gradle
+            sed -i 's/shrinkResources false/shrinkResources true/g' app/build.gradle
+          fi
+
+          # 5. Αντικατάσταση του γενικού AndroidManifest.xml με το custom
           if [ -f "AndroidManifest.xml" ]; then
             cp -f AndroidManifest.xml app/src/main/AndroidManifest.xml
           fi
 
-          # 5. Αντιγραφή custom Java/Kotlin αρχείων (π.χ. SplashAdActivity)
+          # 6. Αντιγραφή custom Java/Kotlin αρχείων (π.χ. SplashAdActivity)
           mkdir -p app/src/main/java/com/minamar7/staysafetipselite/
           if [ -f "SplashAdActivity.java" ]; then
             cp -f SplashAdActivity.java app/src/main/java/com/minamar7/staysafetipselite/
@@ -127,7 +133,7 @@ jobs:
         run: |
           echo "── Περιεχόμενο app/build.gradle (SDK & billing γραμμές) ──"
           if [ -f "app/build.gradle" ]; then
-            grep -nE "compileSdk|targetSdk|minSdk|billingclient" app/build.gradle || echo "⚠️ Δεν βρέθηκαν σχετικές γραμμές — έλεγξε τη δομή του build.gradle."
+            grep -nE "compileSdk|targetSdk|minSdk|billingclient|minifyEnabled" app/build.gradle || echo "⚠️ Δεν βρέθηκαν σχετικές γραμμές — έλεγξε τη δομή του build.gradle."
           else
             echo "❌ Δεν βρέθηκε app/build.gradle — το bubblewrap init μάλλον απέτυχε."
             exit 1
