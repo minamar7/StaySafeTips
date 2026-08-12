@@ -1,7 +1,7 @@
 name: 🛡️ Build Stay Safe Elite AAB
 
 on:
-  workflow_dispatch:  # Τρέχει χειροκίνητα από το Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
@@ -9,33 +9,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ── 1. Κατέβασε τον κώδικα ──────────────────────────
+
+      # ─────────────────────────────────────────────
+      # 1. Checkout repository
+      # ─────────────────────────────────────────────
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # ── 2. Εγκατάσταση Java 17 ──────────────────────────
+
+      # ─────────────────────────────────────────────
+      # 2. Java 17
+      # ─────────────────────────────────────────────
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # ── 3. Εγκατάσταση Node.js ──────────────────────────
+
+      # ─────────────────────────────────────────────
+      # 3. Node.js 22
+      # ─────────────────────────────────────────────
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      # ── 4. Εγκατάσταση Bubblewrap ───────────────────────
-      - name: Install Bubblewrap
-        run: npm install -g @bubblewrap/cli
 
-      # ── 5. Δημιουργία Keystore από το GitHub Secret ─────
+      # ─────────────────────────────────────────────
+      # 4. Install Bubblewrap
+      # ─────────────────────────────────────────────
+      - name: Install Bubblewrap
+        run: |
+          npm install -g @bubblewrap/cli
+          bubblewrap --version
+
+
+      # ─────────────────────────────────────────────
+      # 5. Restore signing keystore
+      # ─────────────────────────────────────────────
       - name: Restore keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > signing.keystore
 
-      # ── 6. Δημιουργία twa-manifest.json ─────────────────
+          if [ ! -s signing.keystore ]; then
+            echo "❌ ERROR: signing.keystore was not created."
+            exit 1
+          fi
+
+          echo "✅ Keystore restored successfully."
+
+
+      # ─────────────────────────────────────────────
+      # 6. Create Bubblewrap manifest
+      # ─────────────────────────────────────────────
       - name: Create twa-manifest.json
         run: |
           cat > twa-manifest.json << 'EOF'
@@ -45,111 +72,286 @@ jobs:
             "name": "Stay Safe Elite",
             "launcherName": "Stay Safe",
             "display": "standalone",
+
             "themeColor": "#020617",
             "navigationColor": "#020617",
             "navigationColorDark": "#020617",
             "navigationDividerColor": "#020617",
             "navigationDividerColorDark": "#020617",
             "backgroundColor": "#020617",
+
             "enableNotifications": false,
+
             "startUrl": "/StaySafeTips/",
+
             "iconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "maskableIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "monochromeIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
+
             "splashScreenFadeOutDuration": 300,
+
             "signingKey": {
               "path": "./signing.keystore",
               "alias": "my-key-alias"
             },
+
             "appVersionCode": 22,
             "appVersionName": "1.0.0.22",
+
             "shortcuts": [],
+
             "generatorApp": "bubblewrap-cli",
+
             "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest.json",
+
             "fallbackType": "customtabs",
+
             "features": {
-              "playBilling": { "enabled": true }
+              "playBilling": {
+                "enabled": true
+              }
             },
-            "alphaDependencies": { "enabled": false },
+
+            "alphaDependencies": {
+              "enabled": false
+            },
+
             "enableSiteSettingsShortcut": true,
+
             "isChromeOSOnly": false,
             "isMetaQuest": false,
+
             "fullScopeUrl": "https://minamar7.github.io/StaySafeTips/",
+
             "minSdkVersion": 21,
+
             "targetSdkVersion": 36,
+
             "orientation": "any",
+
             "fingerprints": []
           }
           EOF
 
-      # ── 7. Initialize & Inject Custom Manifest / Code / Dependencies ───
-      - name: Initialize project and copy custom Android files
+          echo "✅ twa-manifest.json created."
+
+
+      # ─────────────────────────────────────────────
+      # 7. Initialize Bubblewrap project
+      # ─────────────────────────────────────────────
+      - name: Initialize Android project
         timeout-minutes: 15
         run: |
-          # 1. Δημιουργία του Android Project δομής από το twa-manifest.json
-          yes | bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
+          yes | bubblewrap init \
+            --manifest=twa-manifest.json \
+            --skipPwaValidation
 
-          # 2. Force compileSdkVersion & targetSdkVersion σε 36 (Android 16 / API 36)
-          if [ -f "app/build.gradle" ]; then
-            sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 36/g' app/build.gradle
-            sed -i 's/targetSdkVersion [0-9]*/targetSdkVersion 36/g' app/build.gradle
-            sed -i 's/compileSdk [0-9]*/compileSdk 36/g' app/build.gradle
-            sed -i 's/targetSdk [0-9]*/targetSdk 36/g' app/build.gradle
-          fi
-
-          # 3. Force Google Play Billing v8.0.0+ στο build.gradle
-          if [ -f "app/build.gradle" ]; then
-            sed -i 's/com.android.billingclient:billing:[^"'"'"']*/com.android.billingclient:billing:8.0.0/g' app/build.gradle
-          fi
-
-          # 4. Ενεργοποίηση R8 Minification (για το 4ο warning των Android Vitals)
-          if [ -f "app/build.gradle" ]; then
-            sed -i 's/minifyEnabled false/minifyEnabled true/g' app/build.gradle
-            sed -i 's/shrinkResources false/shrinkResources true/g' app/build.gradle
-          fi
-
-          # 5. Αντικατάσταση του γενικού AndroidManifest.xml με το custom
-          if [ -f "AndroidManifest.xml" ]; then
-            cp -f AndroidManifest.xml app/src/main/AndroidManifest.xml
-          fi
-
-          # 6. Αντιγραφή custom Java/Kotlin αρχείων (π.χ. SplashAdActivity)
-          mkdir -p app/src/main/java/com/minamar7/staysafetipselite/
-          if [ -f "SplashAdActivity.java" ]; then
-            cp -f SplashAdActivity.java app/src/main/java/com/minamar7/staysafetipselite/
-          fi
-          if [ -f "SplashAdActivity.kt" ]; then
-            cp -f SplashAdActivity.kt app/src/main/java/com/minamar7/staysafetipselite/
-          fi
-
-          # Ρητός έλεγχος: αν δεν δημιουργήθηκε το build.gradle, σταμάτα εδώ με σαφές μήνυμα
           if [ ! -f "app/build.gradle" ]; then
-            echo "❌ Το app/build.gradle δεν δημιουργήθηκε — το bubblewrap init απέτυχε."
+            echo "❌ ERROR: app/build.gradle was not created."
             exit 1
           fi
 
-      # ── 8. Έλεγχος ότι οι τιμές όντως άλλαξαν ────────────
-      - name: Verify SDK & Billing versions before build
+          echo "✅ Bubblewrap Android project initialized."
+
+
+      # ─────────────────────────────────────────────
+      # 8. Force Android SDK 36
+      # ─────────────────────────────────────────────
+      - name: Force Android API 36
         run: |
-          echo "── Περιεχόμενο app/build.gradle (SDK & billing γραμμές) ──"
           if [ -f "app/build.gradle" ]; then
-            grep -nE "compileSdk|targetSdk|minSdk|billingclient|minifyEnabled" app/build.gradle || echo "⚠️ Δεν βρέθηκαν σχετικές γραμμές — έλεγξε τη δομή του build.gradle."
+
+            sed -i -E \
+              's/compileSdkVersion[[:space:]]+[0-9]+/compileSdkVersion 36/g' \
+              app/build.gradle
+
+            sed -i -E \
+              's/targetSdkVersion[[:space:]]+[0-9]+/targetSdkVersion 36/g' \
+              app/build.gradle
+
+            sed -i -E \
+              's/compileSdk[[:space:]]+[0-9]+/compileSdk 36/g' \
+              app/build.gradle
+
+            sed -i -E \
+              's/targetSdk[[:space:]]+[0-9]+/targetSdk 36/g' \
+              app/build.gradle
+
+          fi
+
+          echo "✅ Android SDK 36 forced."
+
+
+      # ─────────────────────────────────────────────
+      # 9. Force Google Play Billing 8.0.0
+      # ─────────────────────────────────────────────
+      - name: Force Google Play Billing 8.0.0
+        run: |
+          if [ -f "app/build.gradle" ]; then
+
+            sed -i -E \
+              's/com\.android\.billingclient:billing:[^"'"'"']+/com.android.billingclient:billing:8.0.0/g' \
+              app/build.gradle
+
+          fi
+
+          echo "✅ Google Play Billing 8.0.0 configured."
+
+
+      # ─────────────────────────────────────────────
+      # 10. Enable R8
+      # ─────────────────────────────────────────────
+      - name: Enable R8 optimization
+        run: |
+          if [ -f "app/build.gradle" ]; then
+
+            sed -i \
+              's/minifyEnabled false/minifyEnabled true/g' \
+              app/build.gradle
+
+            sed -i \
+              's/shrinkResources false/shrinkResources true/g' \
+              app/build.gradle
+
+          fi
+
+          echo "✅ R8 optimization enabled."
+
+
+      # ─────────────────────────────────────────────
+      # 11. Copy custom AndroidManifest.xml
+      # ─────────────────────────────────────────────
+      - name: Install custom AndroidManifest
+        run: |
+          if [ -f "AndroidManifest.xml" ]; then
+            mkdir -p app/src/main
+            cp -f AndroidManifest.xml app/src/main/AndroidManifest.xml
+            echo "✅ Custom AndroidManifest.xml copied."
           else
-            echo "❌ Δεν βρέθηκε app/build.gradle — το bubblewrap init μάλλον απέτυχε."
+            echo "ℹ️ No custom AndroidManifest.xml found."
+          fi
+
+
+      # ─────────────────────────────────────────────
+      # 12. Copy custom Java / Kotlin files
+      # ─────────────────────────────────────────────
+      - name: Install custom Android source files
+        run: |
+
+          mkdir -p \
+            app/src/main/java/com/minamar7/staysafetipselite/
+
+          if [ -f "SplashAdActivity.java" ]; then
+            cp -f \
+              SplashAdActivity.java \
+              app/src/main/java/com/minamar7/staysafetipselite/
+
+            echo "✅ SplashAdActivity.java copied."
+          fi
+
+          if [ -f "SplashAdActivity.kt" ]; then
+            cp -f \
+              SplashAdActivity.kt \
+              app/src/main/java/com/minamar7/staysafetipselite/
+
+            echo "✅ SplashAdActivity.kt copied."
+          fi
+
+
+      # ─────────────────────────────────────────────
+      # 13. Verify Gradle configuration
+      # ─────────────────────────────────────────────
+      - name: Verify SDK and Billing configuration
+        run: |
+
+          echo ""
+          echo "=========================================="
+          echo "ANDROID BUILD CONFIGURATION"
+          echo "=========================================="
+
+          if [ ! -f "app/build.gradle" ]; then
+            echo "❌ app/build.gradle NOT FOUND."
             exit 1
           fi
 
-      # ── 9. Build AAB ────────────────────────────────────
-      - name: Build AAB
+          echo ""
+          echo "SDK / Billing configuration:"
+          grep -nE \
+            "compileSdk|targetSdk|minSdk|billingclient|minifyEnabled|shrinkResources" \
+            app/build.gradle || true
+
+          echo ""
+          echo "=========================================="
+
+          if ! grep -q "36" app/build.gradle; then
+            echo "❌ API 36 was NOT found in app/build.gradle."
+            exit 1
+          fi
+
+          if ! grep -q "billing:8.0.0" app/build.gradle; then
+            echo "❌ Google Play Billing 8.0.0 was NOT found."
+            exit 1
+          fi
+
+          echo "✅ API 36 detected."
+          echo "✅ Billing 8.0.0 detected."
+          echo "=========================================="
+
+
+      # ─────────────────────────────────────────────
+      # 14. Build signed AAB
+      # ─────────────────────────────────────────────
+      - name: Build signed AAB
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           CI: true
         run: |
-          echo -e "n\nn\n" | bubblewrap build --skipPwaValidation 2>&1 || \
-          yes n | bubblewrap build --skipPwaValidation
 
-      # ── 10. Upload Artifact ──────────────────────────────
+          echo ""
+          echo "=========================================="
+          echo "BUILDING STAY SAFE ELITE AAB"
+          echo "=========================================="
+
+          printf "n\nn\n" | bubblewrap build \
+            --skipPwaValidation
+
+          echo ""
+          echo "=========================================="
+          echo "BUILD FINISHED"
+          echo "=========================================="
+
+
+      # ─────────────────────────────────────────────
+      # 15. Find generated AAB
+      # ─────────────────────────────────────────────
+      - name: Locate generated AAB
+        run: |
+
+          echo ""
+          echo "Generated AAB files:"
+          echo "------------------------------------------"
+
+          find . \
+            -type f \
+            -name "*.aab" \
+            -print
+
+          echo "------------------------------------------"
+
+          AAB_COUNT=$(find . -type f -name "*.aab" | wc -l)
+
+          if [ "$AAB_COUNT" -eq 0 ]; then
+            echo "❌ ERROR: No AAB file was generated."
+            exit 1
+          fi
+
+          echo "✅ Found $AAB_COUNT AAB file(s)."
+
+
+      # ─────────────────────────────────────────────
+      # 16. Upload AAB artifact
+      # ─────────────────────────────────────────────
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -158,5 +360,5 @@ jobs:
             *.aab
             app/*.aab
             app/build/outputs/bundle/release/*.aab
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 30
