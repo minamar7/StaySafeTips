@@ -95,8 +95,8 @@ jobs:
               "alias": "my-key-alias"
             },
 
-            "appVersionCode": 22,
-            "appVersionName": "1.0.0.22",
+            "appVersionCode": 23,
+            "appVersionName": "1.0.0.23",
 
             "shortcuts": [],
 
