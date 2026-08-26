@@ -62,78 +62,65 @@ jobs:
 
       # ─────────────────────────────────────────────
       # 6. Create Bubblewrap manifest
+      #    ΣΗΜΑΝΤΙΚΟ: χρησιμοποιούμε python για να
+      #    παράγουμε έγκυρο JSON χωρίς leading spaces
       # ─────────────────────────────────────────────
       - name: Create twa-manifest.json
         run: |
-          cat > twa-manifest.json << 'EOF'
-          {
-            "packageId": "com.minamar7.staysafetipselite",
-            "host": "minamar7.github.io",
-            "name": "Stay Safe Elite",
-            "launcherName": "Stay Safe",
-            "display": "standalone",
-
-            "themeColor": "#020617",
-            "navigationColor": "#020617",
-            "navigationColorDark": "#020617",
-            "navigationDividerColor": "#020617",
-            "navigationDividerColorDark": "#020617",
-            "backgroundColor": "#020617",
-
-            "enableNotifications": false,
-
-            "startUrl": "/StaySafeTips/",
-
-            "iconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
-            "maskableIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
-            "monochromeIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
-
-            "splashScreenFadeOutDuration": 300,
-
-            "signingKey": {
-              "path": "./signing.keystore",
-              "alias": "my-key-alias"
+          python3 -c "
+          import json
+          manifest = {
+            'packageId': 'com.minamar7.staysafetipselite',
+            'host': 'minamar7.github.io',
+            'name': 'Stay Safe Elite',
+            'launcherName': 'Stay Safe',
+            'display': 'standalone',
+            'themeColor': '#020617',
+            'navigationColor': '#020617',
+            'navigationColorDark': '#020617',
+            'navigationDividerColor': '#020617',
+            'navigationDividerColorDark': '#020617',
+            'backgroundColor': '#020617',
+            'enableNotifications': False,
+            'startUrl': '/StaySafeTips/',
+            'iconUrl': 'https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png',
+            'maskableIconUrl': 'https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png',
+            'monochromeIconUrl': 'https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png',
+            'splashScreenFadeOutDuration': 300,
+            'signingKey': {
+              'path': './signing.keystore',
+              'alias': 'my-key-alias'
             },
-
-            "appVersionCode": 23,
-            "appVersionName": "1.0.0.23",
-
-            "shortcuts": [],
-
-            "generatorApp": "bubblewrap-cli",
-
-            "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest.json",
-
-            "fallbackType": "customtabs",
-
-            "features": {
-              "playBilling": {
-                "enabled": true
+            'appVersionCode': 23,
+            'appVersionName': '1.0.0.23',
+            'shortcuts': [],
+            'generatorApp': 'bubblewrap-cli',
+            'webManifestUrl': 'https://minamar7.github.io/StaySafeTips/manifest.json',
+            'fallbackType': 'customtabs',
+            'features': {
+              'playBilling': {
+                'enabled': True
               }
             },
-
-            "alphaDependencies": {
-              "enabled": false
+            'alphaDependencies': {
+              'enabled': False
             },
-
-            "enableSiteSettingsShortcut": true,
-
-            "isChromeOSOnly": false,
-            "isMetaQuest": false,
-
-            "fullScopeUrl": "https://minamar7.github.io/StaySafeTips/",
-
-            "minSdkVersion": 21,
-
-            "targetSdkVersion": 36,
-
-            "orientation": "any",
-
-            "fingerprints": []
+            'enableSiteSettingsShortcut': True,
+            'isChromeOSOnly': False,
+            'isMetaQuest': False,
+            'fullScopeUrl': 'https://minamar7.github.io/StaySafeTips/',
+            'minSdkVersion': 21,
+            'targetSdkVersion': 36,
+            'orientation': 'any',
+            'fingerprints': []
           }
-          EOF
+          with open('twa-manifest.json', 'w') as f:
+            json.dump(manifest, f, indent=2)
+          "
 
           echo "✅ twa-manifest.json created."
+          echo "--- Content preview ---"
+          cat twa-manifest.json
 
 
       # ─────────────────────────────────────────────
@@ -144,14 +131,12 @@ jobs:
         run: |
           mkdir -p ~/.bubblewrap
 
-          # Χρησιμοποιούμε double-quote heredoc ώστε τα
-          # $JAVA_HOME / $ANDROID_SDK_ROOT να γίνουν expand
           cat > ~/.bubblewrap/config.json << EOF
-          {
-            "jdkPath": "${JAVA_HOME}",
-            "androidSdkPath": "${ANDROID_SDK_ROOT}"
-          }
-          EOF
+{
+  "jdkPath": "${JAVA_HOME}",
+  "androidSdkPath": "${ANDROID_SDK_ROOT}"
+}
+EOF
 
           echo "✅ Bubblewrap config written."
           echo "   JDK  → ${JAVA_HOME}"
@@ -169,8 +154,6 @@ jobs:
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           CI: true
         run: |
-          # Απαντάμε "n" σε κάθε ερώτηση JDK/SDK install
-          # (το config.json ήδη δείχνει στα pre-installed tools)
           printf 'n\nn\nn\n' | bubblewrap init \
             --manifest=twa-manifest.json \
             --skipPwaValidation
