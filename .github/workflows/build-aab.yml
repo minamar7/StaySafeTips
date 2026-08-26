@@ -137,16 +137,41 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 7. Initialize Bubblewrap project
+      # 7. Configure Bubblewrap to use the runner's
+      #    pre-installed JDK & Android SDK
+      # ─────────────────────────────────────────────
+      - name: Configure Bubblewrap paths
+        run: |
+          mkdir -p ~/.bubblewrap
+
+          # Χρησιμοποιούμε double-quote heredoc ώστε τα
+          # $JAVA_HOME / $ANDROID_SDK_ROOT να γίνουν expand
+          cat > ~/.bubblewrap/config.json << EOF
+          {
+            "jdkPath": "${JAVA_HOME}",
+            "androidSdkPath": "${ANDROID_SDK_ROOT}"
+          }
+          EOF
+
+          echo "✅ Bubblewrap config written."
+          echo "   JDK  → ${JAVA_HOME}"
+          echo "   SDK  → ${ANDROID_SDK_ROOT}"
+          cat ~/.bubblewrap/config.json
+
+
+      # ─────────────────────────────────────────────
+      # 8. Initialize Bubblewrap project
       # ─────────────────────────────────────────────
       - name: Initialize Android project
-        timeout-minutes: 15
+        timeout-minutes: 10
         env:
           BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           CI: true
         run: |
-          yes '' | bubblewrap init \
+          # Απαντάμε "n" σε κάθε ερώτηση JDK/SDK install
+          # (το config.json ήδη δείχνει στα pre-installed tools)
+          printf 'n\nn\nn\n' | bubblewrap init \
             --manifest=twa-manifest.json \
             --skipPwaValidation
 
@@ -159,7 +184,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 8. Force Android SDK 36
+      # 9. Force Android SDK 36
       # ─────────────────────────────────────────────
       - name: Force Android API 36
         run: |
@@ -187,7 +212,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 9. Force Google Play Billing 8.0.0
+      # 10. Force Google Play Billing 8.0.0
       # ─────────────────────────────────────────────
       - name: Force Google Play Billing 8.0.0
         run: |
@@ -203,7 +228,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 10. Enable R8
+      # 11. Enable R8
       # ─────────────────────────────────────────────
       - name: Enable R8 optimization
         run: |
@@ -223,7 +248,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 11. Copy custom AndroidManifest.xml
+      # 12. Copy custom AndroidManifest.xml
       # ─────────────────────────────────────────────
       - name: Install custom AndroidManifest
         run: |
@@ -237,7 +262,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 12. Copy custom Java / Kotlin files
+      # 13. Copy custom Java / Kotlin files
       # ─────────────────────────────────────────────
       - name: Install custom Android source files
         run: |
@@ -263,7 +288,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 13. Verify Gradle configuration
+      # 14. Verify Gradle configuration
       # ─────────────────────────────────────────────
       - name: Verify SDK and Billing configuration
         run: |
@@ -303,7 +328,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 14. Build signed AAB
+      # 15. Build signed AAB
       # ─────────────────────────────────────────────
       - name: Build signed AAB
         env:
@@ -327,7 +352,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 15. Find generated AAB
+      # 16. Find generated AAB
       # ─────────────────────────────────────────────
       - name: Locate generated AAB
         run: |
@@ -354,7 +379,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 16. Upload AAB artifact
+      # 17. Upload AAB artifact
       # ─────────────────────────────────────────────
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
