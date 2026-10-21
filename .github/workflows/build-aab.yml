@@ -1,4 +1,4 @@
-name: 🛡️ Build Stay Safe Elite AAB
+Name: 🛡️ Build Stay Safe Elite AAB
 
 on:
   workflow_dispatch:
@@ -62,8 +62,6 @@ jobs:
 
       # ─────────────────────────────────────────────
       # 6. Create Bubblewrap manifest
-      #    ΣΗΜΑΝΤΙΚΟ: χρησιμοποιούμε python για να
-      #    παράγουμε έγκυρο JSON χωρίς leading spaces
       # ─────────────────────────────────────────────
       - name: Create twa-manifest.json
         run: |
@@ -124,8 +122,7 @@ jobs:
 
 
       # ─────────────────────────────────────────────
-      # 7. Configure Bubblewrap to use the runner's
-      #    pre-installed JDK & Android SDK
+      # 7. Configure Bubblewrap paths
       # ─────────────────────────────────────────────
       - name: Configure Bubblewrap paths
         run: |
@@ -195,19 +192,19 @@ EOF
 
 
       # ─────────────────────────────────────────────
-      # 10. Force Google Play Billing 8.0.0
+      # 10. Force Google Play Billing 9.1.0
       # ─────────────────────────────────────────────
-      - name: Force Google Play Billing 8.0.0
+      - name: Force Google Play Billing 9.1.0
         run: |
           if [ -f "app/build.gradle" ]; then
 
             sed -i -E \
-              's/com\.android\.billingclient:billing:[^"'"'"']+/com.android.billingclient:billing:8.0.0/g' \
+              's/com\.android\.billingclient:billing:[^"'"'"']+/com.android.billingclient:billing:9.1.0/g' \
               app/build.gradle
 
           fi
 
-          echo "✅ Google Play Billing 8.0.0 configured."
+          echo "✅ Google Play Billing 9.1.0 configured."
 
 
       # ─────────────────────────────────────────────
@@ -300,13 +297,13 @@ EOF
             exit 1
           fi
 
-          if ! grep -q "billing:8.0.0" app/build.gradle; then
-            echo "❌ Google Play Billing 8.0.0 was NOT found."
+          if ! grep -q "billing:9.1.0" app/build.gradle; then
+            echo "❌ Google Play Billing 9.1.0 was NOT found."
             exit 1
           fi
 
           echo "✅ API 36 detected."
-          echo "✅ Billing 8.0.0 detected."
+          echo "✅ Billing 9.1.0 detected."
           echo "=========================================="
 
 
