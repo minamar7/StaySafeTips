@@ -54,7 +54,7 @@ jobs:
             "navigationDividerColorDark": "#020617",
             "backgroundColor": "#020617",
             "enableNotifications": false,
-            "startUrl": "/StaySafeTips/",
+            "startUrl": "https://minamar7.github.io/StaySafeTips/",
             "iconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "maskableIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "monochromeIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
@@ -163,4 +163,3 @@ jobs:
             app/build/outputs/bundle/release/*.aab
           if-no-files-found: error
           retention-days: 30
-          
