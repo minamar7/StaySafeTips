@@ -38,6 +38,28 @@ jobs:
             exit 1
           fi
 
+      - name: Create local web manifest
+        run: |
+          mkdir -p public
+          cat > public/manifest.json << 'EOF'
+          {
+            "name": "Stay Safe Elite",
+            "short_name": "Stay Safe",
+            "start_url": "https://minamar7.github.io/StaySafeTips/",
+            "display": "standalone",
+            "background_color": "#020617",
+            "theme_color": "#020617",
+            "icons": [
+              {
+                "src": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "any maskable"
+              }
+            ]
+          }
+          EOF
+
       - name: Create twa-manifest.json
         run: |
           cat > twa-manifest.json << 'EOF'
@@ -67,7 +89,7 @@ jobs:
             "appVersionName": "1.0.0.23",
             "shortcuts": [],
             "generatorApp": "bubblewrap-cli",
-            "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest.json",
+            "webManifestUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "fallbackType": "customtabs",
             "features": {
               "playBilling": {
@@ -105,7 +127,7 @@ jobs:
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           CI: true
         run: |
-          bubblewrap init --manifest=https://minamar7.github.io/StaySafeTips/manifest.json --directory=. --skipPwaValidation || printf 'n\nn\nn\n' | bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
+          printf 'n\nn\nn\n' | bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
 
       - name: Force Android API 36
         run: |
