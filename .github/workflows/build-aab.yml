@@ -105,7 +105,7 @@ jobs:
           BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           CI: true
         run: |
-          printf 'n\nn\nn\n' | bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
+          bubblewrap init --manifest=https://minamar7.github.io/StaySafeTips/manifest.json --directory=. --skipPwaValidation || printf 'n\nn\nn\n' | bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
 
       - name: Force Android API 36
         run: |
