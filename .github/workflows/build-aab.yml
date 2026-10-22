@@ -62,7 +62,7 @@ jobs:
             "navigationDividerColor": "#020617",
             "navigationDividerColorDark": "#020617",
             "backgroundColor": "#020617",
-            "enableNotifications": false,
+            "enableNotifications": true,
             "startUrl": "/StaySafeTips/",
             "iconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "maskableIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
