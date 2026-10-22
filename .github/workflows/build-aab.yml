@@ -1,4 +1,4 @@
-name: 🛡️ Build Stay Safe Elite AAB
+name: Build Stay Safe Elite AAB
 
 on:
   workflow_dispatch:
@@ -10,9 +10,11 @@ jobs:
   build:
     name: Build Android App Bundle
     runs-on: ubuntu-latest
+    env:
+      WEB_MANIFEST_URL: https://minamar7.github.io/StaySafeTips/manifest.json
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'my-key-alias' }}
 
     steps:
-
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -28,41 +30,26 @@ jobs:
           node-version: '22'
 
       - name: Install Bubblewrap
-        run: npm install -g @bubblewrap/cli --ignore-scripts
+        run: npm install -g @bubblewrap/cli
+
+      - name: Check web manifest is reachable
+        run: |
+          curl -fsSL "$WEB_MANIFEST_URL" | jq . > /dev/null \
+            || { echo "ERROR: $WEB_MANIFEST_URL is not reachable or is not valid JSON"; exit 1; }
 
       - name: Restore keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > signing.keystore
-          if [ ! -s signing.keystore ]; then
-            echo "❌ ERROR: signing.keystore was not created."
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$GITHUB_WORKSPACE/signing.keystore"
+          if [ ! -s "$GITHUB_WORKSPACE/signing.keystore" ]; then
+            echo "ERROR: signing.keystore was not created. Check KEYSTORE_BASE64 secret."
             exit 1
           fi
 
-      - name: Create local web manifest
-        run: |
-          mkdir -p public
-          cat > public/manifest.json << 'EOF'
-          {
-            "name": "Stay Safe Elite",
-            "short_name": "Stay Safe",
-            "start_url": "https://minamar7.github.io/StaySafeTips/",
-            "display": "standalone",
-            "background_color": "#020617",
-            "theme_color": "#020617",
-            "icons": [
-              {
-                "src": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
-                "sizes": "512x512",
-                "type": "image/png",
-                "purpose": "any maskable"
-              }
-            ]
-          }
-          EOF
-
       - name: Create twa-manifest.json
         run: |
-          cat > twa-manifest.json << 'EOF'
+          cat > twa-manifest.json << EOF
           {
             "packageId": "com.minamar7.staysafetipselite",
             "host": "minamar7.github.io",
@@ -76,20 +63,20 @@ jobs:
             "navigationDividerColorDark": "#020617",
             "backgroundColor": "#020617",
             "enableNotifications": false,
-            "startUrl": "https://minamar7.github.io/StaySafeTips/",
+            "startUrl": "/StaySafeTips/",
             "iconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "maskableIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "monochromeIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
             "splashScreenFadeOutDuration": 300,
             "signingKey": {
               "path": "./signing.keystore",
-              "alias": "my-key-alias"
+              "alias": "${KEY_ALIAS}"
             },
             "appVersionCode": 23,
             "appVersionName": "1.0.0.23",
             "shortcuts": [],
             "generatorApp": "bubblewrap-cli",
-            "webManifestUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
+            "webManifestUrl": "${WEB_MANIFEST_URL}",
             "fallbackType": "customtabs",
             "features": {
               "playBilling": {
@@ -103,53 +90,59 @@ jobs:
             "isChromeOSOnly": false,
             "isMetaQuest": false,
             "fullScopeUrl": "https://minamar7.github.io/StaySafeTips/",
-            "minSdkVersion": 21,
+            "minSdkVersion": 23,
             "targetSdkVersion": 36,
             "orientation": "any",
             "fingerprints": []
           }
           EOF
+          jq . twa-manifest.json > /dev/null
 
-      - name: Configure Bubblewrap paths
+      - name: Install Android SDK packages
         run: |
-          mkdir -p ~/.bubblewrap
-          cat > ~/.bubblewrap/config.json << EOF
-          {
-            "jdkPath": "${JAVA_HOME}",
-            "androidSdkPath": "${ANDROID_SDK_ROOT}"
-          }
-          EOF
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$GITHUB_WORKSPACE/local.properties"
 
-      - name: Initialize Android project
+      - name: Generate Android project
         timeout-minutes: 10
         env:
-          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           CI: true
-        run: |
-          printf 'n\nn\nn\n' | bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
+        run: bubblewrap update --skipVersionUpgrade < /dev/null
 
-      - name: Force Android API 36
+      - name: Show generated project
         run: |
-          if [ -f "app/build.gradle" ]; then
-            sed -i -E 's/compileSdkVersion[[:space:]]+[0-9]+/compileSdkVersion 36/g' app/build.gradle
-            sed -i -E 's/targetSdkVersion[[:space:]]+[0-9]+/targetSdkVersion 36/g' app/build.gradle
-            sed -i -E 's/compileSdk[[:space:]]+[0-9]+/compileSdk 36/g' app/build.gradle
-            sed -i -E 's/targetSdk[[:space:]]+[0-9]+/targetSdk 36/g' app/build.gradle
-          fi
+          ls -la
+          test -f app/build.gradle || { echo "ERROR: app/build.gradle was not generated"; exit 1; }
+          test -f gradlew || { echo "ERROR: gradlew was not generated"; exit 1; }
+          chmod +x gradlew
+
+      - name: Force Android API 36 & Min SDK 23
+        run: |
+          sed -i -E 's/compileSdkVersion[[:space:]]+[0-9]+/compileSdkVersion 36/g' app/build.gradle
+          sed -i -E 's/targetSdkVersion[[:space:]]+[0-9]+/targetSdkVersion 36/g' app/build.gradle
+          sed -i -E 's/compileSdk[[:space:]]+[0-9]+/compileSdk 36/g' app/build.gradle
+          sed -i -E 's/targetSdk[[:space:]]+[0-9]+/targetSdk 36/g' app/build.gradle
+          sed -i -E 's/minSdkVersion[[:space:]]+[0-9]+/minSdkVersion 23/g' app/build.gradle
+          sed -i -E 's/minSdk[[:space:]]+[0-9]+/minSdk 23/g' app/build.gradle
 
       - name: Force Google Play Billing 9.1.0
         run: |
-          if [ -f "app/build.gradle" ]; then
-            sed -i -E 's/com\.android\.billingclient:billing:[^"'"'"']+/com.android.billingclient:billing:9.1.0/g' app/build.gradle
+          if grep -q "com.android.billingclient:billing" app/build.gradle; then
+            sed -i -E "s#com\.android\.billingclient:billing:[^\"']+#com.android.billingclient:billing:9.1.0#g" app/build.gradle
+          else
+            echo 'dependencies { implementation "com.android.billingclient:billing:9.1.0" }' >> app/build.gradle
           fi
+
+      - name: Check billing version
+        run: |
+          ./gradlew app:dependencies --configuration releaseRuntimeClasspath | grep -i billing || true
 
       - name: Enable R8 optimization
         run: |
-          if [ -f "app/build.gradle" ]; then
-            sed -i 's/minifyEnabled false/minifyEnabled true/g' app/build.gradle
-            sed -i 's/shrinkResources false/shrinkResources true/g' app/build.gradle
-          fi
+          sed -i 's/minifyEnabled false/minifyEnabled true/g' app/build.gradle
+          sed -i 's/shrinkResources false/shrinkResources true/g' app/build.gradle
 
       - name: Install custom AndroidManifest
         run: |
@@ -161,27 +154,38 @@ jobs:
       - name: Install custom Android source files
         run: |
           mkdir -p app/src/main/java/com/minamar7/staysafetipselite/
-          if [ -f "SplashAdActivity.java" ]; then
-            cp -f SplashAdActivity.java app/src/main/java/com/minamar7/staysafetipselite/
-          fi
-          if [ -f "SplashAdActivity.kt" ]; then
-            cp -f SplashAdActivity.kt app/src/main/java/com/minamar7/staysafetipselite/
-          fi
+          for f in SplashAdActivity.java SplashAdActivity.kt; do
+            if [ -f "$f" ]; then
+              cp -f "$f" app/src/main/java/com/minamar7/staysafetipselite/
+            fi
+          done
 
-      - name: Build signed AAB
+      - name: Build AAB with Gradle
         env:
-          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          CI: true
-        run: printf "n\nn\n" | bubblewrap build --skipPwaValidation
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+        run: ./gradlew --no-daemon bundleRelease
+
+      - name: Sign AAB
+        env:
+          KS_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASS: ${{ secrets.KEY_PASSWORD || secrets.KEYSTORE_PASSWORD }}
+        run: |
+          AAB="app/build/outputs/bundle/release/app-release.aab"
+          test -f "$AAB" || { echo "ERROR: $AAB not found"; find . -name '*.aab'; exit 1; }
+          jarsigner \
+            -keystore "$GITHUB_WORKSPACE/signing.keystore" \
+            -storepass:env KS_PASS \
+            -keypass:env KEY_PASS \
+            -sigalg SHA256withRSA \
+            -digestalg SHA-256 \
+            "$AAB" "$KEY_ALIAS"
+          jarsigner -verify "$AAB"
+          cp "$AAB" stay-safe-elite-signed.aab
 
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
         with:
           name: stay-safe-elite-aab
-          path: |
-            *.aab
-            app/*.aab
-            app/build/outputs/bundle/release/*.aab
+          path: stay-safe-elite-signed.aab
           if-no-files-found: error
           retention-days: 30
