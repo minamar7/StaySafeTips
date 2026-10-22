@@ -105,11 +105,22 @@ jobs:
           "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$GITHUB_WORKSPACE/local.properties"
 
+      - name: Configure Bubblewrap paths
+        run: |
+          mkdir -p ~/.bubblewrap
+          cat > ~/.bubblewrap/config.json << EOF
+          {
+            "jdkPath": "${JAVA_HOME}",
+            "androidSdkPath": "${ANDROID_SDK_ROOT}"
+          }
+          EOF
+
       - name: Generate Android project
         timeout-minutes: 10
         env:
           CI: true
-        run: bubblewrap update --skipVersionUpgrade < /dev/null
+        run: |
+          printf 'n\nn\nn\n' | bubblewrap update --skipVersionUpgrade --skipPwaValidation
 
       - name: Show generated project
         run: |
