@@ -126,6 +126,8 @@ jobs:
         env:
           CI: true
         run: |
+          cp -f manifest.json twa-manifest.json || true
+          npx @bubblewrap/cli update --manifest=twa-manifest.json --skipVersionUpgrade --skipPwaValidation --force || \
           printf 'n\nn\nn\n' | bubblewrap update --skipVersionUpgrade --skipPwaValidation --force
 
       - name: Show generated project
