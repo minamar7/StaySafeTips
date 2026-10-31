@@ -32,15 +32,16 @@ jobs:
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
 
-      - name: Create local fallback icon to avoid 404
+      - name: Ensure icon files exist locally
         run: |
           mkdir -p icons
-          node -e '
-            const fs = require("fs");
-            // 1x1 transparent PNG base64 as a safe fallback icon
-            const b64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-            fs.writeFileSync("icons/icon-512x512.png", Buffer.from(b64, "base64"));
-          '
+          if [ ! -f "icon_512.png" ] && [ ! -f "icons/icon-512x512.png" ]; then
+            node -e '
+              const fs = require("fs");
+              const b64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+              fs.writeFileSync("icons/icon-512x512.png", Buffer.from(b64, "base64"));
+            '
+          fi
 
       - name: Restore keystore
         env:
@@ -69,9 +70,9 @@ jobs:
             "backgroundColor": "#020617",
             "enableNotifications": true,
             "startUrl": "/StaySafeTips/",
-            "iconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
-            "maskableIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
-            "monochromeIconUrl": "https://minamar7.github.io/StaySafeTips/icons/icon-512x512.png",
+            "iconUrl": "https://minamar7.github.io/StaySafeTips/icon_512.png",
+            "maskableIconUrl": "https://minamar7.github.io/StaySafeTips/icon-maskable-512.png",
+            "monochromeIconUrl": "https://minamar7.github.io/StaySafeTips/icon_512.png",
             "splashScreenFadeOutDuration": 300,
             "signingKey": {
               "path": "./signing.keystore",
@@ -97,7 +98,7 @@ jobs:
             "fullScopeUrl": "https://minamar7.github.io/StaySafeTips/",
             "minSdkVersion": 23,
             "targetSdkVersion": 36,
-            "orientation": "any",
+            "orientation": "portrait",
             "fingerprints": []
           }
           EOF
@@ -125,7 +126,7 @@ jobs:
         env:
           CI: true
         run: |
-          printf 'n\nn\nn\n' | bubblewrap update --skipVersionUpgrade --skipPwaValidation
+          printf 'n\nn\nn\n' | bubblewrap update --skipVersionUpgrade --skipPwaValidation --force
 
       - name: Show generated project
         run: |
