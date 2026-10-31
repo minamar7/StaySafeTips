@@ -55,7 +55,7 @@ jobs:
 
       - name: Create twa-manifest.json
         run: |
-          cat > twa-manifest.json << 'EOF'
+          cat > twa-manifest.json << EOF
           {
             "packageId": "com.minamar7.staysafetipselite",
             "host": "minamar7.github.io",
@@ -126,10 +126,7 @@ jobs:
         env:
           CI: true
         run: |
-          cp -f manifest_v2.json twa-manifest.json || true
-          npx @bubblewrap/cli update --manifest=twa-manifest.json --skipVersionUpgrade --skipPwaValidation --force || \
-          npx @bubblewrap/cli init --manifest=twa-manifest.json --force || \
-          printf 'n\nn\nn\n' | bubblewrap update --skipVersionUpgrade --skipPwaValidation --force
+          npx @bubblewrap/cli update --manifest=twa-manifest.json --skipVersionUpgrade --skipPwaValidation --force
 
       - name: Show generated project
         run: |
