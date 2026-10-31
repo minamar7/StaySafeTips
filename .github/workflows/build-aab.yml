@@ -11,7 +11,7 @@ jobs:
     name: Build Android App Bundle
     runs-on: ubuntu-latest
     env:
-      WEB_MANIFEST_URL: https://minamar7.github.io/StaySafeTips/manifest.json
+      WEB_MANIFEST_URL: https://minamar7.github.io/StaySafeTips/manifest_v2.json
       KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'my-key-alias' }}
 
     steps:
@@ -82,7 +82,7 @@ jobs:
             "appVersionName": "1.0.0.23",
             "shortcuts": [],
             "generatorApp": "bubblewrap-cli",
-            "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest.json",
+            "webManifestUrl": "https://minamar7.github.io/StaySafeTips/manifest_v2.json",
             "fallbackType": "customtabs",
             "features": {
               "playBilling": {
@@ -126,8 +126,9 @@ jobs:
         env:
           CI: true
         run: |
-          cp -f manifest.json twa-manifest.json || true
+          cp -f manifest_v2.json twa-manifest.json || true
           npx @bubblewrap/cli update --manifest=twa-manifest.json --skipVersionUpgrade --skipPwaValidation --force || \
+          npx @bubblewrap/cli init --manifest=twa-manifest.json --force || \
           printf 'n\nn\nn\n' | bubblewrap update --skipVersionUpgrade --skipPwaValidation --force
 
       - name: Show generated project
